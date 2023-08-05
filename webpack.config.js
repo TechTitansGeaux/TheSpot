@@ -8,22 +8,35 @@ const isProduction = process.env.NODE_ENV == 'production';
 
 
 const stylesHandler = isProduction ? MiniCssExtractPlugin.loader : 'style-loader';
+const Dotenv = require('dotenv-webpack');
 
+require("dotenv").config();
+
+const { NODE_ENV } = process.env;
 
 
 const config = {
-    entry: './src/index.ts',
+    mode: NODE_ENV,
+    entry: path.resolve(__dirname, './client/src/index.tsx'),
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'client/dist'),
+        filename: 'bundle.js'
     },
     devServer: {
         open: true,
-        host: 'localhost',
+        host: "127.0.0.1",
+        liveReload: true,
+        resolve: {
+          extensions: [".js", ".ts", ".tsx", ".json"],
+        },
     },
     plugins: [
         new HtmlWebpackPlugin({
             template: 'index.html',
         }),
+        new Dotenv({
+            template: path.join(__dirname, ".env"),
+          }),
 
         // Add your plugins here
         // Learn more about plugins from https://webpack.js.org/configuration/plugins/
@@ -33,6 +46,11 @@ const config = {
             {
                 test: /\.(ts|tsx)$/i,
                 loader: 'ts-loader',
+                options: {
+                    compilerOptions: {
+                        noEmit: false
+                    }
+                },
                 exclude: ['/node_modules/'],
             },
             {
@@ -58,10 +76,11 @@ module.exports = () => {
         config.mode = 'production';
         
         config.plugins.push(new MiniCssExtractPlugin());
-        
+        config.plugins.push(new Dotenv());
         
     } else {
         config.mode = 'development';
+        config.plugins.push(new Dotenv());
     }
     return config;
 };

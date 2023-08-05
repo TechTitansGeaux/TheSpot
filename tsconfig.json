@@ -1,12 +1,21 @@
 {
   "compilerOptions": {
+    "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
-    "module": "es6",
+    "module": "CommonJS",
     "target": "es5",
-    "allowJs": true
+    "allowJs": true,
+    "jsx": "react",
+    // "allowImportingTsExtensions": true,
+    // "noEmit": false
   },
-  "files": ["src/index.ts"]
+  "exclude": [
+    "node_modules",
+    "webpack",
+    "jest",
+  ],
+  "files": ["client/src/index.tsx"]
 }
 
 // {

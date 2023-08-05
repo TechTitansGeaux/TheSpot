@@ -33,5 +33,6 @@ module.exports = {
     ],
     "ignorePatterns": [".eslint*", "dist", "node_modules"],
     "rules": {
+        '@typescript-eslint/no-var-requires': 0,
     }
 }
