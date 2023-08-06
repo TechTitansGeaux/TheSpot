@@ -47,5 +47,5 @@ app.get('/*', (req: Request, res: Response) => {
 });
 
 server.listen(port, () => {
-  console.log(`⚡️ Server listening at http://127.0.0.1:${port}`);
+  console.log(`⚡️ Server listening at http://localhost:${port}`);
 });

@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon server/app.ts",
+    "seed": "node ./server/db/seed.ts",
     "test": "jest",
     "build": "webpack --mode=production --node-env=production",
     "build:dev": "webpack --mode=development -w",
@@ -51,6 +52,7 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.4.2",
     "sequelize": "^6.32.1",
+    "sequelize-typescript": "^2.1.5",
     "socket.io": "^4.7.2",
     "socket.io-client": "^4.7.2",
     "ts-node": "^10.9.1",

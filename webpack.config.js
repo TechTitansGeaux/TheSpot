@@ -24,7 +24,7 @@ const config = {
     },
     devServer: {
         open: true,
-        host: "127.0.0.1",
+        host: "localhost",
         liveReload: true,
         resolve: {
           extensions: [".js", ".ts", ".tsx", ".json"],
