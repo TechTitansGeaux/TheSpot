@@ -31,6 +31,7 @@
     "@types/redux-logger": "^3.0.9",
     "@types/redux-thunk": "^2.1.0",
     "axios": "^1.4.0",
+    "cloudinary": "^1.40.0",
     "dayjs": "^1.11.9",
     "dotenv": "^16.3.1",
     "dotenv-webpack": "^8.0.1",

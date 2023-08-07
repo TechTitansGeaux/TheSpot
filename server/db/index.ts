@@ -3,7 +3,7 @@ const { Sequelize, DataTypes } = require('sequelize');
 
 // Create sequelize connection to mysql database
 const sequelize = new Sequelize({
-  host: '127.0.0.1',
+  host: 'localhost',
   dialect: 'mysql',
   username: 'root',
   password: '',
