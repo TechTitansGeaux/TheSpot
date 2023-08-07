@@ -24,11 +24,9 @@ const Users = sequelize.define('Users', {
   },
   displayName: {
     type: DataTypes.STRING(100),
-    allowNull: false
   },
   type: {
     type: DataTypes.STRING(100),
-    allowNull: false
   },
   geolocation: {
     type: DataTypes.STRING(100)
@@ -36,7 +34,10 @@ const Users = sequelize.define('Users', {
   mapIcon: DataTypes.STRING(100),
   birthday: DataTypes.DATE,
   privacy: DataTypes.STRING(100),
-  accessibility: DataTypes.STRING(100)
+  accessibility: DataTypes.STRING(100),
+  email: DataTypes.STRING(100),
+  picture: DataTypes.STRING(100),
+  googleId: DataTypes.STRING(100),
 }, { timestamps: true });
 
 const Places = sequelize.define('Places', {

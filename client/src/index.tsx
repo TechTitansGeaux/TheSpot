@@ -1,5 +1,5 @@
 import * as React from 'react';
-import thunk from 'redux-thunk';
+//import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import { createRoot } from 'react-dom/client';
 // import createStore from './createReduxStore'

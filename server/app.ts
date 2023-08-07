@@ -1,9 +1,16 @@
 require('dotenv').config();
 // require('./auth/passport');
-const express = require('express');
-const session = require('express-session');
-const path = require('path');
-const passport = require('passport');
+import express from 'express';
+import session from 'express-session';
+import path from 'path';
+import passport from 'passport';
+import authRoutes from './routes/auth';
+import users from './routes/users';
+import "./db/auth/passport";
+
+
+
+
 // const {Request, Response} = require('express')
 import { Request, Response } from 'express';
 
@@ -18,9 +25,9 @@ const uuid = require('uuid');
 const secretKey = uuid.v4();
 
 // server setup for sockets
-const http = require('http');
+import http from 'http';
 const server = http.createServer(app);
-const { Server } = require("socket.io");
+import { Server } from "socket.io";
 const io = new Server(server);
 
 // middleware
@@ -37,6 +44,10 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+
+// routes
+app.use('/users', users);
+app.use('/auth', authRoutes);
 
 app.get('/*', (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, '../client/dist/index.html'), (err) => {
