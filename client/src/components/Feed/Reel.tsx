@@ -13,7 +13,7 @@ type Reel = {
 const Reel = () => {
   return (
     <div className='reel-container'>
-      {fakeData?.map((reel: Reel): any => {
+      {fakeData?.map((reel: Reel) => {
         return (
           <div>
             <span className='video'>{reel.video}</span>
