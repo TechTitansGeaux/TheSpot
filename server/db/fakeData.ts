@@ -1,3 +1,4 @@
+// fake Reels data
 module.exports = [
   {
     id: 1,
@@ -19,8 +20,8 @@ module.exports = [
     id: 3,
     video: 'testingString3',
     user_id: 3,
-    event_id: 3,
-    text: 'party 3 its lit',
+    event_id: 2,
+    text: 'party 2 its lit',
     like_count: 8
   },
 ]
