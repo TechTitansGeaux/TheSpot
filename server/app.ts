@@ -10,7 +10,7 @@ import { Request, Response } from 'express';
 const port = 4000;
 
 // check this after building webpack
-const distPath = path.resolve(__dirname, '..', 'dist');
+const distPath = path.resolve(__dirname, '..', 'client/dist');
 
 //generate secret key
 const app = express();
