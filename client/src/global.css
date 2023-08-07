@@ -1,0 +1,8 @@
+.webcam {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  background-color: #282c34;
+
+}
