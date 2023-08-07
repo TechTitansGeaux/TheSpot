@@ -14,9 +14,12 @@ const Reel = () => {
   return (
     <div className='reel-container'>
       {fakeData?.map((reel: Reel): any => {
-         return (<div className='video'>
+        return (
+          <div>
+            <span className='video'>{reel.video}</span>
             <p className='user-text'>{reel.text}</p>
-          </div>)
+          </div>
+        )
       })}
     </div>
   );
