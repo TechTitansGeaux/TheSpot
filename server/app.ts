@@ -6,6 +6,7 @@ import path from 'path';
 import passport from 'passport';
 import authRoutes from './routes/auth';
 import users from './routes/users';
+import reelRouter from './routes/createReel'
 import "./db/auth/passport";
 
 
@@ -48,6 +49,7 @@ app.use(passport.session());
 // routes
 app.use('/users', users);
 app.use('/auth', authRoutes);
+app.use('/reel', reelRouter);
 
 app.get('/*', (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, '../client/dist/index.html'), (err) => {

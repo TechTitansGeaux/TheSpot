@@ -7,9 +7,11 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AddFriend from '../AddFriend'
 
+// jackie added public_id and url instead of video
 type Reel = {
   id: number;
-  video: string;
+  public_id: number;
+  url: string,
   user_id: number;
   event_id: number;
   text: string;
@@ -24,7 +26,8 @@ const Reel = () => {
       {fakeReels?.map((reel: Reel) => {
         return (
           <div key={reel.id + 'reel'}>
-            <div className='video' id={reel.video}>
+            {/* jackie replaced reel.video here with reel.url */}
+            <div className='video' id={reel.url}>
               <p className='video-text'>{reel.text}</p>
               <AddFriend/>
             </div>

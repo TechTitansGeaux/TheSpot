@@ -8,16 +8,14 @@ reelRouter.post('/', async (req, res) => {
   // access properties of reel from req body
   const { id, video, user_id, event_id, text, like_count } = req.body;
 
+
   try {
-    const result = await cloudinary.uploader.upload(video, {
-      folder: reels
-    })
+    const cloudURL = (await uploadReelToCloudinary(video))
+
     const reel = await Reels.create({
       id,
-      video: {
-        public_id: result.public_id,
-        url: result.secure_url
-      },
+      // public_id: result.public_id,
+      url: cloudURL,
       user_id,
       event_id,
       text,
@@ -33,4 +31,14 @@ reelRouter.post('/', async (req, res) => {
   }
 });
 
-module.exports = reelRouter;
+const uploadReelToCloudinary = async (reelData: string) => {
+  try {
+    const result = await cloudinary.uploader.upload_stream('reels', reelData);
+    return result.secure_url;
+  } catch (err) {
+    console.error('Failed cloudinary reel upload: ', err);
+    throw err;
+  }
+};
+
+export default reelRouter;
