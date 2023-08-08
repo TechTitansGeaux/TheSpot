@@ -1,44 +1,41 @@
 import * as React from 'react';
-import { useState, useRef, useEffect } from 'react';
-// import Webcam from "react-webcam";
+import { useRef, useEffect } from "react";
+// import { ReactMediaRecorder } from 'react-media-recorder'
+import Webcam from 'react-webcam';
+import VideoRecorder from './VideoRecorder';
+// import VideoRecorder from "./VideoRecorder";
+// import AudioRecorder from "./AudioRecorder";
 
-
+// interface WebcamDisplayProps {
+//   ReactMediaRecorder: 
+// }
 
 const WebcamDisplay = () => {
-  const webcamRef = useRef(null);
 
-  // function to get user camera
-  const getUserCamera = () => {
-    navigator.mediaDevices.getUserMedia({
-      video: true,
-      audio: true
-    })
-    .then((stream) => {
-      // attach stream to video tag
-      const video = webcamRef.current;
-
-      video.srcObject = stream;
-
-      video.play()
-    })
-    .catch((err) => {
-      console.error('Failed to get user camera: ', err)
-    })
-  }
-
-  // get access to user camera
-  useEffect(() => {
-    getUserCamera()
-  }, [webcamRef])
-
+  // const videoConstraints = {
+  //   width: { min: 480 },
+  //   height: { min: 720 },
+  //   aspectRatio: 0.6666666667,
+  //   facingMode: "user"
+  // };
+  
   // function to record video
-  const recordVideo = () => {
+  // const recordVideo = () => {
 
-  }
+  // }
   return (
     <div>
-      <video className="webcam" ref={webcamRef}></video>
-      <button onClick={recordVideo}>⏺️</button>
+      {/* <video className="webcam" ref={webcamRef}></video> */}
+      {/* <Webcam
+      // className="webcam"
+      imageSmoothing={true}
+      audio={false}
+      mirrored={true}
+      width={480}
+      height={720}
+      videoConstraints={videoConstraints}
+      /> */}
+      <VideoRecorder />
     </div>
   )
 };
