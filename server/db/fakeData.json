@@ -1,7 +1,8 @@
 [
   {
     "id": 1,
-    "video": "testingString1",
+    "public_id": 1,
+    "url": "vid1",
     "text": "party one yay",
     "like_count": 6,
     "UserId": 1,
@@ -9,7 +10,8 @@
   },
   {
     "id": 2,
-    "video": "testingString2",
+    "public_id": 2,
+    "url": "vid2",
     "text": "party 2 weee",
     "like_count": 3,
     "UserId": 1,
@@ -17,7 +19,8 @@
   },
   {
     "id": 3,
-    "video": "testingString3",
+    "public_id": 3,
+    "url": "vid3",
     "text": "party 2 its lit",
     "like_count": 8,
     "UserId": 1,

@@ -90,9 +90,12 @@ const Reels = sequelize.define('Reels', {
     primaryKey: true,
     autoIncrement: true
   },
-  video: {
-    type: DataTypes.STRING(100),
-    unique: true
+
+  public_id: {
+    type: DataTypes.INTEGER
+  },
+  url: {
+    type: DataTypes.STRING
   },
   text: {
     type: DataTypes.STRING(100),
