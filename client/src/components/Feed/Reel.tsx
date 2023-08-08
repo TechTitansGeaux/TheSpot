@@ -10,10 +10,10 @@ import AddFriend from '../AddFriend'
 type Reel = {
   id: number;
   video: string;
-  user_id: number;
-  event_id: number;
   text: string;
   like_count: number;
+  UserId: number;
+  EventId: number;
 };
 
 

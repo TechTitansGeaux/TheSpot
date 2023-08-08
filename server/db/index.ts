@@ -75,13 +75,6 @@ const Events = sequelize.define('Events', {
   date: {
     type: DataTypes.DATE
   },
-  place_id: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: Places,
-      key: 'id'
-    }
-  },
   geolocation: {
     type: DataTypes.STRING(100)
   },
@@ -101,20 +94,6 @@ const Reels = sequelize.define('Reels', {
     type: DataTypes.STRING(100),
     unique: true
   },
-  user_id: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: Users,
-      key: 'id'
-    }
-  },
-  event_id: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: Events,
-      key: 'id'
-    }
-  },
   text: {
     type: DataTypes.STRING(100),
   },
@@ -123,26 +102,12 @@ const Reels = sequelize.define('Reels', {
   }
 }, { timestamps: true });
 
-const Rsvp = sequelize.define('Rsvp', {
+const RSVPs = sequelize.define('Rsvp', {
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     primaryKey: true,
     autoIncrement: true
-  },
-  user_id: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: Users,
-      key: 'id'
-    }
-  },
-  event_id: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: Events,
-      key: 'id'
-    }
   }
 }, { timestamps: true });
 
@@ -152,20 +117,6 @@ const Likes = sequelize.define('Likes', {
     allowNull: false,
     primaryKey: true,
     autoIncrement: true
-  },
-  user_id: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: Users,
-      key: 'id'
-    }
-  },
-  reels_id: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: Reels,
-      key: 'id'
-    }
   }
 }, { timestamps: true });
 
@@ -187,28 +138,57 @@ const Notifications = sequelize.define('Notifications', {
   }
 }, { timestamps: true });
 
-const Friendship = sequelize.define('Friendship', {
-  id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    primaryKey: true,
-    autoIncrement: true
+const Friendship = sequelize.define(
+  'Friendship',
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    status: {
+      type: DataTypes.STRING(100),
+    },
+    requester_id: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: Users,
+        key: 'id',
+      },
+    },
+    accepter_id: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: Users,
+        key: 'id',
+      },
+    },
   },
-  requester_id: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: Users,
-      key: 'id'
-    }
-  },
-  accepter_id: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: Users,
-      key: 'id'
-    }
-  }
-}, { timestamps: true });
+  { timestamps: true }
+);
+
+// FOREIGN Keys UserId AND EventId to Reels
+Users.hasMany(Reels);
+Reels.belongsTo(Users);
+Events.hasMany(Reels);
+Reels.belongsTo(Events);
+
+// FOREIGN Keys PlaceId to Events
+Places.hasMany(Events);
+Events.belongsTo(Places);
+
+// FOREIGN Keys ReelId AND UserId to Likes
+Reels.hasMany(Likes);
+Likes.belongsTo(Reels);
+Users.hasMany(Likes);
+Likes.belongsTo(Users);
+
+// FOREIGN Keys UserId AND EventId to RSVPs
+Users.hasMany(RSVPs);
+RSVPs.belongsTo(Users);
+Events.hasMany(RSVPs);
+RSVPs.belongsTo(Events);
 
 module.exports = {
   db: sequelize,
@@ -216,8 +196,8 @@ module.exports = {
   Places,
   Events,
   Reels,
-  Rsvp,
+  RSVPs,
   Likes,
   Notifications,
-  Friendship
+  Friendship,
 };

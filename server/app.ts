@@ -7,7 +7,7 @@ import passport from 'passport';
 import authRoutes from './routes/auth';
 import users from './routes/users';
 import "./db/auth/passport";
-
+import feedRouter from './routes/feed';
 
 
 
@@ -48,6 +48,8 @@ app.use(passport.session());
 // routes
 app.use('/users', users);
 app.use('/auth', authRoutes);
+// feed route
+app.use('/feed', feedRouter);
 
 app.get('/*', (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, '../client/dist/index.html'), (err) => {
