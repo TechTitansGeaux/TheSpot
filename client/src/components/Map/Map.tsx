@@ -2,8 +2,8 @@ import * as React from 'react';
 
 const Map = () => {
   return (
-    <div>
-      <h1>Map</h1>
+    <div className='flex-container'>
+      <h1>MAP</h1>
       <iframe
         width="600"
         height="450"
