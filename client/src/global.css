@@ -101,6 +101,7 @@ h1 {
  background-color: var(--purple);
  min-height: 620px;
  min-width: 100%;
+}
 
 .webcam {
   display: flex;
