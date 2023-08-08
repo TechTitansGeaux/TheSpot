@@ -1,0 +1,57 @@
+[
+  {
+    "id": 1,
+    "username": "Samson",
+    "displayName": "samsonite",
+    "type": "personal",
+    "geolocation": "",
+    "mapIcon": "👻",
+    "birthday": "1994-08-16",
+    "privacy": "",
+    "accessibility": ""
+  },
+  {
+    "id": 2,
+    "username": "Bernie",
+    "displayName": "The Bar",
+    "type": "business",
+    "geolocation": "",
+    "mapIcon": "💣",
+    "birthday": "1984-10-08",
+    "privacy": "",
+    "accessibility": ""
+  },
+  {
+    "id": 3,
+    "username": "Jackie",
+    "displayName": "wackiejisdom",
+    "type": "personal",
+    "geolocation": "",
+    "mapIcon": "🎡",
+    "birthday": "1995-09-20",
+    "privacy": "",
+    "accessibility": ""
+  },
+  {
+    "id": 4,
+    "username": "Ben",
+    "displayName": "The Cafe",
+    "type": "business",
+    "geolocation": "",
+    "mapIcon": "👑",
+    "birthday": "1999-09-02",
+    "privacy": "",
+    "accessibility": ""
+  },
+  {
+    "id": 5,
+    "username": "Edward",
+    "displayName": "Cooper",
+    "type": "personal",
+    "geolocation": "",
+    "mapIcon": "💰",
+    "birthday": "1997-12-31",
+    "privacy": "",
+    "accessibility": ""
+  }
+]

@@ -1,0 +1,113 @@
+/* //// ROOT VARIABLES  */
+:root {
+  --violet: #0b0113;
+  --pink: #f433ab;
+  --purple: #7161EF;
+  --yellow: #f0f465;
+  --grey: #eaf2ef;
+  --white: #F5FCFA;
+  --title-font: 'Spectral', serif;
+  --primary-font: system-ui, sans-serif;
+  --secondary-font: Georgia, serif;
+  --lg-font: 2.5rem;
+  --md-font: 1rem;
+  --sm-font: .5rem;
+}
+
+
+/* resetting CSS margin: remove default margin on text tags */
+* {
+  margin: 0;
+}
+
+/*
+  Use a more-intuitive box-sizing model.
+*/
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* remove built-in form typography
+margin: remove default margin on text tags
+*/
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/*
+remove list styles
+*/
+ol,
+ul {
+  list-style: none;
+}
+
+/*
+  Avoid text overflows
+*/
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+/* ////// GLOBAL */
+
+body {
+  background-color: var(--violet);
+  font-family: var(--primary-font);
+  color: var(--white);
+}
+
+a {
+  color: inherit;
+}
+
+h1 {
+  font-family: var(--title-font);
+  font-size: var(--lg-font);
+  color: var(--yellow);
+}
+
+.container-full-w {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 450px;
+  margin: auto;
+}
+
+/* ////// REEL */
+
+.reel-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--white);
+  min-height: 667px;
+  min-width: 375px;
+}
+
+.video {
+ background-color: var(--purple);
+ min-height: 620px;
+ min-width: 100%;
+
+.webcam {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  background-color: #282c34;
+
+
+}

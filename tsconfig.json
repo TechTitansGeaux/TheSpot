@@ -8,6 +8,7 @@
     "allowJs": true,
     "jsx": "react",
     "esModuleInterop": true
+    "resolveJsonModule": true,
     // "allowImportingTsExtensions": true,
     // "noEmit": false
   },
