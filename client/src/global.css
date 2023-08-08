@@ -6,11 +6,15 @@
   --yellow: #f0f465;
   --grey: #eaf2ef;
   --white: #F5FCFA;
-  --title-font: 'Spectral', serif;
+  --t50-white: rgba(245, 252, 250, .5);
+  --t25-white: rgba(245, 252, 250, .25);
+  --t75-violet: rgba(11, 1, 19, .75);
+  --t50-violet: rgba(11, 1, 19, .50);
+  --t25-violet: rgba(11, 1, 19, .25);
+  --title-font: 'Anton', sans-serif;
   --primary-font: system-ui, sans-serif;
-  --secondary-font: Georgia, serif;
   --lg-font: 2.5rem;
-  --md-font: 1rem;
+  --md-font: 1.5rem;
   --sm-font: .5rem;
 }
 
@@ -63,6 +67,7 @@ h6 {
 /* ////// GLOBAL */
 
 body {
+  padding: 5.5em 0;
   background-color: var(--violet);
   font-family: var(--primary-font);
   color: var(--white);
@@ -82,26 +87,104 @@ h1 {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  max-width: 450px;
+  max-width: 410px;
   margin: auto;
 }
 
-/* ////// REEL */
+.flex-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+}
+
+footer {
+  position: fixed;
+  background-color: var(--t75-violet);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  bottom: 0%;
+  width: 100vw;
+}
+
+/* ////// NAVIGATION */
+
+.navbar-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: .75rem 0;
+}
+
+#nav-logo {
+  width: 100px;
+  height: 50px;
+  margin-right: 20px;
+}
+
+.navLink {
+  text-decoration: none;
+  text-transform: uppercase;
+  font-family: var(--title-font);
+  font-size: var(--md-font);
+  color: var(--yellow);
+}
+/* ////// FEED & REEL */
+
+.friend-request {
+  position: absolute;
+  right: 3%;
+  bottom: 3%;
+}
+
+.friend-add-btn {
+  position: absolute;
+  left: 8%;
+  bottom: 34%;
+  z-index: 3;
+}
+
+.friend-avatar {
+  z-index: 2;
+}
+
+
+/* ////// FEED & REEL */
 
 .reel-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: var(--white);
+  justify-content: flex-start;
+  border: solid var(--t25-white);
+  padding-top: 2rem;
   min-height: 667px;
-  min-width: 375px;
 }
 
 .video {
- background-color: var(--purple);
- min-height: 620px;
- min-width: 100%;
+  position: relative;
+  background-color: var(--purple);
+  height: 620px;
+  min-width: 375px;
 }
+
+.video-text {
+  position: absolute;
+  margin: 0 1rem;
+  max-width: 350px;
+  font-size: var(--lg-font);
+  font-family: var(--title-font);
+}
+
+.video-links-container {
+  width: 100%;
+  height: 3.5em;
+  border: solid var(--t25-white);
+  margin-bottom: 2rem;
+}
+
+/* ////// CREATE REEL */
 
 .webcam {
   display: flex;
@@ -109,6 +192,4 @@ h1 {
   align-items: center;
   width: 100vw;
   background-color: #282c34;
-
-
 }

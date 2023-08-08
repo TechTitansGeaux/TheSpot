@@ -1,5 +1,11 @@
 import * as React from 'react';
-import fakeData from '../../../../server/db/fakeData.json';
+import fakeReels from '../../../../server/db/fakeData.json';
+import Box from '@mui/material/Box';
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import AddFriend from '../AddFriend'
 
 type Reel = {
   id: number;
@@ -10,16 +16,34 @@ type Reel = {
   like_count: number;
 };
 
+
+
 const Reel = () => {
   return (
     <div className='reel-container'>
-      {fakeData?.map((reel: Reel) => {
+      {fakeReels?.map((reel: Reel) => {
         return (
-          <div>
-            <span className='video'>{reel.video}</span>
-            <p className='user-text'>{reel.text}</p>
+          <div key={reel.id + 'reel'}>
+            <div className='video' id={reel.video}>
+              <p className='video-text'>{reel.text}</p>
+              <AddFriend/>
+            </div>
+            <div className='video-links-container'>
+              <Box sx={{ maxWidth: 400 }}>
+                <BottomNavigation>
+                  <BottomNavigationAction
+                    label='Favorites'
+                    icon={<FavoriteIcon />}
+                  />
+                  <BottomNavigationAction
+                    label='Nearby'
+                    icon={<LocationOnIcon />}
+                  />
+                </BottomNavigation>
+              </Box>
+            </div>
           </div>
-        )
+        );
       })}
     </div>
   );
