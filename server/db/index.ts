@@ -141,8 +141,8 @@ const Notifications = sequelize.define('Notifications', {
   }
 }, { timestamps: true });
 
-const Friendship = sequelize.define(
-  'Friendship',
+const Friendships = sequelize.define(
+  'Friendships',
   {
     id: {
       type: DataTypes.INTEGER,
@@ -202,5 +202,5 @@ module.exports = {
   RSVPs,
   Likes,
   Notifications,
-  Friendship,
+  Friendships,
 };
