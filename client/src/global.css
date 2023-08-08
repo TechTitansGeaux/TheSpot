@@ -1,4 +1,3 @@
-
 /* //// ROOT VARIABLES  */
 :root {
   --violet: #0b0113;
@@ -87,7 +86,6 @@ h1 {
   margin: auto;
 }
 
-
 /* ////// REEL */
 
 .reel-container {
@@ -99,9 +97,17 @@ h1 {
   min-width: 375px;
 }
 
-
 .video {
  background-color: var(--purple);
  min-height: 620px;
  min-width: 100%;
+
+.webcam {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  background-color: #282c34;
+
+
 }

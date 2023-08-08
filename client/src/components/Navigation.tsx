@@ -12,6 +12,9 @@ const Navigation = () => {
           <li>
             <NavLink to='/Map'>Map</NavLink>
           </li>
+          <li>
+            <NavLink to='/WebcamDisplay'>WebcamDisplay</NavLink>
+          </li>
         </ul>
       </nav>
       <Outlet />
