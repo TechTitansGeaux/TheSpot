@@ -5,7 +5,7 @@ const { Reels, Users, Events } = require('../db/index');
 
 feedRouter.get('/reel', (req: any, res: any) => {
   // will be changed to find by filter
-  Reels.findAll()
+  Reels.findAll({ include: Users})
     .then((response: any) => {
       if (response === null) {
         console.log('feed does not exist');
@@ -14,10 +14,10 @@ feedRouter.get('/reel', (req: any, res: any) => {
         res.status(200).send(response);
       }
     })
-    .then((response: any) =>{
-      const { user_id } = req.body;
-      console.log(user_id);
-    })
+    // .then((response: any) =>{
+    //   const { user_id } = req.body;
+    //   console.log(user_id);
+    // })
     .catch((err: any) => {
       console.error('Cannot GET feed:', err);
       res.sendStatus(500);

@@ -210,6 +210,9 @@ const Friendship = sequelize.define('Friendship', {
   }
 }, { timestamps: true });
 
+Users.hasMany(Reels);
+Reels.belongsTo(Users);
+
 module.exports = {
   db: sequelize,
   Users,
