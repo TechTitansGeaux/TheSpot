@@ -55,7 +55,7 @@ const Navigation = () => {
         <Outlet />
         <footer>
           <Link to='/WebcamDisplay'>
-            <AddCircleIcon color='secondary' sx={{ width: 48, height: 48 }} />
+            <AddCircleIcon color='secondary' sx={{ width: 52, height: 52 }} />
           </Link>
         </footer>
       </ThemeProvider>
