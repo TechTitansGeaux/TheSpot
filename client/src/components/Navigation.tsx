@@ -7,6 +7,8 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import Avatar from '@mui/material/Avatar';
 
 const logo = require('/client/src/img/logo.jpg');
+const logoGradient = require('/client/src/img/logo-gradient.jpg');
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -38,7 +40,7 @@ const Navigation = () => {
               <div className='navbar-container'>
                 <div>
                   <NavLink className='navLink' to='/Feed'>
-                    <img id='nav-logo' src={logo} alt='app logo' />
+                    <img id='nav-logo' src={logoGradient} alt='app logo' />
                   </NavLink>
                 </div>
                 <div>
