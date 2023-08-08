@@ -23,6 +23,10 @@ const seedSqlize = () => {
     .then(() => console.log('\x1b[36m', '\nDatabase (MySQL): \'Notifications\' table successfully created!'))
     .then(() => Friendship.sync({ force: true }))
     .then(() => console.log('\x1b[36m', '\nDatabase (MySQL): \'Friendship\' table successfully created!'))
+    .then(() => Promise.all(require('./fakeUserData.json').map((txn) => Users.create(txn))))
+    .then(() => Promise.all(require('./fakePlaceData.json').map((txn) => Places.create(txn))))
+    .then(() => Promise.all(require('./fakeEventData.json').map((txn) => Events.create(txn))))
+    .then(() => Promise.all(require('./fakeData.json').map((txn) => Reels.create(txn))))
     .then(process.exit);
 };
 

@@ -1,6 +1,7 @@
 const { Sequelize, DataTypes } = require('sequelize');
+require('dotenv').config();
 // import { Table, Column, Model, HasMany } from 'sequelize-typescript';
-
+// const { DB_HOST } = process.env;
 // Create sequelize connection to mysql database
 const sequelize = new Sequelize({
   host: '127.0.0.1',
@@ -71,7 +72,7 @@ const Events = sequelize.define('Events', {
     type: DataTypes.INTEGER
   },
   date: {
-    type: DataTypes.STRING(100)
+    type: DataTypes.DATE
   },
   place_id: {
     type: DataTypes.INTEGER,

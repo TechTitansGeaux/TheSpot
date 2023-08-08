@@ -1,9 +1,12 @@
 import * as React from 'react';
+import Reel from './Reel';
 
 const Feed = () => {
   return (
     <>
-      <h1>Feed</h1>
+      <div className='container-full-w'>
+        <Reel />
+      </div>
     </>
   );
 };
