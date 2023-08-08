@@ -20,7 +20,7 @@ type Reel = {
 
 
 
-const Reel = () => {
+const Reel = ({reel}: Reel[]) => {
   return (
     <div className='reel-container'>
       {fakeReels?.map((reel: Reel) => {
