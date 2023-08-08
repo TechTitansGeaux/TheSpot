@@ -101,20 +101,6 @@ const Reels = sequelize.define('Reels', {
     type: DataTypes.STRING(100),
     unique: true
   },
-  user_id: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: Users,
-      key: 'id'
-    }
-  },
-  event_id: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: Events,
-      key: 'id'
-    }
-  },
   text: {
     type: DataTypes.STRING(100),
   },
@@ -212,6 +198,9 @@ const Friendship = sequelize.define('Friendship', {
 
 Users.hasMany(Reels);
 Reels.belongsTo(Users);
+Events.hasMany(Reels);
+Reels.belongsTo(Events);
+
 
 module.exports = {
   db: sequelize,

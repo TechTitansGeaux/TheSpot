@@ -5,7 +5,14 @@ const { Reels, Users, Events } = require('../db/index');
 
 feedRouter.get('/reel', (req: any, res: any) => {
   // will be changed to find by filter
-  Reels.findAll({ include: Users})
+  Reels.findAll({ include: [
+    {
+      model: Users
+    },
+    {
+      model: Events
+    }
+  ]})
     .then((response: any) => {
       if (response === null) {
         console.log('feed does not exist');
