@@ -163,9 +163,10 @@ footer {
 }
 
 .video {
- background-color: var(--purple);
- min-height: 620px;
- min-width: 100%;
+  position: relative;
+  background-color: var(--purple);
+  height: 620px;
+  min-width: 375px;
 }
 
 .webcam {
