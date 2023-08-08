@@ -12,10 +12,10 @@ type Reel = {
   id: number;
   public_id: number;
   url: string,
-  user_id: number;
-  event_id: number;
   text: string;
   like_count: number;
+  UserId: number;
+  EventId: number;
 };
 
 
