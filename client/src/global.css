@@ -8,10 +8,13 @@
   --white: #F5FCFA;
   --t50-white: rgba(245, 252, 250, .5);
   --t25-white: rgba(245, 252, 250, .25);
+  --t75-violet: rgba(11, 1, 19, .75);
+  --t50-violet: rgba(11, 1, 19, .50);
+  --t25-violet: rgba(11, 1, 19, .25);
   --title-font: 'Anton', sans-serif;
   --primary-font: system-ui, sans-serif;
   --lg-font: 2.5rem;
-  --md-font: 1rem;
+  --md-font: 1.5rem;
   --sm-font: .5rem;
 }
 
@@ -88,6 +91,38 @@ h1 {
   margin: auto;
 }
 
+footer {
+  position: fixed;
+  background-color: var(--t75-violet);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  bottom: 0%;
+  width: 100vw;
+}
+
+/* ////// NAVIGATION */
+
+.navbar-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: .5rem 0;
+}
+
+#nav-logo {
+  width: 100px;
+  height: 50px;
+  margin-right: 20px;
+}
+
+.navLink {
+  text-decoration: none;
+  text-transform: uppercase;
+  font-family: var(--title-font);
+  font-size: var(--md-font);
+  color: var(--yellow);
+}
 /* ////// FEED & REEL */
 
 .friend-request {

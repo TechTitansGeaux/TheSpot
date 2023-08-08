@@ -1,20 +1,22 @@
 import * as React from 'react';
-import { Outlet, NavLink } from 'react-router-dom';
+import { Outlet, NavLink, Link } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Toolbar } from '@mui/material';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 import Avatar from '@mui/material/Avatar';
 
+const logo = require('/client/src/img/logo.jpg');
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#f0f465',
+      main: '#0b0113',
       dark: '#f433ab',
-      contrastText: '#0b0113',
+      contrastText: '#F5FCFA',
     },
     secondary: {
       main: '#f433ab',
-      dark: '#f0f465',
+      light: '#f0f465',
       contrastText: '#0b0113',
     },
   },
@@ -23,26 +25,38 @@ const theme = createTheme({
 const Navigation = () => {
   return (
     <>
-      <nav>
       <ThemeProvider theme={theme}>
+        <nav>
           <AppBar position='fixed'>
-            <Toolbar>
-              <ul>
-                <li>
-                  <NavLink to='/Feed'>Feed</NavLink>
-                </li>
-                <li>
-                  <NavLink to='/Map'>Map</NavLink>
-                </li>
-                <li>
-                  <NavLink to='/WebcamDisplay'>WebcamDisplay</NavLink>
-                </li>
-              </ul>
+            <Toolbar
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                backgroundColor: 'rgba(11, 1, 19, .75)',
+              }}
+            >
+              <div className='navbar-container'>
+                <div>
+                  <NavLink className='navLink' to='/Feed'>
+                    <img id='nav-logo' src={logo} alt='app logo' />
+                  </NavLink>
+                </div>
+                <div>
+                  <NavLink className='navLink' to='/Map'>
+                    Map
+                  </NavLink>
+                </div>
+              </div>
             </Toolbar>
           </AppBar>
-          </ThemeProvider>
-      </nav>
-      <Outlet />
+        </nav>
+        <Outlet />
+        <footer>
+          <Link to='/WebcamDisplay'>
+            <AddCircleIcon color='secondary' sx={{ width: 48, height: 48 }} />
+          </Link>
+        </footer>
+      </ThemeProvider>
     </>
   );
 };
