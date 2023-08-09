@@ -22,7 +22,7 @@ passport.use(
         }
 
         const defaultUser = {
-          username: profile.displayName,
+          displayName: profile.displayName,
           email: profile.emails[0]?.value,
           picture: profile.photos[0]?.value,
           googleId: profile.id

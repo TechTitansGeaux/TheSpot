@@ -6,7 +6,7 @@ require('dotenv').config();
 
 const auth = express.Router();
 
-const successLoginUrl = `${process.env.HOST}:4000/Feed`;
+const successLoginUrl = `${process.env.HOST}:4000/ProfileSetUp`;
 const errorLoginUrl = `${process.env.HOST}:4000/login/error`;
 
 auth.get('/login/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
