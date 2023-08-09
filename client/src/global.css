@@ -169,23 +169,6 @@ footer {
   min-width: 375px;
 }
 
-.video-text {
-  position: absolute;
-  margin: 0 1rem;
-  max-width: 350px;
-  font-size: var(--lg-font);
-  font-family: var(--title-font);
-}
-
-.video-links-container {
-  width: 100%;
-  height: 3.5em;
-  border: solid var(--t25-white);
-  margin-bottom: 2rem;
-}
-
-/* ////// CREATE REEL */
-
 .webcam {
   display: flex;
   justify-content: center;
