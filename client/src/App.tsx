@@ -8,7 +8,6 @@ import Navigation from './components/Navigation';
 import './global.css';
 import SignUp from './components/ProfileSetUp/SignUp';
 import ProfileSetUp from './components/ProfileSetUp/Location';
-import AddFriend from './components/AddFriend'
 
 const App = () => {
   return (

@@ -20,6 +20,8 @@ const theme = createTheme({
 });
 
 const AddFriend = () => {
+
+  
   return (
     <ThemeProvider theme={theme}>
       <div className='friend-request'>
