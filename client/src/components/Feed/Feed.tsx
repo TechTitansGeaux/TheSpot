@@ -22,6 +22,7 @@ const Feed = () => {
     getAllReels();
   }, []);
 
+
   return (
     <>
       <div className='container-full-w'>
