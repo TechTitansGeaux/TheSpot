@@ -2,6 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
+import GroupIcon from '@mui/icons-material/Group';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const theme = createTheme({
@@ -19,19 +20,21 @@ const theme = createTheme({
   },
 });
 
+
+
 const AddFriend = () => {
 
-  
   return (
     <ThemeProvider theme={theme}>
       <div className='friend-request'>
-        <Box className="friend-box">
+        <Box className='friend-box'>
           <Fab
             size='small'
             color='primary'
             aria-label='add'
             className='friend-add-btn'
           >
+            {/**if current user not friend with set to true | false icon  <GroupIcon /> or removed */}
             <AddIcon />
           </Fab>
         </Box>

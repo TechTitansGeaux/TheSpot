@@ -1,5 +1,4 @@
 import * as React from 'react';
-import fakeReels from '../../../../server/db/fakeData.json';
 import Box from '@mui/material/Box';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
@@ -9,7 +8,7 @@ import AddFriend from '../AddFriend';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import Zoom from '@mui/material/Zoom';
-
+import { useState, useEffect } from 'react';
 
 
 type Props = {
@@ -24,7 +23,8 @@ type Props = {
     EventId?: number;
     User: User;
     Event: Event;
-  }[]
+  }[],
+  user: User;
 };
 
 type User = {
@@ -54,7 +54,9 @@ type Event = {
   PlaceId: 1;
 };
 
-const Reel: React.FC<Props> = ({reels}) => {
+const Reel: React.FC<Props> = ({ reels, user }) => {
+
+  console.log('feed user', user);
   return (
     <div className='reel-container'>
       {reels?.map((reel) => {
