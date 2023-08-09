@@ -2,8 +2,8 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
-import GroupIcon from '@mui/icons-material/Group';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import axios from 'axios';
 
 const theme = createTheme({
   palette: {
@@ -20,9 +20,9 @@ const theme = createTheme({
   },
 });
 
-
-
 const AddFriend = () => {
+
+  // post friendship to db 
 
   return (
     <ThemeProvider theme={theme}>
@@ -34,7 +34,6 @@ const AddFriend = () => {
             aria-label='add'
             className='friend-add-btn'
           >
-            {/**if current user not friend with set to true | false icon  <GroupIcon /> or removed */}
             <AddIcon />
           </Fab>
         </Box>
