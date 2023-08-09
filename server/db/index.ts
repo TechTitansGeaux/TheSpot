@@ -22,11 +22,11 @@ const Users = sequelize.define(
     },
     username: {
       type: DataTypes.STRING(100),
-      allowNull: false,
       unique: true,
     },
     displayName: {
       type: DataTypes.STRING(100),
+      allowNull: false,
     },
     type: {
       type: DataTypes.STRING(100),
