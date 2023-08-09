@@ -1,31 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-// interface KeyPair<T, U> {
-//   key: T;
-//   value: U;
-// }
-// let kv1: KeyPair<string, void> = { key: 'authUser', value: null };
-
-interface initState {
+interface AuthState {
   isAuthenticated: boolean;
-  authUser: {
-    id: number;
-    username: string;
-    displayName: string;
-    type: string | null;
-    geolocation: string | null;
-    mapIcon: string | null;
-    birthday: Date | null;
-    privacy: string | null;
-    accessibility: string | null;
-    email: string | null;
-    picture: string | null;
-    googleId: string | null;
-  }
-
+  authUser: null | any; 
 }
 
-const initialState: initState = {
+const initialState: AuthState = {
   isAuthenticated: false,
   authUser: null,
 };
@@ -34,10 +15,10 @@ const appSlice = createSlice({
   name: "app",
   initialState,
   reducers: {
-    setIsAuthenticated: (state, action) => {
+    setIsAuthenticated: (state, action: PayloadAction<boolean>) => {
       state.isAuthenticated = action.payload;
     },
-    setAuthUser: (state, action) => {
+    setAuthUser: (state, action: PayloadAction<any>) => {
       state.authUser = action.payload;
     },
   },
