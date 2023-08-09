@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 
 
 
-const Feed = () => {
+const Feed: React.FC = () => {
   const [reel, setReel] = useState([]);
 
   const getAllReels = () => {
@@ -26,7 +26,7 @@ const Feed = () => {
   return (
     <>
       <div className='container-full-w'>
-        <Reel reel={reel} />
+        <Reel />
       </div>
     </>
   );
