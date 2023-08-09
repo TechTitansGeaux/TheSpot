@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { configureStore, PayloadAction } from "@reduxjs/toolkit";
 import logger from "redux-logger";
 import appReducer from "./appSlice";
@@ -11,7 +13,7 @@ export const store = configureStore({
 });
 
 export type AppDispatch = typeof store.dispatch
-export type RootState = typeof store.getState;
+export type RootState = ReturnType<typeof store.getState>
 
 interface action {
   dispatch: AppDispatch,
@@ -23,3 +25,5 @@ export const AppThunk = (action: any) => {
     return action(dispatch, getState);
   };
 };
+
+export default store;

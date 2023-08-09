@@ -8,7 +8,21 @@ import { createSlice } from "@reduxjs/toolkit";
 
 interface initState {
   isAuthenticated: boolean;
-  authUser: string | null
+  authUser: {
+    id: number;
+    username: string;
+    displayName: string;
+    type: string | null;
+    geolocation: string | null;
+    mapIcon: string | null;
+    birthday: Date | null;
+    privacy: string | null;
+    accessibility: string | null;
+    email: string | null;
+    picture: string | null;
+    googleId: string | null;
+  }
+
 }
 
 const initialState: initState = {
