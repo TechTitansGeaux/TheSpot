@@ -1,5 +1,3 @@
-import { freemem } from "os";
-
 const express = require('express');
 const friendRouter = express.Router();
 const { Friendships, Reels, Users, Events } = require('../db/index');
