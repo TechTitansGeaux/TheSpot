@@ -8,11 +8,26 @@ import WebcamDisplay from './components/CreateReel/WebcamDisplay';
 import Navigation from './components/Navigation';
 import './global.css';
 import SignUp from './components/ProfileSetUp/SignUp';
-import ProfileSetUp from './components/ProfileSetUp/ProfileSetUp';
-import { useDispatch } from "react-redux";
-import { setAuthUser, setIsAuthenticated } from "./store/appSlice";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import ProfileSetUp from './components/ProfileSetUp/Location';
+import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { setAuthUser, setIsAuthenticated } from './store/appSlice';
+import axios from 'axios';
+
+type User = {
+  id: number;
+  username: string;
+  displayName: string;
+  type: string;
+  geolocation: string; // i.e. "29.947126049254177, -90.18719199978266"
+  mapIcon: string;
+  birthday: string;
+  privacy: string;
+  accessibility: string;
+  email: string;
+  picture: string;
+  googleId: string;
+};
 
 const App = () => {
 
@@ -22,6 +37,7 @@ const App = () => {
   useEffect(() => {
     fetchAuthUser();
   }, []);
+
 
   const fetchAuthUser = async () => {
     try {
@@ -36,16 +52,15 @@ const App = () => {
     }
   };
 
+  // get all friendships to pass down as props
+
   return (
     <BrowserRouter>
       <Routes>
-      <Route
-          index
-          element={<SignUp />}
-        ></Route>
+        <Route index element={<SignUp />}></Route>
         <Route path='/' element={<Navigation />}>
           <Route path='/ProfileSetUp' element={<ProfileSetUp />}></Route>
-          <Route path='/Feed' element={<Feed />}></Route>
+          <Route path='/Feed' element={<Feed user={user} />}></Route>
           <Route path='/Map' element={<Map />}></Route>
           <Route path='/WebcamDisplay' element={<WebcamDisplay />}></Route>
 

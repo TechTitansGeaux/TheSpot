@@ -3,8 +3,26 @@ import Reel from './Reel';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 
-const Feed = () => {
+type Props = {
+  user: {
+    id: number;
+    username: string;
+    displayName: string;
+    type: string;
+    geolocation: string; // i.e. "29.947126049254177, -90.18719199978266"
+    mapIcon: string;
+    birthday: string;
+    privacy: string;
+    accessibility: string;
+    email: string;
+    picture: string;
+    googleId: string;
+  }
+};
+
+const Feed: React.FC<Props> = ({user}) => {
   const [reels, setReels] = useState([]);
+
 
   const getAllReels = () => {
     axios
@@ -26,7 +44,7 @@ const Feed = () => {
   return (
     <>
       <div className='container-full-w'>
-        <Reel reels={reels} />
+        <Reel reels={reels} user={user} />
       </div>
     </>
   );

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import fakeReels from '../../../../server/db/fakeData.json';
 import Box from '@mui/material/Box';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
@@ -9,7 +8,8 @@ import AddFriend from '../AddFriend';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import Zoom from '@mui/material/Zoom';
-
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 
 type Props = {
@@ -24,7 +24,8 @@ type Props = {
     EventId?: number;
     User: User;
     Event: Event;
-  }[]
+  }[],
+  user: User;
 };
 
 type User = {
@@ -54,15 +55,19 @@ type Event = {
   PlaceId: 1;
 };
 
-const Reel: React.FC<Props> = ({reels}) => {
+const Reel: React.FC<Props> = ({ reels, user }) => {
+
+  // get friendship from db and create state
+
+  console.log('feed user', user);
   return (
     <div className='reel-container'>
       {reels?.map((reel) => {
         return (
           <div key={reel.id + 'reel'}>
-            {/* jackie replaced reel.video here with reel.url */}
             <div className='video' id={reel.url}>
               <p className='video-text'>{reel.text}</p>
+              {/**TRUE: if current user not friend with reel user set to <AddFriend/> | FALSE: if friend & remove icon - null */}
               <AddFriend />
               <div className='friend-request'>
                 <Tooltip

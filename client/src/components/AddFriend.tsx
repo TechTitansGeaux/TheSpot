@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import axios from 'axios';
 
 const theme = createTheme({
   palette: {
@@ -21,11 +22,12 @@ const theme = createTheme({
 
 const AddFriend = () => {
 
-  
+  // post friendship to db 
+
   return (
     <ThemeProvider theme={theme}>
       <div className='friend-request'>
-        <Box className="friend-box">
+        <Box className='friend-box'>
           <Fab
             size='small'
             color='primary'
