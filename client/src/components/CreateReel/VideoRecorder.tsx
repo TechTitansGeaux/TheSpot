@@ -11,7 +11,9 @@
     const [capturing, setCapturing] = useState(false);
     const [selfieTaken, setSelfieTaken] = useState(false);
     const [recordedChunks, setRecordedChunks] = useState([]);
-    const [bufferedBlob, setBufferedBlob] = useState({'key': 'value'});
+    const [text, setText] = useState('test text');
+    const [userId, setUserId] = useState(1);
+    const [eventId, setEventId] = useState(1)
 
     type Blob = {
       data: {
@@ -132,16 +134,14 @@
         const blob = new Blob(recordedChunks, {
           type: "video/webm",
         });
-        // console.log(blob, '<-----video blob')
-        // console.log(blob, '<-----video blob type')
+        // turn url into blob
         const blobUrl = URL.createObjectURL(blob);
-
+        // turn blobUrl into file
         const file = await urltoFile(blobUrl, 'video.webm', 'video/webm')
-        console.log(file, '<----file')
+        // append file to form data
         const formData = new FormData;
         formData.append('video', file);
-        console.log(formData, '<------ blob form ')
-
+        // send video form data to server
         await axios.post('/reel/upload', formData)
         .then(() => {
           setRecordedChunks([]);

@@ -3,16 +3,14 @@ import { Router } from 'express';
 const reelRouter = Router();
 const { Reels } = require('../db/index');
 const cloudinary = require('../cloudinary');
-const streamifier = require('streamifier');
 const multer = require('multer');
 
-// const upload = multer({dest: 'public/files'});
-
-
 const uploadReelToCloudinary = async (file: string) => {
-  console.log(file, '<------- file from uploadToCloudinary')
   try {
-    const result = await cloudinary.uploader.upload(file);
+    const result = await cloudinary.uploader.upload(file, {
+      resource_type: "video"
+    });
+    console.log(result, '<-----result from upload to cloudinary')
     return result.secure_url;
   } catch (err) {
     console.error('Failed cloudinary reel upload: ', err);
@@ -32,34 +30,51 @@ const storage = multer.diskStorage({
 
 const fileUpload = multer({storage});
 
-// const fileUpload = multer();
-
 reelRouter.post('/upload', fileUpload.single('video'), async (req: any, res: any) => {
-  // const file = req.file;
-console.log(req.file, '<-----req.file');
+  console.log(req.file, '<-----req.file');
+  console.log(req.body, '<-----req.body');
 
-  const { id, videoFile, user_id, event_id, text, like_count } = req.body;
+  const { text, userId, eventId} = req.body;
 
-  // try {
-  //   // const cloudURL = await uploadReelToCloudinary(videoFile)
-  //   console.log(videoFile, '<-----videoFile')
+  try {
+    let cloudURL = await uploadReelToCloudinary(req.file.path)
+    // cloudURL comes as a mkv, here I jankily turn it into a webm
+    cloudURL = cloudURL.slice(0, cloudURL.length - 3) + 'webm';
+    // also jankily getting the publicID
+    const cloudID = cloudURL.slice(cloudURL.length - 23, cloudURL.length - 5);
+    const reel = await Reels.create({
+      public_id: cloudID,
+      url: cloudURL,
+      text,
+      userId,
+      eventId
+    });
+    res.status(201).json({
+      success: true,
+      reel
+    })
 
-  //   const reel = await Reels.create({
-  //     id,
-  //     // // public_id: result.public_id,
-  //     // url: cloudURL,
-  //     text,
-  //     like_count
-  //   });
-  //   res.status(201).json({
-  //     success: true,
-  //     reel
-  //   })
-  // } catch (error) {
-  //   console.error('Failed to CREATE reel: ', error)
-  //   res.sendStatus(500);
-  // }
+    console.log(reel, '<---- reel created in server ')
+  } catch (error) {
+    console.error('Failed to CREATE reel: ', error)
+    res.sendStatus(500);
+  }
 });
 
+// function to get reel by cloudURL bc cannot send body at same time as video file
+reelRouter.get('/:cloudURL', (req: any, res: any) => {
+  //access cloudURL from request parameters
+  const {cloudURL} = req.params
+  // sequelize method to find one particular
+  Reels.findOne({where: {cloudURL}})
+    .then((resObj: any) => {
+      console.log(resObj, '<---resObj from find by cloudURL')
+      res.sendStatus(200)
+    })
+    .catch((err: any) => {
+      console.error('Failed to GET reel by cloudURL: ', err);
+      res.sendStatus(500);
+    })
+})
 
 export default reelRouter;
