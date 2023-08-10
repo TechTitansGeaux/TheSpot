@@ -9,6 +9,7 @@ import users from './routes/users';
 import reelRouter from './routes/createReel'
 import "./db/auth/passport";
 import feedRouter from './routes/feed';
+import friendRouter from './routes/friends';
 
 
 
@@ -52,6 +53,8 @@ app.use('/auth', authRoutes);
 app.use('/reel', reelRouter);
 // feed route
 app.use('/feed', feedRouter);
+// friends route
+app.use('/friends', friendRouter);
 
 
 app.get('/*', (req: Request, res: Response) => {
