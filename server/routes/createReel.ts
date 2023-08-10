@@ -64,13 +64,13 @@ console.log(req.file, '<-----req.file');
   const { id, videoFile, user_id, event_id, text, like_count } = req.body;
 
   try {
-    const cloudURL = await uploadReelToCloudinary(videoFile)
+    // const cloudURL = await uploadReelToCloudinary(videoFile)
     console.log(videoFile, '<-----videoFile')
 
     const reel = await Reels.create({
       id,
-      // public_id: result.public_id,
-      url: cloudURL,
+      // // public_id: result.public_id,
+      // url: cloudURL,
       text,
       like_count
     });

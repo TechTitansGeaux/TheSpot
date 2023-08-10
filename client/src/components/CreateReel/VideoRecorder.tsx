@@ -6,6 +6,7 @@
   const VideoRecorder = () => {
     const webcamRef = useRef(null);
     const mediaRecorderRef = useRef(null);
+    const [imgSrc, setImgSrc] = useState(null);
     const [capturing, setCapturing] = useState(false);
     const [recordedChunks, setRecordedChunks] = useState([]);
     const [bufferedBlob, setBufferedBlob] = useState({'key': 'value'});
@@ -26,6 +27,23 @@
       },
       [setRecordedChunks]
     );
+
+    const handleSelfieClick = useCallback(() => {
+      // get the screenshot
+      const imageSrc = webcamRef.current.getScreenshot();
+      setImgSrc(imageSrc);
+      // send image to server
+      axios.post('/reel/upload', {videoFile: imageSrc})
+        .then(() => {
+          setImgSrc(null);
+        })
+        .catch((err) => {
+          console.error('Failed to axios post selfie: ', err)
+        })
+
+    }, [webcamRef]);
+
+    // console.log(imgSrc, '<----imgSrc outside selfie')
 
     const handleStartCaptureClick = useCallback(() => {
       setCapturing(true);
@@ -131,6 +149,7 @@
         {recordedChunks.length > 0 && (
           <button onClick={saveReel}>Post</button>
         )}
+        <button onClick={handleSelfieClick}>Selfie</button>
       </div>
     );
   }
