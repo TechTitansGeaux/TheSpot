@@ -1,114 +1,168 @@
-import React, { useCallback, useRef, useState } from "react";
-import Webcam from "react-webcam";
-import axios from 'axios';
+  import React, { useCallback, useRef, useState } from "react";
+  import Webcam from "react-webcam";
+  import axios from 'axios';
+  // import streamifier from 'streamifier';
 
-const VideoRecorder = () => {
-  const webcamRef = useRef(null);
-  const mediaRecorderRef = useRef(null);
-  const [capturing, setCapturing] = useState(false);
-  const [recordedChunks, setRecordedChunks] = useState([]);
+  const VideoRecorder = () => {
+    const webcamRef = useRef(null);
+    const mediaRecorderRef = useRef(null);
+    const [capturing, setCapturing] = useState(false);
+    const [recordedChunks, setRecordedChunks] = useState([]);
+    const [bufferedBlob, setBufferedBlob] = useState({'key': 'value'});
 
-  type Blob = {
-    data: {
-    size: number,
-    type: string,
-    }
-  };
-
-  const handleDataAvailable = useCallback(
-    ({ data }: Blob) => {
-      if (data.size > 0) {
-        setRecordedChunks((prev) => prev.concat(data));
+    type Blob = {
+      data: {
+      size: number,
+      type: string,
       }
-    },
-    [setRecordedChunks]
-  );
+    };
 
-  const handleStartCaptureClick = useCallback(() => {
-    setCapturing(true);
-    mediaRecorderRef.current = new MediaRecorder(webcamRef.current.stream, {
-      mimeType: "video/webm",
-    });
-    mediaRecorderRef.current.addEventListener(
-      "dataavailable",
-      handleDataAvailable
+    const handleDataAvailable = useCallback(
+      ({ data }: Blob) => {
+        if (data.size > 0) {
+          setRecordedChunks((prev) => prev.concat(data));
+        }
+        console.log(data, '<----data')
+      },
+      [setRecordedChunks]
     );
-    mediaRecorderRef.current.start();
-  }, [webcamRef, setCapturing, mediaRecorderRef, handleDataAvailable]);
 
-  const handleStopCaptureClick = useCallback(() => {
-    mediaRecorderRef.current.stop();
-    setCapturing(false);
-  }, [mediaRecorderRef, setCapturing]);
-
-  // const handleDownload = useCallback(() => {
-  //   if (recordedChunks.length) {
-  //     const blob = new Blob(recordedChunks, {
-  //       type: "video/webm",
-  //     });
-  //     console.log(blob, '<----blob')
-  //     const url = URL.createObjectURL(blob);
-  //     console.log(url, '<----vid url')
-  //     const a = document.createElement("a");
-  //     document.body.appendChild(a);
-  //     a.href = url;
-  //     a.download = "react-webcam-stream-capture.webm";
-  //     a.click();
-  //     window.URL.revokeObjectURL(url);
-  //     setRecordedChunks([]);
-  //   }
-  // }, [recordedChunks]);
-
-  // save reel to databases
-  const saveReel = useCallback(() => {
-    if (recordedChunks.length) {
-      const blob = new Blob(recordedChunks, {
-        type: "video/webm",
+    const handleStartCaptureClick = useCallback(() => {
+      setCapturing(true);
+      mediaRecorderRef.current = new MediaRecorder(webcamRef.current.stream, {
+        mimeType: "video/webm",
       });
-      // create reel data url for axios post
-      const reelData = URL.createObjectURL(blob);
-      console.log(reelData, '<----reelData')
-      // use post route for axios post
-      axios.post('/reel', {
-          // public_id: 123,
-          video: reelData,
-          user_id: 1,
-          event_id: 1,
-          text: "testText",
-          like_count: 3
-      })
-      .catch((err) => {
-        console.log('Failed axios POST reel: ', err)
-      })
-    }
-  }, [recordedChunks]);
+      mediaRecorderRef.current.addEventListener(
+        "dataavailable",
+        handleDataAvailable
+      );
+      mediaRecorderRef.current.start();
+    }, [webcamRef, setCapturing, mediaRecorderRef, handleDataAvailable]);
 
-  const videoConstraints = {
-    width: 420,
-    height: 420,
-    facingMode: "user",
-  };
+    const handleStopCaptureClick = useCallback(() => {
+      mediaRecorderRef.current.stop();
+      setCapturing(false);
+    }, [mediaRecorderRef, setCapturing]);
 
-  return (
-    <div className="Container">
-      <Webcam
-        height={400}
-        width={400}
-        audio={false}
-        mirrored={true}
-        ref={webcamRef}
-        videoConstraints={videoConstraints}
-      />
-      {capturing ? (
-        <button onClick={handleStopCaptureClick}>Stop Capture</button>
-      ) : (
-        <button onClick={handleStartCaptureClick}>Start Capture</button>
-      )}
-      {recordedChunks.length > 0 && (
-        <button onClick={saveReel}>Post</button>
-      )}
-    </div>
-  );
-}
+    const handleDownload = useCallback(() => {
+      if (recordedChunks.length) {
+        const blob = new Blob(recordedChunks, {
+          type: "video/webm",
+        });
+        const file = new File(recordedChunks, 'video');
+        console.log(file, '<---file')
+        console.log(blob, '<----blob')
+        const url = URL.createObjectURL(blob);
+        console.log(url, '<----vid url')
+        const a = document.createElement("a");
+        document.body.appendChild(a);
+        a.href = url;
+        a.download = "react-webcam-stream-capture.webm";
+        console.log(a, '<----a')
+        a.click();
+        window.URL.revokeObjectURL(url);
+        setRecordedChunks([]);
+      }
+    }, [recordedChunks]);
 
-export default VideoRecorder;
+    // const uploadVideoToServer = async () => {
+    //   try {
+    //     // const blob = new Blob(recordedChunks, {
+    //     //   type: "video/webm",
+    //     // });
+    //     // const formData = new FormData();
+    //     // formData.append('video', blob);
+  
+    //     const response = await axios.post(`/reel/upload/`, {video: recordedChunks});
+  
+    //     if (response && response.data) {
+    //       console.log(response.data, '<-----data from axios upload to server')
+    //     }
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // };
+
+
+    // save reel to databases
+    const saveReel = useCallback(async () => {
+      console.log(recordedChunks, '<------ recordedChunks')
+      if (recordedChunks.length) {
+        const blob = new Blob(recordedChunks, {
+          type: "video/webm",
+        });
+        const form = new FormData;
+        form.append('reel', blob);
+        console.log(form, '<------ blob form ')
+        // const buffered = await blob.arrayBuffer()
+        //   .then(async (data) => {
+        //     console.log(typeof data, '<------type of array buffer')
+        //     // console.log(data.toString, '<---data from blob array buffer STRINGIFIED')
+        //     // setBufferedBlob(data);
+        //     await axios.post('/reel/upload', {
+        //       videoFile: form
+        //       // text: "testText",
+        //       // like_count: 3
+        //   })
+        //   .then(() => {
+        //     setRecordedChunks([]);
+        //   })
+        //   .catch((err) => {
+        //     console.log('Failed axios POST reel: ', err)
+        //   })
+        //   })
+          // console.log(JSON.stringify(buffered), '<------buffered blob to string')
+        const file = new File(recordedChunks, 'video');
+        const url = URL.createObjectURL(blob);
+        console.log(url, '<----url');
+        const sansBlobUrl = url.slice(5);
+        console.log(sansBlobUrl, '<----sans blob')
+        // const png = jdenticon.toPng(blob, blob.size);
+        // const filePath = await Promise.resolve(blob.text());
+        // console.log(filePath, '<------filePath');
+        console.log(recordedChunks, '<-----recordedChunks')
+        console.log(file, '<----file')
+      //  use post route for axios post
+        await axios.post('/reel/upload', {
+            videoFile: sansBlobUrl
+            // text: "testText",
+            // like_count: 3
+        })
+        .then(() => {
+          setRecordedChunks([]);
+        })
+        .catch((err) => {
+          console.log('Failed axios POST reel: ', err)
+        })
+      }
+    }, [recordedChunks]);
+
+    const videoConstraints = {
+      width: 420,
+      height: 420,
+      facingMode: "user",
+    };
+
+    return (
+      <div className="Container">
+        <Webcam
+          height={400}
+          width={400}
+          audio={false}
+          mirrored={true}
+          ref={webcamRef}
+          videoConstraints={videoConstraints}
+        />
+        {capturing ? (
+          <button onClick={handleStopCaptureClick}>Stop Capture</button>
+        ) : (
+          <button onClick={handleStartCaptureClick}>Start Capture</button>
+        )}
+        {recordedChunks.length > 0 && (
+          <button onClick={saveReel}>Post</button>
+        )}
+      </div>
+    );
+  }
+
+  export default VideoRecorder;
