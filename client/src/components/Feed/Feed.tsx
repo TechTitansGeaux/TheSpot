@@ -22,13 +22,22 @@ type Props = {
 
 const Feed: React.FC<Props> = ({user}) => {
   const [reels, setReels] = useState([]);
+  const [filter, setFilter] = useState('reel');
+  const [friends, setFriends] = useState([]);
+
+  const filters = ['reel', 'recent', 'likes'];
+
+  const filterChangeHandler = (event: any) => {
+    setFilter(event.target.value);
+    console.log('filter:', filter);
+  };
 
 
   const getAllReels = () => {
     axios
-      .get('/feed/reel')
+      .get(`/feed/${filter}`)
       .then((response) => {
-        console.log('response.data:', response.data);
+        console.log('reels response.data:', response.data);
         setReels(response.data);
       })
       .catch((err) => {
@@ -36,13 +45,38 @@ const Feed: React.FC<Props> = ({user}) => {
       });
   };
 
+  const getFriendList = () => {
+    axios
+      .get(`/feed/friendlist`)
+      .then((response) => {
+        console.log('friends response.data:', response.data);
+        setFriends(response.data);
+      })
+      .catch((err) => {
+        console.error('Could not GET friends:', err);
+      })
+  };
+
   useEffect(() => {
     getAllReels();
-  }, []);
+  }, [filter]);
 
+  useEffect(() => {
+    getFriendList();
+  }, []);
 
   return (
     <>
+      <label>
+        Filter by:
+        <select onChange={filterChangeHandler}>
+          {filters.map((filter, i) => {
+            return <option key={i}>
+              {filter}
+            </option>
+          })}
+        </select>
+      </label>
       <div className='container-full-w'>
         <Reel reels={reels} user={user} />
       </div>
