@@ -9,6 +9,7 @@ const sequelize = new Sequelize({
   username: 'root',
   password: '',
   database: 'theSpot',
+  logging: false
 });
 
 const Users = sequelize.define(

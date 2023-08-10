@@ -34,6 +34,7 @@ const AddFriend = () => {
             aria-label='add'
             className='friend-add-btn'
           >
+            {/** This icon should be removed after request sent */}
             <AddIcon />
           </Fab>
         </Box>

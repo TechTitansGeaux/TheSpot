@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // import SignUp from './components/SignUp';
@@ -12,7 +13,6 @@ import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { setAuthUser, setIsAuthenticated } from './store/appSlice';
 import axios from 'axios';
-
 
 type User = {
   id: number;
@@ -30,9 +30,14 @@ type User = {
 };
 
 const App = () => {
-  // get all users to pass down as props
+
   const dispatch = useDispatch();
-  const [user, setUser] = useState<User>(null);
+  const [user, setUser] = useState("");
+
+  useEffect(() => {
+    fetchAuthUser();
+  }, []);
+
 
   const fetchAuthUser = async () => {
     try {
@@ -47,10 +52,6 @@ const App = () => {
     }
   };
 
-  useEffect(() => {
-    fetchAuthUser();
-  }, []);
-
   // get all friendships to pass down as props
 
   return (
@@ -62,6 +63,7 @@ const App = () => {
           <Route path='/Feed' element={<Feed user={user} />}></Route>
           <Route path='/Map' element={<Map />}></Route>
           <Route path='/WebcamDisplay' element={<WebcamDisplay />}></Route>
+
         </Route>
       </Routes>
     </BrowserRouter>

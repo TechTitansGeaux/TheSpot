@@ -19,7 +19,7 @@ const SignUp = () => {
             <div className='d-flex justify-content-center mb-3'>
               <GoogleButton onClick={redirectToGoogleSSO} />
             </div>
-            <p className='text-center'>Welcome</p>
+            <h1 className='text-center'>Welcome</h1>
           </div>
         </div>
       </div>

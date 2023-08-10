@@ -40,6 +40,7 @@ const Feed: React.FC<Props> = ({user}) => {
     getAllReels();
   }, []);
 
+
   return (
     <>
       <div className='container-full-w'>
