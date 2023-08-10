@@ -63,7 +63,7 @@ const ProfileSetUp = () => {
       const response = await axios.post(`/users/uploadImage/${authUser.id}`, formData);
 
       if (response && response.data) {
-        dispatch(setAuthUser(response.data));
+        dispatch(setAuthUser(response.data)); 
         setPicture(authUser.picture);
         console.log(picture, '<-----------PIC');
         setSelectedImage(null); // clear the selected image after successful upload
