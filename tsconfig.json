@@ -11,10 +11,6 @@
     "resolveJsonModule": true,
     // "allowImportingTsExtensions": true,
     // "noEmit": false
-    "typeRoots": [
-      "./server",
-      "./node_modules/@types"
-  ],
   },
   "exclude": [
     "node_modules",

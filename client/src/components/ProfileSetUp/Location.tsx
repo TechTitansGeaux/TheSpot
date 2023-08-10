@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react/no-unescaped-entities */
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -8,6 +9,7 @@ import { RootState } from '../../store/store';
 
 const Location: React.FC = () => {
   const [locationStatus, setLocationStatus] = useState<string>('');
+  const [status, setStatus] = useState<string>('');
   const [geolocationError, setGeolocationError] = useState<string>('');
   const dispatch = useDispatch();
   const authUser = useSelector((state: RootState) => state.app.authUser);
@@ -23,6 +25,7 @@ const Location: React.FC = () => {
     const longitude = position.coords.longitude;
 
     setLocationStatus(`Latitude: ${latitude}°, Longitude: ${longitude}°`);
+    setStatus('Cool, see ya there!');
 
     if (authUser) {
       // Update the user's geolocation on the server using Axios
@@ -51,7 +54,7 @@ const Location: React.FC = () => {
     if (!navigator.geolocation) {
       setGeolocationError('Geolocation is not supported by your browser');
     } else {
-      setLocationStatus('Locating…');
+      setStatus('Locating…');
       setGeolocationError('');
 
       navigator.geolocation.getCurrentPosition(success, errorCallback);
@@ -68,7 +71,7 @@ const Location: React.FC = () => {
       ) : (
         <p>You must be authenticated to retrieve your geolocation.</p>
       )}
-      <p id="status">{locationStatus}</p>
+      <p id="status">{status}</p>
       {geolocationError && <p>{geolocationError}</p>}
     </div>
   );

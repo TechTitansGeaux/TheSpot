@@ -125,8 +125,10 @@ users.post('/uploadImage/:id', isUserAuthenticated, upload.single('image'), asyn
       return res.status(404).json({ error: 'User not found' });
     }
 
-    // Construct the URL of the uploaded image
-    const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    // // Construct the URL of the uploaded image
+    // const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    const imageUrl = `server/public/uploads/${req.file.filename}`;
+
 
     // Update the user's picture field with the URL of the uploaded image
     user.picture = imageUrl;

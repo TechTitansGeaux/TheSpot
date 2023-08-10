@@ -15,7 +15,7 @@ auth.get('/login/google', passport.authenticate('google', { scope: ['profile', '
 auth.get('/google/callback', passport.authenticate('google', { failureRedirect: errorLoginUrl, successRedirect: successLoginUrl }), (req: express.Request, res: express.Response) => {
   // Store the user ID in the xsession
   if (req.user) {
-    req.session.userId = req.user.id;
+    //req.session.userId = req.user.id;
     console.log('USER', req.user);
   }
 
