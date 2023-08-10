@@ -13,6 +13,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { setAuthUser, setIsAuthenticated } from './store/appSlice';
 import axios from 'axios';
+import AddFriend from './components/AddFriend';
 
 type User = {
   id: number;
@@ -29,9 +30,11 @@ type User = {
   googleId: string;
 };
 
+
+
 const App = () => {
-  // get all users to pass down as props
   const dispatch = useDispatch();
+  // get all users to pass down as props
   const [user, setUser] = useState<User>(null);
 
   const fetchAuthUser = async () => {
@@ -51,15 +54,13 @@ const App = () => {
     fetchAuthUser();
   }, []);
 
-  // get all friendships to pass down as props
-
   return (
     <BrowserRouter>
       <Routes>
         <Route index element={<SignUp />}></Route>
         <Route path='/' element={<Navigation />}>
           <Route path='/ProfileSetUp' element={<ProfileSetUp />}></Route>
-          <Route path='/Feed' element={<Feed user={user} />}></Route>
+          <Route path='/Feed' element={<Feed user={user} AddFriend={<AddFriend />} />}></Route>
           <Route path='/Map' element={<Map />}></Route>
           <Route path='/WebcamDisplay' element={<WebcamDisplay />}></Route>
         </Route>

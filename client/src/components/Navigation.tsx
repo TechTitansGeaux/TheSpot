@@ -2,10 +2,9 @@ import * as React from 'react';
 import { Outlet, NavLink, Link } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Toolbar } from '@mui/material';
+import  Toolbar  from '@mui/material/Toolbar';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 
-const logo = require('/client/src/img/logo.jpg');
 const logoGradient = require('/client/src/img/logo-gradient.jpg');
 
 const theme = createTheme({

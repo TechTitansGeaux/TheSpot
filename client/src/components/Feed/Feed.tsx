@@ -17,10 +17,11 @@ type Props = {
     email: string;
     picture: string;
     googleId: string;
-  }
+  };
+  AddFriend?: React.ReactNode | React.ReactNode[];
 };
 
-const Feed: React.FC<Props> = ({user}) => {
+const Feed: React.FC<Props> = ({user, AddFriend}) => {
   const [reels, setReels] = useState([]);
   const [filter, setFilter] = useState('reel');
   const [friends, setFriends] = useState([]);
@@ -78,7 +79,7 @@ const Feed: React.FC<Props> = ({user}) => {
         </select>
       </label>
       <div className='container-full-w'>
-        <Reel reels={reels} user={user} />
+        <Reel reels={reels} user={user} AddFriend={AddFriend} />
       </div>
     </>
   );

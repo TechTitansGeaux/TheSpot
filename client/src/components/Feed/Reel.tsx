@@ -4,7 +4,7 @@ import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import AddFriend from '../AddFriend';
+// import AddFriend from '../AddFriend';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import Zoom from '@mui/material/Zoom';
@@ -13,8 +13,7 @@ import axios from 'axios';
 
 
 type Props = {
-  reels:
-  {
+  reels: {
     id: string;
     public_id: number;
     url: string;
@@ -24,8 +23,9 @@ type Props = {
     EventId?: number;
     User: User;
     Event: Event;
-  }[],
+  }[];
   user: User;
+  AddFriend?: React.ReactNode | React.ReactNode[];
 };
 
 type User = {
@@ -55,11 +55,14 @@ type Event = {
   PlaceId: 1;
 };
 
-const Reel: React.FC<Props> = ({ reels, user }) => {
+const Reel: React.FC<Props> = ({ reels, user, AddFriend }) => {
 
-  // get friendship from db and create state
+  // get friendship from db for currUser and create state
+  /**
+   * within  reels?.map // if reel.User.id is equal to friend <accepter_id>
+   *
+   */
 
-  console.log('feed user', user);
   return (
     <div className='reel-container'>
       {reels?.map((reel) => {
@@ -68,7 +71,7 @@ const Reel: React.FC<Props> = ({ reels, user }) => {
             <div className='video' id={reel.url}>
               <p className='video-text'>{reel.text}</p>
               {/**TRUE: if current user not friend with reel user set to <AddFriend/> | FALSE: if friend & remove icon - null */}
-              <AddFriend />
+              <>{AddFriend}</>
               <div className='friend-request'>
                 <Tooltip
                   title={reel.User.displayName}

@@ -20,9 +20,18 @@ const theme = createTheme({
   },
 });
 
-const AddFriend = () => {
 
-  // post friendship to db 
+interface ParentCompProps {
+  AddFriend?: React.ReactNode | React.ReactNode[];
+}
+const AddFriend: React.FC<ParentCompProps> = () => {
+  // post friendship to db
+  const requestFriendship = () => {
+    console.log('your friendship is requested');
+    // axios.post('/friends', (req: any, res: any) => {
+
+    // });
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -35,7 +44,7 @@ const AddFriend = () => {
             className='friend-add-btn'
           >
             {/** This icon should be removed after request sent */}
-            <AddIcon />
+            <AddIcon onClick={requestFriendship} />
           </Fab>
         </Box>
       </div>
