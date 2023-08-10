@@ -40,7 +40,6 @@ const App = () => {
       if (response && response.data) {
         dispatch(setIsAuthenticated(true));
         dispatch(setAuthUser(response.data));
-        console.log('data from response', response.data);
         setUser(response.data);
       }
     } catch (error) {
