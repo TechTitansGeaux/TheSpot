@@ -8,7 +8,7 @@ import WebcamDisplay from './components/CreateReel/WebcamDisplay';
 import Navigation from './components/Navigation';
 import './global.css';
 import SignUp from './components/ProfileSetUp/SignUp';
-import ProfileSetUp from './components/ProfileSetUp/Location';
+import ProfileSetUp from './components/ProfileSetUp/ProfileSetUp';
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { setAuthUser, setIsAuthenticated } from './store/appSlice';

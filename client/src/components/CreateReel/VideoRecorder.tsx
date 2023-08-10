@@ -92,41 +92,11 @@
           type: "video/webm",
         });
         const form = new FormData;
-        form.append('reel', blob);
+        form.append('file', blob);
         console.log(form, '<------ blob form ')
-        // const buffered = await blob.arrayBuffer()
-        //   .then(async (data) => {
-        //     console.log(typeof data, '<------type of array buffer')
-        //     // console.log(data.toString, '<---data from blob array buffer STRINGIFIED')
-        //     // setBufferedBlob(data);
-        //     await axios.post('/reel/upload', {
-        //       videoFile: form
-        //       // text: "testText",
-        //       // like_count: 3
-        //   })
-        //   .then(() => {
-        //     setRecordedChunks([]);
-        //   })
-        //   .catch((err) => {
-        //     console.log('Failed axios POST reel: ', err)
-        //   })
-        //   })
-          // console.log(JSON.stringify(buffered), '<------buffered blob to string')
-        const file = new File(recordedChunks, 'video');
-        const url = URL.createObjectURL(blob);
-        console.log(url, '<----url');
-        const sansBlobUrl = url.slice(5);
-        console.log(sansBlobUrl, '<----sans blob')
-        // const png = jdenticon.toPng(blob, blob.size);
-        // const filePath = await Promise.resolve(blob.text());
-        // console.log(filePath, '<------filePath');
-        console.log(recordedChunks, '<-----recordedChunks')
-        console.log(file, '<----file')
-      //  use post route for axios post
+
         await axios.post('/reel/upload', {
-            videoFile: sansBlobUrl
-            // text: "testText",
-            // like_count: 3
+            videoFile: form
         })
         .then(() => {
           setRecordedChunks([]);
