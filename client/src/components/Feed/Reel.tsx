@@ -57,9 +57,12 @@ type Event = {
 
 const Reel: React.FC<Props> = ({ reels, user, AddFriend }) => {
 
-  // get friendship from db and create state
+  // get friendship from db for currUser and create state
+  /**
+   * within  reels?.map // if reel.User.id is equal to friend <accepter_id>
+   *
+   */
 
-  console.log('feed user', user);
   return (
     <div className='reel-container'>
       {reels?.map((reel) => {

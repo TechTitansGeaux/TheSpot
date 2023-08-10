@@ -5,8 +5,12 @@ import axios from 'axios';
 import { setAuthUser } from '../../store/appSlice';
 import { RootState } from '../../store/store';
 import Location from './Location';
-import { Avatar, Button, Container, TextField, Typography, MenuItem } from '@mui/material';
-import { UploadFile } from '@mui/icons-material';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import TextField from '@mui/material/TextField';
+import UploadFile from '@mui/icons-material/UploadFile';
+import MenuItem from '@mui/material/MenuItem';
 
 
 const ProfileSetUp = () => {
@@ -76,7 +80,7 @@ const ProfileSetUp = () => {
 
   return (
     <Container className="container-full-w center">
-      <Typography variant="h1">Profile Setup</Typography>
+      <h1>Profile Setup</h1>
       <div className='flex-container center' style={{ display: 'flex', alignItems: 'center' }}>
           <Avatar
             src={picture}
