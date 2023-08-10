@@ -20,6 +20,8 @@ const ProfileSetUp = () => {
   const [picture, setPicture] = React.useState('');
   const [selectedImage, setSelectedImage] = useState(null);
   const [isImageSelected, setIsImageSelected] = useState(false);
+  const [selectedMapIcon, setSelectedMapIcon] = React.useState('');
+
 
   useEffect(() => {
     if (authUser) {
@@ -31,9 +33,10 @@ const ProfileSetUp = () => {
     const profileData = {
       username,
       displayName,
-      type, // Updated profile type
+      type,
       birthday,
       picture,
+      mapIcon: selectedMapIcon,
     };
 
     // Update user's profile on the server using Axios
@@ -63,7 +66,7 @@ const ProfileSetUp = () => {
       const response = await axios.post(`/users/uploadImage/${authUser.id}`, formData);
 
       if (response && response.data) {
-        dispatch(setAuthUser(response.data)); 
+        dispatch(setAuthUser(response.data));
         setPicture(authUser.picture);
         console.log(picture, '<-----------PIC');
         setSelectedImage(null); // clear the selected image after successful upload
@@ -132,6 +135,24 @@ const ProfileSetUp = () => {
         >
           <MenuItem value="personal">Party Goer</MenuItem>
           <MenuItem value="business">Party Thrower</MenuItem>
+        </TextField>
+
+        <TextField
+          select
+          label="Select Map Icon"
+          variant="outlined"
+          color="secondary"
+          fullWidth
+          value={selectedMapIcon}
+          onChange={e => setSelectedMapIcon(e.target.value)}
+          style={{ backgroundColor: 'var(--grey)', marginBottom: '1rem' }}
+        >
+          <MenuItem value="𓆉">𓆉</MenuItem>
+          <MenuItem value="✿">✿</MenuItem>
+          <MenuItem value="𓃠">𓃠</MenuItem>
+          <MenuItem value="♛">♛</MenuItem>
+          <MenuItem value="★">★</MenuItem>
+          <MenuItem value="☻">☻</MenuItem>
         </TextField>
 
         <TextField
