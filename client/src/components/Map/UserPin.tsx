@@ -21,24 +21,11 @@ type Props = {
   lng: number
 };
 
-const UserPin: React.FC<Props> = () => {
-  // const [lat, setLat] = useState(0);
-  // const [lng, setLng] = useState(0);
-
-  // const setLocation = () => {
-  //   const str = props.user.geolocation;
-  //   const arr = str.split(',');
-  //   setLat(+arr[0]);
-  //   setLng(+arr[1]);
-  // }
-
-  // useEffect(() => {
-  //   setLocation();
-  // }, [])
+const UserPin: React.FC<Props> = (props) => {
 
   return (
     <div style={{ backgroundColor: 'black', width: '75px', border: '4px solid green' }} >
-      {'bob'}
+      {props.user.username}
     </div>
 
   );
