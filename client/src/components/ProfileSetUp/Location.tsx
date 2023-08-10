@@ -1,33 +1,48 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react/no-unescaped-entities */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import axios from 'axios'; // Import Axios
+import axios from 'axios';
 import { setAuthUser } from '../../store/appSlice';
 import { RootState } from '../../store/store';
 
+
 const Location: React.FC = () => {
   const [locationStatus, setLocationStatus] = useState<string>('');
+  const [status, setStatus] = useState<string>('');
   const [geolocationError, setGeolocationError] = useState<string>('');
   const dispatch = useDispatch();
   const authUser = useSelector((state: RootState) => state.app.authUser);
+
+  useEffect(() => {
+    if (authUser) {
+      setLocationStatus(`Your geolocation: ${authUser.geolocation}`);
+    }
+  }, [authUser]);
 
   const success = (position: GeolocationPosition) => {
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
 
     setLocationStatus(`Latitude: ${latitude}°, Longitude: ${longitude}°`);
+    setStatus('Cool, see ya there!');
 
-    // Update the user's geolocation on the server using Axios
-    axios
-      .patch(`/users/${authUser.id}`, { geolocation: `${latitude},${longitude}` })
-      .then(response => {
-        // Dispatch the updated user object to the Redux store
-        dispatch(setAuthUser(response.data));
-      })
-      .catch(error => {
-        console.error(error);
-        setGeolocationError('Error updating geolocation on server');
-      });
+    if (authUser) {
+      // Update the user's geolocation on the server using Axios
+      const newGeolocation = `${latitude},${longitude}`;
+      axios
+        .patch(`/users/updateGeolocation/${authUser.id}`, { geolocation: newGeolocation })
+        .then(response => {
+          // Dispatch the updated user object to the Redux store
+          dispatch(setAuthUser(response.data));
+        })
+        .catch(error => {
+          console.error(error);
+          setGeolocationError('Error updating geolocation on server');
+        });
+    } else {
+      console.error('User not authenticated'); // Handle this case as needed
+    }
   };
 
   const errorCallback = () => {
@@ -39,7 +54,7 @@ const Location: React.FC = () => {
     if (!navigator.geolocation) {
       setGeolocationError('Geolocation is not supported by your browser');
     } else {
-      setLocationStatus('Locating…');
+      setStatus('Locating…');
       setGeolocationError('');
 
       navigator.geolocation.getCurrentPosition(success, errorCallback);
@@ -49,10 +64,14 @@ const Location: React.FC = () => {
   return (
     <div>
       <h1>Yo what's the Lo?</h1>
-      <button id="find-me" onClick={geoFindMe}>
-        Get My Lo
-      </button>
-      <p id="status">{locationStatus}</p>
+      {authUser ? (
+        <button id="find-me" onClick={geoFindMe}>
+          Get My Lo
+        </button>
+      ) : (
+        <p>You must be authenticated to retrieve your geolocation.</p>
+      )}
+      <p id="status">{status}</p>
       {geolocationError && <p>{geolocationError}</p>}
     </div>
   );

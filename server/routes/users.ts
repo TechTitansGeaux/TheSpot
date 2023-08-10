@@ -125,8 +125,10 @@ users.post('/uploadImage/:id', isUserAuthenticated, upload.single('image'), asyn
       return res.status(404).json({ error: 'User not found' });
     }
 
-    // Construct the URL of the uploaded image
-    const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    // // Construct the URL of the uploaded image
+    // const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    const imageUrl = `server/public/uploads/${req.file.filename}`;
+
 
     // Update the user's picture field with the URL of the uploaded image
     user.picture = imageUrl;
@@ -167,5 +169,35 @@ users.get('/:id/geolocation', async (req: any, res: any) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+// PATCH request to update user's geolocation
+users.patch('/updateGeolocation/:id', async (req: any, res: any) => {
+  const { id } = req.params;
+  const { geolocation } = req.body;
+
+  try {
+    // Find the user by ID in the database
+    const user = await Users.findByPk(id);
+
+    if (!user) {
+      // If the user doesn't exist, send a 404 Not Found response
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Update the user's geolocation
+    user.geolocation = geolocation;
+
+    // Save the updated user to the database
+    await user.save();
+
+    // Respond with the updated user
+    res.json(user);
+  } catch (error) {
+    // Handle any errors that occur
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 
 export default users;
