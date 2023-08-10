@@ -1,29 +1,21 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { configureStore, PayloadAction } from "@reduxjs/toolkit";
+import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import logger from "redux-logger";
 import appReducer from "./appSlice";
 
 export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(logger),
+    [...getDefaultMiddleware(), logger],
   reducer: {
-    app: appReducer
+    app: appReducer,
   },
 });
 
-export type AppDispatch = typeof store.dispatch
-export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch;
+export type RootState = ReturnType<typeof store.getState>;
 
-interface action {
-  dispatch: AppDispatch,
-  getState: RootState
-}
-
-export const AppThunk = (action: any) => {
+export const AppThunk = (action: (dispatch: AppDispatch, getState: RootState) => void) => {
   return function (dispatch: AppDispatch, getState: RootState) {
     return action(dispatch, getState);
   };
 };
-
-export default store;
