@@ -106,6 +106,7 @@ footer {
   justify-content: center;
   bottom: 0%;
   width: 100vw;
+  z-index: 9999;
 }
 
 /* ////// NAVIGATION */
@@ -115,6 +116,7 @@ footer {
   justify-content: center;
   align-items: center;
   padding: .75rem 0;
+  z-index: 9999;
 }
 
 #nav-logo {
@@ -130,25 +132,26 @@ footer {
   font-size: var(--md-font);
   color: var(--yellow);
 }
+
 /* ////// FEED & REEL */
 
 .friend-request {
-  position: absolute;
+  position: relative;
   right: 3%;
-  bottom: 3%;
+  top: 80%;
 }
 
 .friend-add-btn {
   position: absolute;
-  left: 8%;
-  bottom: 34%;
-  z-index: 3;
-}
-
-.friend-avatar {
+  left: 88%;;
   z-index: 2;
 }
 
+.friend-avatar {
+  position: absolute;
+  cursor: pointer;
+  left: 87%;
+}
 
 /* ////// FEED & REEL */
 
