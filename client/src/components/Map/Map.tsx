@@ -6,7 +6,7 @@ import UserPin from './UserPin';
 
 const Map = () => {
 
-  const [ users, setUsers ] = useState([{username: 'p'}])
+  const [ users, setUsers ] = useState([])
 
   useEffect(() => {
     axios.get('/users')
@@ -18,13 +18,8 @@ const Map = () => {
       });
   }, [])
 
-  const getLocation = (str: string) => {
-    return str.split(',');
-  }
-
   return (
     <div style={{ display: 'flex', justifyContent: 'center' }}>
-      <div>{users[0].username}</div>
       <div style={{ height: '75vh', width: '80%' }}>
         <GoogleMapReact
           bootstrapURLKeys={{ key: "AIzaSyAYtb7y6JZ2DxgdIESWJky8NyhWuu_YFVg" }}
@@ -32,7 +27,7 @@ const Map = () => {
           defaultCenter={{lat: 29.917448559152003, lng: -90.10073471661711}}
         >{
           users.map((user, i) => {
-            return <UserPin username={user.username} key={user.username + i} lat={getLocation(user.geolocation)[0]} lng={getLocation(user.geolocation)[1]}/>
+            return <UserPin user={user} key={i} lat={29.917448559152003} lng={ -90.10073471661711} />
           })
         }</GoogleMapReact>
       </div>
