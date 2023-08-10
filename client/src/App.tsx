@@ -30,14 +30,9 @@ type User = {
 };
 
 const App = () => {
-
+  // get all users to pass down as props
   const dispatch = useDispatch();
-  const [user, setUser] = useState("");
-
-  useEffect(() => {
-    fetchAuthUser();
-  }, []);
-
+  const [user, setUser] = useState<User>(null);
 
   const fetchAuthUser = async () => {
     try {
@@ -52,6 +47,10 @@ const App = () => {
     }
   };
 
+  useEffect(() => {
+    fetchAuthUser();
+  }, []);
+
   // get all friendships to pass down as props
 
   return (
@@ -63,7 +62,6 @@ const App = () => {
           <Route path='/Feed' element={<Feed user={user} />}></Route>
           <Route path='/Map' element={<Map />}></Route>
           <Route path='/WebcamDisplay' element={<WebcamDisplay />}></Route>
-
         </Route>
       </Routes>
     </BrowserRouter>
