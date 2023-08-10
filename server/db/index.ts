@@ -8,7 +8,8 @@ const sequelize = new Sequelize({
   dialect: 'mysql',
   username: 'root',
   password: '',
-  database: 'theSpot'
+  database: 'theSpot',
+  logging: false
 });
 
 const Users = sequelize.define('Users', {
