@@ -8,7 +8,7 @@ const {
   RSVPs,
   Likes,
   Notifications,
-  Friendship,
+  Friendships,
 } = require('./index.ts');
 // import { db, Users } from './index.ts'
 db.options.logging = false;
@@ -74,11 +74,11 @@ const seedSqlize = () => {
         "\nDatabase (MySQL): 'Notifications' table successfully created!"
       )
     )
-    .then(() => Friendship.sync({ force: true }))
+    .then(() => Friendships.sync({ force: true }))
     .then(() =>
       console.log(
         '\x1b[36m',
-        "\nDatabase (MySQL): 'Friendship' table successfully created!"
+        "\nDatabase (MySQL): 'Friendships' table successfully created!"
       )
     )
     .then(() =>
@@ -94,6 +94,11 @@ const seedSqlize = () => {
     .then(() =>
       Promise.all(
         require('./fakeEventData.json').map((txn) => Events.create(txn))
+      )
+    )
+    .then(() =>
+      Promise.all(
+        require('./fakeFriendData.json').map((txn) => Friendships.create(txn))
       )
     )
     .then(() =>

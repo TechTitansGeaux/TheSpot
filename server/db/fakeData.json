@@ -3,27 +3,72 @@
     "id": 1,
     "public_id": 1,
     "url": "vid1",
-    "text": "party one yay",
-    "like_count": 6,
+    "text": "Party at my house!",
+    "like_count": 109,
     "UserId": 1,
     "EventId": 1
   },
   {
     "id": 2,
-    "public_id": 2,
+    "public_id": 1,
     "url": "vid2",
-    "text": "party 2 weee",
+    "text": "Party Cancelled...",
     "like_count": 3,
     "UserId": 1,
     "EventId": 2
   },
   {
     "id": 3,
-    "public_id": 3,
+    "public_id": 2,
     "url": "vid3",
-    "text": "party 2 its lit",
+    "text": "I need a drink.🍻",
     "like_count": 8,
+    "UserId": 2,
+    "EventId": 2
+  },
+  {
+    "id": 4,
+    "public_id": 3,
+    "url": "vid1",
+    "text": "",
+    "like_count": 6,
+    "UserId": 3,
+    "EventId": 1
+  },
+  {
+    "id": 5,
+    "public_id": 1,
+    "url": "vid2",
+    "text": "Don't Stop.. Belieeeving!",
+    "like_count": 3,
     "UserId": 1,
     "EventId": 2
+  },
+  {
+    "id": 6,
+    "public_id": 4,
+    "url": "vid3",
+    "text": "SUUUUP!",
+    "like_count": 29,
+    "UserId": 4,
+    "EventId": 2
+  },
+  {
+    "id": 7,
+    "public_id": 5,
+    "url": "vid2",
+    "text": "Let's Gooooo!",
+    "like_count": 13,
+    "UserId": 5,
+    "EventId": 2
+  },
+  {
+    "id": 8,
+    "public_id": 5,
+    "url": "vid3",
+    "text": "🕸️ Spidey senses are tingling",
+    "like_count": 12,
+    "UserId": 5,
+    "EventId": 1
   }
 ]

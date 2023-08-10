@@ -8,141 +8,170 @@ const sequelize = new Sequelize({
   dialect: 'mysql',
   username: 'root',
   password: '',
-  database: 'theSpot'
+  database: 'theSpot',
+  logging: false
 });
 
-const Users = sequelize.define('Users', {
-  id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    primaryKey: true,
-    autoIncrement: true
+const Users = sequelize.define(
+  'Users',
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    username: {
+      type: DataTypes.STRING(100),
+      unique: true,
+    },
+    displayName: {
+      type: DataTypes.STRING(100),
+      allowNull: false,
+    },
+    type: {
+      type: DataTypes.STRING(100),
+    },
+    geolocation: {
+      type: DataTypes.STRING(100),
+    },
+    mapIcon: DataTypes.STRING(100),
+    birthday: DataTypes.DATE,
+    privacy: DataTypes.STRING(100),
+    accessibility: DataTypes.STRING(100),
+    email: DataTypes.STRING(100),
+    picture: DataTypes.STRING(100),
+    googleId: DataTypes.STRING(100),
   },
-  username: {
-    type: DataTypes.STRING(100),
-    unique: true
-  },
-  displayName: {
-    type: DataTypes.STRING(100),
-    allowNull: false,
-  },
-  type: {
-    type: DataTypes.STRING(100),
-  },
-  geolocation: {
-    type: DataTypes.STRING(100)
-  },
-  mapIcon: DataTypes.STRING(100),
-  birthday: DataTypes.DATE,
-  privacy: DataTypes.STRING(100),
-  accessibility: DataTypes.STRING(100),
-  email: DataTypes.STRING(100),
-  picture: DataTypes.STRING(100),
-  googleId: DataTypes.STRING(100),
-}, { timestamps: true });
+  { timestamps: true }
+);
 
-const Places = sequelize.define('Places', {
-  id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    primaryKey: true,
-    autoIncrement: true
+const Places = sequelize.define(
+  'Places',
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    venue_name: {
+      type: DataTypes.STRING(100),
+      allowNull: false,
+    },
+    coordinates: {
+      type: DataTypes.STRING(100),
+      allowNull: false,
+    },
   },
-  venue_name: {
-    type: DataTypes.STRING(100),
-    allowNull: false,
-  },
-  coordinates: {
-    type: DataTypes.STRING(100),
-    allowNull: false,
-  }
-}, { timestamps: true });
+  { timestamps: true }
+);
 
-const Events = sequelize.define('Events', {
-  id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    primaryKey: true,
-    autoIncrement: true
+const Events = sequelize.define(
+  'Events',
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    name: {
+      type: DataTypes.STRING(100),
+      allowNull: false,
+    },
+    rsvp_count: {
+      type: DataTypes.INTEGER,
+    },
+    date: {
+      type: DataTypes.DATE,
+    },
+    geolocation: {
+      type: DataTypes.STRING(100),
+    },
+    twenty_one: {
+      type: DataTypes.BOOLEAN,
+    },
   },
-  name: {
-    type: DataTypes.STRING(100),
-    allowNull: false,
-  },
-  rsvp_count: {
-    type: DataTypes.INTEGER
-  },
-  date: {
-    type: DataTypes.DATE
-  },
-  geolocation: {
-    type: DataTypes.STRING(100)
-  },
-  twenty_one: {
-    type: DataTypes.BOOLEAN
-  }
-}, { timestamps: true });
+  { timestamps: true }
+);
 
-const Reels = sequelize.define('Reels', {
-  id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    primaryKey: true,
-    autoIncrement: true
-  },
+const Reels = sequelize.define(
+  'Reels',
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
+    },
 
-  public_id: {
-    type: DataTypes.INTEGER
+    public_id: {
+      type: DataTypes.INTEGER,
+    },
+    url: {
+      type: DataTypes.STRING,
+    },
+    text: {
+      type: DataTypes.STRING(100),
+    },
+    like_count: {
+      type: DataTypes.INTEGER,
+    },
   },
-  url: {
-    type: DataTypes.STRING
-  },
-  text: {
-    type: DataTypes.STRING(100),
-  },
-  like_count: {
-    type: DataTypes.INTEGER
-  }
-}, { timestamps: true });
+  { timestamps: true }
+);
 
-const RSVPs = sequelize.define('Rsvp', {
-  id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    primaryKey: true,
-    autoIncrement: true
-  }
-}, { timestamps: true });
-
-const Likes = sequelize.define('Likes', {
-  id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    primaryKey: true,
-    autoIncrement: true
-  }
-}, { timestamps: true });
-
-const Notifications = sequelize.define('Notifications', {
-  id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    primaryKey: true,
-    autoIncrement: true
+const RSVPs = sequelize.define(
+  'Rsvp',
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
+    },
   },
-  type: {
-    type: DataTypes.STRING(100),
-  },
-  sender_id: {
-    type: DataTypes.STRING(100),
-  },
-  receiver_id: {
-    type: DataTypes.STRING(100),
-  }
-}, { timestamps: true });
+  { timestamps: true }
+);
 
-const Friendship = sequelize.define(
-  'Friendship',
+const Likes = sequelize.define(
+  'Likes',
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+  },
+  { timestamps: true }
+);
+
+const Notifications = sequelize.define(
+  'Notifications',
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    type: {
+      type: DataTypes.STRING(100),
+    },
+    sender_id: {
+      type: DataTypes.STRING(100),
+    },
+    receiver_id: {
+      type: DataTypes.STRING(100),
+    },
+  },
+  { timestamps: true }
+);
+
+const Friendships = sequelize.define(
+  'Friendships',
   {
     id: {
       type: DataTypes.INTEGER,
@@ -202,5 +231,5 @@ module.exports = {
   RSVPs,
   Likes,
   Notifications,
-  Friendship,
+  Friendships,
 };

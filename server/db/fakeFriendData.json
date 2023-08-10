@@ -1,0 +1,27 @@
+
+[
+  {
+    "id": 1,
+    "status": "approved",
+    "requester_id": 2,
+    "accepter_id": 3
+  },
+  {
+    "id": 2,
+    "status": "approved",
+    "requester_id": 3,
+    "accepter_id": 2
+  },
+  {
+    "id": 3,
+    "status": "pending",
+    "requester_id": 2,
+    "accepter_id": 1
+  },
+  {
+    "id": 4,
+    "status": "pending",
+    "requester_id": 4,
+    "accepter_id": 5
+  }
+]
