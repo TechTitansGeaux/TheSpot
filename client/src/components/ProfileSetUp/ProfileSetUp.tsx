@@ -51,6 +51,8 @@ const ProfileSetUp = () => {
   };
 
   const handleImageChange = (event: any) => {
+    console.log(event.target.files[0], '<---- is sent back to server PROF PIC')
+    console.log(typeof event.target.files[0], '<---- is its datatype PROF PIC')
     setSelectedImage(event.target.files[0]);
     setIsImageSelected(true);
   };
