@@ -107,7 +107,7 @@ const Reels = sequelize.define(
     },
 
     public_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
     },
     url: {
       type: DataTypes.STRING,

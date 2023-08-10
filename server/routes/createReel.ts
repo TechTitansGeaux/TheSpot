@@ -3,45 +3,20 @@ import { Router } from 'express';
 const reelRouter = Router();
 const { Reels } = require('../db/index');
 const cloudinary = require('../cloudinary');
-const streamifier = require('streamifier');
 const multer = require('multer');
 
-// const upload = multer({dest: 'public/files'});
-
-
 const uploadReelToCloudinary = async (file: string) => {
-  console.log(file, '<------- file from uploadToCloudinary')
   try {
-    const result = await cloudinary.uploader.upload(file);
+    const result = await cloudinary.uploader.upload(file, {
+      resource_type: "video"
+    });
+    console.log(result, '<-----result from upload to cloudinary')
     return result.secure_url;
   } catch (err) {
     console.error('Failed cloudinary reel upload: ', err);
     throw err;
   }
 };
-
-// const uploadFromBuffer = (file: any) => {
-// console.log(file, '<----- file from uploadFromBuffer')
-//   return new Promise((resolve, reject) => {
-
-//     const cld_upload_stream = cloudinary.uploader.upload_stream(
-//      {
-//        folder: "reels"
-//      },
-//      (error: any, result: any) => {
-
-//        if (result) {
-//          resolve(result);
-//        } else {
-//          reject(error);
-//         }
-//       }
-//     );
-
-//     streamifier.createReadStream(file.buffer).pipe(cld_upload_stream);
-//   });
-
-// };
 
 // set up multer storage
 const storage = multer.diskStorage({
@@ -55,64 +30,35 @@ const storage = multer.diskStorage({
 
 const fileUpload = multer({storage});
 
-// const fileUpload = multer();
+reelRouter.post('/upload', fileUpload.single('video'), async (req: any, res: any) => {
+  console.log(req.file, '<-----req.file');
+  console.log(req.body, '<-----req.body');
 
-reelRouter.post('/upload', fileUpload.single('reel'), async (req: any, res: any) => {
-console.log(req.file, '<-----req.file');
-//   const streamUpload = (req: any) => {
-//     return new Promise((resolve, reject) => {
-//         const stream = cloudinary.uploader.upload_stream(
-//           (error: any, result: any) => {
-//             if (result) {
-//               resolve(result);
-//             } else {
-//               reject(error);
-//             }
-//           }
-//         );
-
-//       streamifier.createReadStream(req.file.buffer).pipe(stream);
-//     });
-// };
-
-// async function upload(req: any) {
-//     const result = await streamUpload(req);
-//     console.log(result);
-// }
-
-// upload(req);
-
-  // access properties of reel from req body
-  const { id, videoFile, user_id, event_id, text, like_count } = req.body;
-
-//   // const videoForm = new FormData(videoFile);
-//   // console.log(videoForm, '<-----videoForm')
-
-//   console.log(req.body.videoFile, '<-----req.body.videoFile')
+  const { text, userId, eventId} = req.body;
 
   try {
-    const cloudURL = await uploadReelToCloudinary(videoFile)
-    console.log(videoFile, '<-----videoFile')
-    console.log(req.body, '<-------req.body')
-    // //  Construct the URL of the uploaded video
-    //   const videoURL = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
-    //   console.log(videoURL, '<------videoURL')
+    let cloudURL = await uploadReelToCloudinary(req.file.path)
+    // cloudURL comes as a mkv, here I jankily turn it into a webm
+    cloudURL = cloudURL.slice(0, cloudURL.length - 3) + 'webm';
+    // also jankily getting the publicID
+    const cloudID = cloudURL.slice(cloudURL.length - 23, cloudURL.length - 5);
     const reel = await Reels.create({
-      id,
-      // public_id: result.public_id,
+      public_id: cloudID,
       url: cloudURL,
       text,
-      like_count
+      userId,
+      eventId
     });
     res.status(201).json({
       success: true,
       reel
     })
+
+    console.log(reel, '<---- reel created in server ')
   } catch (error) {
     console.error('Failed to CREATE reel: ', error)
-    res.sendStatus(500);
+    res.status(500).json('Failed to CREATE reel');
   }
 });
-
 
 export default reelRouter;

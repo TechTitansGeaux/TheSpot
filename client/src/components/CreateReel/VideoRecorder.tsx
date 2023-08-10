@@ -1,3 +1,4 @@
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   import React, { useCallback, useRef, useState } from "react";
   import Webcam from "react-webcam";
   import axios from 'axios';
@@ -6,9 +7,13 @@
   const VideoRecorder = () => {
     const webcamRef = useRef(null);
     const mediaRecorderRef = useRef(null);
+    const [imgSrc, setImgSrc] = useState(null);
     const [capturing, setCapturing] = useState(false);
+    const [selfieTaken, setSelfieTaken] = useState(false);
     const [recordedChunks, setRecordedChunks] = useState([]);
-    const [bufferedBlob, setBufferedBlob] = useState({'key': 'value'});
+    const [text, setText] = useState('test text');
+    const [userId, setUserId] = useState(1);
+    const [eventId, setEventId] = useState(1)
 
     type Blob = {
       data: {
@@ -22,10 +27,65 @@
         if (data.size > 0) {
           setRecordedChunks((prev) => prev.concat(data));
         }
-        console.log(data, '<----data')
       },
       [setRecordedChunks]
     );
+
+    // function to turn image data string into file
+  const dataURLtoFile = (dataurl: any, filename: any) => {
+    const arr = dataurl.split(',');
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[arr.length - 1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, {type:mime});
+}
+  // function to turn ANY url into a file!
+  const urltoFile = (url: any, filename: any, mimeType: any) => {
+    if (url.startsWith('data:')) {
+        const arr = url.split(',');
+        const mime = arr[0].match(/:(.*?);/)[1];
+        const bstr = atob(arr[arr.length - 1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while(n--){
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        const file = new File([u8arr], filename, {type:mime || mimeType});
+        return Promise.resolve(file);
+    }
+    return fetch(url)
+        .then(res => res.arrayBuffer())
+        .then(buf => new File([buf], filename,{type:mimeType}));
+}
+
+    // to enable selfies, must got back and make server route with upload.image to multer (rather than video)
+    const handleSelfieClick = useCallback(async () => {
+      setSelfieTaken(true);
+      // get the screenshot
+      const imageSrc = webcamRef.current.getScreenshot();
+      setImgSrc(imageSrc);
+    }, [webcamRef]);
+    
+    const handleSaveSelfie = useCallback(() => {
+      // try to turn long string into a file
+      const file = dataURLtoFile(imgSrc, 'image.jpg');
+
+      const formData = new FormData();
+      formData.append('image', file);
+      // send image to server
+      axios.post('/reel/upload', formData)
+        .then(() => {
+          setImgSrc(null);
+        })
+        .catch((err) => {
+          console.error('Failed to axios post selfie: ', err)
+        })
+        setSelfieTaken(false);
+    }, [selfieTaken])
 
     const handleStartCaptureClick = useCallback(() => {
       setCapturing(true);
@@ -49,85 +109,34 @@
         const blob = new Blob(recordedChunks, {
           type: "video/webm",
         });
-        const file = new File(recordedChunks, 'video');
-        console.log(file, '<---file')
-        console.log(blob, '<----blob')
         const url = URL.createObjectURL(blob);
-        console.log(url, '<----vid url')
         const a = document.createElement("a");
         document.body.appendChild(a);
         a.href = url;
         a.download = "react-webcam-stream-capture.webm";
-        console.log(a, '<----a')
         a.click();
         window.URL.revokeObjectURL(url);
         setRecordedChunks([]);
       }
     }, [recordedChunks]);
 
-    // const uploadVideoToServer = async () => {
-    //   try {
-    //     // const blob = new Blob(recordedChunks, {
-    //     //   type: "video/webm",
-    //     // });
-    //     // const formData = new FormData();
-    //     // formData.append('video', blob);
-  
-    //     const response = await axios.post(`/reel/upload/`, {video: recordedChunks});
-  
-    //     if (response && response.data) {
-    //       console.log(response.data, '<-----data from axios upload to server')
-    //     }
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
-    // };
-
-
     // save reel to databases
     const saveReel = useCallback(async () => {
-      console.log(recordedChunks, '<------ recordedChunks')
       if (recordedChunks.length) {
         const blob = new Blob(recordedChunks, {
           type: "video/webm",
         });
-        const form = new FormData;
-        form.append('reel', blob);
-        console.log(form, '<------ blob form ')
-        // const buffered = await blob.arrayBuffer()
-        //   .then(async (data) => {
-        //     console.log(typeof data, '<------type of array buffer')
-        //     // console.log(data.toString, '<---data from blob array buffer STRINGIFIED')
-        //     // setBufferedBlob(data);
-        //     await axios.post('/reel/upload', {
-        //       videoFile: form
-        //       // text: "testText",
-        //       // like_count: 3
-        //   })
-        //   .then(() => {
-        //     setRecordedChunks([]);
-        //   })
-        //   .catch((err) => {
-        //     console.log('Failed axios POST reel: ', err)
-        //   })
-        //   })
-          // console.log(JSON.stringify(buffered), '<------buffered blob to string')
-        const file = new File(recordedChunks, 'video');
-        const url = URL.createObjectURL(blob);
-        console.log(url, '<----url');
-        const sansBlobUrl = url.slice(5);
-        console.log(sansBlobUrl, '<----sans blob')
-        // const png = jdenticon.toPng(blob, blob.size);
-        // const filePath = await Promise.resolve(blob.text());
-        // console.log(filePath, '<------filePath');
-        console.log(recordedChunks, '<-----recordedChunks')
-        console.log(file, '<----file')
-      //  use post route for axios post
-        await axios.post('/reel/upload', {
-            videoFile: sansBlobUrl
-            // text: "testText",
-            // like_count: 3
-        })
+        // turn url into blob
+        const blobUrl = URL.createObjectURL(blob);
+        // turn blobUrl into file
+        const file = await urltoFile(blobUrl, 'video.webm', 'video/webm')
+        // append file to form data
+        const formData = new FormData;
+        // MAYBE you can append STINGS to the form, before you append the file
+        formData.append('video', file);
+        console.log(file, '<---- file that is appended to formData')
+        // send video form data to server
+        await axios.post('/reel/upload', formData)
         .then(() => {
           setRecordedChunks([]);
         })
@@ -161,6 +170,11 @@
         {recordedChunks.length > 0 && (
           <button onClick={saveReel}>Post</button>
         )}
+        {/* {selfieTaken ? (
+        <button onClick={handleSaveSelfie}>Save Selfie</button>
+      ) : (
+        <button onClick={handleSelfieClick}>Take Selfie</button>
+      )} */}
       </div>
     );
   }
