@@ -57,24 +57,8 @@ reelRouter.post('/upload', fileUpload.single('video'), async (req: any, res: any
     console.log(reel, '<---- reel created in server ')
   } catch (error) {
     console.error('Failed to CREATE reel: ', error)
-    res.sendStatus(500);
+    res.status(500).json('Failed to CREATE reel');
   }
 });
-
-// function to get reel by cloudURL bc cannot send body at same time as video file
-reelRouter.get('/:cloudURL', (req: any, res: any) => {
-  //access cloudURL from request parameters
-  const {cloudURL} = req.params
-  // sequelize method to find one particular
-  Reels.findOne({where: {cloudURL}})
-    .then((resObj: any) => {
-      console.log(resObj, '<---resObj from find by cloudURL')
-      res.sendStatus(200)
-    })
-    .catch((err: any) => {
-      console.error('Failed to GET reel by cloudURL: ', err);
-      res.sendStatus(500);
-    })
-})
 
 export default reelRouter;

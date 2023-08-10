@@ -27,7 +27,6 @@
         if (data.size > 0) {
           setRecordedChunks((prev) => prev.concat(data));
         }
-        console.log(data, '<----data')
       },
       [setRecordedChunks]
     );
@@ -87,7 +86,6 @@
         })
         setSelfieTaken(false);
     }, [selfieTaken])
-    // console.log(imgSrc, '<----imgSrc outside selfie')
 
     const handleStartCaptureClick = useCallback(() => {
       setCapturing(true);
@@ -111,16 +109,11 @@
         const blob = new Blob(recordedChunks, {
           type: "video/webm",
         });
-        const file = new File(recordedChunks, 'video');
-        console.log(file, '<---file')
-        console.log(blob, '<----blob')
         const url = URL.createObjectURL(blob);
-        console.log(url, '<----vid url')
         const a = document.createElement("a");
         document.body.appendChild(a);
         a.href = url;
         a.download = "react-webcam-stream-capture.webm";
-        console.log(a, '<----a')
         a.click();
         window.URL.revokeObjectURL(url);
         setRecordedChunks([]);
@@ -129,7 +122,6 @@
 
     // save reel to databases
     const saveReel = useCallback(async () => {
-      console.log(recordedChunks, '<------ recordedChunks')
       if (recordedChunks.length) {
         const blob = new Blob(recordedChunks, {
           type: "video/webm",
@@ -140,7 +132,9 @@
         const file = await urltoFile(blobUrl, 'video.webm', 'video/webm')
         // append file to form data
         const formData = new FormData;
+        // MAYBE you can append STINGS to the form, before you append the file
         formData.append('video', file);
+        console.log(file, '<---- file that is appended to formData')
         // send video form data to server
         await axios.post('/reel/upload', formData)
         .then(() => {
