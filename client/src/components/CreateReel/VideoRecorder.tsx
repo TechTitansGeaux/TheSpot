@@ -209,7 +209,8 @@ console.log(url, '<-----url')
         height={400}
         width={400}
         src={url}
-        controls autoPlay>
+        controls autoPlay
+        loop>
         </video>
       ) : (
         <Webcam
