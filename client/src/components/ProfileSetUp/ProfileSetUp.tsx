@@ -11,6 +11,22 @@ import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import UploadFile from '@mui/icons-material/UploadFile';
 import MenuItem from '@mui/material/MenuItem';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#7161EF',
+      dark: '#f433ab',
+      contrastText: '#F5FCFA',
+    },
+    secondary: {
+      main: '#7161EF',
+      light: '#f0f465',
+      contrastText: '#0b0113',
+    },
+  },
+});
 
 
 const ProfileSetUp = () => {
@@ -25,17 +41,18 @@ const ProfileSetUp = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [isImageSelected, setIsImageSelected] = useState(false);
   const [selectedMapIcon, setSelectedMapIcon] = React.useState('');
-  const [geolocation, setGeolocation] = useState(null);
+  const [geolocation, setGeolocation] = React.useState('');
 
 
   useEffect(() => {
     if (authUser) {
       setPicture(authUser.picture);
+      setGeolocation(authUser.geolocation);
     }
   }, [authUser]);
 
   const handleProfileSetup = () => {
-    if (geolocation === null) {
+    if (geolocation === '') {
       throw new Error("Geolocation is required.");
     }
 
@@ -88,9 +105,10 @@ const ProfileSetUp = () => {
   };
 
   return (
-    <Container className="container-full-w center">
+    <ThemeProvider theme={theme}>
+      <Container className="container-full-w center">
       <h1>Profile Setup</h1>
-      <div className='flex-container center' style={{ display: 'flex', alignItems: 'center' }}>
+      <div className='flex-container center' style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
           <Avatar
             src={picture}
             alt="User Picture"
@@ -112,7 +130,9 @@ const ProfileSetUp = () => {
           )}
         </div>
 
-      <form className='flex-container center'>
+      <form className='flex-container center' style={{ backgroundColor: 'var(--t25-white)', marginTop: '1rem' }}>
+
+
         <TextField
           label="Username"
           variant="outlined"
@@ -120,7 +140,7 @@ const ProfileSetUp = () => {
           fullWidth
           value={username}
           onChange={e => setUsername(e.target.value)}
-          style={{ backgroundColor: 'var(--grey)' }}
+          style={{ backgroundColor: 'var(--setupBG)', marginBottom: '1rem', marginTop: '1rem' }}
         />
 
         <TextField
@@ -130,7 +150,7 @@ const ProfileSetUp = () => {
           fullWidth
           value={displayName}
           onChange={e => setDisplayName(e.target.value)}
-          style={{ backgroundColor: 'var(--grey)' }}
+          style={{ backgroundColor: 'var(--setupBG)', marginBottom: '1rem' }}
         />
 
         <TextField
@@ -141,7 +161,7 @@ const ProfileSetUp = () => {
           fullWidth
           value={type}
           onChange={e => setType(e.target.value)}
-          style={{ backgroundColor: 'var(--grey)' }}
+          style={{ backgroundColor: 'var(--setupBG)', marginBottom: '1rem' }}
         >
           <MenuItem value="personal">Party Goer</MenuItem>
           <MenuItem value="business">Party Thrower</MenuItem>
@@ -155,9 +175,9 @@ const ProfileSetUp = () => {
           fullWidth
           value={selectedMapIcon}
           onChange={e => setSelectedMapIcon(e.target.value)}
-          style={{ backgroundColor: 'var(--grey)', marginBottom: '1rem' }}
+          style={{ backgroundColor: 'var(--setupBG)', marginBottom: '1rem' }}
         >
-          <MenuItem value="https://icons8.com/icon/Kq4Pq3lJNTy3/futurama-bender"><Avatar src='https://icons8.com/icon/Kq4Pq3lJNTy3/futurama-bender'/></MenuItem>
+          <MenuItem value="https://icons8.com/icon/Kq4Pq3lJNTy3/futurama-bender"><img src='https://img.icons8.com/?size=512&id=Kq4Pq3lJNTy3&format=png'/></MenuItem>
           <MenuItem value="✿">✿</MenuItem>
           <MenuItem value="𓃠">𓃠</MenuItem>
           <MenuItem value="♛">♛</MenuItem>
@@ -172,14 +192,14 @@ const ProfileSetUp = () => {
           fullWidth
           value={birthday}
           onChange={e => setBirthday(e.target.value)}
-          style={{ backgroundColor: 'var(--grey)' }}
+          style={{ backgroundColor: 'var(--setupBG)', marginBottom: '1rem' }}
         />
 
         <Button
           variant="contained"
           color="secondary"
           onClick={handleProfileSetup}
-          style={{ marginTop: '1rem' }}
+          style={{ marginTop: '1rem', marginBottom: '1rem' }}
         >
           Save Profile
         </Button>
@@ -187,6 +207,7 @@ const ProfileSetUp = () => {
 
       <Location />
     </Container>
+    </ThemeProvider>
   );
 };
 

@@ -44,9 +44,6 @@ const config = {
     // Learn more about plugins from https://webpack.js.org/configuration/plugins/
   ],
   module: {
-    loaders: [
-      { test: /\.(png|jpg|jpeg)$/, loader: 'url-loader?limit=8192' }
-    ],
     rules: [
       {
         test: /\.(ts|tsx)$/i,
@@ -63,7 +60,7 @@ const config = {
         use: [stylesHandler, 'css-loader', 'postcss-loader'],
       },
       {
-        test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
+        test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif|jpeg)$/i,
         type: 'asset',
       },
 
