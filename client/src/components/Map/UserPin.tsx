@@ -22,12 +22,27 @@ type Props = {
 };
 
 const UserPin: React.FC<Props> = (props) => {
-  console.log('rendered pin');
+
+  const togglePopUp = () => {
+    const box = document.getElementById(props.user.username + props.user.id)
+    if (+box.style.opacity === 0) {
+      box.style.opacity = '1';
+    } else if (+box.style.opacity === 1) {
+      box.style.opacity = '0';
+    }
+  }
+
   return (
-    <div className='dot' >
-      <div style={{ fontSize: '30px', textAlign: 'center' }} >
-        {props.user.mapIcon}
+    <div>
+      <div className='dot' onClick={togglePopUp} >
+        <div >
+          {props.user.mapIcon}
+        </div>
       </div>
+      <div className='popUpBox' id={props.user.username + props.user.id} >
+        <div style={{ textAlign: 'center', fontSize:'20px' }}>{props.user.username}</div>
+      </div>
+
     </div>
 
   );
