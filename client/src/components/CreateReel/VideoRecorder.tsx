@@ -13,6 +13,7 @@
     const [recordedChunks, setRecordedChunks] = useState([]);
     const [text, setText] = useState('test text');
     const [eventId, setEventId] = useState(1)
+    const [reelId, setReelId] = useState(0);
 
     type Blob = {
       data: {
@@ -136,7 +137,8 @@
         console.log(file, '<---- file that is appended to formData')
         // send video form data to server
         await axios.post('/reel/upload', formData)
-        .then(() => {
+        .then(({data}) => {
+          setReelId(data.reel.id);
           setRecordedChunks([]);
         })
         .catch((err) => {

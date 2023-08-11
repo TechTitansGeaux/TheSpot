@@ -31,8 +31,8 @@ const storage = multer.diskStorage({
 const fileUpload = multer({storage});
 
 reelRouter.post('/upload', fileUpload.single('video'), async (req: any, res: any) => {
-  console.log(req.file, '<-----req.file');
-  console.log(req.file.text, '<------req.file.text')
+  // console.log(req.file, '<-----req.file');
+  // console.log(req.file.text, '<------req.file.text')
   // console.log(req.body, '<-----req.body');
 
   // const { text, userId, eventId} = req.body;
@@ -55,11 +55,16 @@ reelRouter.post('/upload', fileUpload.single('video'), async (req: any, res: any
       reel
     })
 
-    console.log(reel, '<---- reel created in server ')
+    // console.log(reel, '<---- reel created in server ')
   } catch (error) {
     console.error('Failed to CREATE reel: ', error)
     res.status(500).json('Failed to CREATE reel');
   }
 });
+
+// reelRouter.post('/post', (req: any, res: any) => {
+//   // access properties of new reel from request body
+//   const { UserId, EventId, url, public_id, text}
+// })
 
 export default reelRouter;
