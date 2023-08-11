@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Reel from './Reel';
+// import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 
@@ -21,7 +22,7 @@ type Props = {
   AddFriend?: React.ReactNode | React.ReactNode[];
 };
 
-const Feed: React.FC<Props> = ({user, AddFriend}) => {
+const Feed: React.FC<Props> = ({user}) => {
   const [reels, setReels] = useState([]);
   const [filter, setFilter] = useState('reel');
   const [friends, setFriends] = useState([]); // friend list for current user
@@ -119,14 +120,16 @@ const Feed: React.FC<Props> = ({user, AddFriend}) => {
         Filter by:
         <select onChange={filterChangeHandler}>
           {filters.map((filter, i) => {
-            return <option key={i}>
-              {filter}
-            </option>
+            return <option key={i}>{filter}</option>;
           })}
         </select>
       </label>
       <div className='container-full-w'>
-        <Reel reels={reels} user={user} AddFriend={AddFriend} />
+        <Reel
+          reels={reels}
+          user={user}
+          friends={friends}
+        />
       </div>
     </>
   );

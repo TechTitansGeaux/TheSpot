@@ -2,7 +2,7 @@
   {
     "id": 1,
     "public_id": 1,
-    "url": "vid1",
+    "url": "https://res.cloudinary.com/thespot/video/upload/v1691427437/samples/sea-turtle.webm",
     "text": "Party at my house!",
     "like_count": 109,
     "UserId": 1,
@@ -20,7 +20,7 @@
   {
     "id": 3,
     "public_id": 2,
-    "url": "vid3",
+    "url": "https://res.cloudinary.com/thespot/video/upload/v1691427442/samples/cld-sample-video.webm",
     "text": "I need a drink.🍻",
     "like_count": 8,
     "UserId": 2,
@@ -38,7 +38,7 @@
   {
     "id": 5,
     "public_id": 1,
-    "url": "vid2",
+    "url": "https://res.cloudinary.com/thespot/video/upload/v1691427439/samples/elephants.webm",
     "text": "Don't Stop.. Belieeeving!",
     "like_count": 3,
     "UserId": 1,

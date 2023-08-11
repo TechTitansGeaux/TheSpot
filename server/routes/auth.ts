@@ -35,6 +35,7 @@ auth.get(
       console.error(error);
       res.redirect(errorLoginUrl);
     }
+
   }
 );
 auth.get(
