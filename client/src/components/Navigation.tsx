@@ -52,7 +52,7 @@ const Navigation = () => {
         </nav>
         <Outlet />
         <footer>
-          <Link to='/WebcamDisplay'>
+          <Link to='/VideoRecorder'>
             <AddCircleIcon color='secondary' sx={{ width: 52, height: 52 }} />
           </Link>
         </footer>
