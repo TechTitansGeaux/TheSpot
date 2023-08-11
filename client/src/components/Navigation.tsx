@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Outlet, NavLink, Link } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import  Toolbar  from '@mui/material/Toolbar';
+import Toolbar from '@mui/material/Toolbar';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -38,7 +38,7 @@ const Navigation = () => {
   const handleScrollTop = () => {
     document.body.scrollTop = 0; // For Safari
     document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-  }
+  };
 
   // if location on feed then change logo button to scroll
   useEffect(() => {
@@ -48,8 +48,7 @@ const Navigation = () => {
           <img id='nav-logo' src={logoGradient} alt='app logo' />
         </button>
       );
-    }
-    if (feedPath === '/Map') {
+    } else {
       setOnPage(
         <NavLink className='navLink' to='/Feed'>
           <img id='nav-logo' src={logoGradient} alt='app logo' />
