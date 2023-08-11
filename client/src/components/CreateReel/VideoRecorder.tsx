@@ -1,5 +1,5 @@
   /* eslint-disable @typescript-eslint/no-explicit-any */
-  import React, { useCallback, useRef, useState } from "react";
+  import React, { useEffect, useCallback, useRef, useState } from "react";
   import Webcam from "react-webcam";
   import axios from 'axios';
   // import streamifier from 'streamifier';
@@ -14,6 +14,8 @@
     const [text, setText] = useState('test text');
     const [eventId, setEventId] = useState(1)
     const [reelId, setReelId] = useState(0);
+    const [event, setEvent] = useState({});
+    const [stopRecording, setStopRecording] = useState(false);
 
     type Blob = {
       data: {
@@ -69,7 +71,8 @@
       const imageSrc = webcamRef.current.getScreenshot();
       setImgSrc(imageSrc);
     }, [webcamRef]);
-    
+
+    // this would be attached to a post button for pics, if we choose to let them post pics
     const handleSaveSelfie = useCallback(() => {
       // try to turn long string into a file
       const file = dataURLtoFile(imgSrc, 'image.jpg');
@@ -87,6 +90,7 @@
         setSelfieTaken(false);
     }, [selfieTaken])
 
+    // when they click start video
     const handleStartCaptureClick = useCallback(() => {
       setCapturing(true);
       mediaRecorderRef.current = new MediaRecorder(webcamRef.current.stream, {
@@ -99,10 +103,43 @@
       mediaRecorderRef.current.start();
     }, [webcamRef, setCapturing, mediaRecorderRef, handleDataAvailable]);
 
+    // when they click to end recording video
     const handleStopCaptureClick = useCallback(() => {
       mediaRecorderRef.current.stop();
       setCapturing(false);
+      setStopRecording(true);
     }, [mediaRecorderRef, setCapturing]);
+
+    // upload whenever they are done recording and setStop is called
+    useEffect(() => {
+      const upload = async () => {
+
+        if (recordedChunks.length) {
+          const blob = new Blob(recordedChunks, {
+            type: "video/webm",
+          });
+          // turn url into blob
+          const blobUrl = URL.createObjectURL(blob);
+          // turn blobUrl into file
+          const file = await urltoFile(blobUrl, 'video.webm', 'video/webm')
+          // append file to form data
+          const formData = new FormData;
+  
+          formData.append('video', file);
+          console.log(file, '<---- file that is appended to formData')
+          // send video form data to server
+          await axios.post('/reel/upload', formData)
+          .then(({data}) => {
+            console.log(data, '<---data from axios upload')
+            setRecordedChunks([]);
+          })
+          .catch((err) => {
+            console.log('Failed axios UPLOAD reel: ', err)
+          })
+        }
+      };
+      upload();
+    }, [setStopRecording, stopRecording])
 
     const handleDownload = useCallback(() => {
       if (recordedChunks.length) {
@@ -122,29 +159,12 @@
 
     // save reel to databases
     const saveReel = useCallback(async () => {
-      if (recordedChunks.length) {
-        const blob = new Blob(recordedChunks, {
-          type: "video/webm",
-        });
-        // turn url into blob
-        const blobUrl = URL.createObjectURL(blob);
-        // turn blobUrl into file
-        const file = await urltoFile(blobUrl, 'video.webm', 'video/webm')
-        // append file to form data
-        const formData = new FormData;
-
-        formData.append('video', file);
-        console.log(file, '<---- file that is appended to formData')
-        // send video form data to server
-        await axios.post('/reel/upload', formData)
-        .then(({data}) => {
-          setReelId(data.reel.id);
-          setRecordedChunks([]);
-        })
-        .catch((err) => {
-          console.log('Failed axios POST reel: ', err)
-        })
-      }
+      await axios.post('/reel/post', {
+        name: event.name,
+        date: event.date,
+        geolocation: event.location,
+        twenty_one: true
+    })
     }, [recordedChunks]);
 
     const videoConstraints = {
@@ -168,7 +188,7 @@
         ) : (
           <button onClick={handleStartCaptureClick}>Start Capture</button>
         )}
-        {recordedChunks.length > 0 && (
+        {stopRecording && (
           <button onClick={saveReel}>Post</button>
         )}
         {/* {selfieTaken ? (
