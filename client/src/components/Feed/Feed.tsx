@@ -24,26 +24,49 @@ type Props = {
 const Feed: React.FC<Props> = ({user, AddFriend}) => {
   const [reels, setReels] = useState([]);
   const [filter, setFilter] = useState('reel');
-  const [friends, setFriends] = useState([]);
+  const [friends, setFriends] = useState([]); // friend list for current user
 
-  const filters = ['reel', 'recent', 'likes'];
+  const filters = ['reel', 'recent', 'likes', 'friends'];
+  const friendsReels: any = [];
 
   const filterChangeHandler = (event: any) => {
     setFilter(event.target.value);
     console.log('filter:', filter);
   };
 
-
-  const getAllReels = () => {
+  const getAllFriendReels = () => {
     axios
-      .get(`/feed/${filter}`)
+      .get('/feed/recent')
       .then((response) => {
-        console.log('reels response.data:', response.data);
-        setReels(response.data);
+        // console.log('reels recent res.data:', response.data);
+        for (let i = 0; i < friends.length; i++) {
+          for (let j = 0; j < response.data.length; j++) {
+            if (friends[i].accepter_id === response.data[j].UserId) {
+              friendsReels.push(response.data[j]);
+            }
+          }
+        }
+        setReels(friendsReels);
       })
       .catch((err) => {
-        console.error('Could not GET all reels:', err);
-      });
+        console.error('Could not GET all frens reels:', err);
+      })
+  };
+
+  const getAllReels = () => {
+    if (filter === 'friends') {
+      getAllFriendReels();
+    } else {
+      axios
+        .get(`/feed/${filter}`)
+        .then((response) => {
+          console.log('reels response.data:', response.data);
+          setReels(response.data);
+        })
+        .catch((err) => {
+          console.error('Could not GET all reels:', err);
+        });
+    }
   };
 
   const getFriendList = () => {
