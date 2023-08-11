@@ -85,12 +85,16 @@ const Reel: React.FC<Props> = ({ reels, user, AddFriend, friends }) => {
   }, [])
 
   console.log('friendList ==>', friendList)
+  console.log('user ==>', user?.displayName)
   return (
     <div className='reel-container'>
       {reels?.map((reel) => {
         return (
           <div key={reel.id + 'reel'}>
-            <div className='video' id={reel.url}>
+            <div className='video-container'>
+              {reel.url.length > 15 && <video id={reel.url} controls>
+                <source src={reel.url} type='video/ogg' />
+              </video>}
               <p className='video-text'>{reel.text}</p>
               {/**Removes addFriend button if already approved friend*/}
               <>{!friendList.includes(reel.User.id) && AddFriend}</>

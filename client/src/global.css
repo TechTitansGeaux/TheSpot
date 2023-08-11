@@ -178,9 +178,17 @@ button.navLink  {
   min-height: 667px;
 }
 
-.video {
+video {
+  position: absolute;
+  left: -50%;
+  max-width: auto;
+  max-height: 100%;
+}
+
+.video-container {
   position: relative;
   background-color: var(--purple);
+  overflow: hidden;
   height: 620px;
   min-width: 375px;
 }
