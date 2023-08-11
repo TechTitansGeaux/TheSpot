@@ -61,7 +61,7 @@ const App = () => {
         <Route path='/' element={<Navigation />}>
           <Route path='/ProfileSetUp' element={<ProfileSetUp />}></Route>
           <Route path='/Feed' element={<Feed user={user} AddFriend={<AddFriend />} />}></Route>
-          <Route path='/Map' element={<Map />}></Route>
+          <Route path='/Map' element={<Map loggedIn={user} />}></Route>
           <Route path='/WebcamDisplay' element={<WebcamDisplay />}></Route>
         </Route>
       </Routes>
