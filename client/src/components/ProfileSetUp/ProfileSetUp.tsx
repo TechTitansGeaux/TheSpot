@@ -34,12 +34,6 @@ const ProfileSetUp = () => {
     }
   }, [authUser]);
 
-  useEffect(() => {
-    if (authUser) {
-      setPicture(authUser.picture);
-    }
-  }, [authUser]);
-
   const handleProfileSetup = () => {
     if (geolocation === null) {
       throw new Error("Geolocation is required.");
