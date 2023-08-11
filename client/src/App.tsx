@@ -36,7 +36,7 @@ const App = () => {
   const fetchAuthUser = async () => {
     try {
       const response = await axios.get(`/users/user`);
-      if (response && response.data) {
+      if (response && response.data && user === null) {
         setUser(response.data);
       }
     } catch (error) {
@@ -46,7 +46,7 @@ const App = () => {
 
   useEffect(() => {
     fetchAuthUser();
-  }, []);
+  }, [user]);
 
   return (
     <BrowserRouter>
