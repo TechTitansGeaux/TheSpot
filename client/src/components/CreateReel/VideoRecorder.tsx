@@ -159,12 +159,12 @@
 
     // save reel to databases
     const saveReel = useCallback(async () => {
-      await axios.post('/reel/post', {
-        name: event.name,
-        date: event.date,
-        geolocation: event.location,
-        twenty_one: true
-    })
+    //   await axios.post('/reel/post', {
+    //     name: event.name,
+    //     date: event.date,
+    //     geolocation: event.location,
+    //     twenty_one: true
+    // })
     }, [recordedChunks]);
 
     const videoConstraints = {

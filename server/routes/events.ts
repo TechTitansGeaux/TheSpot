@@ -3,7 +3,29 @@ import { Router } from 'express';
 const eventRouter = Router();
 const { Events } = require('../db/index');
 
-// get event by location?
+// get event by location
+eventRouter.get('/:geolocation', async (req: any, res: any) => {
+  // access geolocation from request parameters
+  const { geolocation } = req.params;
+  console.log(geolocation, '<----geolo from router')
+  // find event by geolocation
+    await Events.findOne({where: {geolocation: geolocation}})
+    .then((event: any) => {
+      if (event !== null) {
+        res.status(200).json({
+          event
+      })
+      } else {
+        res.status(404).send('No event found at this location');
+      }
+    })
+    .catch((err: any) => {
+      console.error('Failed to GET event: ', err)
+      res.sendStatus(500);
+    })
+
+
+})
 
 // create new event
 eventRouter.post('/create', async (req, res) => {
@@ -25,7 +47,7 @@ eventRouter.post('/create', async (req, res) => {
   })
   .catch((err: any) => {
     console.log('Failed to CREATE event: ', err)
-    res.status(500).json('Failed to CREATE event');
+    res.sendStatus(500)
   })
 })
 

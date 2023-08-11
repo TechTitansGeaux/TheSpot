@@ -63,7 +63,7 @@ reelRouter.post('/post', async (req: any, res: any) => {
   // console.log(reel, '<---- reel created in server ')
 } catch (error) {
   console.error('Failed to CREATE reel: ', error)
-  res.status(500).json('Failed to CREATE reel');
+  res.sendStatus(500);
 }
 })
 
