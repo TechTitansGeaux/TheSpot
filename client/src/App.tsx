@@ -12,6 +12,7 @@ import ProfileSetUp from './components/ProfileSetUp/ProfileSetUp';
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { setAuthUser, setIsAuthenticated } from './store/appSlice';
+
 import axios from 'axios';
 import AddFriend from './components/AddFriend';
 

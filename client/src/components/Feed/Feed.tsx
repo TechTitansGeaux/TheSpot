@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Reel from './Reel';
+// import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 
@@ -25,6 +26,9 @@ const Feed: React.FC<Props> = ({user, AddFriend}) => {
   const [reels, setReels] = useState([]);
   const [filter, setFilter] = useState('reel');
   const [friends, setFriends] = useState([]);
+  // const location = useLocation();
+  // const feedPath = location.pathname;
+  // console.log('feedPath', feedPath)
 
   const filters = ['reel', 'recent', 'likes'];
 
