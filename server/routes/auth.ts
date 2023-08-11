@@ -14,18 +14,20 @@ const errorLoginUrl = `${process.env.HOST}:4000/login/error`;
 
 auth.get('/login/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-auth.get('/google/callback', passport.authenticate('google', { failureRedirect: errorLoginUrl }), async (req: express.Request, res: express.Response) => {
+auth.get('/google/callback', passport.authenticate('google', { failureRedirect: errorLoginUrl }), async (req: any, res: express.Response) => {
   try {
     // Check if the user exists in the database by googleId
-    const existingUser = await Users.findOne({ where: { id: req.user?.id } });
-
-    if (existingUser.username === null) {
-      // New user, redirect to Feed
-      res.redirect(successNewUserUrl);
-    } else {
-      // User exists in the database, redirect to Feed
-        res.redirect(successLoginUrl);
-      }
+    if (req.user) {
+      const existingUser = await Users.findOne({ where: { id: req.user?.id} });
+  
+      if (existingUser.username === null) {
+        // New user, redirect to Feed
+        res.redirect(successNewUserUrl);
+      } else {
+        // User exists in the database, redirect to Feed
+          res.redirect(successLoginUrl);
+        }
+    }
   } catch (error) {
     console.error(error);
     res.redirect(errorLoginUrl);

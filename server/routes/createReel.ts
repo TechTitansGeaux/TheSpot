@@ -10,7 +10,7 @@ const uploadReelToCloudinary = async (file: string) => {
     const result = await cloudinary.uploader.upload(file, {
       resource_type: "video"
     });
-    console.log(result, '<-----result from upload to cloudinary')
+    // console.log(result, '<-----result from upload to cloudinary')
     return result.secure_url;
   } catch (err) {
     console.error('Failed cloudinary reel upload: ', err);
@@ -31,10 +31,10 @@ const storage = multer.diskStorage({
 const fileUpload = multer({storage});
 
 reelRouter.post('/upload', fileUpload.single('video'), async (req: any, res: any) => {
-  console.log(req.file, '<-----req.file');
-  console.log(req.body, '<-----req.body');
+  // console.log(req.file, '<-----req.file');
+  // console.log(req.body, '<-----req.body');
 
-  const { text, userId, eventId} = req.body;
+  // const { text, userId, eventId} = req.body;
 
   try {
     let cloudURL = await uploadReelToCloudinary(req.file.path)
@@ -45,9 +45,9 @@ reelRouter.post('/upload', fileUpload.single('video'), async (req: any, res: any
     const reel = await Reels.create({
       public_id: cloudID,
       url: cloudURL,
-      text,
-      userId,
-      eventId
+      // text,
+      UserId: req.user.dataValues.id
+      // eventId
     });
     res.status(201).json({
       success: true,
