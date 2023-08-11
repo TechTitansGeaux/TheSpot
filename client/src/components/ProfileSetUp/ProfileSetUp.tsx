@@ -15,12 +15,13 @@ const ProfileSetUp = () => {
 
   const [username, setUsername] = React.useState('');
   const [displayName, setDisplayName] = React.useState('');
-  const [type, setType] = React.useState(''); // Updated state for type
+  const [type, setType] = React.useState('');
   const [birthday, setBirthday] = React.useState('');
   const [picture, setPicture] = React.useState('');
   const [selectedImage, setSelectedImage] = useState(null);
   const [isImageSelected, setIsImageSelected] = useState(false);
   const [selectedMapIcon, setSelectedMapIcon] = React.useState('');
+  const [geolocation, setGeolocation] = useState(null);
 
 
   useEffect(() => {
@@ -30,6 +31,10 @@ const ProfileSetUp = () => {
   }, [authUser]);
 
   const handleProfileSetup = () => {
+    if (geolocation === null) {
+      throw new Error("Geolocation is required.");
+    }
+
     const profileData = {
       username,
       displayName,
@@ -37,6 +42,7 @@ const ProfileSetUp = () => {
       birthday,
       picture,
       mapIcon: selectedMapIcon,
+      geolocation
     };
 
     // Update user's profile on the server using Axios
