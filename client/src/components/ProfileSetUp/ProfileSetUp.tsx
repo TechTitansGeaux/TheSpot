@@ -25,7 +25,7 @@ const ProfileSetUp = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [isImageSelected, setIsImageSelected] = useState(false);
   const [selectedMapIcon, setSelectedMapIcon] = React.useState('');
-  const [geolocation, setGeolocation] = React.useState('');
+  const [geolocation, setGeolocation] = useState('');
 
   useEffect(() => {
     if (authUser) {
