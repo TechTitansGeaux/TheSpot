@@ -28,9 +28,19 @@ const AddFriend: React.FC<ParentCompProps> = () => {
   // post friendship to db
   const requestFriendship = () => {
     console.log('your friendship is requested');
-    // axios.post('/friends', (req: any, res: any) => {
 
-    // });
+    axios.post('/friends', {
+      // accepter_id is user on reel
+      accepter_id: 1,
+    })
+      .then((data) => {
+        console.log('Friend request POSTED', data);
+      })
+      .catch((err) => {
+        console.error('Friend request axios FAILED', err);
+    })
+
+
   };
 
   return (

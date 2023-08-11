@@ -26,6 +26,12 @@ type Props = {
   }[];
   user: User;
   AddFriend?: React.ReactNode | React.ReactNode[];
+  friends: {
+    id: number;
+    status: string;
+    requester_id: number;
+    accepter_id: number;
+  }[];
 };
 
 type User = {
@@ -33,7 +39,7 @@ type User = {
   username: string;
   displayName: string;
   type: string;
-  geolocation: string; // i.e. "29.947126049254177, -90.18719199978266"
+  geolocation: string;
   mapIcon: string;
   birthday: string;
   privacy: string;
@@ -48,21 +54,37 @@ type Event = {
   name: string;
   rsvp_count: number;
   date: string;
-  geolocation: string; // i.e. "29.947126049254177, -90.18719199978266"
+  geolocation: string;
   twenty_one: boolean;
   createdAt: string;
   updatedAt: string;
   PlaceId: 1;
 };
 
-const Reel: React.FC<Props> = ({ reels, user, AddFriend }) => {
-
+const Reel: React.FC<Props> = ({ reels, user, AddFriend, friends }) => {
+  const [friendList, setFriendList] = useState([]);
   // get friendship from db for currUser and create state
   /**
    * within  reels?.map // if reel.User.id is equal to friend <accepter_id>
    *
    */
 
+  useEffect(() => {
+    axios.get('/feed/friendlist')
+      .then(( {data} ) => {
+        console.log('data from friends Axios GET ==>', data);
+        data.map((user: any) => {
+          if (user.status === 'approved') {
+            setFriendList([...friendList, user.accepter_id])
+          }
+        })
+      })
+      .catch((err) => {
+        console.error('Failed to get Friends:', err);
+    })
+  }, [])
+
+  console.log('friendList ==>', friendList)
   return (
     <div className='reel-container'>
       {reels?.map((reel) => {
@@ -70,8 +92,8 @@ const Reel: React.FC<Props> = ({ reels, user, AddFriend }) => {
           <div key={reel.id + 'reel'}>
             <div className='video' id={reel.url}>
               <p className='video-text'>{reel.text}</p>
-              {/**TRUE: if current user not friend with reel user set to <AddFriend/> | FALSE: if friend & remove icon - null */}
-              <>{AddFriend}</>
+              {/**Removes addFriend button if already approved friend*/}
+              <>{!friendList.includes(reel.User.id) && AddFriend}</>
               <div className='friend-request'>
                 <Tooltip
                   title={reel.User.displayName}

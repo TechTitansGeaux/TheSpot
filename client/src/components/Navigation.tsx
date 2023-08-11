@@ -32,9 +32,9 @@ const Navigation = () => {
   );
   const location = useLocation();
   const feedPath = location.pathname;
-  console.log('feedPath', feedPath);
+  // console.log('feedPath', feedPath);
 
-  // When the user clicks on the button, scroll to the top of the document
+  // When the user clicks on the button, scroll to the top of the page
   const handleScrollTop = () => {
     document.body.scrollTop = 0; // For Safari
     document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera

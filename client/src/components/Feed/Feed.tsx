@@ -76,14 +76,17 @@ const Feed: React.FC<Props> = ({user, AddFriend}) => {
         Filter by:
         <select onChange={filterChangeHandler}>
           {filters.map((filter, i) => {
-            return <option key={i}>
-              {filter}
-            </option>
+            return <option key={i}>{filter}</option>;
           })}
         </select>
       </label>
       <div className='container-full-w'>
-        <Reel reels={reels} user={user} AddFriend={AddFriend} />
+        <Reel
+          reels={reels}
+          user={user}
+          AddFriend={AddFriend}
+          friends={friends}
+        />
       </div>
     </>
   );
