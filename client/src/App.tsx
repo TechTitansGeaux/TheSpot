@@ -10,8 +10,6 @@ import './global.css';
 import SignUp from './components/ProfileSetUp/SignUp';
 import ProfileSetUp from './components/ProfileSetUp/ProfileSetUp';
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { setAuthUser, setIsAuthenticated } from './store/appSlice';
 import axios from 'axios';
 import AddFriend from './components/AddFriend';
 
@@ -33,7 +31,6 @@ type User = {
 
 
 const App = () => {
-  const dispatch = useDispatch();
   // get all users to pass down as props
   const [user, setUser] = useState<User>(null);
 
@@ -41,8 +38,6 @@ const App = () => {
     try {
       const response = await axios.get(`/users/user`);
       if (response && response.data && user === null) {
-        dispatch(setIsAuthenticated(true));
-        dispatch(setAuthUser(response.data));
         setUser(response.data);
       }
     } catch (error) {
