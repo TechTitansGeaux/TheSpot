@@ -147,7 +147,7 @@ const ProfileSetUp = () => {
           onChange={e => setSelectedMapIcon(e.target.value)}
           style={{ backgroundColor: 'var(--grey)', marginBottom: '1rem' }}
         >
-          <MenuItem value="𓆉">𓆉</MenuItem>
+          <MenuItem value="https://icons8.com/icon/Kq4Pq3lJNTy3/futurama-bender"><Avatar src='https://icons8.com/icon/Kq4Pq3lJNTy3/futurama-bender'/></MenuItem>
           <MenuItem value="✿">✿</MenuItem>
           <MenuItem value="𓃠">𓃠</MenuItem>
           <MenuItem value="♛">♛</MenuItem>
