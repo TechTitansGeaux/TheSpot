@@ -22,7 +22,7 @@ type Props = {
   AddFriend?: React.ReactNode | React.ReactNode[];
 };
 
-const Feed: React.FC<Props> = ({user, AddFriend}) => {
+const Feed: React.FC<Props> = ({user}) => {
   const [reels, setReels] = useState([]);
   const [filter, setFilter] = useState('reel');
   const [friends, setFriends] = useState([]);
@@ -84,7 +84,6 @@ const Feed: React.FC<Props> = ({user, AddFriend}) => {
         <Reel
           reels={reels}
           user={user}
-          AddFriend={AddFriend}
           friends={friends}
         />
       </div>

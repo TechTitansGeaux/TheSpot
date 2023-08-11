@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -10,6 +9,10 @@ import Tooltip from '@mui/material/Tooltip';
 import Zoom from '@mui/material/Zoom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import Box from '@mui/material/Box';
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 
 type Props = {
@@ -61,7 +64,22 @@ type Event = {
   PlaceId: 1;
 };
 
-const Reel: React.FC<Props> = ({ reels, user, AddFriend, friends }) => {
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#f0f465',
+      dark: '#f433ab',
+      contrastText: '#0b0113',
+    },
+    secondary: {
+      main: '#f433ab',
+      dark: '#f0f465',
+      contrastText: '#0b0113',
+    },
+  },
+});
+
+const Reel: React.FC<Props> = ({ reels, user, friends }) => {
   const [friendList, setFriendList] = useState([]);
   // get friendship from db for currUser and create state
   /**
@@ -70,34 +88,71 @@ const Reel: React.FC<Props> = ({ reels, user, AddFriend, friends }) => {
    */
 
   useEffect(() => {
-    axios.get('/feed/friendlist')
-      .then(( {data} ) => {
+    axios
+      .get('/feed/friendlist')
+      .then(({ data }) => {
         console.log('data from friends Axios GET ==>', data);
         data.map((user: any) => {
           if (user.status === 'approved') {
-            setFriendList([...friendList, user.accepter_id])
+            setFriendList([...friendList, user.accepter_id]);
           }
-        })
+        });
       })
       .catch((err) => {
         console.error('Failed to get Friends:', err);
-    })
-  }, [])
+      });
+  }, []);
 
-  console.log('friendList ==>', friendList)
-  console.log('user ==>', user?.displayName)
+  // post friendship to db
+  const requestFriendship = () => {
+    console.log('your friendship is requested');
+
+    axios
+      .post('/friends', {
+        // accepter_id is user on reel
+        accepter_id: 1
+      })
+      .then((data) => {
+        console.log('Friend request POSTED', data);
+      })
+      .catch((err) => {
+        console.error('Friend request axios FAILED', err);
+      });
+  };
+
+
   return (
     <div className='reel-container'>
       {reels?.map((reel) => {
         return (
           <div key={reel.id + 'reel'}>
             <div className='video-container'>
-              {reel.url.length > 15 && <video id={reel.url} controls>
-                <source src={reel.url} type='video/ogg' />
-              </video>}
+              {reel.url.length > 15 && (
+                <video id={reel.url} controls>
+                  <source src={reel.url} type='video/ogg' />
+                </video>
+              )}
               <p className='video-text'>{reel.text}</p>
               {/**Removes addFriend button if already approved friend*/}
-              <>{!friendList.includes(reel.User.id) && AddFriend}</>
+              <>
+                {!friendList.includes(reel.User.id) && (
+                      <ThemeProvider theme={theme}>
+                        <div className='friend-request'>
+                          <Box className='friend-box'>
+                            <Fab
+                              size='small'
+                              color='primary'
+                              aria-label='add'
+                              className='friend-add-btn'
+                            >
+                              {/** This icon should be removed after request sent */}
+                              <AddIcon onClick={requestFriendship}/>
+                            </Fab>
+                          </Box>
+                        </div>
+                      </ThemeProvider>
+                )}
+              </>
               <div className='friend-request'>
                 <Tooltip
                   title={reel.User.displayName}

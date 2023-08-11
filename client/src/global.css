@@ -148,6 +148,11 @@ button.navLink  {
 
 /* ////// FEED & REEL */
 
+.click {
+  width: 100%;
+  height: 100%;
+}
+
 .friend-request {
   position: relative;
   right: 3%;
@@ -166,8 +171,6 @@ button.navLink  {
   left: 87%;
 }
 
-/* ////// FEED & REEL */
-
 .reel-container {
   display: flex;
   flex-direction: column;
@@ -181,6 +184,7 @@ button.navLink  {
 video {
   position: absolute;
   left: -50%;
+  bottom: 0%;
   max-width: auto;
   max-height: 100%;
 }
