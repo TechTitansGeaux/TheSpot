@@ -38,7 +38,7 @@ const Map: React.FC<Props> = ({loggedIn}) => {
       .catch((err) => {
         console.log('error getting users', err);
       });
-  }, [loggedInLng])
+  }, [])
 
   const splitCoords = (coords: string) => {
     const arr = coords.split(',');
