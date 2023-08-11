@@ -22,10 +22,12 @@ type Props = {
 };
 
 const UserPin: React.FC<Props> = (props) => {
-
+  console.log('rendered pin');
   return (
-    <div style={{ backgroundColor: 'black', width: '75px', border: '4px solid green' }} >
-      {props.user.username}
+    <div className='dot' >
+      <div style={{ fontSize: '30px', textAlign: 'center' }} >
+        {props.user.mapIcon}
+      </div>
     </div>
 
   );

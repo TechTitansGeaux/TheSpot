@@ -196,3 +196,11 @@ footer {
   width: 100vw;
   background-color: #282c34;
 }
+
+.dot {
+  height: 40px;
+  width: 40px;
+  background-color: #ff3636;
+  border-radius: 50%;
+  display: inline-block;
+}
