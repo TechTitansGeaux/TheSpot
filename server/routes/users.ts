@@ -126,8 +126,8 @@ users.post('/uploadImage/:id', isUserAuthenticated, upload.single('image'), asyn
     }
 
     // // Construct the URL of the uploaded image
-    // const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
-    const imageUrl = `server/public/uploads/${req.file.filename}`;
+    const imageUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    // const imageUrl = `server/public/uploads/${req.file.filename}`;
 
 
     // Update the user's picture field with the URL of the uploaded image

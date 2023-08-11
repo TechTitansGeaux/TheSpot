@@ -19,11 +19,14 @@ const ProfileSetUp = () => {
 
   const [username, setUsername] = React.useState('');
   const [displayName, setDisplayName] = React.useState('');
-  const [type, setType] = React.useState(''); // Updated state for type
+  const [type, setType] = React.useState('');
   const [birthday, setBirthday] = React.useState('');
   const [picture, setPicture] = React.useState('');
   const [selectedImage, setSelectedImage] = useState(null);
   const [isImageSelected, setIsImageSelected] = useState(false);
+  const [selectedMapIcon, setSelectedMapIcon] = React.useState('');
+  const [geolocation, setGeolocation] = useState(null);
+
 
   useEffect(() => {
     if (authUser) {
@@ -32,12 +35,18 @@ const ProfileSetUp = () => {
   }, [authUser]);
 
   const handleProfileSetup = () => {
+    if (geolocation === null) {
+      throw new Error("Geolocation is required.");
+    }
+
     const profileData = {
       username,
       displayName,
-      type, // Updated profile type
+      type,
       birthday,
       picture,
+      mapIcon: selectedMapIcon,
+      geolocation
     };
 
     // Update user's profile on the server using Axios
@@ -136,6 +145,24 @@ const ProfileSetUp = () => {
         >
           <MenuItem value="personal">Party Goer</MenuItem>
           <MenuItem value="business">Party Thrower</MenuItem>
+        </TextField>
+
+        <TextField
+          select
+          label="Select Map Icon"
+          variant="outlined"
+          color="secondary"
+          fullWidth
+          value={selectedMapIcon}
+          onChange={e => setSelectedMapIcon(e.target.value)}
+          style={{ backgroundColor: 'var(--grey)', marginBottom: '1rem' }}
+        >
+          <MenuItem value="https://icons8.com/icon/Kq4Pq3lJNTy3/futurama-bender"><Avatar src='https://icons8.com/icon/Kq4Pq3lJNTy3/futurama-bender'/></MenuItem>
+          <MenuItem value="✿">✿</MenuItem>
+          <MenuItem value="𓃠">𓃠</MenuItem>
+          <MenuItem value="♛">♛</MenuItem>
+          <MenuItem value="★">★</MenuItem>
+          <MenuItem value="☻">☻</MenuItem>
         </TextField>
 
         <TextField
