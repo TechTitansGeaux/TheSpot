@@ -12,7 +12,6 @@
     const [selfieTaken, setSelfieTaken] = useState(false);
     const [recordedChunks, setRecordedChunks] = useState([]);
     const [text, setText] = useState('test text');
-    const [userId, setUserId] = useState(1);
     const [eventId, setEventId] = useState(1)
 
     type Blob = {
@@ -132,7 +131,7 @@
         const file = await urltoFile(blobUrl, 'video.webm', 'video/webm')
         // append file to form data
         const formData = new FormData;
-        // MAYBE you can append STINGS to the form, before you append the file
+
         formData.append('video', file);
         console.log(file, '<---- file that is appended to formData')
         // send video form data to server
