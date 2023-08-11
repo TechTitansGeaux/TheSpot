@@ -88,13 +88,22 @@ const Feed: React.FC<Props> = ({user, AddFriend}) => {
     console.log('user:', user?.geolocation);
     if (user) {
       const arr = user.geolocation.split(',');
-      console.log('coord:', arr);
+      const lat = Number(arr[0]);
+      const long = Number(arr[1]);
+      setUserLat(lat);
+      setUserLong(long);
+      // console.log('coord:', lat, long);
+      // console.log('userLat, userLong', userLat, userLong);
+      // console.log('add', lat + long);
+      // console.log(typeof lat);
+      // console.log('add userLat userLong', userLat + userLong);
     }
   };
 
   useEffect(() => {
     userCoord(user);
-  }, [user]);
+    // console.log('user lat long', userLat, userLong);
+  }, [user, userLat, userLong]);
 
   useEffect(() => {
     getAllReels();
