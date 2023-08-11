@@ -25,8 +25,10 @@ const Feed: React.FC<Props> = ({user, AddFriend}) => {
   const [reels, setReels] = useState([]);
   const [filter, setFilter] = useState('reel');
   const [friends, setFriends] = useState([]); // friend list for current user
+  const [userLat, setUserLat] = useState(0);
+  const [userLong, setUserLong] = useState(0);
 
-  const filters = ['reel', 'recent', 'likes', 'friends'];
+  const filters = ['reel', 'recent', 'likes', 'friends']; // filter options
   const friendsReels: any = [];
 
   const filterChangeHandler = (event: any) => {
@@ -80,6 +82,16 @@ const Feed: React.FC<Props> = ({user, AddFriend}) => {
         console.error('Could not GET friends:', err);
       })
   };
+
+
+  const userCoord = (user: any) => {
+    console.log('user:', user?.geolocation);
+
+  };
+
+  useEffect(() => {
+    userCoord(user);
+  }, []);
 
   useEffect(() => {
     getAllReels();
