@@ -224,8 +224,10 @@ video.reel {
 }
 
 .dot {
-  height: 40px;
-  width: 40px;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  width: 50px;
   background-color: var(--pink);
   border-radius: 50%;
   display: inline-block;
@@ -239,18 +241,28 @@ video.reel {
   overflow-y: auto;
 }
 
+
 .popUpBox {
+  display: none;
+  transition: all .5s ease;
   height: 300px;
   width: 200px;
-  border-radius: 15px;
   border: solid var(--pink);
+  border-width: 4px;
+  border-radius: 15px;
   background-color: var(--violet);
   font-family: var(--title-font);
-  color: rgb(255, 255, 255);
+  color: white;
   position: relative;
   top: -25px;
   left: -100px;
-  opacity: 0;
   text-transform: uppercase;
-  z-index: 9;
+  z-index: 11;
+}
+
+.addOrRmFriend {
+  position: relative;
+  top: 155px;
+  left: -25px;
+
 }
