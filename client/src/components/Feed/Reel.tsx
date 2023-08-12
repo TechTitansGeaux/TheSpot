@@ -18,7 +18,6 @@ import { useDispatch } from 'react-redux';
 // import { useLocation } from 'react-router-dom';
 import { setAuthUser, setIsAuthenticated } from '../../store/appSlice';
 
-
 type Props = {
   reels: {
     id: string;
@@ -84,7 +83,8 @@ const theme = createTheme({
 
 const Reel: React.FC<Props> = ({ reels, friends }) => {
   const dispatch = useDispatch();
-  // get all users to pass down as props
+
+  // GET current user
   const [user, setUser] = useState<User>(null);
 
   const fetchAuthUser = async () => {
@@ -102,20 +102,16 @@ const Reel: React.FC<Props> = ({ reels, friends }) => {
 
   useEffect(() => {
     fetchAuthUser();
+  }, []);
+  const [friendList, setFriendList] = useState([]);
 
-  }, []);  const [friendList, setFriendList] = useState([]);
-
-  // REFERENCE VIDEO HTML element in JSX element
-  // Uses a ref to hold an array of generated refs, and assign them when mapping.
+  // REFERENCE VIDEO HTML element in JSX element // Uses a ref to hold an array of generated refs, and assign them when mapping.
   const myRef = useRef([]);
   myRef.current = reels.map((_, i) => myRef.current[i] ?? createRef());
 
-  // get friendship from db for currUser and create state
-  /**
-   * within  reels?.map // if reel.User.id is equal to friend <accepter_id>
-   */
-
+  // GET request get friendList from Friendship table in DB // set to state variable
   useEffect(() => {
+    const controller = new AbortController();
     axios
       .get('/feed/friendlist')
       .then(({ data }) => {
@@ -129,9 +125,11 @@ const Reel: React.FC<Props> = ({ reels, friends }) => {
       .catch((err) => {
         console.error('Failed to get Friends:', err);
       });
+    // aborts axios request when component unmounts
+    return () => controller?.abort();
   }, []);
 
-  // POST friendship 'pending' status to db
+  // POST request friendship 'pending' status to db
   const requestFriendship = (friend: number) => {
     console.log('your friendship is requested');
     axios
@@ -147,41 +145,35 @@ const Reel: React.FC<Props> = ({ reels, friends }) => {
       });
   };
 
-  // PUT update friendship from 'pending' to 'approved'
+  // PUT request update friendship from 'pending' to 'approved'
   const approveFriendship = (friend: number) => {
-    console.log('friendship approved')
-    axios.put('/friends', {
-      requester_id: friend,
-    })
+    console.log('friendship approved');
+    axios
+      .put('/friends', {
+        requester_id: friend,
+      })
       .then((data) => {
         console.log('Friend request approved PUT', data);
       })
       .catch((err) => {
         console.error('Friend PUT request axios FAILED:', err);
-    })
+      });
   };
 
-
   useEffect(() => {
-    // observe videos to playback on scroll in view
+    // observe videos with IntersectionObserver API to playback on scroll in view
     const observer = new IntersectionObserver((entries, observer) => {
-      entries.forEach((entry) => {
-        // accessibility static video
-        if (window.matchMedia('(prefers-reduced-motion)').matches) {
-          // replace console.log with vid.currentTime = <number of seconds>
-          console.log('static video');
-        } else {
-          // play videos here
-          console.log('video entry ==>', entries[0]);
-        }
+      entries.map((entry) => {
+        console.log('entry', entry)
       });
-      observer.observe(myRef.current[0]);
     });
-    // console.log('useRef DOM myRef INSIDE useEFFect', myRef?.current[0]);
+    // let setter = setTimeout(() => observer.observe(myRef.current[0]), 100);
+    console.log('useRef DOM myRef INSIDE useEFFect', myRef?.current[0]);
+    // cleans up setTimeout when component unmounts
+    // return () => clearTimeout(setter);
   }, []);
 
-  // console.log('useRef DOM myRef OUTSIDE useEFFect', myRef?.current[0]);
-  // console.log('authUser ===>', user);
+  console.log('useRef DOM myRef OUTSIDE useEFFect', myRef?.current);
 
   return (
     <div className='reel-container'>
@@ -195,15 +187,15 @@ const Reel: React.FC<Props> = ({ reels, friends }) => {
                   className='reel'
                   ref={myRef?.current[i]}
                   id={`video${reel.id}`}
+                  src={reel.url}
                   controls
+                  autoPlay
+                  loop
                 >
-
-                  <source src={reel.url} type='video/ogg' />
+                  <source />
                 </video>
               )}
-              <p className='video-text'>
-                {reel.text }
-              </p>
+              <p className='video-text'>{reel.text}</p>
               {/**Removes addFriend button if already approved friend*/}
               <>
                 {!friendList.includes(reel.User.id) && (
@@ -216,7 +208,6 @@ const Reel: React.FC<Props> = ({ reels, friends }) => {
                           aria-label='add'
                           className='friend-add-btn'
                         >
-                          {/** This icon should be removed after request sent */}
                           <AddIcon
                             onClick={() => requestFriendship(reel.User.id)}
                           />
