@@ -284,62 +284,68 @@
 // console.log(url, '<-----url')
 
     return (
-      <div className="Container" > { justRecorded ? (
-        <div className='webcam'>
-        <video
-        height={520}
-        width={520}
-        src={url}
-        controls autoPlay
-        loop>
-        </video>
-        </div>
-      ) : (
-        <Webcam
-          className='webcam'
-          height={420}
-          width={420}
-          audio={false}
-          mirrored={true}
-          ref={webcamRef}
-          videoConstraints={videoConstraints}
-        />
-      )}
-      <div className='cameraButtons'>
-        {capturing ? (
-          <RadioButtonCheckedIcon
-          onClick={handleStopCaptureClick}
-          color='secondary'
-          sx={{ width: 52, height: 52 }}/>
-          // <button onClick={handleStopCaptureClick}>Stop Capture</button>
+      <div>
+        <div className='webContainer'> { justRecorded ? (
+          <div className='preview-mask'>
+            <div className='webcam'>
+              <video
+              height={700}
+              width={700}
+              src={url}
+              controls autoPlay
+              loop>
+              </video>
+            </div>
+          </div>
         ) : (
-          <motion.div
-          whileHover={{ scale: 1.2 }}
-          >
-            <RadioButtonUncheckedIcon
-            onClick={handleStartCaptureClick}
+          <div className='cam-mask'>
+            <Webcam
+              className='webcam'
+              height={580}
+              width={580}
+              audio={false}
+              mirrored={false}
+              ref={webcamRef}
+              videoConstraints={videoConstraints}
+            />
+          </div>
+        )}
+        </div>
+        <div className='cameraButtons'>
+          {capturing ? (
+            <RadioButtonCheckedIcon
+            onClick={handleStopCaptureClick}
             color='secondary'
             sx={{ width: 52, height: 52 }}/>
-          </motion.div>
-          // <button onClick={handleStartCaptureClick}>Start Capture</button>
-        )}
-        {justRecorded && (
-          <motion.div
-          whileHover={{ scale: 1.2 }}
-          >
-            <ArrowCircleRightIcon
-            onClick={saveReel}
-            color='secondary'
-            sx={{ width: 52, height: 52 }}/>
-          </motion.div>
-          // <button onClick={saveReel}>Post</button>
-        )}
-        {/* {selfieTaken ? (
-        <button onClick={handleSaveSelfie}>Save Selfie</button>
-      ) : (
-        <button onClick={handleSelfieClick}>Take Selfie</button>
-      )} */}
-      </div>
+            // <button onClick={handleStopCaptureClick}>Stop Capture</button>
+          ) : (
+            <motion.div
+            whileHover={{ scale: 1.2 }}
+            >
+              <RadioButtonUncheckedIcon
+              onClick={handleStartCaptureClick}
+              color='secondary'
+              sx={{ width: 52, height: 52 }}/>
+            </motion.div>
+            // <button onClick={handleStartCaptureClick}>Start Capture</button>
+          )}
+          {justRecorded && (
+            <motion.div
+            whileHover={{ scale: 1.2 }}
+            >
+              <ArrowCircleRightIcon
+              onClick={saveReel}
+              color='secondary'
+              sx={{ width: 52, height: 52 }}/>
+            </motion.div>
+            // <button onClick={saveReel}>Post</button>
+          )}
+          {/* {selfieTaken ? (
+          <button onClick={handleSaveSelfie}>Save Selfie</button>
+        ) : (
+          <button onClick={handleSelfieClick}>Take Selfie</button>
+        )} */}
+        </div>
       </div>
     );
   }
