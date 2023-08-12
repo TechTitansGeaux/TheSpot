@@ -88,6 +88,7 @@ const Events = sequelize.define(
     },
     geolocation: {
       type: DataTypes.STRING(100),
+      allowNull: false,
     },
     twenty_one: {
       type: DataTypes.BOOLEAN,
