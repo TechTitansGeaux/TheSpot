@@ -210,6 +210,7 @@ footer {
   cursor: pointer;
   font-size: 30px;
   text-align: center;
+  overflow-y: auto;
 }
 
 .popUpBox {
@@ -225,5 +226,5 @@ footer {
   left: -100px;
   opacity: 0;
   text-transform: uppercase;
-  z-index: 11;
+  z-index: 9;
 }

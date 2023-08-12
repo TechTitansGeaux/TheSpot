@@ -33,7 +33,7 @@ const UserPin: React.FC<Props> = (props) => {
   }
 
   return (
-    <div>
+    <div >
       <div className='dot' onClick={togglePopUp} >
         <div >
           {props.user.mapIcon}
