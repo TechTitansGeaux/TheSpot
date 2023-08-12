@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // import SignUp from './components/SignUp';
 import Map from './components/Map/Map';
 import Feed from './components/Feed/Feed';
-import VideoRecorder from './components/CreateReel/VideoRecorder';
+import CreateReel from './components/CreateReel/CreateReel';
 import Navigation from './components/Navigation';
 import './global.css';
 import SignUp from './components/ProfileSetUp/SignUp';
@@ -53,6 +53,7 @@ const App = () => {
   useEffect(() => {
     fetchAuthUser();
   }, []);
+
   return (
     <BrowserRouter>
       <Routes>
@@ -62,10 +63,7 @@ const App = () => {
           <Route path='/Feed' element={<Feed user={user} />}></Route>
           <Route path='/Map' element={<Map loggedIn={user} />}></Route>
           <Route path='/Settings' element={<Settings />}></Route>
-          <Route
-            path='/VideoRecorder'
-            element={<VideoRecorder user={user} />}
-          ></Route>
+          <Route path='/CreateReel' element={<CreateReel user={user}/>}></Route>
         </Route>
       </Routes>
     </BrowserRouter>
