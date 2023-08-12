@@ -34,10 +34,11 @@
       picture: string;
       googleId: string;
     },
-    mustCreateEvent: boolean
+    mustCreateEvent: boolean,
+    currentEventId: number
   };
 
-  const VideoRecorder: React.FC<Props> = ({currentEvent, user, mustCreateEvent}) => {
+  const VideoRecorder: React.FC<Props> = ({currentEvent, user, mustCreateEvent, currentEventId}) => {
     const webcamRef = useRef(null);
     const mediaRecorderRef = useRef(null);
     const [imgSrc, setImgSrc] = useState(null);
@@ -61,6 +62,7 @@
       PlaceId: 0,
     });
     const [justRecorded, setJustRecorded] = useState(false);
+    const [reelSaved, setReelSaved] = useState(false);
 
     type Blob = {
       data: {
@@ -229,7 +231,15 @@
       .catch((err) => {
         console.error('Failed axios post event: ', err);
       })
-      axios.post('/reel/post', {
+    } else {
+      // If event did not need to be created, set event id to the one passed down from props
+      setEventId(currentEventId);
+    }
+    };
+
+    // POST THE REEL to the db, but only AFTER eventId has been GOT
+    const postReelToDb = async () => {
+      await axios.post('/reel/post', {
         public_id: public_id,
         url: url,
         text: text,
@@ -243,12 +253,15 @@
     .catch((err) => {
       console.error('Failed axios post reel: ', err);
     })
-    }
     // no longer just recorded
     setJustRecorded(false)
     // reset url
     setUrl('');
-    };
+    }
+
+    useEffect(() => {
+      postReelToDb();
+    }, [eventId])
 
     const videoConstraints = {
       width: 420,
@@ -273,7 +286,7 @@ console.log(url, '<-----url')
           mirrored={true}
           ref={webcamRef}
           videoConstraints={videoConstraints}
-        /> 
+        />
       )}
         {capturing ? (
           <button onClick={handleStopCaptureClick}>Stop Capture</button>

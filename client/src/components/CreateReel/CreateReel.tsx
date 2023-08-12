@@ -52,7 +52,7 @@ const CreateReel: React.FC<Props> = ({user}) => {
 // check to see if there are any events happening at users location
 const eventCheck = () => {
   // CHANGE BACK TO USER.GEOLO LATER
-  axios.get(`/events/${'29.947192177,-90.183419996'}`)
+  axios.get(`/events/${'29.979197703427907,-90.09631406159835'}`)
     .then((resObj) => {
       setCurrentEvent(resObj.data.event);
     })
@@ -70,7 +70,7 @@ useEffect(() => {
 
   return (
     <div>
-      <VideoRecorder currentEvent={currentEvent} user={user} mustCreateEvent={mustCreateEvent}/>
+      <VideoRecorder currentEvent={currentEvent} currentEventId={currentEvent.id} user={user} mustCreateEvent={mustCreateEvent}/>
     </div>
   )
 };
