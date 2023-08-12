@@ -1,8 +1,11 @@
-import React from 'react';
 import dayjs = require('dayjs');
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 dayjs.extend(localizedFormat)
-
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
+import { setAuthUser } from '../../store/appSlice';
+import { RootState } from '../../store/store';
 
 
 type Props = {
@@ -28,6 +31,17 @@ type Props = {
 
 
 const UserPin: React.FC<Props> = (props) => {
+  const dispatch = useDispatch();
+  const authUser = useSelector((state: RootState) => state.app.authUser);
+  const [geolocation, setGeolocation] = useState('');
+
+  useEffect(() => {
+    if (authUser && props.user) {
+      setAuthUser(authUser);
+      setGeolocation(authUser.geolocation);
+    }
+  }, [authUser, props.user]);
+
   const [isHovered, setIsHovered] = React.useState(false);
 
   const handleMouseEnter = () => {
