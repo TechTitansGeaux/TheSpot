@@ -37,20 +37,20 @@ const UserPin: React.FC<Props> = (props) => {
 
   useEffect(() => {
     if (authUser && props.user) {
-      setAuthUser(authUser);
+      dispatch(setAuthUser(authUser));
       setGeolocation(authUser.geolocation);
     }
   }, [authUser, props.user]);
 
-  const [isHovered, setIsHovered] = React.useState(false);
+  // const [isHovered, setIsHovered] = React.useState(false);
 
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-  };
+  // const handleMouseEnter = () => {
+  //   setIsHovered(true);
+  // };
 
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-  };
+  // const handleMouseLeave = () => {
+  //   setIsHovered(false);
+  // };
 
   const togglePopUp = () => {
     const box = document.getElementById(props.user.username + props.user.id)

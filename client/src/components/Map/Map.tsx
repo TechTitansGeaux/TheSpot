@@ -25,13 +25,14 @@ type Props = {
 
 const Map: React.FC<Props> = ({loggedIn}) => {
   const authUser = useSelector((state: RootState) => state.app.authUser);
+  const dispatch = useDispatch();
 
   const [ users, setUsers ] = useState([])
   const [ loggedInLat, setLoggedInLat ] = useState(0);
   const [ loggedInLng, setLoggedInLng ] = useState(0);
   const [geolocation, setGeolocation] = React.useState('');
-  const filteredUsers = users.filter((user) => user.privacy !== 'private');
 
+  // fetch all users
   const fetchUsers = () => {
     axios.get('/users')
       .then((res) => {
@@ -47,10 +48,11 @@ const Map: React.FC<Props> = ({loggedIn}) => {
   }, [])
 
   useEffect(() => {
-    setAuthUser(authUser)
+    dispatch(setAuthUser(authUser))
     setGeolocation(authUser.geolocation)
   }, [authUser]);
 
+  // set coordinates
   useEffect(() => {
     const [lat, lng] = splitCoords(authUser.geolocation);
     setLoggedInLat(+lat);
@@ -58,6 +60,7 @@ const Map: React.FC<Props> = ({loggedIn}) => {
     fetchUsers()
   }, [])
 
+  // function to split coordinates into array
   const splitCoords = (coords: string) => {
     const arr = coords.split(',');
     return arr;
