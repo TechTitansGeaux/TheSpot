@@ -59,6 +59,27 @@ friendRouter.put('/', (req: any, res: any) => {
 
 // DELETE request to delete a friend
 
+friendRouter.delete('/',  (req: any, res: any) => {
+  // ACCEPTER is req.user
+  const { id } = req.user;
+  const { requester_id } = req.body;
+  Friendships.bulkDelete(
+    {
+      where: {
+        accepter_id: [id, requester_id],
+        requester_id: [id, requester_id],
+      },
+    }
+  )
+    .then((data: any) => {
+      console.log('friendRoute DELETE friend from friends list', data);
+      res.sendStatus(200);
+    })
+    .catch((err: any) => {
+      console.error('friendRouter DELETE to database Error:', err);
+    });
+});
+
 export default friendRouter;
 
 // // update put request for friendship with 'approved' status

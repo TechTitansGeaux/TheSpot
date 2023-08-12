@@ -7,6 +7,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import $ from 'jquery';
 import dayjs = require('dayjs');
 dayjs.extend(localizedFormat)
 
@@ -49,16 +50,31 @@ type LoggedIn = {
   googleId: string;
 };
 
-const theme = createTheme({
+const addFriendTheme = createTheme({
   palette: {
     primary: {
       main: '#f0f465',
-      dark: '#f433ab',
+      dark: '#4CBB17',
       contrastText: '#0b0113',
     },
     secondary: {
-      main: '#f433ab',
-      dark: '#f0f465',
+      main: '#f0f465',
+      dark: '#4CBB17',
+      contrastText: '#0b0113',
+    },
+  },
+});
+
+const rmFriendTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#f0f465',
+      dark: '#FF3131',
+      contrastText: '#0b0113',
+    },
+    secondary: {
+      main: '#F44336',
+      dark: '#F44336',
       contrastText: '#0b0113',
     },
   },
@@ -71,7 +87,7 @@ const UserPin: React.FC<Props> = (props) => {
   const [friendList, setFriendList] = useState([]);
 
   const togglePopUp = () => {
-    const box = document.getElementById(props.user.username + props.user.id)
+    const box = document.getElementById('popUp' + props.user.username + props.user.id)
     if (box.style.display === 'block') {
       box.style.display = 'none';
     } else {
@@ -99,7 +115,6 @@ const UserPin: React.FC<Props> = (props) => {
     axios
       .get('/feed/friendlist')
       .then(({ data }) => {
-        console.log('data from friends Axios GET ==>', data);
         data.map((user: any) => {
           if (user.status === 'approved') {
             setFriendList([...friendList, user.accepter_id]);
@@ -113,17 +128,20 @@ const UserPin: React.FC<Props> = (props) => {
 
   const isNotLoggedInUser = (props.user.id !== props.loggedIn.id) || null;
 
+  const $offset = $(`#${props.user.username + props.user.id}`).offset()
+
+  console.log($offset);
 
   return (
     <div>
-      <div className='dot' onClick={togglePopUp} >
+      <div className='dot' id={props.user.username + props.user.id} onClick={togglePopUp} >
         <img
           src={props.user.mapIcon}
           alt={props.user.username}
           style={{ width: '40px', height: '40px', marginLeft: '1.5px', marginTop: '2.5px'}}
         />
       </div>
-      <div className='popUpBox' id={props.user.username + props.user.id} >
+      <div className='popUpBox' id={'popUp' + props.user.username + props.user.id} >
         <div style={{ textAlign: 'center', fontSize:'20px' }}>
           {props.user.username}
         </div>
@@ -133,8 +151,8 @@ const UserPin: React.FC<Props> = (props) => {
           </p>
         </div>
         <div className='addOrRmFriend'>
-        { friendList.includes(props.user.id) && isNotLoggedInUser && (
-          <ThemeProvider theme={theme}>
+        { !friendList.includes(props.user.id) && isNotLoggedInUser && (
+          <ThemeProvider theme={addFriendTheme}>
             <div>
               <Box>
                 <Fab
@@ -151,8 +169,8 @@ const UserPin: React.FC<Props> = (props) => {
         )}
         </div>
         <div className='addOrRmFriend'>
-        { (
-          <ThemeProvider theme={theme}>
+        { friendList.includes(props.user.id) && (
+          <ThemeProvider theme={rmFriendTheme}>
             <div>
               <Box>
                 <Fab
