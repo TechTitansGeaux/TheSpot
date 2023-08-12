@@ -7,13 +7,16 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import Zoom from '@mui/material/Zoom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, createRef } from 'react';
 import axios from 'axios';
 import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+import { realpath } from 'fs';
+import { useDispatch } from 'react-redux';
+// import { useLocation } from 'react-router-dom';
+import { setAuthUser, setIsAuthenticated } from '../../store/appSlice';
 
 type Props = {
   reels: {
@@ -27,7 +30,6 @@ type Props = {
     User: User;
     Event: Event;
   }[];
-  user: User;
   AddFriend?: React.ReactNode | React.ReactNode[];
   friends: {
     id: number;
@@ -79,78 +81,143 @@ const theme = createTheme({
   },
 });
 
-const Reel: React.FC<Props> = ({ reels, user, friends }) => {
-  const [friendList, setFriendList] = useState([]);
-  // get friendship from db for currUser and create state
-  /**
-   * within  reels?.map // if reel.User.id is equal to friend <accepter_id>
-   *
-   */
+const Reel: React.FC<Props> = ({ reels, friends }) => {
+  const dispatch = useDispatch();
+
+  // GET current user
+  const [user, setUser] = useState<User>(null);
+
+  const fetchAuthUser = async () => {
+    try {
+      const response = await axios.get(`/users/user`);
+      if (response && response.data) {
+        dispatch(setIsAuthenticated(true));
+        dispatch(setAuthUser(response.data));
+        setUser(response.data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
+    fetchAuthUser();
+  }, []);
+  const [friendList, setFriendList] = useState([]);
+
+  // REFERENCE VIDEO HTML element in JSX element // Uses a ref to hold an array of generated refs, and assign them when mapping.
+  const myRef = useRef([]);
+  myRef.current = reels.map((_, i) => myRef.current[i] ?? createRef());
+
+  // GET request get friendList from Friendship table in DB // set to state variable
+  useEffect(() => {
+    const controller = new AbortController();
     axios
       .get('/feed/friendlist')
       .then(({ data }) => {
         console.log('data from friends Axios GET ==>', data);
-        data.map((user: any) => {
-          if (user.status === 'approved') {
-            setFriendList([...friendList, user.accepter_id]);
+        data.map((authUser: any) => {
+          if (authUser.status === 'approved') {
+            setFriendList([...friendList, authUser.accepter_id]);
           }
         });
       })
       .catch((err) => {
         console.error('Failed to get Friends:', err);
       });
+    // aborts axios request when component unmounts
+    return () => controller?.abort();
   }, []);
 
-  // post friendship to db
+  // POST request friendship 'pending' status to db
   const requestFriendship = (friend: number) => {
     console.log('your friendship is requested');
-
     axios
       .post('/friends', {
         // accepter_id is user on reel
-        accepter_id: friend
+        accepter_id: friend,
       })
       .then((data) => {
-        console.log('Friend request POSTED', data);
+        // console.log('Friend request POSTED', data);
       })
       .catch((err) => {
         console.error('Friend request axios FAILED', err);
       });
   };
 
+  // PUT request update friendship from 'pending' to 'approved'
+  const approveFriendship = (friend: number) => {
+    console.log('friendship approved');
+    axios
+      .put('/friends', {
+        requester_id: friend,
+      })
+      .then((data) => {
+        console.log('Friend request approved PUT', data);
+      })
+      .catch((err) => {
+        console.error('Friend PUT request axios FAILED:', err);
+      });
+  };
+
+  useEffect(() => {
+    // observe videos with IntersectionObserver API to playback on scroll in view
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.map((entry) => {
+        console.log('entry', entry)
+      });
+    });
+    // let setter = setTimeout(() => observer.observe(myRef.current[0]), 100);
+    console.log('useRef DOM myRef INSIDE useEFFect', myRef?.current[0]);
+    // cleans up setTimeout when component unmounts
+    // return () => clearTimeout(setter);
+  }, []);
+
+  console.log('useRef DOM myRef OUTSIDE useEFFect', myRef?.current);
 
   return (
     <div className='reel-container'>
-      {reels?.map((reel) => {
+      {reels.map((reel, i) => {
         return (
           <div key={reel.id + 'reel'}>
             <div className='video-container'>
               {reel.url.length > 15 && (
-                <video id={reel.url} controls>
-                  <source src={reel.url} type='video/ogg' />
+
+                <video
+                  className='reel'
+                  ref={myRef?.current[i]}
+                  id={`video${reel.id}`}
+                  src={reel.url}
+                  controls
+                  autoPlay
+                  loop
+                >
+                  <source />
                 </video>
               )}
               <p className='video-text'>{reel.text}</p>
               {/**Removes addFriend button if already approved friend*/}
               <>
                 {!friendList.includes(reel.User.id) && (
-                      <ThemeProvider theme={theme}>
-                        <div className='friend-request'>
-                          <Box className='friend-box'>
-                            <Fab
-                              size='small'
-                              color='primary'
-                              aria-label='add'
-                              className='friend-add-btn'
-                            >
-                              {/** This icon should be removed after request sent */}
-                              <AddIcon onClick={() => requestFriendship(reel.User.id)}/>
-                            </Fab>
-                          </Box>
-                        </div>
-                      </ThemeProvider>
+                  <ThemeProvider theme={theme}>
+                    <div className='friend-request'>
+                      <Box className='friend-box'>
+                        <Fab
+                          size='small'
+                          color='primary'
+                          aria-label='add'
+                          className='friend-add-btn'
+                        >
+                          <AddIcon
+                            onClick={() => requestFriendship(reel.User.id)}
+                          />
+                        </Fab>
+                        {/* <button onClick={() => approveFriendship(reel.User.id)}>
+                          ACCEPT FRIEND
+                        </button> */}
+                      </Box>
+                    </div>
+                  </ThemeProvider>
                 )}
               </>
               <div className='friend-request'>
