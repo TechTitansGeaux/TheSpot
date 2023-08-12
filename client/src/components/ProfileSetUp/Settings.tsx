@@ -233,7 +233,7 @@ const Settings = () => {
             >
               Save Profile
             </Button>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
               <Button
                 variant="outlined"
                 color="secondary"
@@ -252,7 +252,7 @@ const Settings = () => {
             </div>
             {showDeleteConfirmation && (
         <div className="footer">
-          <p>Are you sure you want to delete your account?</p>
+          <p style={{ marginBottom: '1rem' }} >Are you sure you want to delete your account?</p>
           <Button
             variant="contained"
             color="secondary"
