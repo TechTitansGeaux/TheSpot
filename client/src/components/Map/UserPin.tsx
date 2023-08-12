@@ -49,16 +49,31 @@ type LoggedIn = {
   googleId: string;
 };
 
-const theme = createTheme({
+const addFriendTheme = createTheme({
   palette: {
     primary: {
       main: '#f0f465',
-      dark: '#f433ab',
+      dark: '#4CBB17',
       contrastText: '#0b0113',
     },
     secondary: {
-      main: '#f433ab',
-      dark: '#f0f465',
+      main: '#f0f465',
+      dark: '#4CBB17',
+      contrastText: '#0b0113',
+    },
+  },
+});
+
+const rmFriendTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#f0f465',
+      dark: '#FF3131',
+      contrastText: '#0b0113',
+    },
+    secondary: {
+      main: '#F44336',
+      dark: '#F44336',
       contrastText: '#0b0113',
     },
   },
@@ -133,8 +148,8 @@ const UserPin: React.FC<Props> = (props) => {
           </p>
         </div>
         <div className='addOrRmFriend'>
-        { friendList.includes(props.user.id) && isNotLoggedInUser && (
-          <ThemeProvider theme={theme}>
+        { !friendList.includes(props.user.id) && isNotLoggedInUser && (
+          <ThemeProvider theme={addFriendTheme}>
             <div>
               <Box>
                 <Fab
@@ -151,8 +166,8 @@ const UserPin: React.FC<Props> = (props) => {
         )}
         </div>
         <div className='addOrRmFriend'>
-        { (
-          <ThemeProvider theme={theme}>
+        { friendList.includes(props.user.id) && (
+          <ThemeProvider theme={rmFriendTheme}>
             <div>
               <Box>
                 <Fab
