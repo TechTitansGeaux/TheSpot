@@ -104,13 +104,13 @@ const Reel: React.FC<Props> = ({ reels, user, friends }) => {
   }, []);
 
   // post friendship to db
-  const requestFriendship = () => {
+  const requestFriendship = (friend: number) => {
     console.log('your friendship is requested');
 
     axios
       .post('/friends', {
         // accepter_id is user on reel
-        accepter_id: 1
+        accepter_id: friend
       })
       .then((data) => {
         console.log('Friend request POSTED', data);
@@ -146,7 +146,7 @@ const Reel: React.FC<Props> = ({ reels, user, friends }) => {
                               className='friend-add-btn'
                             >
                               {/** This icon should be removed after request sent */}
-                              <AddIcon onClick={requestFriendship}/>
+                              <AddIcon onClick={() => requestFriendship(reel.User.id)}/>
                             </Fab>
                           </Box>
                         </div>
