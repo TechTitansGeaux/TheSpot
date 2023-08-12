@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { setAuthUser } from '../../store/appSlice';
 import { RootState } from '../../store/store';
-import Location from './Location';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
@@ -29,19 +28,17 @@ const theme = createTheme({
 });
 
 
-const ProfileSetUp = () => {
+const Settings = () => {
   const dispatch = useDispatch();
   const authUser = useSelector((state: RootState) => state.app.authUser);
-
-  const [username, setUsername] = React.useState('');
   const [displayName, setDisplayName] = React.useState('');
-  const [type, setType] = React.useState('');
-  const [birthday, setBirthday] = React.useState('');
   const [picture, setPicture] = React.useState('');
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = React.useState(null||'');
   const [isImageSelected, setIsImageSelected] = useState(false);
   const [selectedMapIcon, setSelectedMapIcon] = React.useState('');
   const [geolocation, setGeolocation] = React.useState('');
+  const [privacy, setPrivacy] = React.useState('');
+
 
   useEffect(() => {
     if (authUser) {
@@ -50,19 +47,16 @@ const ProfileSetUp = () => {
     }
   }, [authUser]);
 
-  const handleProfileSetup = () => {
+  const handleSettings = () => {
     if (geolocation === '') {
       throw new Error("Geolocation is required.");
     }
 
     const profileData = {
-      username,
       displayName,
-      type,
-      birthday,
       picture,
       mapIcon: selectedMapIcon,
-      geolocation
+      privacy
     };
 
     // Update user's profile on the server using Axios
@@ -93,9 +87,8 @@ const ProfileSetUp = () => {
 
       if (response && response.data) {
         dispatch(setAuthUser(response.data));
-        setPicture(authUser.picture);
         console.log(picture, '<-----------PIC');
-        setSelectedImage(null); // clear the selected image after successful upload
+        setSelectedImage(null||''); // clear the selected image after successful upload
         setIsImageSelected(false); // reset the image selection state
       }
     } catch (error) {
@@ -106,13 +99,13 @@ const ProfileSetUp = () => {
   return (
     <ThemeProvider theme={theme}>
       <Container className="container-full-w center">
-      <h1>Profile Setup</h1>
+      <h1>Settings</h1>
       <div className='flex-container center' style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
           <Avatar
-            src={picture}
             alt="User Picture"
+            src={picture}
             className='rounded-circle mb-3'
-            sx={{ width: '150px', height: '150px', objectFit: 'cover', cursor: 'pointer' }}
+            style={{ width: '150px', height: '150px', objectFit: 'cover', cursor: 'pointer' }}
             onClick={() => document.getElementById('imageInput').click()}
           />
           <input
@@ -130,17 +123,6 @@ const ProfileSetUp = () => {
         </div>
 
       <form className='flex-container center' style={{ backgroundColor: 'var(--yellow)', marginTop: '1rem' }}>
-            <Location />
-
-        <TextField
-          label="Username"
-          variant="outlined"
-          color="secondary"
-          fullWidth
-          value={username}
-          onChange={e => setUsername(e.target.value)}
-          style={{ color: 'var(--setupBG)', marginBottom: '1rem', marginTop: '1rem' }}
-        />
 
         <TextField
           label="Display Name"
@@ -149,22 +131,8 @@ const ProfileSetUp = () => {
           fullWidth
           value={displayName}
           onChange={e => setDisplayName(e.target.value)}
-          style={{ color: 'var(--setupBG)', marginBottom: '1rem' }}
+          style={{ color: 'var(--setupBG)', marginBottom: '1rem', marginTop: '3rem' }}
         />
-
-        <TextField
-          select
-          label="Why are you here?"
-          variant="outlined"
-          color="secondary"
-          fullWidth
-          value={type}
-          onChange={e => setType(e.target.value)}
-          style={{ color: 'var(--setupBG)', marginBottom: '1rem' }}
-        >
-          <MenuItem value="personal">Party Goer</MenuItem>
-          <MenuItem value="business">Party Thrower</MenuItem>
-        </TextField>
 
         <TextField
           select
@@ -185,19 +153,23 @@ const ProfileSetUp = () => {
         </TextField>
 
         <TextField
-          variant="outlined"
-          color="secondary"
-          type="date"
-          fullWidth
-          value={birthday}
-          onChange={e => setBirthday(e.target.value)}
-          style={{ color: 'var(--setupBG)', marginBottom: '1rem' }}
-        />
+            select
+            label="Privacy"
+            variant="outlined"
+            color="secondary"
+            fullWidth
+            value={privacy}
+            onChange={e => setPrivacy(e.target.value)}
+            style={{ color: 'var(--setupBG)', marginBottom: '1rem' }}
+          >
+            <MenuItem value="public">Public</MenuItem>
+            <MenuItem value="private">Private</MenuItem>
+          </TextField>
 
         <Button
           variant="contained"
           color="secondary"
-          onClick={handleProfileSetup}
+          onClick={handleSettings}
           style={{ marginTop: '1rem', marginBottom: '1rem' }}
         >
           Save Profile
@@ -208,5 +180,5 @@ const ProfileSetUp = () => {
   );
 };
 
-export default ProfileSetUp;
+export default Settings;
 
