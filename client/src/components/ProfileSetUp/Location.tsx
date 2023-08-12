@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { setAuthUser } from '../../store/appSlice';
 import { RootState } from '../../store/store';
+import Button from '@mui/material/Button';
 
 
 const Location: React.FC = () => {
@@ -41,7 +42,7 @@ const Location: React.FC = () => {
           setGeolocationError('Error updating geolocation on server');
         });
     } else {
-      console.error('User not authenticated'); // Handle this case as needed
+      console.error('User not authenticated');
     }
   };
 
@@ -57,21 +58,24 @@ const Location: React.FC = () => {
       setStatus('Locating…');
       setGeolocationError('');
 
-      navigator.geolocation.getCurrentPosition(success, errorCallback);
+      navigator.geolocation.watchPosition(success, errorCallback);
     }
   };
 
   return (
     <div>
-      <h1>Yo what's the Lo?</h1>
       {authUser ? (
-        <button id="find-me" onClick={geoFindMe}>
+        <Button id="find-me"
+        variant="contained"
+        color="secondary"
+        onClick={geoFindMe}
+        style={{ marginTop: '1rem', marginBottom: '1rem' }}>
           Get My Lo
-        </button>
+        </Button>
       ) : (
         <p>You must be authenticated to retrieve your geolocation.</p>
       )}
-      <p id="status">{status}</p>
+      <p className='center' id="status" style={{ color: 'var(--violet)' }}>{status}</p>
       {geolocationError && <p>{geolocationError}</p>}
     </div>
   );

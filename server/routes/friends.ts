@@ -16,17 +16,21 @@ friendRouter.get('/', (req: any, res: any) => {
     });
 });
 
-// create post request for based with 'pending' status
+// create post request for friendship with 'pending' status
 friendRouter.post('/', (req: any, res: any) => {
-  const { requester_id, accepter_id } = req.body;
-  Friendships.create({ status: "pending", requester_id, accepter_id })
+  const { id } = req.user;
+  const { accepter_id } = req.body;
+  Friendships.bulkCreate([
+    { status: 'pending', requester_id: id, accepter_id },
+    { status: 'pending', requester_id: accepter_id, accepter_id: id },
+  ])
     .then((data: any) => {
       console.log('friendRoute POST friend data', data);
       res.sendStatus(201);
     })
     .catch((err: any) => {
       console.error('friendRouter POST to database Error:', err);
-  })
+    });
 });
 
 // create get request for based on requestId
