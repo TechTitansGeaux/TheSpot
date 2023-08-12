@@ -3,6 +3,7 @@ import Reel from './Reel';
 // import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import './feed.css';
 
 type Props = {
   user: {
@@ -165,22 +166,28 @@ const Feed: React.FC<Props> = ({user}) => {
 
   return (
     <>
-      <label>
-        Filter by:
-        <select onChange={filterChangeHandler}>
-          {filters.map((filter, i) => {
-            return <option key={i}>{filter}</option>;
-          })}
-        </select>
-      </label>
-      <label>
-        Radius (miles):
-        <select onChange={geoFilterHandler}>
-          {geoFilters.map((geofilter, i) => {
-            return <option key={i}>{geofilter}</option>;
-          })}
-        </select>
-      </label>
+      <div className='filter-container'>
+        <div className='label'>
+        <label>
+          Filter by:
+          <select onChange={filterChangeHandler}>
+            {filters.map((filter, i) => {
+              return <option key={i}>{filter}</option>;
+            })}
+          </select>
+        </label>
+        </div>
+        <div className='label'>
+        <label>
+          Radius (miles):
+          <select onChange={geoFilterHandler}>
+            {geoFilters.map((geofilter, i) => {
+              return <option key={i}>{geofilter}</option>;
+            })}
+          </select>
+        </label>
+        </div>
+      </div>
       <div className='container-full-w'>
         <Reel
           reels={reels}
