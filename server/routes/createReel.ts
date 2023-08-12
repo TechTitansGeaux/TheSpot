@@ -32,33 +32,40 @@ const fileUpload = multer({storage});
 
 reelRouter.post('/upload', fileUpload.single('video'), async (req: any, res: any) => {
   console.log(req.file, '<-----req.file');
-  console.log(req.body, '<-----req.body');
 
-  const { text, userId, eventId} = req.body;
-
-  try {
     let cloudURL = await uploadReelToCloudinary(req.file.path)
     // cloudURL comes as a mkv, here I jankily turn it into a webm
     cloudURL = cloudURL.slice(0, cloudURL.length - 3) + 'webm';
     // also jankily getting the publicID
     const cloudID = cloudURL.slice(cloudURL.length - 23, cloudURL.length - 5);
-    const reel = await Reels.create({
-      public_id: cloudID,
-      url: cloudURL,
-      text,
-      userId,
-      eventId
-    });
-    res.status(201).json({
-      success: true,
-      reel
-    })
 
-    console.log(reel, '<---- reel created in server ')
-  } catch (error) {
-    console.error('Failed to CREATE reel: ', error)
-    res.status(500).json('Failed to CREATE reel');
-  }
+    res.status(200).json({cloudID, cloudURL})
 });
+
+// route to create new reel
+reelRouter.post('/post', async (req: any, res: any) => {
+  // access properties of new reel from request body
+  const { EventId, url, public_id, text} = req.body;
+
+  try {
+  const reel = await Reels.create({
+    public_id,
+    url,
+    text,
+    UserId: req.user.dataValues.id,
+    EventId
+  });
+  res.status(201).json({
+    success: true,
+    reel
+  })
+
+  // console.log(reel, '<---- reel created in server ')
+} catch (error) {
+  console.error('Failed to CREATE reel: ', error)
+  res.sendStatus(500);
+}
+})
+
 
 export default reelRouter;

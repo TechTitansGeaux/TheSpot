@@ -23,5 +23,29 @@
     "status": "pending",
     "requester_id": 4,
     "accepter_id": 5
+  },
+  {
+    "id": 5,
+    "status": "approved",
+    "requester_id": 6,
+    "accepter_id": 1
+  },
+  {
+    "id": 6,
+    "status": "approved",
+    "requester_id": 1,
+    "accepter_id": 6
+  },
+  {
+    "id": 7,
+    "status": "approved",
+    "requester_id": 6,
+    "accepter_id": 2
+  },
+  {
+    "id": 8,
+    "status": "approved",
+    "requester_id": 2,
+    "accepter_id": 6
   }
 ]
