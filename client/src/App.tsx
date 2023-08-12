@@ -11,8 +11,9 @@ import SignUp from './components/ProfileSetUp/SignUp';
 import ProfileSetUp from './components/ProfileSetUp/ProfileSetUp';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import AddFriend from './components/AddFriend';
-import Settings from './components/ProfileSetUp/Settings'
+import Settings from './components/ProfileSetUp/Settings';
+import { setAuthUser } from './store/appSlice';
+
 
 type User = {
   id: number;
@@ -39,7 +40,7 @@ const App = () => {
     try {
       const response = await axios.get(`/users/user`);
       if (response && response.data && user === null) {
-        setUser(response.data);
+        setAuthUser(response.data);
       }
     } catch (error) {
       console.error(error);
@@ -56,7 +57,6 @@ const App = () => {
         <Route index element={<SignUp />}></Route>
         <Route path='/' element={<Navigation />}>
           <Route path='/ProfileSetUp' element={<ProfileSetUp  />}></Route>
-          <Route path='/Feed' element={<Feed user={user} AddFriend={<AddFriend />} />}></Route>
           <Route path='/Map' element={<Map loggedIn={user} />}></Route>
           <Route path='/Settings' element={<Settings />}></Route>
           <Route path='/CreateReel' element={<CreateReel user={user}/>}></Route>

@@ -5,22 +5,22 @@
   import axios from 'axios';
 
 
-  type Props = {
-    Event: {
-      id: number;
-      name: string;
-      rsvp_count: number;
-      date: string;
-      geolocation: string; // i.e. "29.947126049254177, -90.18719199978266"
-      twenty_one: boolean;
-      createdAt: string;
-      updatedAt: string;
-      PlaceId: 1;
-    }
-    };
+  // type Props = {
+  //   Event: {
+  //     id: number;
+  //     name: string;
+  //     rsvp_count: number;
+  //     date: string;
+  //     geolocation: string; // i.e. "29.947126049254177, -90.18719199978266"
+  //     twenty_one: boolean;
+  //     createdAt: string;
+  //     updatedAt: string;
+  //     PlaceId: 1;
+  //   }
+  //   };
 
 
-  const VideoRecorder: React.FC<Props> = ({Event}) => {
+  const VideoRecorder = () => {
     const webcamRef = useRef(null);
     const mediaRecorderRef = useRef(null);
     const [imgSrc, setImgSrc] = useState(null);

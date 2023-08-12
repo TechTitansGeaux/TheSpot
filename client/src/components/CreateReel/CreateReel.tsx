@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useState, useRef, useEffect } from "react";
 import VideoRecorder from './VideoRecorder';
 
+
 type Props = {
   user: {
     id: number;
@@ -55,7 +56,7 @@ useEffect(() => {
 
   return (
     <div>
-      <VideoRecorder currentEvent={currentEvent}/>
+      <VideoRecorder />
     </div>
   )
 };
