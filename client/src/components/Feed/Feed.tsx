@@ -63,7 +63,7 @@ const Feed: React.FC<Props> = ({user}) => {
       axios
         .get(`/feed/${filter}`)
         .then((response) => {
-          console.log('reels response.data:', response.data);
+          // console.log('reels response.data:', response.data);
           setReels(response.data);
         })
         .catch((err) => {
@@ -86,7 +86,7 @@ const Feed: React.FC<Props> = ({user}) => {
 
 
   const userCoord = (user: any) => {
-    console.log('user:', user?.geolocation);
+    // console.log('user:', user?.geolocation);
     if (user) {
       const arr = user.geolocation.split(',');
       const lat = Number(arr[0]);
