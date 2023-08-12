@@ -8,5 +8,10 @@
     "id": 2,
     "venue_name": "The Cafe",
     "coordinates": ""
+  },
+  {
+    "id": 3,
+    "venue_name": "UNO Lakefront Arena",
+    "coordinates": "30.031003882054566,-90.050313779948"
   }
 ]

@@ -24,7 +24,8 @@ type Props = {
 
 const Feed: React.FC<Props> = ({user}) => {
   const [reels, setReels] = useState([]);
-  const [filter, setFilter] = useState('recent');
+  const [filter, setFilter] = useState('recent'); // filter feed state
+  const [geoF, setGeoF] = useState(5);
   const [friends, setFriends] = useState([]); // friend list for current user
   const [userLat, setUserLat] = useState(0);
   const [userLong, setUserLong] = useState(0);
@@ -36,6 +37,10 @@ const Feed: React.FC<Props> = ({user}) => {
 
   const filterChangeHandler = (event: any) => {
     setFilter(event.target.value);
+  };
+
+  const geoFilterHandler = (event: any) => {
+    setGeoF(event.target.value);
   };
 
   const getAllFriendReels = () => {
@@ -65,7 +70,7 @@ const Feed: React.FC<Props> = ({user}) => {
       axios
         .get(`/feed/${filter}`)
         .then((response) => {
-          console.log('reels response.data:', response.data);
+          // console.log('reels response.data:', response.data);
           setReels(response.data);
         })
         .catch((err) => {
@@ -132,8 +137,9 @@ const Feed: React.FC<Props> = ({user}) => {
           const eventLong = Number(eventGeo[1]);
           let dist = distance(userLat, otherLat, userLong, otherLong);
           let eventDist = distance(userLat, eventLat, userLong, eventLong);
-          console.log('distance:', dist);
-          if (dist <= 5 || eventDist <= 5) {
+          // console.log('distance:', dist);
+          console.log('geoF:', geoF);
+          if (dist <= geoF || eventDist <= geoF) {
             geoReels.push(response.data[i]);
           }
         }
@@ -150,11 +156,12 @@ const Feed: React.FC<Props> = ({user}) => {
 
   useEffect(() => {
     getAllReels();
-  }, [filter]);
+  }, [filter, geoF]);
 
   useEffect(() => {
     getFriendList();
   }, []);
+
 
   return (
     <>
@@ -163,6 +170,14 @@ const Feed: React.FC<Props> = ({user}) => {
         <select onChange={filterChangeHandler}>
           {filters.map((filter, i) => {
             return <option key={i}>{filter}</option>;
+          })}
+        </select>
+      </label>
+      <label>
+        Radius (miles):
+        <select onChange={geoFilterHandler}>
+          {geoFilters.map((geofilter, i) => {
+            return <option key={i}>{geofilter}</option>;
           })}
         </select>
       </label>
