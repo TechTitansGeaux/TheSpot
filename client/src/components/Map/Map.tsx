@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import GoogleMapReact from 'google-map-react';
 import axios from 'axios';
 import UserPin from './UserPin';
+import { useSelector, useDispatch } from 'react-redux';
+import { setAuthUser } from '../../store/appSlice';
+import { RootState } from '../../store/store';
 
 type Props = {
   loggedIn: {
@@ -21,10 +24,17 @@ type Props = {
 };
 
 const Map: React.FC<Props> = ({loggedIn}) => {
+  const authUser = useSelector((state: RootState) => state.app.authUser);
 
   const [ users, setUsers ] = useState([])
   const [ loggedInLat, setLoggedInLat ] = useState(0);
   const [ loggedInLng, setLoggedInLng ] = useState(0);
+  const [geolocation, setGeolocation] = React.useState('');
+
+  useEffect(() => {
+    setAuthUser(authUser)
+    setGeolocation(authUser.geolocation)
+  }, [authUser]);
 
   useEffect(() => {
     const [lat, lng] = splitCoords(loggedIn.geolocation);

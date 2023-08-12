@@ -4,8 +4,22 @@ const { Users } = require('../db/index');
 import { isUserAuthenticated } from '../db/middleware/auth';
 // use multer to handle file uploads
 const multer = require('multer');
+const cloudinary = require('../cloudinary')
 
 const users = express.Router();
+
+const uploadReelToCloudinary = async (file: string) => {
+  try {
+    const result = await cloudinary.uploader.upload(file, {
+      resource_type: "image"
+    });
+    console.log(result, '<-----result from upload to cloudinary')
+    return result.secure_url;
+  } catch (err) {
+    console.error('Failed cloudinary reel upload: ', err);
+    throw err;
+  }
+};
 
 // set up multer storage
 const storage = multer.diskStorage({
@@ -112,6 +126,8 @@ users.delete('/:id', async (req: any, res: any) => {
   }
 });
 
+
+
 // POST request to upload a user image
 users.post('/uploadImage/:id', isUserAuthenticated, upload.single('image'), async (req: any, res: any) => {
   const { id } = req.params;
@@ -126,12 +142,14 @@ users.post('/uploadImage/:id', isUserAuthenticated, upload.single('image'), asyn
     }
 
     // // Construct the URL of the uploaded image
-    const imageUrl = `server/public/uploads/${req.file.filename}`;
+    //const imageUrl = `server/public/uploads/${req.file.filename}`;
     // const imageUrl = `server/public/uploads/${req.file.filename}`;
+    const cloudURL = await uploadReelToCloudinary(req.file.path);
+    const cloudID = cloudURL.slice(cloudURL.length - 23, cloudURL.length - 5);
 
 
     // Update the user's picture field with the URL of the uploaded image
-    user.picture = imageUrl;
+    user.picture = cloudURL;
 
     // Save the updated user to the database
     await user.save();

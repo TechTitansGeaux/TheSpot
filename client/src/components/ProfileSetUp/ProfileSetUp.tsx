@@ -7,6 +7,8 @@ import { RootState } from '../../store/store';
 import Location from './Location';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import UploadFile from '@mui/icons-material/UploadFile';
@@ -21,7 +23,7 @@ const theme = createTheme({
       contrastText: '#F5FCFA',
     },
     secondary: {
-      main: '#7161EF',
+      main: '#f433ab',
       light: '#f0f465',
       contrastText: '#0b0113',
     },
@@ -107,7 +109,9 @@ const ProfileSetUp = () => {
     <ThemeProvider theme={theme}>
       <Container className="container-full-w center">
       <h1>Profile Setup</h1>
-      <div className='flex-container center' style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
+        <Card style={{ backgroundColor: 'var(--yellow)', marginTop: '1rem' }}>
+          <CardContent>
+          <div className='flex-container center' style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
           <Avatar
             src={picture}
             alt="User Picture"
@@ -128,29 +132,28 @@ const ProfileSetUp = () => {
             </Button>
           )}
         </div>
-
-      <form className='flex-container center' style={{ backgroundColor: 'var(--yellow)', marginTop: '1rem' }}>
+        
             <Location />
 
-        <TextField
-          label="Username"
-          variant="outlined"
-          color="secondary"
-          fullWidth
-          value={username}
-          onChange={e => setUsername(e.target.value)}
-          style={{ color: 'var(--setupBG)', marginBottom: '1rem', marginTop: '1rem' }}
-        />
+            <TextField
+              label="Username"
+              variant="outlined"
+              color="secondary"
+              fullWidth
+              value={username}
+              onChange={e => setUsername(e.target.value)}
+              style={{ color: 'var(--setupBG)', marginBottom: '1rem', marginTop: '1rem' }}
+            />
 
-        <TextField
-          label="Display Name"
-          variant="outlined"
-          color="secondary"
-          fullWidth
-          value={displayName}
-          onChange={e => setDisplayName(e.target.value)}
-          style={{ color: 'var(--setupBG)', marginBottom: '1rem' }}
-        />
+            <TextField
+              label="Display Name"
+              variant="outlined"
+              color="secondary"
+              fullWidth
+              value={displayName}
+              onChange={e => setDisplayName(e.target.value)}
+              style={{ color: 'var(--setupBG)', marginBottom: '1rem' }}
+            />
 
         <TextField
           select
@@ -194,16 +197,17 @@ const ProfileSetUp = () => {
           style={{ color: 'var(--setupBG)', marginBottom: '1rem' }}
         />
 
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={handleProfileSetup}
-          style={{ marginTop: '1rem', marginBottom: '1rem' }}
-        >
-          Save Profile
-        </Button>
-      </form>
-    </Container>
+              <Button
+              variant="contained"
+              color="secondary"
+              onClick={handleProfileSetup}
+              style={{ marginTop: '1rem', marginBottom: '1rem' }}
+            >
+              Save Profile
+            </Button>
+          </CardContent>
+        </Card>
+      </Container>
     </ThemeProvider>
   );
 };
