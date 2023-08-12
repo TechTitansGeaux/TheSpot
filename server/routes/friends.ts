@@ -2,8 +2,7 @@ const express = require('express');
 const friendRouter = express.Router();
 const { Friendships, Reels, Users, Events } = require('../db/index');
 
-
-// create get request for all friendships
+// GET request for all friendships
 friendRouter.get('/', (req: any, res: any) => {
   Friendships.findAll()
     .then((data: any) => {
@@ -16,8 +15,9 @@ friendRouter.get('/', (req: any, res: any) => {
     });
 });
 
-// create post request for friendship with 'pending' status
+//  POST request for friendship with 'pending' status
 friendRouter.post('/', (req: any, res: any) => {
+  // REQUESTER is req.user
   const { id } = req.user;
   const { accepter_id } = req.body;
   Friendships.bulkCreate([
@@ -33,6 +33,73 @@ friendRouter.post('/', (req: any, res: any) => {
     });
 });
 
-// create get request for based on requestId
+// PUT request to update friendship with 'approved' status
+friendRouter.put('/', (req: any, res: any) => {
+  // ACCEPTER is req.user
+  const { id } = req.user;
+  const { requester_id } = req.body;
+  Friendships.update(
+    { status: 'approved' },
+    {
+      where: {
+        accepter_id: [id, requester_id],
+        requester_id: [id, requester_id],
+        status: 'pending'
+      },
+    }
+  )
+    .then((data: any) => {
+      console.log('friendRoute UPDATE friend approved status', data);
+      res.sendStatus(200);
+    })
+    .catch((err: any) => {
+      console.error('friendRouter UPDATE to database Error:', err);
+    });
+});
+
+// DELETE request to delete a friend
+
+friendRouter.delete('/',  (req: any, res: any) => {
+  // ACCEPTER is req.user
+  const { id } = req.user;
+  const { requester_id } = req.body;
+  Friendships.bulkDelete(
+    {
+      where: {
+        accepter_id: [id, requester_id],
+        requester_id: [id, requester_id],
+      },
+    }
+  )
+    .then((data: any) => {
+      console.log('friendRoute DELETE friend from friends list', data);
+      res.sendStatus(200);
+    })
+    .catch((err: any) => {
+      console.error('friendRouter DELETE to database Error:', err);
+    });
+});
 
 export default friendRouter;
+
+// // update put request for friendship with 'approved' status
+// friendRouter.put('/', (req: any, res: any) => {
+//   // const { id } = req.user;
+//   const { requester_id, accepter_id } = req.body;
+//   Friendships.update(
+//     { status: 'approved' },
+//     {
+//       where: {
+//         accepter_id: [6, 2],
+//         status: 'pending',
+//       },
+//     }
+//   )
+//     .then((data: any) => {
+//       console.log('friendRoute UPDATE friend data', data);
+//       res.sendStatus(200);
+//     })
+//     .catch((err: any) => {
+//       console.error('friendRouter UPDATE to database Error:', err);
+//     });
+// });

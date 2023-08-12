@@ -20,6 +20,8 @@ type Props = {
   }
 };
 
+
+
 const Map: React.FC<Props> = ({loggedIn}) => {
 
   const [ users, setUsers ] = useState([])
@@ -55,7 +57,7 @@ const Map: React.FC<Props> = ({loggedIn}) => {
         >{
           users.map((user, i) => {
             const [lat, lng] = splitCoords(user.geolocation);
-            return <UserPin user={user} key={i} lat={+lat} lng={+lng} />
+            return <UserPin loggedIn={loggedIn} user={user} key={i} lat={+lat} lng={+lng} />
           })
         }</GoogleMapReact>
       </div>
