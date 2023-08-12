@@ -7,7 +7,6 @@ const { Events } = require('../db/index');
 eventRouter.get('/:geolocation', async (req: any, res: any) => {
   // access geolocation from request parameters
   const { geolocation } = req.params;
-  console.log(geolocation, '<----geolo from router')
   // find event by geolocation
     await Events.findOne({where: {geolocation: geolocation}})
     .then((event: any) => {
@@ -32,16 +31,14 @@ eventRouter.post('/create', async (req, res) => {
   // access event properties from request body
   const { name, date, geolocation, twenty_one } = req.body;
   // sequelize create method
-  const event = await Events.create({
+  await Events.create({
     name,
     date,
     geolocation,
     twenty_one
   })
-  .then((resObj: any) => {
-    console.log(resObj, '<--- response object from create event')
+  .then((event: any) => {
     res.status(201).json({
-      success: true,
       event
     })
   })

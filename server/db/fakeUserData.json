@@ -20,7 +20,7 @@
     "displayName": "The Bar",
     "type": "business",
     "geolocation": "29.97447880662405,-90.10652552057815",
-    "mapIcon": "https://img.icons8.com/?size=512&id=20880&format=png",
+    "mapIcon": "https://img.icons8.com/?size=2x&id=19983&format=png",
     "birthday": "1984-10-08",
     "privacy": "private",
     "accessibility": "",
@@ -50,7 +50,7 @@
     "displayName": "The Cafe",
     "type": "business",
     "geolocation": "29.923551177388916,-90.13164291217434",
-    "mapIcon": "https://img.icons8.com/?size=512&id=32002&format=png",
+    "mapIcon": "https://img.icons8.com/?size=512&id=luN7421eTXGW&format=png",
     "birthday": "1999-09-02",
     "privacy": "public",
     "accessibility": "",
@@ -64,7 +64,7 @@
     "displayName": "Cooper",
     "type": "personal",
     "geolocation": "29.96124197302851,-90.19135849135267",
-    "mapIcon": "https://img.icons8.com/?size=512&id=35183&format=png",
+    "mapIcon": "https://img.icons8.com/?size=512&id=rn0oscjrJY2d&format=png",
     "birthday": "1997-12-31",
     "privacy": "private",
     "accessibility": "",
@@ -87,5 +87,19 @@
     "picture": "https://lh3.googleusercontent.com/a/AAcHTtcumH5yV4FWWZoyLzOoiXmG9P2jr8fvA5K-hKrJs-D7=s96-c",
     "googleId": "105034674130068305670"
 
+  },
+  {
+    "id": 7,
+    "username": "uselessponko",
+    "displayName": "ponko",
+    "type": "personal",
+    "geolocation": "30.408918434025757,-91.16428712463653",
+    "mapIcon": "✿",
+    "birthday": "1986-08-11",
+    "privacy": "",
+    "accessibility": "",
+    "email": "ponko@email.com",
+    "picture": "",
+    "googleId": ""
   }
 ]

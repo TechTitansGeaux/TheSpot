@@ -23,6 +23,8 @@ type Props = {
   }
 };
 
+
+
 const Map: React.FC<Props> = ({loggedIn}) => {
   const authUser = useSelector((state: RootState) => state.app.authUser);
   const dispatch = useDispatch();
