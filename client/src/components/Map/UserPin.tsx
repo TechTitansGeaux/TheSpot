@@ -4,15 +4,14 @@ import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useState, useEffect } from 'react';
 import $ from 'jquery';
-import dayjs = require('dayjs');
-dayjs.extend(localizedFormat)
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { setAuthUser } from '../../store/appSlice';
 import { RootState } from '../../store/store';
+import dayjs = require('dayjs');
+dayjs.extend(localizedFormat)
 
 
 
@@ -124,7 +123,7 @@ const UserPin: React.FC<Props> = (props) => {
         console.error('Failed to get Friends:', err);
       });
   }, []);
-  const isNotLoggedInUser = (props.user.id !== props.loggedIn.id) || null;
+  const isNotLoggedInUser = (props.user.id !== authUser.id) || null;
   const $offset = $(`#${props.user.username + props.user.id}`).offset()
   console.log($offset);
   return (
