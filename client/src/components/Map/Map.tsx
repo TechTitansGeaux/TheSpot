@@ -20,6 +20,8 @@ type Props = {
   }
 };
 
+
+
 const Map: React.FC<Props> = ({loggedIn}) => {
 
   const [ users, setUsers ] = useState([])

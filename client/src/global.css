@@ -243,6 +243,7 @@ video {
 
 
 .popUpBox {
+  display: none;
   transition: all .5s ease;
   height: 300px;
   width: 200px;
@@ -255,14 +256,13 @@ video {
   position: relative;
   top: -25px;
   left: -100px;
-  opacity: 1;
   text-transform: uppercase;
-  z-index: 9;
+  z-index: 11;
 }
 
-.addFriend {
+.addOrRmFriend {
   position: relative;
-  top: -80px;
-  left: -20px;
+  top: 155px;
+  left: -25px;
 
 }

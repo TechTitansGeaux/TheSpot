@@ -3,6 +3,7 @@ import localizedFormat from 'dayjs/plugin/localizedFormat';
 import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -64,16 +65,17 @@ const theme = createTheme({
 });
 
 
+
 const UserPin: React.FC<Props> = (props) => {
 
   const [friendList, setFriendList] = useState([]);
 
   const togglePopUp = () => {
     const box = document.getElementById(props.user.username + props.user.id)
-    if (+box.style.opacity === 0) {
-      box.style.opacity = '1';
-    } else if (+box.style.opacity === 1) {
-      box.style.opacity = '0';
+    if (box.style.display === 'block') {
+      box.style.display = 'none';
+    } else {
+      box.style.display = 'block';
     }
   }
 
@@ -109,6 +111,8 @@ const UserPin: React.FC<Props> = (props) => {
       });
   }, []);
 
+  const isNotLoggedInUser = (props.user.id !== props.loggedIn.id) || null;
+
 
   return (
     <div>
@@ -128,24 +132,42 @@ const UserPin: React.FC<Props> = (props) => {
             {`Member Since: ${dayjs(props.user.createdAt).format('ll')}`}
           </p>
         </div>
-      </div>
-      <div className='addFriend'>
-      {!friendList.includes(props.user.id) && (
-        <ThemeProvider theme={theme}>
-          <div>
-            <Box>
-              <Fab
-                size='small'
-                color='primary'
-                aria-label='add'
-                className='friend-add-btn'
-              >
-                <AddIcon onClick={requestFriendship}/>
-              </Fab>
-            </Box>
-          </div>
-        </ThemeProvider>
-      )}
+        <div className='addOrRmFriend'>
+        { friendList.includes(props.user.id) && isNotLoggedInUser && (
+          <ThemeProvider theme={theme}>
+            <div>
+              <Box>
+                <Fab
+                  size='small'
+                  color='primary'
+                  aria-label='add'
+                  className='friend-add-btn'
+                >
+                  <AddIcon onClick={requestFriendship}/>
+                </Fab>
+              </Box>
+            </div>
+          </ThemeProvider>
+        )}
+        </div>
+        <div className='addOrRmFriend'>
+        { (
+          <ThemeProvider theme={theme}>
+            <div>
+              <Box>
+                <Fab
+                  size='small'
+                  color='primary'
+                  aria-label='add'
+                  className='friend-add-btn'
+                >
+                  <RemoveIcon onClick={requestFriendship}/>
+                </Fab>
+              </Box>
+            </div>
+          </ThemeProvider>
+        )}
+        </div>
       </div>
     </div>
   );
