@@ -220,8 +220,21 @@ video.reel {
   justify-content: center;
   align-items: center;
   width: 100vw;
-  background-color: #282c34;
 }
+
+.cameraButtons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: inherit
+}
+
+/* .cam-mask{
+  width: 400px;
+  border-radius: 10px; 
+  overflow: hidden; 
+} */
 
 .dot {
   height: 40px;

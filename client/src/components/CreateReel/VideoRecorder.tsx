@@ -3,6 +3,10 @@
   import { useEffect, useCallback, useRef, useState } from "react";
   import Webcam from "react-webcam";
   import axios from 'axios';
+  import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
+  import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
+  import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
+  import { motion } from 'framer-motion';
 // import { current } from '@reduxjs/toolkit';
   // import dayjs = require('dayjs');
   // import localizedFormat from 'dayjs/plugin/localizedFormat';
@@ -180,7 +184,7 @@
           // send video form data to server
           await axios.post('/reel/upload', formData)
           .then(({data}) => {
-            console.log(data, '<---data from axios upload')
+            // console.log(data, '<---data from axios upload')
             setPublic_id(data.cloudID);
             setUrl(data.cloudURL)
             setRecordedChunks([]);
@@ -192,7 +196,7 @@
       };
       upload();
     }, [justRecorded, mediaRecorderRef, recordedChunks])
-    console.log(recordedChunks, '<-----recorded chunks OUTSIDE')
+    // console.log(recordedChunks, '<-----recorded chunks OUTSIDE')
 
     const handleDownload = useCallback(() => {
       if (recordedChunks.length) {
@@ -210,7 +214,8 @@
       }
     }, [recordedChunks]);
 
-    console.log(mustCreateEvent, '<-----must create event outside')
+    // console.log(mustCreateEvent, '<-----must create event outside')
+
     // save reel to databases
     // get all reel properties from predetermined event properties
     const saveReel = async () => {
@@ -225,7 +230,7 @@
           twenty_one: currentEvent.twenty_one
       })
       .then((res) => {
-        console.log(res, '<----- response from axios post event')
+        // console.log(res, '<----- response from axios post event')
         setEventId(res.data.event.id)
       })
       .catch((err) => {
@@ -234,10 +239,11 @@
     } else {
       // If event did not need to be created, set event id to the one passed down from props
       setEventId(currentEventId);
+      setReelSaved(true)
     }
     };
 
-    console.log(eventId, '<---- eventId in state')
+    // console.log(eventId, '<---- eventId in state')
 
     // POST THE REEL to the db, but only AFTER eventId has been GOT
     const postReelToDb = async () => {
@@ -250,7 +256,7 @@
         EventId: eventId
     })
     .then((resObj) => {
-      console.log(resObj, '<--- response from axios post reel')
+      // console.log(resObj, '<--- response from axios post reel')
     })
     .catch((err) => {
       console.error('Failed axios post reel: ', err);
@@ -261,48 +267,79 @@
     setUrl('');
     }
 
+    // post reel to db should be invoked whenever eventId has been changed
     useEffect(() => {
-      postReelToDb();
+      if (reelSaved === true) {
+        postReelToDb();
+        setReelSaved(false);
+      }
     }, [eventId])
 
     const videoConstraints = {
-      width: 420,
-      height: 420,
+      // width: 420,
+      // height: 420,
       facingMode: "user",
     };
-console.log(url, '<-----url')
+
+// console.log(url, '<-----url')
+
     return (
-      <div className="Container"> { justRecorded ? (
+      <div className="Container" > { justRecorded ? (
+        <div className='webcam'>
         <video
-        height={400}
-        width={400}
+        height={520}
+        width={520}
         src={url}
         controls autoPlay
         loop>
         </video>
+        </div>
       ) : (
         <Webcam
-          height={400}
-          width={400}
+          className='webcam'
+          height={420}
+          width={420}
           audio={false}
           mirrored={true}
           ref={webcamRef}
           videoConstraints={videoConstraints}
         />
       )}
+      <div className='cameraButtons'>
         {capturing ? (
-          <button onClick={handleStopCaptureClick}>Stop Capture</button>
+          <RadioButtonCheckedIcon
+          onClick={handleStopCaptureClick}
+          color='secondary'
+          sx={{ width: 52, height: 52 }}/>
+          // <button onClick={handleStopCaptureClick}>Stop Capture</button>
         ) : (
-          <button onClick={handleStartCaptureClick}>Start Capture</button>
+          <motion.div
+          whileHover={{ scale: 1.2 }}
+          >
+            <RadioButtonUncheckedIcon
+            onClick={handleStartCaptureClick}
+            color='secondary'
+            sx={{ width: 52, height: 52 }}/>
+          </motion.div>
+          // <button onClick={handleStartCaptureClick}>Start Capture</button>
         )}
         {justRecorded && (
-          <button onClick={saveReel}>Post</button>
+          <motion.div
+          whileHover={{ scale: 1.2 }}
+          >
+            <ArrowCircleRightIcon
+            onClick={saveReel}
+            color='secondary'
+            sx={{ width: 52, height: 52 }}/>
+          </motion.div>
+          // <button onClick={saveReel}>Post</button>
         )}
         {/* {selfieTaken ? (
         <button onClick={handleSaveSelfie}>Save Selfie</button>
       ) : (
         <button onClick={handleSelfieClick}>Take Selfie</button>
       )} */}
+      </div>
       </div>
     );
   }

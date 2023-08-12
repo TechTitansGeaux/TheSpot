@@ -51,8 +51,7 @@ const CreateReel: React.FC<Props> = ({user}) => {
 
 // check to see if there are any events happening at users location
 const eventCheck = () => {
-  // CHANGE BACK TO USER.GEOLO LATER
-  axios.get(`/events/${'29.979197703427907,-90.09631406159835'}`)
+  axios.get(`/events/${user.geolocation}`)
     .then((resObj) => {
       setCurrentEvent(resObj.data.event);
     })
@@ -61,8 +60,8 @@ const eventCheck = () => {
       console.error('Failed axios get event: ', err)
     })
 }
-console.log(user.geolocation, '<---- my location')
-console.log(currentEvent, '<----currentEvent')
+// console.log(user.geolocation, '<---- my location')
+// console.log(currentEvent, '<----currentEvent')
 
 useEffect(() => {
   eventCheck();
