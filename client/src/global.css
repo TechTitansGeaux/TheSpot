@@ -215,12 +215,48 @@ video.reel {
 
 /* ////// CREATE REEL */
 
+.webContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+}
+
 .webcam {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100vw;
-  background-color: #282c34;
+}
+
+.cameraButtons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: inherit
+}
+
+.cam-mask {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  width: 580px;
+  height: 580px;
+  border-radius: 10px; 
+  overflow: hidden; 
+}
+
+.preview-mask {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  width: 550px;
+  height: 520px;
+  border-radius: 10px; 
+  overflow: hidden; 
 }
 
 .dot {

@@ -190,12 +190,14 @@ const Reel: React.FC<Props> = ({ reels, friends }) => {
           <div key={reel.id + 'reel'}>
             <div className='video-container'>
               {reel.url.length > 15 && (
+
                 <video
                   className='reel'
                   ref={myRef?.current[i]}
                   id={`video${reel.id}`}
                   controls
                 >
+
                   <source src={reel.url} type='video/ogg' />
                 </video>
               )}
