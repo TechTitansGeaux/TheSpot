@@ -1,11 +1,8 @@
-import { request } from "http";
-
 const express = require('express');
 const friendRouter = express.Router();
 const { Friendships, Reels, Users, Events } = require('../db/index');
 
-
-// create get request for all friendships
+// GET request for all friendships
 friendRouter.get('/', (req: any, res: any) => {
   Friendships.findAll()
     .then((data: any) => {
@@ -18,8 +15,9 @@ friendRouter.get('/', (req: any, res: any) => {
     });
 });
 
-// create post request for friendship with 'pending' status
+//  POST request for friendship with 'pending' status
 friendRouter.post('/', (req: any, res: any) => {
+  // REQUESTER is req.user
   const { id } = req.user;
   const { accepter_id } = req.body;
   Friendships.bulkCreate([
@@ -35,18 +33,21 @@ friendRouter.post('/', (req: any, res: any) => {
     });
 });
 
-// update put request for friendship with 'approved' status
+// PUT request to update friendship with 'approved' status
 friendRouter.put('/', (req: any, res: any) => {
+  // ACCEPTER is req.user
   const { id } = req.user;
   const { requester_id } = req.body;
   Friendships.update(
     { status: 'approved' },
     {
       where: {
-          accepter_id: [id, requester_id],
-          status: 'pending',
-        },
-    })
+        accepter_id: [id, requester_id],
+        requester_id: [id, requester_id],
+        status: 'pending'
+      },
+    }
+  )
     .then((data: any) => {
       console.log('friendRoute UPDATE friend approved status', data);
       res.sendStatus(200);
@@ -54,9 +55,9 @@ friendRouter.put('/', (req: any, res: any) => {
     .catch((err: any) => {
       console.error('friendRouter UPDATE to database Error:', err);
     });
-})
+});
 
-// create get request for based on requestId
+// DELETE request to delete a friend
 
 export default friendRouter;
 

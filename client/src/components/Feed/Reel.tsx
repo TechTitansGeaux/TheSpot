@@ -134,7 +134,6 @@ const Reel: React.FC<Props> = ({ reels, friends }) => {
   // POST friendship 'pending' status to db
   const requestFriendship = (friend: number) => {
     console.log('your friendship is requested');
-
     axios
       .post('/friends', {
         // accepter_id is user on reel
@@ -146,6 +145,20 @@ const Reel: React.FC<Props> = ({ reels, friends }) => {
       .catch((err) => {
         console.error('Friend request axios FAILED', err);
       });
+  };
+
+  // PUT update friendship from 'pending' to 'approved'
+  const approveFriendship = (friend: number) => {
+    console.log('friendship approved')
+    axios.put('/friends', {
+      requester_id: friend,
+    })
+      .then((data) => {
+        console.log('Friend request approved PUT', data);
+      })
+      .catch((err) => {
+        console.error('Friend PUT request axios FAILED:', err);
+    })
   };
 
 
@@ -164,11 +177,11 @@ const Reel: React.FC<Props> = ({ reels, friends }) => {
       });
       observer.observe(myRef.current[0]);
     });
-    console.log('useRef DOM myRef INSIDE useEFFect', myRef?.current[0]);
+    // console.log('useRef DOM myRef INSIDE useEFFect', myRef?.current[0]);
   }, []);
 
-  console.log('useRef DOM myRef OUTSIDE useEFFect', myRef?.current[0]);
-  console.log('authUser ===>', user);
+  // console.log('useRef DOM myRef OUTSIDE useEFFect', myRef?.current[0]);
+  // console.log('authUser ===>', user);
 
   return (
     <div className='reel-container'>
@@ -177,11 +190,18 @@ const Reel: React.FC<Props> = ({ reels, friends }) => {
           <div key={reel.id + 'reel'}>
             <div className='video-container'>
               {reel.url.length > 15 && (
-                <video className="reel" ref={myRef?.current[i]} id={`video${reel.id}`} controls>
+                <video
+                  className='reel'
+                  ref={myRef?.current[i]}
+                  id={`video${reel.id}`}
+                  controls
+                >
                   <source src={reel.url} type='video/ogg' />
                 </video>
               )}
-              <p className='video-text'>{reel.text + myRef.current[i].current}</p>
+              <p className='video-text'>
+                {reel.text }
+              </p>
               {/**Removes addFriend button if already approved friend*/}
               <>
                 {!friendList.includes(reel.User.id) && (
@@ -199,6 +219,9 @@ const Reel: React.FC<Props> = ({ reels, friends }) => {
                             onClick={() => requestFriendship(reel.User.id)}
                           />
                         </Fab>
+                        {/* <button onClick={() => approveFriendship(reel.User.id)}>
+                          ACCEPT FRIEND
+                        </button> */}
                       </Box>
                     </div>
                   </ThemeProvider>
