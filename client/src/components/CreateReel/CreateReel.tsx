@@ -35,19 +35,33 @@ type Props = {
 
 const CreateReel: React.FC<Props> = ({user}) => {
 
-  const [currentEvent, setCurrentEvent] = useState({});
+  const [currentEvent, setCurrentEvent] = useState({
+    id: 0,
+    name: 'It\'s lit',
+    rsvp_count: 0,
+    date: new Date,
+    geolocation: user.geolocation,
+    twenty_one: false,
+    createdAt: '',
+    updatedAt: '',
+    PlaceId: 0
+  });
+  const [mustCreateEvent, setMustCreateEvent] = useState(false);
 
 
 // check to see if there are any events happening at users location
 const eventCheck = () => {
-  axios.get(`/events/${user.geolocation}`)
-    .then(({data}) => {
-      setCurrentEvent(data.event);
+  // CHANGE BACK TO USER.GEOLO LATER
+  axios.get(`/events/${'29.947192177,-90.183419996'}`)
+    .then((resObj) => {
+      setCurrentEvent(resObj.data.event);
     })
     .catch((err) => {
+      setMustCreateEvent(true);
       console.error('Failed axios get event: ', err)
     })
 }
+console.log(user.geolocation, '<---- my location')
 console.log(currentEvent, '<----currentEvent')
 
 useEffect(() => {
@@ -56,7 +70,7 @@ useEffect(() => {
 
   return (
     <div>
-      <VideoRecorder />
+      <VideoRecorder currentEvent={currentEvent} user={user} mustCreateEvent={mustCreateEvent}/>
     </div>
   )
 };

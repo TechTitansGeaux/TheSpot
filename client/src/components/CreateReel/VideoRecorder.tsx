@@ -3,22 +3,41 @@
   import { useEffect, useCallback, useRef, useState } from "react";
   import Webcam from "react-webcam";
   import axios from 'axios';
+// import { current } from '@reduxjs/toolkit';
+  // import dayjs = require('dayjs');
+  // import localizedFormat from 'dayjs/plugin/localizedFormat';
+  // dayjs.extend(localizedFormat)
 
-  // type Props = {
-  //   currentEvent: {
-  //     id: number;
-  //     name: string;
-  //     rsvp_count: number;
-  //     date: string;
-  //     geolocation: string; // i.e. "29.947126049254177, -90.18719199978266"
-  //     twenty_one: boolean;
-  //     createdAt: string;
-  //     updatedAt: string;
-  //     PlaceId: 1;
-  //   };
-  // };
+  type Props = {
+    currentEvent: {
+      id: number;
+      name: string;
+      rsvp_count: number;
+      date: Date;
+      geolocation: string; // i.e. "29.947126049254177, -90.18719199978266"
+      twenty_one: boolean;
+      createdAt: string;
+      updatedAt: string;
+      PlaceId: number;
+    },
+    user: {
+      id: number;
+      username: string;
+      displayName: string;
+      type: string;
+      geolocation: string; // i.e. "29.947126049254177, -90.18719199978266"
+      mapIcon: string;
+      birthday: string;
+      privacy: string;
+      accessibility: string;
+      email: string;
+      picture: string;
+      googleId: string;
+    },
+    mustCreateEvent: boolean
+  };
 
-  const VideoRecorder = () => {
+  const VideoRecorder: React.FC<Props> = ({currentEvent, user, mustCreateEvent}) => {
     const webcamRef = useRef(null);
     const mediaRecorderRef = useRef(null);
     const [imgSrc, setImgSrc] = useState(null);
@@ -28,9 +47,19 @@
     const [public_id, setPublic_id] = useState('');
     const [url, setUrl] = useState('');
     const [text, setText] = useState('test text');
-    const [eventId, setEventId] = useState(1)
+    const [eventId, setEventId] = useState(0)
     const [reelId, setReelId] = useState(0);
-    const [event, setEvent] = useState({});
+    const [event, setEvent] = useState({
+      id: 0,
+      name: '',
+      rsvp_count: 0,
+      date: new Date,
+      geolocation: '',
+      twenty_one: false,
+      createdAt: '',
+      updatedAt: '',
+      PlaceId: 0,
+    });
     const [justRecorded, setJustRecorded] = useState(false);
 
     type Blob = {
@@ -179,14 +208,42 @@
       }
     }, [recordedChunks]);
 
+    console.log(mustCreateEvent, '<-----must create event outside')
     // save reel to databases
-    const saveReel = () => {
-    //   await axios.post('/reel/post', {
-    //     name: event.name,
-    //     date: event.date,
-    //     geolocation: event.location,
-    //     twenty_one: true
-    // })
+    // get all reel properties from predetermined event properties
+    const saveReel = async () => {
+    // IF the event has to be created
+    if (mustCreateEvent === true) {
+      console.log('must create event === true hit')
+      await axios.post('/events/create', {
+          name: currentEvent.name,
+          rsvp_count: 0,
+          date: currentEvent.date,
+          geolocation: currentEvent.geolocation,
+          twenty_one: currentEvent.twenty_one
+      })
+      .then((res) => {
+        console.log(res, '<----- response from axios post event')
+        setEventId(res.data.event.id)
+      })
+      .catch((err) => {
+        console.error('Failed axios post event: ', err);
+      })
+      axios.post('/reel/post', {
+        public_id: public_id,
+        url: url,
+        text: text,
+        like_count: 0,
+        userId: user.id,
+        eventId: eventId
+    })
+    .then((resObj) => {
+      console.log(resObj, '<--- response from axios post reel')
+    })
+    .catch((err) => {
+      console.error('Failed axios post reel: ', err);
+    })
+    }
     // no longer just recorded
     setJustRecorded(false)
     // reset url
