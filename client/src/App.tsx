@@ -14,6 +14,7 @@ import { useDispatch } from 'react-redux';
 import { setAuthUser, setIsAuthenticated } from './store/appSlice';
 import axios from 'axios';
 import AddFriend from './components/AddFriend';
+import Settings from './components/ProfileSetUp/Settings'
 
 type User = {
   id: number;
@@ -59,9 +60,10 @@ const App = () => {
       <Routes>
         <Route index element={<SignUp />}></Route>
         <Route path='/' element={<Navigation />}>
-          <Route path='/ProfileSetUp' element={<ProfileSetUp />}></Route>
+          <Route path='/ProfileSetUp' element={<ProfileSetUp  />}></Route>
           <Route path='/Feed' element={<Feed user={user} AddFriend={<AddFriend />} />}></Route>
           <Route path='/Map' element={<Map loggedIn={user} />}></Route>
+          <Route path='/Settings' element={<Settings />}></Route>
           <Route path='/WebcamDisplay' element={<WebcamDisplay />}></Route>
         </Route>
       </Routes>
