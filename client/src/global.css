@@ -6,11 +6,12 @@
   --yellow: #f0f465;
   --grey: #eaf2ef;
   --white: #F5FCFA;
-  --t50-white: rgba(245, 252, 250, .5);
-  --t25-white: rgba(245, 252, 250, .25);
+  --t50-white: #f5fcfa80;
+  --t25-white: #f5fcfa17;
   --t75-violet: rgba(11, 1, 19, .75);
   --t50-violet: rgba(11, 1, 19, .50);
   --t25-violet: rgba(11, 1, 19, .25);
+  --setupBG: #f433aa12;
   --title-font: 'Anton', sans-serif;
   --primary-font: system-ui, sans-serif;
   --lg-font: 2.5rem;

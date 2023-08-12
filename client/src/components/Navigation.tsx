@@ -76,6 +76,12 @@ const Navigation = () => {
                     Map
                   </NavLink>
                 </div>
+
+                <div>
+                  <NavLink className='navLink' to='/Settings' style={{ marginLeft: '10px' }}>
+                        Settings
+                  </NavLink>
+                </div>
               </div>
             </Toolbar>
           </AppBar>

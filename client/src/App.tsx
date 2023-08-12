@@ -11,6 +11,8 @@ import SignUp from './components/ProfileSetUp/SignUp';
 import ProfileSetUp from './components/ProfileSetUp/ProfileSetUp';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import AddFriend from './components/AddFriend';
+import Settings from './components/ProfileSetUp/Settings'
 
 type User = {
   id: number;
@@ -53,9 +55,10 @@ const App = () => {
       <Routes>
         <Route index element={<SignUp />}></Route>
         <Route path='/' element={<Navigation />}>
-          <Route path='/ProfileSetUp' element={<ProfileSetUp />}></Route>
-          <Route path='/Feed' element={<Feed user={user} />}></Route>
+          <Route path='/ProfileSetUp' element={<ProfileSetUp  />}></Route>
+          <Route path='/Feed' element={<Feed user={user} AddFriend={<AddFriend />} />}></Route>
           <Route path='/Map' element={<Map loggedIn={user} />}></Route>
+          <Route path='/Settings' element={<Settings />}></Route>
           <Route path='/VideoRecorder' element={<VideoRecorder user={user}/>}></Route>
         </Route>
       </Routes>
