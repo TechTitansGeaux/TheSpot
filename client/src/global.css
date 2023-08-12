@@ -182,7 +182,7 @@ button.navLink  {
   min-height: 667px;
 }
 
-video {
+video.reel {
   position: absolute;
   left: -50%;
   bottom: 0%;
