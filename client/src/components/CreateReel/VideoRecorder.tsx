@@ -237,6 +237,8 @@
     }
     };
 
+    console.log(eventId, '<---- eventId in state')
+
     // POST THE REEL to the db, but only AFTER eventId has been GOT
     const postReelToDb = async () => {
       await axios.post('/reel/post', {
@@ -245,7 +247,7 @@
         text: text,
         like_count: 0,
         userId: user.id,
-        eventId: eventId
+        EventId: eventId
     })
     .then((resObj) => {
       console.log(resObj, '<--- response from axios post reel')
