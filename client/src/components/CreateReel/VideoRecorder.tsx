@@ -3,26 +3,24 @@
   import { useEffect, useCallback, useRef, useState } from "react";
   import Webcam from "react-webcam";
   import axios from 'axios';
-  // import streamifier from 'streamifier';
+
 
   type Props = {
-    user: {
+    Event: {
       id: number;
-      username: string;
-      displayName: string;
-      type: string;
+      name: string;
+      rsvp_count: number;
+      date: string;
       geolocation: string; // i.e. "29.947126049254177, -90.18719199978266"
-      mapIcon: string;
-      birthday: string;
-      privacy: string;
-      accessibility: string;
-      email: string;
-      picture: string;
-      googleId: string;
+      twenty_one: boolean;
+      createdAt: string;
+      updatedAt: string;
+      PlaceId: 1;
+    }
     };
-  };
 
-  const VideoRecorder: React.FC<Props> = ({user}) => {
+
+  const VideoRecorder: React.FC<Props> = ({Event}) => {
     const webcamRef = useRef(null);
     const mediaRecorderRef = useRef(null);
     const [imgSrc, setImgSrc] = useState(null);
@@ -144,7 +142,7 @@
           // turn url into blob
           const blobUrl = URL.createObjectURL(blob);
           // turn blobUrl into file
-          const file = await urltoFile(blobUrl, 'video.webm', 'video/webm') 
+          const file = await urltoFile(blobUrl, 'video.webm', 'video/webm')
           // append file to form data
           const formData = new FormData;
   
