@@ -1,3 +1,5 @@
+import { request } from "http";
+
 const express = require('express');
 const friendRouter = express.Router();
 const { Friendships, Reels, Users, Events } = require('../db/index');
@@ -33,6 +35,49 @@ friendRouter.post('/', (req: any, res: any) => {
     });
 });
 
+// update put request for friendship with 'approved' status
+friendRouter.put('/', (req: any, res: any) => {
+  const { id } = req.user;
+  const { requester_id } = req.body;
+  Friendships.update(
+    { status: 'approved' },
+    {
+      where: {
+          accepter_id: [id, requester_id],
+          status: 'pending',
+        },
+    })
+    .then((data: any) => {
+      console.log('friendRoute UPDATE friend approved status', data);
+      res.sendStatus(200);
+    })
+    .catch((err: any) => {
+      console.error('friendRouter UPDATE to database Error:', err);
+    });
+})
+
 // create get request for based on requestId
 
 export default friendRouter;
+
+// // update put request for friendship with 'approved' status
+// friendRouter.put('/', (req: any, res: any) => {
+//   // const { id } = req.user;
+//   const { requester_id, accepter_id } = req.body;
+//   Friendships.update(
+//     { status: 'approved' },
+//     {
+//       where: {
+//         accepter_id: [6, 2],
+//         status: 'pending',
+//       },
+//     }
+//   )
+//     .then((data: any) => {
+//       console.log('friendRoute UPDATE friend data', data);
+//       res.sendStatus(200);
+//     })
+//     .catch((err: any) => {
+//       console.error('friendRouter UPDATE to database Error:', err);
+//     });
+// });

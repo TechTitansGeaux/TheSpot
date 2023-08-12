@@ -127,7 +127,6 @@ const Feed: React.FC<Props> = ({user}) => {
       <div className='container-full-w'>
         <Reel
           reels={reels}
-          user={user}
           friends={friends}
         />
       </div>

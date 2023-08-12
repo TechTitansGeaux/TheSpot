@@ -14,7 +14,9 @@ import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { realpath } from 'fs';
-
+import { useDispatch } from 'react-redux';
+// import { useLocation } from 'react-router-dom';
+import { setAuthUser, setIsAuthenticated } from '../../store/appSlice';
 
 
 type Props = {
@@ -29,7 +31,6 @@ type Props = {
     User: User;
     Event: Event;
   }[];
-  user: User;
   AddFriend?: React.ReactNode | React.ReactNode[];
   friends: {
     id: number;
@@ -81,8 +82,28 @@ const theme = createTheme({
   },
 });
 
-const Reel: React.FC<Props> = ({ reels, user, friends }) => {
-  const [friendList, setFriendList] = useState([]);
+const Reel: React.FC<Props> = ({ reels, friends }) => {
+  const dispatch = useDispatch();
+  // get all users to pass down as props
+  const [user, setUser] = useState<User>(null);
+
+  const fetchAuthUser = async () => {
+    try {
+      const response = await axios.get(`/users/user`);
+      if (response && response.data) {
+        dispatch(setIsAuthenticated(true));
+        dispatch(setAuthUser(response.data));
+        setUser(response.data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAuthUser();
+
+  }, []);  const [friendList, setFriendList] = useState([]);
 
   // REFERENCE VIDEO HTML element in JSX element
   // Uses a ref to hold an array of generated refs, and assign them when mapping.
@@ -99,9 +120,9 @@ const Reel: React.FC<Props> = ({ reels, user, friends }) => {
       .get('/feed/friendlist')
       .then(({ data }) => {
         console.log('data from friends Axios GET ==>', data);
-        data.map((user: any) => {
-          if (user.status === 'approved') {
-            setFriendList([...friendList, user.accepter_id]);
+        data.map((authUser: any) => {
+          if (authUser.status === 'approved') {
+            setFriendList([...friendList, authUser.accepter_id]);
           }
         });
       })
@@ -127,32 +148,27 @@ const Reel: React.FC<Props> = ({ reels, user, friends }) => {
       });
   };
 
-  // const allReelsArr = reels.map((reel) => {
-    //   return <video id={`video${reel.id}`} controls src={reel.url}></video>;
-    // });
-    // console.log('all reels array', allReelsArr);
-    // const playVideos = allReelsArr.map((vid: any) => vid.props.id.play());
 
-
-
-    // observe videos to playback on scroll in view
-  const observer = new IntersectionObserver((entries, observer) => {
-    entries.forEach((entry) => {
-      // accessibility static video
-      if (window.matchMedia('(prefers-reduced-motion)').matches) {
-        // replace console.log with vid.currentTime = <number of seconds>
-        console.log('static video');
-      } else {
-        // play videos here
-        console.log('video entry ==>', entries[0]);
-      }
-    });
-    observer.observe(myRef.current[0]);
-  });
   useEffect(() => {
-    observer;
+    // observe videos to playback on scroll in view
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        // accessibility static video
+        if (window.matchMedia('(prefers-reduced-motion)').matches) {
+          // replace console.log with vid.currentTime = <number of seconds>
+          console.log('static video');
+        } else {
+          // play videos here
+          console.log('video entry ==>', entries[0]);
+        }
+      });
+      observer.observe(myRef.current[0]);
+    });
+    console.log('useRef DOM myRef INSIDE useEFFect', myRef?.current[0]);
   }, []);
-  console.log('useRef DOM myRef OUTSIDE useEFFect', myRef.current);
+
+  console.log('useRef DOM myRef OUTSIDE useEFFect', myRef?.current[0]);
+  console.log('authUser ===>', user);
 
   return (
     <div className='reel-container'>
@@ -161,7 +177,7 @@ const Reel: React.FC<Props> = ({ reels, user, friends }) => {
           <div key={reel.id + 'reel'}>
             <div className='video-container'>
               {reel.url.length > 15 && (
-                <video ref={myRef.current[i]} id={`video${reel.id}`} controls>
+                <video className="reel" ref={myRef?.current[i]} id={`video${reel.id}`} controls>
                   <source src={reel.url} type='video/ogg' />
                 </video>
               )}
