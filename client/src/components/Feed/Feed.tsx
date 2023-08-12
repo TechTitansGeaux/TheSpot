@@ -29,8 +29,9 @@ const Feed: React.FC<Props> = ({user}) => {
   const [userLat, setUserLat] = useState(0);
   const [userLong, setUserLong] = useState(0);
 
-  const filters = ['reel', 'recent', 'likes', 'friends']; // filter options
+  const filters = ['reel', 'recent', 'likes', 'friends', 'location']; // filter options
   const friendsReels: any = [];
+  const geoReels: any = [];
 
   const filterChangeHandler = (event: any) => {
     setFilter(event.target.value);
@@ -41,7 +42,6 @@ const Feed: React.FC<Props> = ({user}) => {
     axios
       .get('/feed/recent')
       .then((response) => {
-        // console.log('reels recent res.data:', response.data);
         for (let i = 0; i < friends.length; i++) {
           for (let j = 0; j < response.data.length; j++) {
             if (friends[i].accepter_id === response.data[j].UserId) {
@@ -57,7 +57,9 @@ const Feed: React.FC<Props> = ({user}) => {
   };
 
   const getAllReels = () => {
-    if (filter === 'friends') {
+    if (filter === 'location') {
+      getReelsByLoc();
+    } else if (filter === 'friends') {
       getAllFriendReels();
     } else {
       axios
@@ -93,18 +95,54 @@ const Feed: React.FC<Props> = ({user}) => {
       const long = Number(arr[1]);
       setUserLat(lat);
       setUserLong(long);
-      // console.log('coord:', lat, long);
-      // console.log('userLat, userLong', userLat, userLong);
-      // console.log('add', lat + long);
-      // console.log(typeof lat);
-      // console.log('add userLat userLong', userLat + userLong);
     }
+  };
+
+  // find distance with 2 points
+  const distance = (lat1: number, lat2: number, lon1: number, lon2: number) => {
+
+        lon1 = lon1 * Math.PI / 180;
+        lon2 = lon2 * Math.PI / 180;
+        lat1 = lat1 * Math.PI / 180;
+        lat2 = lat2 * Math.PI / 180;
+        // Haversine formula
+        let dlon = lon2 - lon1;
+        let dlat = lat2 - lat1;
+        let a = Math.pow(Math.sin(dlat / 2), 2)
+                 + Math.cos(lat1) * Math.cos(lat2)
+                 * Math.pow(Math.sin(dlon / 2),2);
+
+        let c = 2 * Math.asin(Math.sqrt(a));
+
+        let r = 3956;
+
+        return(c * r);
+  };
+
+  const getReelsByLoc = () => {
+    axios
+      .get('feed/recent')
+      .then((response) => {
+        for (let i = 0; i < response.data.length; i++) {
+          let geo = response.data[i].User.geolocation.split(',');
+          const otherLat = Number(geo[0]);
+          const otherLong = Number(geo[1]);
+          let dist = distance(userLat, otherLat, userLong, otherLong);
+          console.log('distance:', dist);
+          if (dist <= 5) {
+            geoReels.push(response.data[i]);
+          }
+        }
+        setReels(geoReels);
+      })
+      .catch((err) => {
+        console.error('Could not GET all geo reels:', err);
+      })
   };
 
   useEffect(() => {
     userCoord(user);
-    // console.log('user lat long', userLat, userLong);
-  }, [user, userLat, userLong]);
+  }, [user]);
 
   useEffect(() => {
     getAllReels();
