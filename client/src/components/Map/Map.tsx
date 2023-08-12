@@ -9,7 +9,7 @@ type Props = {
     username: string;
     displayName: string;
     type: string;
-    geolocation: string;
+    geolocation: string; // i.e. "29.947126049254177, -90.18719199978266"
     mapIcon: string;
     birthday: string;
     privacy: string;

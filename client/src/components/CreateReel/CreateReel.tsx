@@ -21,17 +21,17 @@ type Props = {
   };
 };
 
-type currentEvent = {
-  id: number;
-  name: string;
-  rsvp_count: number;
-  date: string;
-  geolocation: string; // i.e. "29.947126049254177, -90.18719199978266"
-  twenty_one: boolean;
-  createdAt: string;
-  updatedAt: string;
-  PlaceId: 1;
-}
+// type currentEvent = {
+//   id: number;
+//   name: string;
+//   rsvp_count: number;
+//   date: string;
+//   geolocation: string; // i.e. "29.947126049254177, -90.18719199978266"
+//   twenty_one: boolean;
+//   createdAt: string;
+//   updatedAt: string;
+//   PlaceId: 1;
+// }
 
 const CreateReel: React.FC<Props> = ({user}) => {
 
@@ -40,7 +40,7 @@ const CreateReel: React.FC<Props> = ({user}) => {
 
 // check to see if there are any events happening at users location
 const eventCheck = () => {
-  axios.get(`/events/${'29.979197703427907,-90.09631406159835'}`)
+  axios.get(`/events/${user.geolocation}`)
     .then(({data}) => {
       setCurrentEvent(data.event);
     })

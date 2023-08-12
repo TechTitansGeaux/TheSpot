@@ -2,7 +2,7 @@
   {
     "id": 1,
     "public_id": 1,
-    "url": "https://res.cloudinary.com/thespot/video/upload/v1691427437/samples/sea-turtle.webm",
+    "url": "vid1",
     "text": "Party at my house!",
     "like_count": 109,
     "UserId": 1,
@@ -20,7 +20,7 @@
   {
     "id": 3,
     "public_id": 2,
-    "url": "https://res.cloudinary.com/thespot/video/upload/v1691427442/samples/cld-sample-video.webm",
+    "url": "vid3",
     "text": "I need a drink.🍻",
     "like_count": 8,
     "UserId": 2,
@@ -31,14 +31,14 @@
     "public_id": 3,
     "url": "vid1",
     "text": "",
-    "like_count": 2,
+    "like_count": 6,
     "UserId": 3,
     "EventId": 1
   },
   {
     "id": 5,
     "public_id": 1,
-    "url": "https://res.cloudinary.com/thespot/video/upload/v1691427439/samples/elephants.webm",
+    "url": "vid2",
     "text": "Don't Stop.. Belieeeving!",
     "like_count": 3,
     "UserId": 1,
@@ -67,7 +67,7 @@
     "public_id": 5,
     "url": "vid3",
     "text": "🕸️ Spidey senses are tingling",
-    "like_count": 1201,
+    "like_count": 12,
     "UserId": 5,
     "EventId": 1
   }

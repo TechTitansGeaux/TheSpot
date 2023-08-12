@@ -4,9 +4,8 @@
   import Webcam from "react-webcam";
   import axios from 'axios';
 
-
   // type Props = {
-  //   Event: {
+  //   currentEvent: {
   //     id: number;
   //     name: string;
   //     rsvp_count: number;
@@ -16,9 +15,8 @@
   //     createdAt: string;
   //     updatedAt: string;
   //     PlaceId: 1;
-  //   }
   //   };
-
+  // };
 
   const VideoRecorder = () => {
     const webcamRef = useRef(null);
@@ -142,7 +140,7 @@
           // turn url into blob
           const blobUrl = URL.createObjectURL(blob);
           // turn blobUrl into file
-          const file = await urltoFile(blobUrl, 'video.webm', 'video/webm')
+          const file = await urltoFile(blobUrl, 'video.webm', 'video/webm') 
           // append file to form data
           const formData = new FormData;
   

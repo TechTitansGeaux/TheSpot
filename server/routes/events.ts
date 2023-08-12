@@ -7,7 +7,6 @@ const { Events } = require('../db/index');
 eventRouter.get('/:geolocation', async (req: any, res: any) => {
   // access geolocation from request parameters
   const { geolocation } = req.params;
-  console.log(geolocation, '<----geolo from router')
   // find event by geolocation
     await Events.findOne({where: {geolocation: geolocation}})
     .then((event: any) => {

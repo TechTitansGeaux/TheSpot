@@ -53,10 +53,7 @@
     "mapIcon": "👑",
     "birthday": "1999-09-02",
     "privacy": "",
-    "accessibility": "",
-    "email": "ben@email.com",
-    "picture": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpZml7e1cq_JpcnG2azxh53OQS5twlqpWNeg&usqp=CAU",
-    "googleId": ""
+    "accessibility": ""
   },
   {
     "id": 5,
@@ -71,21 +68,6 @@
     "email": "coop@email.com",
     "picture": "https://www.rollingstone.com/wp-content/uploads/2022/12/spiderman-trailer.jpg",
     "googleId": ""
-
-  },
-  {
-    "id": 6,
-    "username": "sammy",
-    "displayName": "samtaro",
-    "type": "personal",
-    "geolocation": "30.0085192,-90.2338564",
-    "mapIcon": "✿",
-    "birthday": "1994-08-16",
-    "privacy": "",
-    "accessibility": "",
-    "email": "samsontest894@gmail.com",
-    "picture": "https://lh3.googleusercontent.com/a/AAcHTtcumH5yV4FWWZoyLzOoiXmG9P2jr8fvA5K-hKrJs-D7=s96-c",
-    "googleId": "105034674130068305670"
 
   }
 ]
