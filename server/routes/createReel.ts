@@ -8,7 +8,9 @@ const multer = require('multer');
 const uploadReelToCloudinary = async (file: string) => {
   try {
     const result = await cloudinary.uploader.upload(file, {
-      resource_type: "video"
+      resource_type: "video",
+      width: 1102,
+      height: 620
     });
     console.log(result, '<-----result from upload to cloudinary')
     return result.secure_url;
