@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 // import { useLocation } from 'react-router-dom';
 import { setAuthUser, setIsAuthenticated } from '../../store/appSlice';
 import ReelItem from './ReelItem';
+import { distance } from 'framer-motion';
 
 // const ReelItem = React.lazy(() => import('./ReelItem'));
 
@@ -87,13 +88,10 @@ const Reel: React.FC<Props> = ({ reels }) => {
     axios
       .get('/feed/friendlist')
       .then(({ data }) => {
-        console.log('data from friends Axios GET ==>', data);
+        // console.log('data from friends Axios GET ==>', data);
         data.map((user: any) => {
           if (user?.status === 'approved') {
-            setFriendList([...friendList, user.accepter_id]);
-          }
-          if (user?.status === 'pending') {
-            setDisabled([...disabled, user.accepter_id]);
+            setFriendList((prev) => [...prev, user.accepter_id]);
           }
         });
       })
@@ -107,6 +105,7 @@ const Reel: React.FC<Props> = ({ reels }) => {
   // POST request friendship 'pending' status to db
   const requestFriendship = (friend: number) => {
     console.log('your friendship is requested', friend);
+    setDisabled([...disabled, friend])
     axios
       .post('/friends', {
         // accepter_id is user on reel
@@ -128,7 +127,7 @@ const Reel: React.FC<Props> = ({ reels }) => {
         requester_id: friend,
       })
       .then((data) => {
-        console.log('Friend request approved PUT', data);
+        // console.log('Friend request approved PUT', data);
       })
       .catch((err) => {
         console.error('Friend PUT request axios FAILED:', err);
@@ -146,6 +145,7 @@ const Reel: React.FC<Props> = ({ reels }) => {
               friendList={friendList}
               requestFriendship={requestFriendship}
               approveFriendship={approveFriendship}
+              disabled={disabled}
             />
           </div>
         );

@@ -13,6 +13,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState, useEffect, useRef } from 'react';
 import { memo } from 'react';
+import axios from 'axios';
 
 type Props = {
   reel: any;
@@ -20,6 +21,7 @@ type Props = {
   requestFriendship: any;
   approveFriendship: any;
   user: any;
+  disabled: any;
 };
 
 const theme = createTheme({
@@ -42,27 +44,50 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   friendList,
   requestFriendship,
   approveFriendship,
-  user
+  user,
+  disabled
 }) {
   // REFERENCE VIDEO HTML element in JSX element // Uses a ref to hold an array of generated refs, and assign them when mapping.
   const myRef = useRef<HTMLVideoElement>(null);
   const [loop, setLoop] = useState(false);
+  const [stayDisabled, setStayDisabled] = useState([]);
+
+  // GET request get friendList from Friendship table in DB // set to state variable
+  useEffect(() => {
+    const controller = new AbortController();
+    axios
+      .get('/feed/friendlist/pending')
+      .then(({ data }) => {
+        // console.log('data from friends to DISABLE button Axios GET ==>', data);
+        data.map((user: any) => {
+          if (user.status === 'pending') {
+            setStayDisabled((prev) => [...prev, user.accepter_id]);
+          }
+        });
+      })
+      .catch((err) => {
+        console.error('Failed to get Disabled List:', err);
+      });
+    // aborts axios request when component unmounts
+    return () => controller?.abort();
+  }, []);
 
   useEffect(() => {
     // observe videos with IntersectionObserver API to playback on scroll in view
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         // console.log('entry', entry);
-        const playVideo = myRef.current.play()
+        const playVideo = myRef.current.play();
         if (!entry.isIntersecting && playVideo !== undefined) {
           // if video is in view PLAY video and LOOP
-          playVideo.then(_ => {
-            myRef.current.pause();
-            setLoop(false);
-          })
+          playVideo
+            .then((_) => {
+              myRef.current.pause();
+              setLoop(false);
+            })
             .catch((err) => {
-            console.error('Auto-play was prevented', err)
-          })
+              console.error('Auto-play was prevented', err);
+            });
         } else {
           // else video is out of view PAUSE video and don't Loop
           myRef.current.play();
@@ -92,7 +117,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
         <p className='video-text'>{reel.text}</p>
         {/**Removes addFriend button if already approved friend*/}
         <>
-          {(!friendList.includes(reel.User.id) && reel.User.id !== user.id) && (
+          {!friendList.includes(reel.User.id) && reel.User.id !== user?.id && (
             <ThemeProvider theme={theme}>
               <div className='friend-request'>
                 <Box className='friend-box'>
@@ -101,6 +126,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                     color='primary'
                     aria-label='add'
                     className='friend-add-btn'
+                    disabled={disabled.includes(reel.User.id) || stayDisabled.includes(reel.User.id)}
                   >
                     <AddIcon onClick={() => requestFriendship(reel.User.id)} />
                   </Fab>
