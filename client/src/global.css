@@ -16,6 +16,7 @@
   --primary-font: system-ui, sans-serif;
   --lg-font: 2.5rem;
   --md-font: 1.5rem;
+  --reg-font: 1rem;
   --sm-font: .5rem;
 }
 
@@ -157,12 +158,12 @@ button.navLink  {
 .friend-request {
   position: relative;
   right: 3%;
-  top: 80%;
+  top: 82%;
 }
 
 .friend-add-btn {
   position: absolute;
-  left: 88%;;
+  left: 88%;
   z-index: 2;
 }
 
@@ -170,6 +171,25 @@ button.navLink  {
   position: absolute;
   cursor: pointer;
   left: 87%;
+}
+
+button.accept-friend {
+  position: absolute;
+  background-color: var(--violet);
+  color: var(--yellow);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  right: 3%;
+  top: 215%;
+  z-index: 5;
+}
+
+button.accept-friend:hover {
+  background-color: var(--pink);
+  color: var(--violet);
 }
 
 .reel-container {
@@ -185,14 +205,15 @@ button.navLink  {
 video.reel {
   position: absolute;
   left: -50%;
-  bottom: 0%;
-  max-width: auto;
+  top: 0;
+  bottom: 1vw;
+  width: auto;
   max-height: 100%;
 }
 
 .video-container {
   position: relative;
-  background-color: var(--purple);
+  background-color: var(--white);
   overflow: hidden;
   height: 620px;
   min-width: 375px;
@@ -226,7 +247,8 @@ video.reel {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100vw;
+  height: 100vh;
+  width: auto;
 }
 
 .cameraButtons {
@@ -244,8 +266,8 @@ video.reel {
   width: 100vw;
   width: 580px;
   height: 580px;
-  border-radius: 10px; 
-  overflow: hidden; 
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 .preview-mask {
@@ -255,8 +277,8 @@ video.reel {
   width: 100vw;
   width: 550px;
   height: 520px;
-  border-radius: 10px; 
-  overflow: hidden; 
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 .dot {
