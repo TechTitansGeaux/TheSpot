@@ -40,7 +40,9 @@ const App = () => {
   const fetchAuthUser = async () => {
     try {
       const response = await axios.get(`/users/user`);
+
       if (response && response.data) {
+
         dispatch(setIsAuthenticated(true));
         dispatch(setAuthUser(response.data));
         setUser(response.data);
@@ -52,7 +54,7 @@ const App = () => {
 
   useEffect(() => {
     fetchAuthUser();
-  }, []);
+  }, [user]);
 
   return (
     <BrowserRouter>

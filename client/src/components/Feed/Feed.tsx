@@ -36,6 +36,7 @@ const Feed: React.FC<Props> = ({user}) => {
   const friendsReels: any = [];
   const geoReels: any = [];
 
+
   const filterChangeHandler = (event: any) => {
     setFilter(event.target.value);
   };
@@ -44,10 +45,12 @@ const Feed: React.FC<Props> = ({user}) => {
     setGeoF(event.target.value);
   };
 
+
   const getAllFriendReels = () => {
     axios
       .get('/feed/recent')
       .then((response) => {
+        // console.log('reels recent res.data:', response.data);
         for (let i = 0; i < friends.length; i++) {
           for (let j = 0; j < response.data.length; j++) {
             if (friends[i].accepter_id === response.data[j].UserId) {
@@ -71,7 +74,7 @@ const Feed: React.FC<Props> = ({user}) => {
       axios
         .get(`/feed/${filter}`)
         .then((response) => {
-          // console.log('reels response.data:', response.data);
+          console.log('reels response.data:', response.data);
           setReels(response.data);
         })
         .catch((err) => {
@@ -101,7 +104,6 @@ const Feed: React.FC<Props> = ({user}) => {
       const long = Number(arr[1]);
       setUserLat(lat);
       setUserLong(long);
-    }
   };
 
   // find distance (miles) with 2 points
