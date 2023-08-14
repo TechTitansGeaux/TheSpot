@@ -6,15 +6,17 @@
   --yellow: #f0f465;
   --grey: #eaf2ef;
   --white: #F5FCFA;
-  --t50-white: rgba(245, 252, 250, .5);
-  --t25-white: rgba(245, 252, 250, .25);
+  --t50-white: #f5fcfa80;
+  --t25-white: #f5fcfa17;
   --t75-violet: rgba(11, 1, 19, .75);
   --t50-violet: rgba(11, 1, 19, .50);
   --t25-violet: rgba(11, 1, 19, .25);
+  --setupBG: #f433aa12;
   --title-font: 'Anton', sans-serif;
   --primary-font: system-ui, sans-serif;
   --lg-font: 2.5rem;
   --md-font: 1.5rem;
+  --reg-font: 1rem;
   --sm-font: .5rem;
 }
 
@@ -126,6 +128,12 @@ footer {
   width: 100px;
   height: 50px;
   margin-right: 20px;
+  transition: transform .2s ease-out;
+}
+
+#nav-logo:hover {
+  transform: scale(1.06);
+  /* transform: skewY(.5rem); */
 }
 
 .navLink {
@@ -134,9 +142,14 @@ footer {
   font-family: var(--title-font);
   font-size: var(--md-font);
   color: var(--yellow);
+  transition: color .2s ease-out;
 }
 
-button.navLink  {
+.navLink:hover {
+  color: var(--pink);
+}
+
+button.navLink {
   background: none;
   color: inherit;
   border: none;
@@ -146,6 +159,11 @@ button.navLink  {
   outline: inherit;
 }
 
+.drawer-container {
+  height: 100vh;
+  background-color: var(--violet);
+}
+
 /* ////// FEED & REEL */
 
 .click {
@@ -153,22 +171,30 @@ button.navLink  {
   height: 100%;
 }
 
+
 .friend-request {
   position: relative;
   right: 3%;
-  top: 80%;
+  height: 35px;
+  top: 85%;
 }
 
 .friend-add-btn {
   position: absolute;
-  left: 88%;;
+  left: 88%;
   z-index: 2;
 }
 
 .friend-avatar {
   position: absolute;
   cursor: pointer;
+  bottom: 5%;
   left: 87%;
+}
+
+button.accept-friend:hover {
+  background-color: var(--pink);
+  color: var(--violet);
 }
 
 .reel-container {
@@ -181,17 +207,20 @@ button.navLink  {
   min-height: 667px;
 }
 
-video {
+/* jackie made changes to push video to right  */
+/* it was at left:-50% before */
+video.reel {
   position: absolute;
-  left: -50%;
-  bottom: 0%;
-  max-width: auto;
+  left: -22%;
+  top: 0%;
+  bottom: 1vw;
+  width: auto;
   max-height: 100%;
 }
 
 .video-container {
   position: relative;
-  background-color: var(--purple);
+  background-color: var(--white);
   overflow: hidden;
   height: 620px;
   min-width: 375px;
@@ -214,10 +243,99 @@ video {
 
 /* ////// CREATE REEL */
 
-.webcam {
+.webContainer {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100vw;
-  background-color: #282c34;
+}
+
+.webcam {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: auto;
+}
+
+.cameraButtons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: inherit
+}
+
+.cam-mask {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  width: 700px;
+  height: 700px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.preview-mask {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  width: 585px;
+  height: 655px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.preview-text {
+  position: absolute;
+  margin: 0 5rem;
+  max-width: 350px;
+  font-size: var(--lg-font);
+  font-family: var(--title-font);
+}
+
+.dot {
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  width: 50px;
+  background-color: var(--pink);
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  top: -20px;
+  left: -20px;
+  z-index: 10;
+  cursor: pointer;
+  font-size: 30px;
+  text-align: center;
+  overflow-y: auto;
+}
+
+
+.popUpBox {
+  display: none;
+  transition: all .5s ease;
+  height: 300px;
+  width: 200px;
+  border: solid var(--pink);
+  border-width: 4px;
+  border-radius: 15px;
+  background-color: var(--violet);
+  font-family: var(--title-font);
+  color: white;
+  position: relative;
+  top: -25px;
+  left: -100px;
+  text-transform: uppercase;
+  z-index: 11;
+}
+
+.addOrRmFriend {
+  position: relative;
+  top: 155px;
+  left: -25px;
+
 }

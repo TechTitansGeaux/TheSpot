@@ -100,6 +100,29 @@ feedRouter.get('/friendlist', (req: any, res: any) => {
     })
 });
 
+// get pending friends
+feedRouter.get('/friendlist/pending', (req: any, res: any) => {
+  const { id } = req.user;
+  Friendships.findAll({
+    where: {
+      status: 'pending',
+      requester_id: id,
+    },
+  })
+    .then((response: any) => {
+      if (response === null) {
+        console.log('friends do not exist');
+        res.sendStatus(404);
+      } else {
+        res.status(200).send(response);
+      }
+    })
+    .catch((err: any) => {
+      console.error('Cannot GET friends', err);
+      res.sendStatus(500);
+    });
+});
+
 
 
 export default feedRouter;

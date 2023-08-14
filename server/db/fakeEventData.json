@@ -4,7 +4,7 @@
     "name": "Grand opening",
     "rsvp_count": 10,
     "date": "2023-09-01",
-    "geolocation": "",
+    "geolocation": "30.039587748382235,-90.2405565887334",
     "twenty_one": true,
     "PlaceId": 1
   },
@@ -13,8 +13,17 @@
     "name": "Barbenheimer",
     "rsvp_count": 25,
     "date": "2023-08-31",
-    "geolocation": "",
+    "geolocation": "29.94274204513914,-90.06446969325872",
     "twenty_one": false,
     "PlaceId": 2
+  },
+  {
+    "id": 3,
+    "name": "Graduation",
+    "rsvp_count": 30,
+    "date": "2023-08-31",
+    "geolocation": "30.031003882054566,-90.050313779948",
+    "twenty_one": false,
+    "PlaceId": 3
   }
 ]

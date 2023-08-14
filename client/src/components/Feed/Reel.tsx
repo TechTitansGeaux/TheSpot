@@ -1,19 +1,13 @@
 import * as React from 'react';
-import BottomNavigation from '@mui/material/BottomNavigation';
-import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-// import AddFriend from '../AddFriend';
-import Avatar from '@mui/material/Avatar';
-import Tooltip from '@mui/material/Tooltip';
-import Zoom from '@mui/material/Zoom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, createRef } from 'react';
 import axios from 'axios';
-import Box from '@mui/material/Box';
-import Fab from '@mui/material/Fab';
-import AddIcon from '@mui/icons-material/Add';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useDispatch } from 'react-redux';
+// import { useLocation } from 'react-router-dom';
+import { setAuthUser, setIsAuthenticated } from '../../store/appSlice';
+import ReelItem from './ReelItem';
+import { AnimatePresence, motion } from 'framer-motion';
 
+// const ReelItem = React.lazy(() => import('./ReelItem'));
 
 type Props = {
   reels: {
@@ -27,7 +21,6 @@ type Props = {
     User: User;
     Event: Event;
   }[];
-  user: User;
   AddFriend?: React.ReactNode | React.ReactNode[];
   friends: {
     id: number;
@@ -64,128 +57,112 @@ type Event = {
   PlaceId: 1;
 };
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#f0f465',
-      dark: '#f433ab',
-      contrastText: '#0b0113',
-    },
-    secondary: {
-      main: '#f433ab',
-      dark: '#f0f465',
-      contrastText: '#0b0113',
-    },
-  },
-});
+const Reel: React.FC<Props> = ({ reels }) => {
+  const dispatch = useDispatch();
 
-const Reel: React.FC<Props> = ({ reels, user, friends }) => {
+  // GET current user
+  const [user, setUser] = useState<User>(null);
   const [friendList, setFriendList] = useState([]);
-  // get friendship from db for currUser and create state
-  /**
-   * within  reels?.map // if reel.User.id is equal to friend <accepter_id>
-   *
-   */
+  const [disabled, setDisabled] = useState([]);
+
+  const fetchAuthUser = async () => {
+    try {
+      const response = await axios.get(`/users/user`);
+      if (response && response.data) {
+        dispatch(setIsAuthenticated(true));
+        dispatch(setAuthUser(response.data));
+        setUser(response.data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
+    fetchAuthUser();
+  }, []);
+
+  // GET request get friendList from Friendship table in DB // set to state variable
+  useEffect(() => {
+    const controller = new AbortController();
     axios
       .get('/feed/friendlist')
       .then(({ data }) => {
-        console.log('data from friends Axios GET ==>', data);
+        // console.log('data from friends Axios GET ==>', data);
         data.map((user: any) => {
-          if (user.status === 'approved') {
-            setFriendList([...friendList, user.accepter_id]);
+          if (user?.status === 'approved') {
+            setFriendList((prev) => [...prev, user.accepter_id]);
           }
         });
       })
       .catch((err) => {
         console.error('Failed to get Friends:', err);
       });
+    // aborts axios request when component unmounts
+    return () => controller?.abort();
   }, []);
 
-  // post friendship to db
-  const requestFriendship = () => {
-    console.log('your friendship is requested');
-
+  // POST request friendship 'pending' status to db
+  const requestFriendship = (friend: number) => {
+    console.log('your friendship is requested', friend);
+    setDisabled([...disabled, friend]);
     axios
       .post('/friends', {
         // accepter_id is user on reel
-        accepter_id: 1
+        accepter_id: friend,
       })
       .then((data) => {
-        console.log('Friend request POSTED', data);
+        // console.log('Friend request POSTED', data);
       })
       .catch((err) => {
         console.error('Friend request axios FAILED', err);
       });
   };
 
+  // PUT request update friendship from 'pending' to 'approved'
+  const approveFriendship = (friend: number) => {
+    console.log('friendship approved');
+    axios
+      .put('/friends', {
+        requester_id: friend,
+      })
+      .then((data) => {
+        // console.log('Friend request approved PUT', data);
+      })
+      .catch((err) => {
+        console.error('Friend PUT request axios FAILED:', err);
+      });
+  };
 
   return (
-    <div className='reel-container'>
-      {reels?.map((reel) => {
-        return (
-          <div key={reel.id + 'reel'}>
-            <div className='video-container'>
-              {reel.url.length > 15 && (
-                <video id={reel.url} controls>
-                  <source src={reel.url} type='video/ogg' />
-                </video>
-              )}
-              <p className='video-text'>{reel.text}</p>
-              {/**Removes addFriend button if already approved friend*/}
-              <>
-                {!friendList.includes(reel.User.id) && (
-                      <ThemeProvider theme={theme}>
-                        <div className='friend-request'>
-                          <Box className='friend-box'>
-                            <Fab
-                              size='small'
-                              color='primary'
-                              aria-label='add'
-                              className='friend-add-btn'
-                            >
-                              {/** This icon should be removed after request sent */}
-                              <AddIcon onClick={requestFriendship}/>
-                            </Fab>
-                          </Box>
-                        </div>
-                      </ThemeProvider>
-                )}
-              </>
-              <div className='friend-request'>
-                <Tooltip
-                  title={reel.User.displayName}
-                  TransitionComponent={Zoom}
-                  describeChild
-                >
-                  <Avatar
-                    className='friend-avatar'
-                    sx={{ width: 48, height: 48 }}
-                    alt={reel.User.displayName}
-                    src={reel.User.picture}
-                  />
-                </Tooltip>
-              </div>
-            </div>
-            <div className='video-links-container'>
-              <Box sx={{ maxWidth: 400 }}>
-                <BottomNavigation>
-                  <BottomNavigationAction
-                    label='Favorites'
-                    icon={<FavoriteIcon />}
-                  />
-                  <BottomNavigationAction
-                    label='Nearby'
-                    icon={<LocationOnIcon />}
-                  />
-                </BottomNavigation>
-              </Box>
-            </div>
-          </div>
-        );
-      })}
-    </div>
+    <main className='reel-container'>
+      <AnimatePresence initial={false}>
+        {reels.map((reel) => {
+          return (
+            <motion.div
+              key={reel.id + 'reel'}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{
+                ease: 'anticipate',
+                duration: 0.2,
+                delay: 0.2,
+              }}
+            >
+              <ReelItem
+                user={user}
+                reel={reel}
+                friendList={friendList}
+                requestFriendship={requestFriendship}
+                approveFriendship={approveFriendship}
+                disabledNow={disabled}
+              />
+            </motion.div>
+          );
+        })}
+      </AnimatePresence>
+    </main>
   );
 };
 

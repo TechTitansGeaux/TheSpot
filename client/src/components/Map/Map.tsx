@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import GoogleMapReact from 'google-map-react';
 import axios from 'axios';
 import UserPin from './UserPin';
+import { useSelector, useDispatch } from 'react-redux';
+import { setAuthUser } from '../../store/appSlice';
+import { RootState } from '../../store/store';
 
 type Props = {
   loggedIn: {
@@ -9,7 +12,7 @@ type Props = {
     username: string;
     displayName: string;
     type: string;
-    geolocation: string; // i.e. "29.947126049254177, -90.18719199978266"
+    geolocation: string;
     mapIcon: string;
     birthday: string;
     privacy: string;
@@ -20,16 +23,19 @@ type Props = {
   }
 };
 
+
+
 const Map: React.FC<Props> = ({loggedIn}) => {
+  const authUser = useSelector((state: RootState) => state.app.authUser);
+  const dispatch = useDispatch();
 
   const [ users, setUsers ] = useState([])
   const [ loggedInLat, setLoggedInLat ] = useState(0);
   const [ loggedInLng, setLoggedInLng ] = useState(0);
+  const [geolocation, setGeolocation] = React.useState('');
 
-  useEffect(() => {
-    const [lat, lng] = splitCoords(loggedIn.geolocation);
-    setLoggedInLat(+lat);
-    setLoggedInLng(+lng)
+  // fetch all users
+  const fetchUsers = () => {
     axios.get('/users')
       .then((res) => {
         setUsers(res.data);
@@ -38,8 +44,25 @@ const Map: React.FC<Props> = ({loggedIn}) => {
       .catch((err) => {
         console.log('error getting users', err);
       });
+  }
+  useEffect(() => {
+    fetchUsers()
   }, [])
 
+  useEffect(() => {
+    dispatch(setAuthUser(authUser))
+    setGeolocation(authUser.geolocation)
+  }, [authUser]);
+
+  // set coordinates
+  useEffect(() => {
+    const [lat, lng] = splitCoords(authUser.geolocation);
+    setLoggedInLat(+lat);
+    setLoggedInLng(+lng);
+    fetchUsers()
+  }, [])
+
+  // function to split coordinates into array
   const splitCoords = (coords: string) => {
     const arr = coords.split(',');
     return arr;
@@ -52,12 +75,13 @@ const Map: React.FC<Props> = ({loggedIn}) => {
           bootstrapURLKeys={{ key: "AIzaSyAYtb7y6JZ2DxgdIESWJky8NyhWuu_YFVg" }}
           defaultZoom={15}
           defaultCenter={{lat: loggedInLat, lng: loggedInLng}}
-        >{
-          users.map((user, i) => {
+        >{users.map((user, i) => {
+          if (user.privacy !== 'private' || user.id === authUser.id) {
             const [lat, lng] = splitCoords(user.geolocation);
-            return <UserPin user={user} key={i} lat={+lat} lng={+lng} />
-          })
-        }</GoogleMapReact>
+            return <UserPin user={user} key={i} lat={+lat} lng={+lng} />;
+          }
+          return null;
+        })}</GoogleMapReact>
       </div>
 
     </div>
