@@ -202,10 +202,12 @@ button.accept-friend:hover {
   min-height: 667px;
 }
 
+/* jackie made changes to push video to right  */
+/* it was at left:-50% and top: 0% before */
 video.reel {
   position: absolute;
-  left: -50%;
-  top: 0;
+  left: -22%;
+  top: 0%;
   bottom: 1vw;
   width: auto;
   max-height: 100%;
@@ -264,8 +266,8 @@ video.reel {
   justify-content: center;
   align-items: center;
   width: 100vw;
-  width: 580px;
-  height: 580px;
+  width: 700px;
+  height: 700px;
   border-radius: 10px;
   overflow: hidden;
 }
@@ -275,10 +277,18 @@ video.reel {
   justify-content: center;
   align-items: center;
   width: 100vw;
-  width: 550px;
-  height: 520px;
+  width: 650px;
+  height: 600px;
   border-radius: 10px;
   overflow: hidden;
+}
+
+.preview-text {
+  position: absolute;
+  margin: 0 5rem;
+  max-width: 350px;
+  font-size: var(--lg-font);
+  font-family: var(--title-font);
 }
 
 .dot {
