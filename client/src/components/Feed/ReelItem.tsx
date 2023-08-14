@@ -13,6 +13,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState, useEffect, useRef } from 'react';
 import { memo } from 'react';
+import './feed.css';
 
 type Props = {
   reel: any;
@@ -20,6 +21,7 @@ type Props = {
   requestFriendship: any;
   approveFriendship: any;
   user: any;
+  deleteReel: any;
 };
 
 const theme = createTheme({
@@ -42,7 +44,8 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   friendList,
   requestFriendship,
   approveFriendship,
-  user
+  user,
+  deleteReel,
 }) {
   // REFERENCE VIDEO HTML element in JSX element // Uses a ref to hold an array of generated refs, and assign them when mapping.
   const myRef = useRef<HTMLVideoElement>(null);
@@ -104,16 +107,21 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                   >
                     <AddIcon onClick={() => requestFriendship(reel.User.id)} />
                   </Fab>
-                  {/* <button
-                    className='accept-friend'
-                    onClick={() => approveFriendship(reel.User.id)}
-                  >
-                    ✓
-                  </button> */}
+
                 </Box>
               </div>
             </ThemeProvider>
           )}
+
+            {reel.UserId === user.id &&
+             <div className='friend-request'>
+              (<button
+                className='delete-btn'
+                onClick={() => deleteReel(reel.id)}
+              >
+                🗑️
+
+              </button>) </div>}
         </>
 
         <div className='friend-request'>

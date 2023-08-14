@@ -27,6 +27,7 @@ type Props = {
     requester_id: number;
     accepter_id: number;
   }[];
+  getAllReels: any;
 };
 
 type User = {
@@ -56,7 +57,7 @@ type Event = {
   PlaceId: 1;
 };
 
-const Reel: React.FC<Props> = ({ reels }) => {
+const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
   const dispatch = useDispatch();
 
   // GET current user
@@ -135,6 +136,19 @@ const Reel: React.FC<Props> = ({ reels }) => {
       });
   };
 
+  // DELETE your own reel
+  const deleteReel = (reelId: number) => {
+    axios
+      .delete(`/feed/delete/${reelId}`)
+      .then((data) => {
+        console.log('Reel deleted', data);
+        getAllReels();
+      })
+      .catch((err) => {
+        console.error('Could not DELETE reel', err);
+      })
+  };
+
   return (
     <main className='reel-container'>
       {reels.map((reel) => {
@@ -146,6 +160,7 @@ const Reel: React.FC<Props> = ({ reels }) => {
               friendList={friendList}
               requestFriendship={requestFriendship}
               approveFriendship={approveFriendship}
+              deleteReel={deleteReel}
             />
           </div>
         );

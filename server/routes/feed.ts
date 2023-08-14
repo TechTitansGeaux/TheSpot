@@ -103,7 +103,7 @@ feedRouter.get('/friendlist', (req: any, res: any) => {
 // delete a reel
 feedRouter.delete('/delete/:id', (req: any, res: any) => {
   const { id } = req.params;
-  console.log('req.params:', req.params);
+  //console.log('req.params:', req.params);
 
   Reels.destroy({
     where: {
@@ -112,7 +112,7 @@ feedRouter.delete('/delete/:id', (req: any, res: any) => {
   })
     .then((response: any) => {
       if (response) {
-        console.log('Reels deleted:', response);
+        // console.log('Reels deleted:', response);
         res.sendStatus(200);
       } else {
         console.log('Reel does not exist');
