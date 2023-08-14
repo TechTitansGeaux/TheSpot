@@ -149,7 +149,7 @@ footer {
   color: var(--pink);
 }
 
-button.navLink  {
+button.navLink {
   background: none;
   color: inherit;
   border: none;
@@ -166,10 +166,12 @@ button.navLink  {
   height: 100%;
 }
 
+
 .friend-request {
   position: relative;
   right: 3%;
-  top: 82%;
+  height: 35px;
+  top: 85%;
 }
 
 .friend-add-btn {
@@ -181,21 +183,8 @@ button.navLink  {
 .friend-avatar {
   position: absolute;
   cursor: pointer;
+  bottom: 5%;
   left: 87%;
-}
-
-button.accept-friend {
-  position: absolute;
-  background-color: var(--violet);
-  color: var(--yellow);
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-  right: 3%;
-  top: 215%;
-  z-index: 5;
 }
 
 button.accept-friend:hover {

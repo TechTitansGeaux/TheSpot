@@ -122,6 +122,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
               <div className='friend-request'>
                 <Box className='friend-box'>
                   <Fab
+                    style={{ transform: 'scale(0.8)' }}
                     size='small'
                     color='primary'
                     aria-label='add'
@@ -134,20 +135,15 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                     <Tooltip
                       title='Add Friend'
                       TransitionComponent={Zoom}
-                      placement='top'
+                      placement='left'
                       arrow
                     >
                       <AddIcon
+                        sx={{ width: 20, height: 20 }}
                         onClick={() => requestFriendship(reel.User.id)}
                       />
                     </Tooltip>
                   </Fab>
-                  {/* <button
-                    className='accept-friend'
-                    onClick={() => approveFriendship(reel.User.id)}
-                  >
-                    ✓
-                  </button> */}
                 </Box>
               </div>
             </ThemeProvider>
@@ -158,7 +154,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
           <Tooltip
             title={reel.User.displayName}
             TransitionComponent={Zoom}
-            describeChild
+            placement='left'
             arrow
           >
             <Avatar
