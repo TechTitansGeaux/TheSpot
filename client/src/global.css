@@ -128,6 +128,12 @@ footer {
   width: 100px;
   height: 50px;
   margin-right: 20px;
+  transition: transform .2s ease-out;
+}
+
+#nav-logo:hover {
+  transform: scale(1.06);
+  /* transform: skewY(.5rem); */
 }
 
 .navLink {
@@ -136,6 +142,11 @@ footer {
   font-family: var(--title-font);
   font-size: var(--md-font);
   color: var(--yellow);
+  transition: color .2s ease-out;
+}
+
+.navLink:hover {
+  color: var(--pink);
 }
 
 button.navLink  {

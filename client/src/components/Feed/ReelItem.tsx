@@ -21,7 +21,7 @@ type Props = {
   requestFriendship: any;
   approveFriendship: any;
   user: any;
-  disabled: any;
+  disabledNow: any;
 };
 
 const theme = createTheme({
@@ -45,7 +45,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   requestFriendship,
   approveFriendship,
   user,
-  disabled
+  disabledNow,
 }) {
   // REFERENCE VIDEO HTML element in JSX element // Uses a ref to hold an array of generated refs, and assign them when mapping.
   const myRef = useRef<HTMLVideoElement>(null);
@@ -126,9 +126,21 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                     color='primary'
                     aria-label='add'
                     className='friend-add-btn'
-                    disabled={disabled.includes(reel.User.id) || stayDisabled.includes(reel.User.id)}
+                    disabled={
+                      disabledNow.includes(reel.User.id) ||
+                      stayDisabled.includes(reel.User.id)
+                    }
                   >
-                    <AddIcon onClick={() => requestFriendship(reel.User.id)} />
+                    <Tooltip
+                      title='Add Friend'
+                      TransitionComponent={Zoom}
+                      placement='top'
+                      arrow
+                    >
+                      <AddIcon
+                        onClick={() => requestFriendship(reel.User.id)}
+                      />
+                    </Tooltip>
                   </Fab>
                   {/* <button
                     className='accept-friend'
@@ -147,6 +159,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
             title={reel.User.displayName}
             TransitionComponent={Zoom}
             describeChild
+            arrow
           >
             <Avatar
               className='friend-avatar'
