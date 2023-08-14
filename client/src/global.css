@@ -203,7 +203,7 @@ button.accept-friend:hover {
 }
 
 /* jackie made changes to push video to right  */
-/* it was at left:-50% and top: 0% before */
+/* it was at left:-50% before */
 video.reel {
   position: absolute;
   left: -22%;
@@ -277,8 +277,8 @@ video.reel {
   justify-content: center;
   align-items: center;
   width: 100vw;
-  width: 650px;
-  height: 600px;
+  width: 585px;
+  height: 655px;
   border-radius: 10px;
   overflow: hidden;
 }

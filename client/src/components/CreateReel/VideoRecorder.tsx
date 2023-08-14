@@ -235,8 +235,8 @@
           <div className='preview-mask'>
             <div className='webcam'>
               <video
-              height={750}
-              width={700}
+              height={780}
+              width={730}
               src={url}
               controls autoPlay
               loop>
