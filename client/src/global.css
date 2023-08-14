@@ -159,6 +159,11 @@ button.navLink {
   outline: inherit;
 }
 
+.drawer-container {
+  height: 100vh;
+  background-color: var(--violet);
+}
+
 /* ////// FEED & REEL */
 
 .click {

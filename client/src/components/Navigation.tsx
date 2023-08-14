@@ -87,25 +87,24 @@ const Navigation = () => {
 
   const list = (anchor: Anchor) => (
     <Box
-      sx={{ width: 400 }}
+      sx={{ width: 400, color: '#F5FCFA' }}
+      className='drawer-container'
       role='presentation'
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
-      <List>
+      <List sx={{ paddingTop: '3em' }}>
         {['Profile', 'Friend Requests', 'Likes', 'Settings'].map(
           (text, index) => (
-            <ListItem key={text} disablePadding>
+            <ListItem key={text} color='secondary' disablePadding>
               <ListItemButton>
                 <ListItemIcon>
-                  {index === 3 ? (
+                  {index === 3 && (
                     <NavLink
                       className='navLink'
                       to='/Settings'
                       style={{ marginLeft: '10px' }}
                     />
-                  ) : (
-                    <AddCircleIcon />
                   )}
                 </ListItemIcon>
                 <ListItemText primary={text} />
@@ -162,7 +161,6 @@ const Navigation = () => {
         <Outlet />
         <div>
           <Drawer
-            color='secondary'
             open={state['left']}
             anchor={'left'}
             onClose={toggleDrawer('left', false)}
