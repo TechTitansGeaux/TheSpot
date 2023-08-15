@@ -45,8 +45,11 @@ const Navigation = () => {
     axios
       .get('feed/friendlist/pending')
       .then((response) => {
+        console.log('pending friends:', response.data);
         setPFriends(response.data);
-        setNotifBool(true);
+        if (response.data.length !== 0) {
+          setNotifBool(true);
+        }
       })
       .catch((err) => {
         console.error('Could not GET pending friends:', err);
@@ -55,7 +58,7 @@ const Navigation = () => {
 
   useEffect(() => {
     getAllPFriends();
-  }, []);
+  }, [notifBool]);
 
   const [onPage, setOnPage] = useState(
     <NavLink className='navLink' to='/Feed'>
@@ -175,7 +178,11 @@ const Navigation = () => {
                     className='friend-avatar'
                     sx={{ width: 48, height: 48 }}
                   />
-                  <CircleNotificationsIcon />
+                  <div>
+                    {!notifBool ? (<h5></h5>) :
+                    <CircleNotificationsIcon />
+                    }
+                  </div>
                 </button>
               </div>
             </Toolbar>
