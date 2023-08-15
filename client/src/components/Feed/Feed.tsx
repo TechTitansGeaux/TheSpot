@@ -87,7 +87,7 @@ const Feed: React.FC<Props> = ({user}) => {
     axios
       .get(`/feed/friendlist`)
       .then((response) => {
-        console.log('friends response.data:', response.data);
+        //console.log('friends response.data:', response.data);
         setFriends(response.data);
       })
       .catch((err) => {
@@ -104,6 +104,8 @@ const Feed: React.FC<Props> = ({user}) => {
       const long = Number(arr[1]);
       setUserLat(lat);
       setUserLong(long);
+      console.log('user:', user);
+    }
   };
 
   // find distance (miles) with 2 points
@@ -194,6 +196,7 @@ const Feed: React.FC<Props> = ({user}) => {
         <Reel
           reels={reels}
           friends={friends}
+          getAllReels={getAllReels}
         />
       </div>
     </>
