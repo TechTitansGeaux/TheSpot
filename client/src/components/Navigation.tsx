@@ -96,7 +96,7 @@ const Navigation = () => {
       <List sx={{ paddingTop: '3em' }}>
         {['Profile', 'Friend Requests', 'Likes', 'Settings'].map(
           (text, index) => (
-            <ListItem key={text} color='secondary' disablePadding>
+            <ListItem key={text} className='drawer-btn' disablePadding>
               <ListItemButton>
                 <ListItemIcon>
                   {index === 3 && (

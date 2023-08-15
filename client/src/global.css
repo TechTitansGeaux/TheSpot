@@ -1,6 +1,7 @@
 /* //// ROOT VARIABLES  */
 :root {
   --violet: #0b0113;
+  --light-violet: #11011e;
   --pink: #f433ab;
   --purple: #7161EF;
   --yellow: #f0f465;
@@ -161,7 +162,17 @@ button.navLink {
 
 .drawer-container {
   height: 100vh;
-  background-color: var(--violet);
+  background-color: var(--light-violet);
+}
+
+.drawer-btn {
+  transition: color .2s ease-out;
+  transition: background-color .2s ease-out;
+}
+
+.drawer-btn:hover {
+  background-color: var(--yellow);
+  color: var(--light-violet);
 }
 
 /* ////// FEED & REEL */
@@ -182,7 +193,7 @@ button.navLink {
   border: none;
   cursor: pointer;
   left: 6%;
-  top: 225%;
+  top: 125%;
 }
 
 button.delete-btn:hover {
