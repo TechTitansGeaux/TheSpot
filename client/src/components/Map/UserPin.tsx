@@ -4,12 +4,8 @@ import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-// import $ from 'jquery';
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React from 'react';
 import axios from 'axios';
-import { setAuthUser } from '../../store/appSlice';
-import { RootState } from '../../store/store';
 import dayjs = require('dayjs');
 dayjs.extend(localizedFormat)
 
@@ -38,6 +34,20 @@ type Props = {
   getFriendList: () => void
   pendingFriendList: number[]
   getPendingFriendList: () => void
+  loggedIn: {
+    id: number;
+    username: string;
+    displayName: string;
+    type: string;
+    geolocation: string;
+    mapIcon: string;
+    birthday: string;
+    privacy: string;
+    accessibility: string;
+    email: string;
+    picture: string;
+    googleId: string;
+  }
 };
 
 const addFriendTheme = createTheme({
@@ -70,8 +80,6 @@ const rmFriendTheme = createTheme({
 });
 
 const UserPin: React.FC<Props> = (props) => {
-  const dispatch = useDispatch();
-  const authUser = useSelector((state: RootState) => state.app.authUser);
 
   const togglePopUp = () => {
     const box = document.getElementById('popUp' + props.user.username + props.user.id)
@@ -110,18 +118,8 @@ const UserPin: React.FC<Props> = (props) => {
       });
   }
 
+  const isNotLoggedInUser = (props.user.id !== props.loggedIn.id) || null;
 
-  useEffect(() => {
-    if (authUser && props.user) {
-      dispatch(setAuthUser(authUser));
-    }
-  }, [authUser, props.user]);
-
-
-
-  const isNotLoggedInUser = (props.user.id !== authUser.id) || null;
-  // const $offset = $(`#${props.user.username + props.user.id}`).offset()
-  // console.log($offset);
 
 
   return (

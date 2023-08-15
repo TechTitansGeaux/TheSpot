@@ -2,17 +2,30 @@ import React, { useState, useEffect } from 'react';
 import GoogleMapReact from 'google-map-react';
 import axios from 'axios';
 import UserPin from './UserPin';
-import { useSelector, useDispatch } from 'react-redux';
-import { setAuthUser } from '../../store/appSlice';
-import { RootState } from '../../store/store';
+
+type Props =  {
+  loggedIn: {
+    id: number;
+    username: string;
+    displayName: string;
+    type: string;
+    geolocation: string;
+    mapIcon: string;
+    birthday: string;
+    privacy: string;
+    accessibility: string;
+    email: string;
+    picture: string;
+    googleId: string;
+  }
+}
 
 
+const Map: React.FC<Props> = (props) => {
+  const { loggedIn } = props;
 
-const Map = () => {
-  const authUser = useSelector((state: RootState) => state.app.authUser);
-  const dispatch = useDispatch();
-
-  const [ users, setUsers ] = useState([])
+  const [ users, setUsers ] = useState([]);
+  // const [ events, setEvents ] = useState([])
   const [ loggedInLat, setLoggedInLat ] = useState(0);
   const [ loggedInLng, setLoggedInLng ] = useState(0);
   const [ friendList, setFriendList ] = useState([]);
@@ -32,6 +45,20 @@ const Map = () => {
       });
   }
 
+  // const getEvents = () => {
+  //   axios.get('/events/all')
+  //     .then(({ data }) => {
+  //       const friendsIds = data.reduce((acc: number[], user: any) => {
+  //         acc.push(user.accepter_id);
+  //         return acc;
+  //       }, []);
+  //       setEvents(friendsIds)
+  //     })
+  //     .catch((err) => {
+  //       console.error('Failed to get Events:', err);
+  //     });
+  // }
+
   const getPendingFriendList = () => {
     axios.get('/feed/friendlist/pending')
       .then(({ data }) => {
@@ -46,12 +73,6 @@ const Map = () => {
       });
   }
 
-    // get friends list
-    useEffect(() => {
-      getFriendList();
-      getPendingFriendList();
-    }, []);
-
   // fetch all users
   const fetchUsers = () => {
     axios.get('/users')
@@ -64,17 +85,15 @@ const Map = () => {
       });
   }
 
-
-  useEffect(() => {
-    dispatch(setAuthUser(authUser))
-  }, [authUser]);
-
   // set coordinates
   useEffect(() => {
-    const [lat, lng] = splitCoords(authUser.geolocation);
+    const [lat, lng] = splitCoords(loggedIn.geolocation);
     setLoggedInLat(+lat);
     setLoggedInLng(+lng);
-    fetchUsers()
+    fetchUsers();
+    getFriendList();
+    getPendingFriendList();
+    // getEvents();
   }, [])
 
   // function to split coordinates into array
@@ -84,14 +103,36 @@ const Map = () => {
   }
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center' }}>
-      <div style={{ height: '75vh', width: '80%' }}>
+    <div style={{ display: 'flex', justifyContent: 'center'}}>
+      <div id='userMap'>
         <GoogleMapReact
           bootstrapURLKeys={{ key: "AIzaSyAYtb7y6JZ2DxgdIESWJky8NyhWuu_YFVg" }}
           defaultZoom={15}
           defaultCenter={{lat: loggedInLat, lng: loggedInLng}}
         >{users.map((user, i) => {
-          if (user.privacy !== 'private' || user.id === authUser.id) {
+          if ((user.privacy !== 'private' && user.id !== loggedIn.id) || user.id === loggedIn.id) {
+            const [lat, lng] = splitCoords(user.geolocation);
+            return <UserPin
+              getPendingFriendList={getPendingFriendList}
+              pendingFriendList={pendingFriendList}
+              getFriendList={getFriendList}
+              friendList={friendList}
+              user={user}
+              key={i}
+              lat={+lat}
+              lng={+lng}
+              loggedIn={loggedIn}
+            />;
+          }
+          return null;
+        })}</GoogleMapReact>
+      </div>
+      {/* <div id='eventMap'>
+        <GoogleMapReact
+          bootstrapURLKeys={{ key: "AIzaSyAYtb7y6JZ2DxgdIESWJky8NyhWuu_YFVg" }}
+          defaultZoom={15}
+          defaultCenter={{lat: loggedInLat, lng: loggedInLng}}
+        >{events.map((user, i) => {
             const [lat, lng] = splitCoords(user.geolocation);
             return <UserPin
               getPendingFriendList={getPendingFriendList}
@@ -103,10 +144,8 @@ const Map = () => {
               lat={+lat}
               lng={+lng}
             />;
-          }
-          return null;
         })}</GoogleMapReact>
-      </div>
+      </div> */}
 
     </div>
 

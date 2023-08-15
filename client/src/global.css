@@ -358,4 +358,17 @@ video.reel {
 
 }
 
+#userMap {
+  height: 75vh;
+  width: 80%;
+  /* display: flex; */
+}
+
+/* #eventMap {
+  height: 75vh;
+  width: 80%;
+  display: none;
+} */
+
+
 
