@@ -361,7 +361,7 @@ video.reel {
 #userMap {
   height: 75vh;
   width: 80%;
-  /* display: flex; */
+  display: flex;
 }
 
 /* #eventMap {
