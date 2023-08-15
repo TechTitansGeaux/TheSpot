@@ -33,6 +33,8 @@ type User = {
 
 
 const App = () => {
+  const [fontSize, setFontSize] = useState('var(--reg-font)'); // Default font size
+
   const dispatch = useDispatch();
   // get all users to pass down as props
   const [user, setUser] = useState<User>(null);
@@ -63,8 +65,8 @@ const App = () => {
         <Route path='/' element={<Navigation />}>
           <Route path='/ProfileSetUp' element={<ProfileSetUp  />}></Route>
           <Route path='/Feed' element={<Feed user={user} />}></Route>
+          <Route path='/Settings' element={<Settings fontSize={fontSize} />}></Route>
           <Route path='/Map' element={<Map />}></Route>
-          <Route path='/Settings' element={<Settings />}></Route>
           <Route path='/CreateReel' element={<CreateReel user={user}/>}></Route>
         </Route>
       </Routes>
