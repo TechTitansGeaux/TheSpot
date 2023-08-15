@@ -140,7 +140,7 @@ const ProfileSetUp = () => {
       .patch(`/users/${authUser.id}`, profileData)
       .then((response) => {
         dispatch(setAuthUser(response.data));
-        window.location.href = `${process.env.HOST}:4000/Feed`;
+        window.location.href = `${process.env.HOST}/Feed`;
       })
       .catch((error) => {
         console.error(error);

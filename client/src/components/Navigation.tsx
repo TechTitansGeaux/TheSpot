@@ -47,8 +47,10 @@ const Navigation = () => {
       .then((response) => {
         console.log('pending friends:', response.data);
         setPFriends(response.data);
-        if (response.data.length !== 0) {
+        if (pFriends.length !== 0) {
           setNotifBool(true);
+        } else {
+          setNotifBool(false);
         }
       })
       .catch((err) => {
@@ -58,6 +60,7 @@ const Navigation = () => {
 
   useEffect(() => {
     getAllPFriends();
+    console.log('notifBool:', notifBool);
   }, [notifBool]);
 
   const [onPage, setOnPage] = useState(
@@ -179,8 +182,10 @@ const Navigation = () => {
                     sx={{ width: 48, height: 48 }}
                   />
                   <div>
-                    {!notifBool ? (<h5></h5>) :
-                    <CircleNotificationsIcon />
+                    {notifBool ? (<h5></h5>) :
+                    (<div>
+                      <CircleNotificationsIcon />
+                    </div>)
                     }
                   </div>
                 </button>
