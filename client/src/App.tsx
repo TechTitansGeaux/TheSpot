@@ -56,7 +56,7 @@ const App = () => {
 
   useEffect(() => {
     fetchAuthUser();
-  }, [user]);
+  }, []);
 
   return (
     <BrowserRouter>

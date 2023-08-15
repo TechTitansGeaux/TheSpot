@@ -6,9 +6,9 @@ import { SessionData } from 'express-session';
 const { Users } = require('../db/index');
 require('dotenv').config();
 const auth = express.Router();
-const successLoginUrl = `${process.env.HOST}:4000/Feed`;
-const successNewUserUrl = `${process.env.HOST}:4000/ProfileSetUp`;
-const errorLoginUrl = `${process.env.HOST}:4000/login/error`;
+const successLoginUrl = `${process.env.HOST}/Feed`;
+const successNewUserUrl = `${process.env.HOST}/ProfileSetUp`;
+const errorLoginUrl = `${process.env.HOST}/login/error`;
 
 
 auth.get(
