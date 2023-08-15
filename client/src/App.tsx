@@ -42,7 +42,9 @@ const App = () => {
   const fetchAuthUser = async () => {
     try {
       const response = await axios.get(`/users/user`);
+
       if (response && response.data) {
+
         dispatch(setIsAuthenticated(true));
         dispatch(setAuthUser(response.data));
         setUser(response.data);
@@ -54,7 +56,7 @@ const App = () => {
 
   useEffect(() => {
     fetchAuthUser();
-  }, []);
+  }, [user]);
 
   return (
     <BrowserRouter>
@@ -63,8 +65,8 @@ const App = () => {
         <Route path='/' element={<Navigation />}>
           <Route path='/ProfileSetUp' element={<ProfileSetUp  />}></Route>
           <Route path='/Feed' element={<Feed user={user} />}></Route>
-          <Route path='/Map' element={<Map loggedIn={user} />}></Route>
           <Route path='/Settings' element={<Settings fontSize={fontSize} />}></Route>
+          <Route path='/Map' element={<Map />}></Route>
           <Route path='/CreateReel' element={<CreateReel user={user}/>}></Route>
         </Route>
       </Routes>

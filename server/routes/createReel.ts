@@ -9,8 +9,11 @@ const uploadReelToCloudinary = async (file: string) => {
   try {
     const result = await cloudinary.uploader.upload(file, {
       resource_type: "video",
-      width: 1102,
-      height: 620
+      // width: 1102,
+      // height: 620
+      transformation: [
+        {aspect_ratio: '3:4', crop: 'fill', width: 465}
+      ]
     });
     console.log(result, '<-----result from upload to cloudinary')
     return result.secure_url;
