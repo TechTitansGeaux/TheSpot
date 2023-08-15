@@ -51,7 +51,7 @@
     const [recordedChunks, setRecordedChunks] = useState([]);
     const [public_id, setPublic_id] = useState('');
     const [url, setUrl] = useState('');
-    const [text, setText] = useState('party time y\'all');
+    const [text, setText] = useState('');
     const [eventId, setEventId] = useState(0)
     const [reelId, setReelId] = useState(0);
     const [event, setEvent] = useState({
@@ -211,6 +211,7 @@
     setJustRecorded(false)
     // reset url
     setUrl('');
+    setText('');
     }
 
     // post reel to db should be invoked whenever eventId has been changed
@@ -227,6 +228,10 @@
       facingMode: "user",
     };
 
+    // handle input text
+    const handleText = (e: any) => {
+      setText(e.target.value);
+    };
 // console.log(url, '<-----url')
 
     return (
@@ -241,7 +246,13 @@
               controls autoPlay
               loop>
               </video>
-              <p className='preview-text'>{text}</p>
+              <input
+                className='reel-input-text'
+                placeholder='Add caption?'
+                value={text}
+                onChange={handleText}
+                type='text'>
+              </input>
             </div>
           </div>
         ) : (

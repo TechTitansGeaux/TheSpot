@@ -56,7 +56,8 @@ const App = () => {
 
   useEffect(() => {
     fetchAuthUser();
-  }, [user]);
+    // user was in this dependency, we took it out cause it caused infinite loop
+  }, []);
 
   return (
     <BrowserRouter>

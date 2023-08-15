@@ -296,6 +296,20 @@ video.reel {
   font-family: var(--title-font);
 }
 
+.reel-input-text {
+  position: absolute;
+  left: 25%;
+  top: 25%;
+  margin: 0 5rem;
+  max-width: 350px;
+  color: var(--white);
+  font-size: var(--lg-font);
+  font-family: var(--title-font);
+  /* ^ why aren't these working? */
+  background: transparent;
+  border: none;
+}
+
 .dot {
   align-items: center;
   justify-content: center;
