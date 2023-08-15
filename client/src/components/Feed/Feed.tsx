@@ -36,6 +36,7 @@ const Feed: React.FC<Props> = ({user}) => {
   const friendsReels: any = [];
   const geoReels: any = [];
 
+
   const filterChangeHandler = (event: any) => {
     setFilter(event.target.value);
   };
@@ -44,10 +45,12 @@ const Feed: React.FC<Props> = ({user}) => {
     setGeoF(event.target.value);
   };
 
+
   const getAllFriendReels = () => {
     axios
       .get('/feed/recent')
       .then((response) => {
+        // console.log('reels recent res.data:', response.data);
         for (let i = 0; i < friends.length; i++) {
           for (let j = 0; j < response.data.length; j++) {
             if (friends[i].accepter_id === response.data[j].UserId) {

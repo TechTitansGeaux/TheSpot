@@ -128,6 +128,12 @@ footer {
   width: 100px;
   height: 50px;
   margin-right: 20px;
+  transition: transform .2s ease-out;
+}
+
+#nav-logo:hover {
+  transform: scale(1.06);
+  /* transform: skewY(.5rem); */
 }
 
 .navLink {
@@ -136,9 +142,14 @@ footer {
   font-family: var(--title-font);
   font-size: var(--md-font);
   color: var(--yellow);
+  transition: color .2s ease-out;
 }
 
-button.navLink  {
+.navLink:hover {
+  color: var(--pink);
+}
+
+button.navLink {
   background: none;
   color: inherit;
   border: none;
@@ -146,6 +157,11 @@ button.navLink  {
   font: inherit;
   cursor: pointer;
   outline: inherit;
+}
+
+.drawer-container {
+  height: 100vh;
+  background-color: var(--violet);
 }
 
 /* ////// FEED & REEL */
@@ -178,7 +194,7 @@ button.delete-btn:hover {
   position: relative;
   right: 3%;
   height: 35px;
-  top: 79%;
+  top: 85%;
 }
 
 .friend-add-btn {
@@ -190,21 +206,8 @@ button.delete-btn:hover {
 .friend-avatar {
   position: absolute;
   cursor: pointer;
+  bottom: 5%;
   left: 87%;
-}
-
-button.accept-friend {
-  position: absolute;
-  background-color: var(--violet);
-  color: var(--yellow);
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-  right: 3%;
-  top: 215%;
-  z-index: 5;
 }
 
 button.accept-friend:hover {
@@ -222,10 +225,12 @@ button.accept-friend:hover {
   min-height: 667px;
 }
 
+/* jackie made changes to push video to right  */
+/* it was at left:-50% before */
 video.reel {
   position: absolute;
-  left: -50%;
-  top: 0;
+  left: -22%;
+  top: 0%;
   bottom: 1vw;
   width: auto;
   max-height: 100%;
@@ -284,8 +289,8 @@ video.reel {
   justify-content: center;
   align-items: center;
   width: 100vw;
-  width: 580px;
-  height: 580px;
+  width: 700px;
+  height: 700px;
   border-radius: 10px;
   overflow: hidden;
 }
@@ -295,10 +300,18 @@ video.reel {
   justify-content: center;
   align-items: center;
   width: 100vw;
-  width: 550px;
-  height: 520px;
+  width: 585px;
+  height: 655px;
   border-radius: 10px;
   overflow: hidden;
+}
+
+.preview-text {
+  position: absolute;
+  margin: 0 5rem;
+  max-width: 350px;
+  font-size: var(--lg-font);
+  font-family: var(--title-font);
 }
 
 .dot {
@@ -340,7 +353,9 @@ video.reel {
 
 .addOrRmFriend {
   position: relative;
-  top: 155px;
+  top: 140px;
   left: -25px;
 
 }
+
+

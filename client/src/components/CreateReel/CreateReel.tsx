@@ -21,18 +21,6 @@ type Props = {
   };
 };
 
-// type currentEvent = {
-//   id: number;
-//   name: string;
-//   rsvp_count: number;
-//   date: string;
-//   geolocation: string; // i.e. "29.947126049254177, -90.18719199978266"
-//   twenty_one: boolean;
-//   createdAt: string;
-//   updatedAt: string;
-//   PlaceId: 1;
-// }
-
 const CreateReel: React.FC<Props> = ({user}) => {
 
   const [currentEvent, setCurrentEvent] = useState({

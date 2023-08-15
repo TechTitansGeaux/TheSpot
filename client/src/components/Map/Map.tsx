@@ -6,33 +6,33 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setAuthUser } from '../../store/appSlice';
 import { RootState } from '../../store/store';
 
-type Props = {
-  loggedIn: {
-    id: number;
-    username: string;
-    displayName: string;
-    type: string;
-    geolocation: string;
-    mapIcon: string;
-    birthday: string;
-    privacy: string;
-    accessibility: string;
-    email: string;
-    picture: string;
-    googleId: string;
-  }
-};
 
 
-
-const Map: React.FC<Props> = ({loggedIn}) => {
+const Map = () => {
   const authUser = useSelector((state: RootState) => state.app.authUser);
   const dispatch = useDispatch();
 
   const [ users, setUsers ] = useState([])
   const [ loggedInLat, setLoggedInLat ] = useState(0);
   const [ loggedInLng, setLoggedInLng ] = useState(0);
-  const [geolocation, setGeolocation] = React.useState('');
+  const [friendList, setFriendList] = useState([]);
+
+  const getFriendList = () => {
+    axios.get('/feed/friendlist')
+      .then(({ data }) => {
+        data.map((user: any) => {
+          setFriendList((prev) => [...prev, user.accepter_id]);
+        });
+      })
+      .catch((err) => {
+        console.error('Failed to get Friends:', err);
+      });
+  }
+
+    // get friends list
+    useEffect(() => {
+      getFriendList();
+    }, []);
 
   // fetch all users
   const fetchUsers = () => {
@@ -45,13 +45,10 @@ const Map: React.FC<Props> = ({loggedIn}) => {
         console.log('error getting users', err);
       });
   }
-  useEffect(() => {
-    fetchUsers()
-  }, [])
+
 
   useEffect(() => {
     dispatch(setAuthUser(authUser))
-    setGeolocation(authUser.geolocation)
   }, [authUser]);
 
   // set coordinates
@@ -78,7 +75,7 @@ const Map: React.FC<Props> = ({loggedIn}) => {
         >{users.map((user, i) => {
           if (user.privacy !== 'private' || user.id === authUser.id) {
             const [lat, lng] = splitCoords(user.geolocation);
-            return <UserPin user={user} key={i} lat={+lat} lng={+lng} />;
+            return <UserPin getFriendList={getFriendList} friendList={friendList} user={user} key={i} lat={+lat} lng={+lng} />;
           }
           return null;
         })}</GoogleMapReact>

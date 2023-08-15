@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 // import { useLocation } from 'react-router-dom';
 import { setAuthUser, setIsAuthenticated } from '../../store/appSlice';
 import ReelItem from './ReelItem';
+import { AnimatePresence, motion } from 'framer-motion';
 
 // const ReelItem = React.lazy(() => import('./ReelItem'));
 
@@ -88,13 +89,10 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
     axios
       .get('/feed/friendlist')
       .then(({ data }) => {
-        console.log('data from friends Axios GET ==>', data);
+        // console.log('data from friends Axios GET ==>', data);
         data.map((user: any) => {
           if (user?.status === 'approved') {
-            setFriendList([...friendList, user.accepter_id]);
-          }
-          if (user?.status === 'pending') {
-            setDisabled([...disabled, user.accepter_id]);
+            setFriendList((prev) => [...prev, user.accepter_id]);
           }
         });
       })
@@ -108,6 +106,7 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
   // POST request friendship 'pending' status to db
   const requestFriendship = (friend: number) => {
     console.log('your friendship is requested', friend);
+    setDisabled([...disabled, friend]);
     axios
       .post('/friends', {
         // accepter_id is user on reel
@@ -129,7 +128,7 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
         requester_id: friend,
       })
       .then((data) => {
-        console.log('Friend request approved PUT', data);
+        // console.log('Friend request approved PUT', data);
       })
       .catch((err) => {
         console.error('Friend PUT request axios FAILED:', err);
@@ -151,20 +150,33 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
 
   return (
     <main className='reel-container'>
-      {reels.map((reel) => {
-        return (
-          <div key={reel.id + 'reel'}>
-            <ReelItem
-              user={user}
-              reel={reel}
-              friendList={friendList}
-              requestFriendship={requestFriendship}
-              approveFriendship={approveFriendship}
-              deleteReel={deleteReel}
-            />
-          </div>
-        );
-      })}
+      <AnimatePresence initial={false}>
+        {reels.map((reel) => {
+          return (
+            <motion.div
+              key={reel.id + 'reel'}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{
+                ease: 'anticipate',
+                duration: 0.2,
+                delay: 0.2,
+              }}
+            >
+              <ReelItem
+                user={user}
+                reel={reel}
+                friendList={friendList}
+                requestFriendship={requestFriendship}
+                approveFriendship={approveFriendship}
+                disabledNow={disabled}
+                deleteReel={deleteReel}
+              />
+            </motion.div>
+          );
+        })}
+      </AnimatePresence>
     </main>
   );
 };
