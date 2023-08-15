@@ -36,6 +36,8 @@ type Props = {
   lng: number
   friendList: number[]
   getFriendList: () => void
+  pendingFriendList: number[]
+  getPendingFriendList: () => void
 };
 
 const addFriendTheme = createTheme({
@@ -89,6 +91,7 @@ const UserPin: React.FC<Props> = (props) => {
       })
       .then(() => {
         props.getFriendList();
+        props.getPendingFriendList();
       })
       .catch((err) => {
         console.error('Friend request axios FAILED', err);
@@ -100,6 +103,7 @@ const UserPin: React.FC<Props> = (props) => {
       .delete(`/friends/${props.user.id}`)
       .then(() => {
         props.getFriendList()
+        props.getPendingFriendList();
       })
       .catch((err) => {
         console.error('Remove friend request axios FAILED', err);
@@ -139,7 +143,7 @@ const UserPin: React.FC<Props> = (props) => {
           </p>
         </div>
         <div className='addOrRmFriend'>
-        { !props.friendList.includes(props.user.id) && isNotLoggedInUser && (
+        { !props.pendingFriendList.includes(props.user.id) &&  !props.friendList.includes(props.user.id) && isNotLoggedInUser && (
           <div>
             <div style={{position: 'relative', top: '30px', left: '80px'}} >add friend</div>
             <ThemeProvider theme={addFriendTheme}>
@@ -162,7 +166,7 @@ const UserPin: React.FC<Props> = (props) => {
         <div className='addOrRmFriend'>
         { props.friendList.includes(props.user.id) && (
           <div>
-            <div style={{position: 'relative', top: '30px', left: '80px'}} >remove friend</div>
+            <div style={{position: 'relative', top: '30px', left: '60px'}} >remove friend</div>
             <ThemeProvider theme={rmFriendTheme}>
               <div>
                 <Box>
@@ -177,6 +181,13 @@ const UserPin: React.FC<Props> = (props) => {
                 </Box>
               </div>
             </ThemeProvider>
+          </div>
+        )}
+        </div>
+        <div className='addOrRmFriend'>
+        { props.pendingFriendList.includes(props.user.id) && (
+          <div>
+            <div style={{position: 'relative', top: '30px', left: '60px'}} >request pending</div>
           </div>
         )}
         </div>

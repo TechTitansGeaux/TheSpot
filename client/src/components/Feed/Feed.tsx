@@ -104,7 +104,7 @@ const Feed: React.FC<Props> = ({user}) => {
       const long = Number(arr[1]);
       setUserLat(lat);
       setUserLong(long);
-      console.log('user:', user);
+      // console.log('user:', user);
     }
   };
 
@@ -143,7 +143,7 @@ const Feed: React.FC<Props> = ({user}) => {
           let dist = distance(userLat, otherLat, userLong, otherLong);
           let eventDist = distance(userLat, eventLat, userLong, eventLong);
           // console.log('distance:', dist);
-          console.log('geoF:', geoF);
+          // console.log('geoF:', geoF);
           if (dist <= geoF || eventDist <= geoF) {
             geoReels.push(response.data[i]);
           }

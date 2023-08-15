@@ -15,23 +15,41 @@ const Map = () => {
   const [ users, setUsers ] = useState([])
   const [ loggedInLat, setLoggedInLat ] = useState(0);
   const [ loggedInLng, setLoggedInLng ] = useState(0);
-  const [friendList, setFriendList] = useState([]);
+  const [ friendList, setFriendList ] = useState([]);
+  const [ pendingFriendList, setPendingFriendList ] = useState([]);
 
   const getFriendList = () => {
     axios.get('/feed/friendlist')
       .then(({ data }) => {
-        data.map((user: any) => {
-          setFriendList((prev) => [...prev, user.accepter_id]);
-        });
+        const friendsIds = data.reduce((acc: number[], user: any) => {
+          acc.push(user.accepter_id);
+          return acc;
+        }, []);
+        setFriendList(friendsIds)
       })
       .catch((err) => {
         console.error('Failed to get Friends:', err);
       });
   }
 
+  const getPendingFriendList = () => {
+    axios.get('/feed/friendlist/pending')
+      .then(({ data }) => {
+        const pendingFriendsIds = data.reduce((acc: number[], user: any) => {
+          acc.push(user.accepter_id);
+          return acc;
+        }, []);
+        setPendingFriendList(pendingFriendsIds)
+      })
+      .catch((err) => {
+        console.error('Failed to get pending Friends:', err);
+      });
+  }
+
     // get friends list
     useEffect(() => {
       getFriendList();
+      getPendingFriendList();
     }, []);
 
   // fetch all users
@@ -75,7 +93,16 @@ const Map = () => {
         >{users.map((user, i) => {
           if (user.privacy !== 'private' || user.id === authUser.id) {
             const [lat, lng] = splitCoords(user.geolocation);
-            return <UserPin getFriendList={getFriendList} friendList={friendList} user={user} key={i} lat={+lat} lng={+lng} />;
+            return <UserPin
+              getPendingFriendList={getPendingFriendList}
+              pendingFriendList={pendingFriendList}
+              getFriendList={getFriendList}
+              friendList={friendList}
+              user={user}
+              key={i}
+              lat={+lat}
+              lng={+lng}
+            />;
           }
           return null;
         })}</GoogleMapReact>
