@@ -4,7 +4,7 @@ import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import $ from 'jquery';
+// import $ from 'jquery';
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
@@ -34,6 +34,8 @@ type Props = {
   }
   lat: number
   lng: number
+  friendList: number[]
+  getFriendList: () => void
 };
 
 const addFriendTheme = createTheme({
@@ -64,29 +66,11 @@ const rmFriendTheme = createTheme({
     },
   },
 });
+
 const UserPin: React.FC<Props> = (props) => {
   const dispatch = useDispatch();
   const authUser = useSelector((state: RootState) => state.app.authUser);
-  const [geolocation, setGeolocation] = useState('');
 
-  useEffect(() => {
-    if (authUser && props.user) {
-      dispatch(setAuthUser(authUser));
-      setGeolocation(authUser.geolocation);
-    }
-  }, [authUser, props.user]);
-
-  // const [isHovered, setIsHovered] = React.useState(false);
-
-  // const handleMouseEnter = () => {
-  //   setIsHovered(true);
-  // };
-
-  // const handleMouseLeave = () => {
-  //   setIsHovered(false);
-  // };
-
-  const [friendList, setFriendList] = useState([]);
   const togglePopUp = () => {
     const box = document.getElementById('popUp' + props.user.username + props.user.id)
     if (box.style.display === 'block') {
@@ -95,37 +79,47 @@ const UserPin: React.FC<Props> = (props) => {
       box.style.display = 'block';
     }
   }
-  const requestFriendship = () => {
-    console.log('your friendship is requested');
+
+  // request friend ship
+  const addFriend = () => {
     axios
       .post('/friends', {
         // accepter_id is user on reel
-        accepter_id: 1
+        accepter_id: props.user.id
       })
-      .then((data) => {
-        console.log('Friend request POSTED', data);
+      .then(() => {
+        props.getFriendList();
       })
       .catch((err) => {
         console.error('Friend request axios FAILED', err);
       });
   };
-  useEffect(() => {
+
+  const removeFriend = () => {
     axios
-      .get('/feed/friendlist')
-      .then(({ data }) => {
-        data.map((user: any) => {
-          if (user.status === 'approved') {
-            setFriendList([...friendList, user.accepter_id]);
-          }
-        });
+      .delete(`/friends/${props.user.id}`)
+      .then(() => {
+        props.getFriendList()
       })
       .catch((err) => {
-        console.error('Failed to get Friends:', err);
+        console.error('Remove friend request axios FAILED', err);
       });
-  }, []);
+  }
+
+
+  useEffect(() => {
+    if (authUser && props.user) {
+      dispatch(setAuthUser(authUser));
+    }
+  }, [authUser, props.user]);
+
+
+
   const isNotLoggedInUser = (props.user.id !== authUser.id) || null;
-  const $offset = $(`#${props.user.username + props.user.id}`).offset()
-  console.log($offset);
+  // const $offset = $(`#${props.user.username + props.user.id}`).offset()
+  // console.log($offset);
+
+
   return (
     <div>
       <div className='dot' id={props.user.username + props.user.id} onClick={togglePopUp} >
@@ -145,39 +139,45 @@ const UserPin: React.FC<Props> = (props) => {
           </p>
         </div>
         <div className='addOrRmFriend'>
-        { !friendList.includes(props.user.id) && isNotLoggedInUser && (
-          <ThemeProvider theme={addFriendTheme}>
-            <div>
-              <Box>
-                <Fab
-                  size='small'
-                  color='primary'
-                  aria-label='add'
-                  className='friend-add-btn'
-                >
-                  <AddIcon onClick={requestFriendship}/>
-                </Fab>
-              </Box>
-            </div>
-          </ThemeProvider>
+        { !props.friendList.includes(props.user.id) && isNotLoggedInUser && (
+          <div>
+            <div style={{position: 'relative', top: '30px', left: '80px'}} >add friend</div>
+            <ThemeProvider theme={addFriendTheme}>
+              <div>
+                <Box>
+                  <Fab
+                    size='small'
+                    color='primary'
+                    aria-label='add'
+                    className='friend-add-btn'
+                  >
+                    <AddIcon onClick={() => { addFriend(); }}/>
+                  </Fab>
+                </Box>
+              </div>
+            </ThemeProvider>
+          </div>
         )}
         </div>
         <div className='addOrRmFriend'>
-        { friendList.includes(props.user.id) && (
-          <ThemeProvider theme={rmFriendTheme}>
-            <div>
-              <Box>
-                <Fab
-                  size='small'
-                  color='primary'
-                  aria-label='add'
-                  className='friend-add-btn'
-                >
-                  <RemoveIcon onClick={requestFriendship}/>
-                </Fab>
-              </Box>
-            </div>
-          </ThemeProvider>
+        { props.friendList.includes(props.user.id) && (
+          <div>
+            <div style={{position: 'relative', top: '30px', left: '80px'}} >remove friend</div>
+            <ThemeProvider theme={rmFriendTheme}>
+              <div>
+                <Box>
+                  <Fab
+                    size='small'
+                    color='primary'
+                    aria-label='add'
+                    className='friend-add-btn'
+                  >
+                    <RemoveIcon onClick={() => { removeFriend(); }}/>
+                  </Fab>
+                </Box>
+              </div>
+            </ThemeProvider>
+          </div>
         )}
         </div>
       </div>
