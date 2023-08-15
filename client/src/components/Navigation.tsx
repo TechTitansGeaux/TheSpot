@@ -7,7 +7,6 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Drawer from '@mui/material/Drawer'
-import Button from '@mui/material/Button'
 import Box from '@mui/material/Box';
 import ListItem  from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -85,6 +84,7 @@ const Navigation = () => {
       setState({ ...state, left: open });
       };
 
+  // Need to Update My Reels // to={<my reels component>}
   const list = (anchor: Anchor) => (
     <Box
       sx={{ width: 400, color: '#F5FCFA' }}
@@ -94,24 +94,46 @@ const Navigation = () => {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List sx={{ paddingTop: '3em' }}>
-        {['My Reels', 'Friend Requests', 'Likes', 'Settings'].map(
-          (text, index) => (
-            <ListItem key={text} className='drawer-btn' disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index === 3 && (
-                    <NavLink
-                      className='navLink'
-                      to='/Settings'
-                      style={{ marginLeft: '10px' }}
-                    />
-                  )}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          )
-        )}
+        <ListItem  className='drawer-btn' disablePadding>
+          <ListItemButton
+            className='sidebar-btn'
+            component={Link}
+            to={'/Feed'}
+            sx={{ minHeight: '4em', paddingLeft: '1.5em' }}
+          >
+            MY REELS
+          </ListItemButton>
+        </ListItem>
+        <ListItem  className='drawer-btn' disablePadding>
+          <ListItemButton
+            className='sidebar-btn'
+            component={Link}
+            to={'/FriendRequests'}
+            sx={{ minHeight: '4em', paddingLeft: '1.5em' }}
+          >
+            FRIEND REQUESTS
+          </ListItemButton>
+        </ListItem>
+        <ListItem  className='drawer-btn' disablePadding>
+          <ListItemButton
+            className='sidebar-btn'
+            component={Link}
+            to={'/Likes'}
+            sx={{ minHeight: '4em', paddingLeft: '1.5em' }}
+          >
+            LIKES
+          </ListItemButton>
+        </ListItem>
+        <ListItem  className='drawer-btn' disablePadding>
+          <ListItemButton
+            className='sidebar-btn'
+            component={Link}
+            to={'/Settings'}
+            sx={{ minHeight: '4em', paddingLeft: '1.5em' }}
+          >
+            SETTINGS
+          </ListItemButton>
+        </ListItem>
       </List>
     </Box>
   );
@@ -133,16 +155,6 @@ const Navigation = () => {
                 <div>
                   <NavLink className='navLink' to='/Map'>
                     Map
-                  </NavLink>
-                </div>
-
-                <div>
-                  <NavLink
-                    className='navLink'
-                    to='/Settings'
-                    style={{ marginLeft: '10px' }}
-                  >
-                    Settings
                   </NavLink>
                 </div>
                 <button

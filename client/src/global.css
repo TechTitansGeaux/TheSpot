@@ -160,6 +160,13 @@ button.navLink {
   outline: inherit;
 }
 
+/* ////// SIDEBAR */
+
+.sidebar-btn {
+  font-family: var(--title-font);
+  font-size: var(--md-font);
+}
+
 .drawer-container {
   height: 100vh;
   background-color: var(--light-violet);

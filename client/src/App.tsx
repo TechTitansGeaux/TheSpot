@@ -14,6 +14,8 @@ import axios from 'axios';
 import Settings from './components/ProfileSetUp/Settings'
 import { useDispatch } from 'react-redux';
 import { setAuthUser, setIsAuthenticated } from './store/appSlice';
+import FriendRequestList from './components/UserProfile/FriendRequests/FriendRequestList';
+import LikesList from './components/UserProfile/Likes/LIkesList';
 
 type User = {
   id: number;
@@ -65,6 +67,8 @@ const App = () => {
         <Route path='/' element={<Navigation />}>
           <Route path='/ProfileSetUp' element={<ProfileSetUp  />}></Route>
           <Route path='/Feed' element={<Feed user={user} />}></Route>
+          <Route path='/FriendRequests' element={<FriendRequestList />}></Route>
+          <Route path='/Likes' element={<LikesList />}></Route>
           <Route path='/Settings' element={<Settings fontSize={fontSize} />}></Route>
           <Route path='/Map' element={<Map />}></Route>
           <Route path='/CreateReel' element={<CreateReel user={user}/>}></Route>
