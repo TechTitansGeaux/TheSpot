@@ -167,7 +167,6 @@
       console.log('must create event === true hit')
       await axios.post('/events/create', {
           name: currentEvent.name,
-          rsvp_count: 0,
           date: currentEvent.date,
           geolocation: currentEvent.geolocation,
           twenty_one: currentEvent.twenty_one
