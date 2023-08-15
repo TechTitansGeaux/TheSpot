@@ -45,15 +45,12 @@
   const VideoRecorder: React.FC<Props> = ({currentEvent, user, mustCreateEvent, currentEventId}) => {
     const webcamRef = useRef(null);
     const mediaRecorderRef = useRef(null);
-    const [imgSrc, setImgSrc] = useState(null);
     const [capturing, setCapturing] = useState(false);
-    const [selfieTaken, setSelfieTaken] = useState(false);
     const [recordedChunks, setRecordedChunks] = useState([]);
     const [public_id, setPublic_id] = useState('');
     const [url, setUrl] = useState('');
     const [text, setText] = useState('');
     const [eventId, setEventId] = useState(0)
-    const [reelId, setReelId] = useState(0);
     const [event, setEvent] = useState({
       id: 0,
       name: '',
@@ -197,12 +194,11 @@
         public_id: public_id,
         url: url,
         text: text,
-        like_count: 0,
         userId: user.id,
         EventId: eventId
     })
     .then((resObj) => {
-      // console.log(resObj, '<--- response from axios post reel')
+      console.log(resObj, '<--- response from axios post reel')
     })
     .catch((err) => {
       console.error('Failed axios post reel: ', err);
@@ -247,7 +243,7 @@
               loop>
               </video>
               <input
-                className='reel-input-text'
+                className='reel-input-caption'
                 placeholder='Add caption?'
                 value={text}
                 onChange={handleText}
@@ -275,7 +271,6 @@
             onClick={handleStopCaptureClick}
             color='secondary'
             sx={{ width: 52, height: 52 }}/>
-            // <button onClick={handleStopCaptureClick}>Stop Capture</button>
           ) : (
             <motion.div
             whileHover={{ scale: 1.2 }}
@@ -285,7 +280,6 @@
               color='secondary'
               sx={{ width: 52, height: 52 }}/>
             </motion.div>
-            // <button onClick={handleStartCaptureClick}>Start Capture</button>
           )}
           {justRecorded && (
             <motion.div
@@ -296,7 +290,6 @@
               color='secondary'
               sx={{ width: 52, height: 52 }}/>
             </motion.div>
-            // <button onClick={saveReel}>Post</button>
           )}
         </div>
       </div>

@@ -288,15 +288,7 @@ video.reel {
   overflow: hidden;
 }
 
-.preview-text {
-  position: absolute;
-  margin: 0 5rem;
-  max-width: 350px;
-  font-size: var(--lg-font);
-  font-family: var(--title-font);
-}
-
-.reel-input-text {
+.reel-input-caption {
   position: absolute;
   left: 25%;
   top: 25%;
@@ -305,7 +297,6 @@ video.reel {
   color: var(--white);
   font-size: var(--lg-font);
   font-family: var(--title-font);
-  /* ^ why aren't these working? */
   background: transparent;
   border: none;
 }

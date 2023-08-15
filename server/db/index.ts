@@ -82,6 +82,7 @@ const Events = sequelize.define(
     },
     rsvp_count: {
       type: DataTypes.INTEGER,
+      defaultValue: 0
     },
     date: {
       type: DataTypes.DATE,
@@ -118,6 +119,7 @@ const Reels = sequelize.define(
     },
     like_count: {
       type: DataTypes.INTEGER,
+      defaultValue: 0
     },
   },
   { timestamps: true }
