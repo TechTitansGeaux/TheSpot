@@ -94,7 +94,7 @@ const Navigation = () => {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List sx={{ paddingTop: '3em' }}>
-        {['Profile', 'Friend Requests', 'Likes', 'Settings'].map(
+        {['My Reels', 'Friend Requests', 'Likes', 'Settings'].map(
           (text, index) => (
             <ListItem key={text} className='drawer-btn' disablePadding>
               <ListItemButton>
