@@ -104,7 +104,7 @@ const Feed: React.FC<Props> = ({user}) => {
       const long = Number(arr[1]);
       setUserLat(lat);
       setUserLong(long);
-      console.log('user:', user);
+      // console.log('user:', user);
     }
   };
 
@@ -157,7 +157,7 @@ const Feed: React.FC<Props> = ({user}) => {
 
   useEffect(() => {
     userCoord(user);
-  }, [user]);
+  }, []);
 
   useEffect(() => {
     getAllReels();
