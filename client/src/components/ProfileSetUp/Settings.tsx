@@ -15,6 +15,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Location from './Location';
 
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -31,7 +32,7 @@ const theme = createTheme({
 });
 
 
-const Settings = () => {
+const Settings = ({ fontSize }: any) => {
   const dispatch = useDispatch();
   const authUser = useSelector((state: RootState) => state.app.authUser);
   const [displayName, setDisplayName] = React.useState('');
@@ -42,6 +43,11 @@ const Settings = () => {
   const [geolocation, setGeolocation] = React.useState('');
   const [privacy, setPrivacy] = React.useState('');
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [size, setSize] = useState('var(--reg-font)'); // Default font size
+
+
+
+
 
   const handleDeleteConfirmation = () => {
     setShowDeleteConfirmation(true);
@@ -77,6 +83,8 @@ const Settings = () => {
   }, [authUser]);
 
   const handleSettings = () => {
+    fontSize  = size;
+
     if (geolocation === '') {
       throw new Error("Geolocation is required.");
     }
@@ -148,7 +156,7 @@ const Settings = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container className="container-full-w center">
+      <Container className={`container-full-w center`}>
       <h1>Settings</h1>
       <p>Click Avatar To Edit Image</p>
         <Card style={{ backgroundColor: 'var(--yellow)', marginTop: '1rem' }}>
@@ -224,6 +232,22 @@ const Settings = () => {
             <MenuItem value="private">Private</MenuItem>
             <MenuItem value="friends only">Friends Only</MenuItem>
           </TextField>
+
+          <TextField
+            select
+            label="Change Font Size"
+            variant="outlined"
+            color="secondary"
+            fullWidth
+            value={size}
+            onChange={e => setSize(e.target.value)}
+            style={{ color: 'var(--setupBG)', marginBottom: '1rem' }}
+          >
+            <MenuItem value='var(--sm-font)'>Small</MenuItem>
+            <MenuItem value='var( --md-font)'>Medium</MenuItem>
+            <MenuItem value='var(--lg-font)'>Large</MenuItem>
+          </TextField>
+
 
               <Button
               variant="contained"
