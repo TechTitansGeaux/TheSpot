@@ -104,6 +104,7 @@ const Feed: React.FC<Props> = ({user}) => {
       const long = Number(arr[1]);
       setUserLat(lat);
       setUserLong(long);
+    }
   };
 
   // find distance (miles) with 2 points
