@@ -181,13 +181,6 @@ const Navigation = () => {
                     className='friend-avatar'
                     sx={{ width: 48, height: 48 }}
                   />
-                  <div>
-                    {notifBool ? (<h5></h5>) :
-                    (<div>
-                      <CircleNotificationsIcon />
-                    </div>)
-                    }
-                  </div>
                 </button>
               </div>
             </Toolbar>
