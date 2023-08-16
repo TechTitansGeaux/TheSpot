@@ -5,6 +5,8 @@ import { useDispatch } from 'react-redux';
 // import { useLocation } from 'react-router-dom';
 import { setAuthUser, setIsAuthenticated } from '../../store/appSlice';
 import ReelItem from './ReelItem';
+import { useTheme } from '@mui/material/styles';
+
 
 // const ReelItem = React.lazy(() => import('./ReelItem'));
 
@@ -57,6 +59,9 @@ type Event = {
 };
 
 const Reel: React.FC<Props> = ({ reels }) => {
+
+  const theme = useTheme();
+
   const dispatch = useDispatch();
 
   // GET current user
@@ -136,7 +141,7 @@ const Reel: React.FC<Props> = ({ reels }) => {
   };
 
   return (
-    <main className='reel-container'>
+    <main className='reel-container' style={{ fontSize: theme.typography.fontSize }}>
       {reels.map((reel) => {
         return (
           <div key={reel.id + 'reel'}>

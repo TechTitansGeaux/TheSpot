@@ -12,8 +12,10 @@ import ProfileSetUp from './components/ProfileSetUp/ProfileSetUp';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Settings from './components/ProfileSetUp/Settings'
-import { useDispatch } from 'react-redux';
-import { setAuthUser, setIsAuthenticated } from './store/appSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { setAuthUser, setIsAuthenticated, setFontSize } from './store/appSlice';
+import { RootState } from './store/store';
+import { useTheme } from '@mui/material/styles';
 
 type User = {
   id: number;
@@ -33,11 +35,13 @@ type User = {
 
 
 const App = () => {
-  const [fontSize, setFontSize] = useState('var(--reg-font)'); // Default font size
+
+  const theme = useTheme();
 
   const dispatch = useDispatch();
   // get all users to pass down as props
   const [user, setUser] = useState<User>(null);
+  const fontSize = useSelector((state: RootState) => state.app.fontSize); // Default font size
 
   const fetchAuthUser = async () => {
     try {
@@ -53,10 +57,15 @@ const App = () => {
   };
 
   useEffect(() => {
+    dispatch(setFontSize(fontSize));
+
+    // Apply font size to the root element
+    document.documentElement.style.fontSize = fontSize;
     fetchAuthUser();
-  }, []);
+  }, [fontSize]);
 
   return (
+    <div style={{ fontSize: theme.typography.fontSize }}>
     <BrowserRouter>
       <Routes>
         <Route index element={<SignUp />}></Route>
@@ -69,6 +78,7 @@ const App = () => {
         </Route>
       </Routes>
     </BrowserRouter>
+    </div>
   );
 };
 

@@ -13,6 +13,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState, useEffect, useRef } from 'react';
 import { memo } from 'react';
+import { useTheme } from '@mui/material/styles';
 
 type Props = {
   reel: any;
@@ -22,20 +23,20 @@ type Props = {
   user: any;
 };
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#f0f465',
-      dark: '#f433ab',
-      contrastText: '#0b0113',
-    },
-    secondary: {
-      main: '#f433ab',
-      dark: '#f0f465',
-      contrastText: '#0b0113',
-    },
-  },
-});
+// const theme = createTheme({
+//   palette: {
+//     primary: {
+//       main: '#f0f465',
+//       dark: '#f433ab',
+//       contrastText: '#0b0113',
+//     },
+//     secondary: {
+//       main: '#f433ab',
+//       dark: '#f0f465',
+//       contrastText: '#0b0113',
+//     },
+//   },
+// });
 
 const ReelItem: React.FC<Props> = memo(function ReelItem({
   reel,
@@ -44,6 +45,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   approveFriendship,
   user
 }) {
+  const theme = useTheme();
   // REFERENCE VIDEO HTML element in JSX element // Uses a ref to hold an array of generated refs, and assign them when mapping.
   const myRef = useRef<HTMLVideoElement>(null);
   const [loop, setLoop] = useState(false);
@@ -76,6 +78,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   }, []);
 
   return (
+    <div style={{ fontSize: theme.typography.fontSize }}>
     <>
       <div className='video-container'>
         {reel.url.length > 15 && (
@@ -140,6 +143,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
         </Box>
       </div>
     </>
+    </div>
   );
 });
 

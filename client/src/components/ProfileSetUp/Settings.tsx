@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
-import { setAuthUser } from '../../store/appSlice';
+import { setAuthUser, setFontSize } from '../../store/appSlice';
 import { RootState } from '../../store/store';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -15,24 +15,19 @@ import MenuItem from '@mui/material/MenuItem';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Location from './Location';
 
+type Props = {
+fontSize: string;
+}
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#7161EF',
-      dark: '#f433ab',
-      contrastText: '#F5FCFA',
-    },
-    secondary: {
-      main: '#f433ab',
-      light: '#f0f465',
-      contrastText: '#0b0113',
-    },
-  },
-});
+const fontSizes = {
+  'sm-font': 8,
+  'reg-font': 16,
+  'md-font': 24,
+  'lg-font': 40,
+};
 
 
-const Settings = ({ fontSize }: any) => {
+const Settings: React.FC<Props> = ({fontSize}) => {
   const dispatch = useDispatch();
   const authUser = useSelector((state: RootState) => state.app.authUser);
   const [displayName, setDisplayName] = React.useState('');
@@ -43,10 +38,31 @@ const Settings = ({ fontSize }: any) => {
   const [geolocation, setGeolocation] = React.useState('');
   const [privacy, setPrivacy] = React.useState('');
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-  const [size, setSize] = useState('var(--reg-font)'); // Default font size
+  //const fontSize = useSelector((state: RootState) => state.app.fontSize); // Fetch font size from the Redux store
+  const [selectedFont, setSelectedFont] = useState('reg-font'); // Local state to manage the selected font size
 
 
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#7161EF',
+        dark: '#f433ab',
+        contrastText: '#F5FCFA',
+      },
+      secondary: {
+        main: '#f433ab',
+        light: '#f0f465',
+        contrastText: '#0b0113',
+      },
+    },
+    typography: {
+      fontSize: fontSizes[selectedFont as keyof typeof fontSizes], // Set the selected font size here
+    },
+  });
 
+useEffect(() => {
+  setSelectedFont(fontSize); // Set the selected font size when the component mounts
+}, [fontSize]);
 
 
   const handleDeleteConfirmation = () => {
@@ -83,7 +99,20 @@ const Settings = ({ fontSize }: any) => {
   }, [authUser]);
 
   const handleSettings = () => {
-    fontSize  = size;
+
+  // if (size === 'var(--sm-font)') {
+  //   document.body.style.fontSize = 'var(--sm-font)';
+  // } else if (size === 'var(--md-font)') {
+  //   document.body.style.fontSize = 'var(--md-font)';
+  // } else if (size === 'var(--lg-font)') {
+  //   document.body.style.fontSize = 'var(--lg-font)';
+  // }
+
+  // Update font size in Redux state
+  dispatch(setFontSize(selectedFont));
+
+  //  // Update font size in CSS
+  //  document.documentElement.style.fontSize = selectedFont;
 
     if (geolocation === '') {
       throw new Error("Geolocation is required.");
@@ -239,13 +268,14 @@ const Settings = ({ fontSize }: any) => {
             variant="outlined"
             color="secondary"
             fullWidth
-            value={size}
-            onChange={e => setSize(e.target.value)}
+            value={selectedFont}
+            onChange={e => setSelectedFont(e.target.value)}
             style={{ color: 'var(--setupBG)', marginBottom: '1rem' }}
           >
-            <MenuItem value='var(--sm-font)'>Small</MenuItem>
-            <MenuItem value='var( --md-font)'>Medium</MenuItem>
-            <MenuItem value='var(--lg-font)'>Large</MenuItem>
+            <MenuItem value='sm-font'>Small</MenuItem>
+            <MenuItem value='reg-font'>Regular</MenuItem>
+            <MenuItem value='md-font'>Medium</MenuItem>
+            <MenuItem value='lg-font'>Large</MenuItem>
           </TextField>
 
 
