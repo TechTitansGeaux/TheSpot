@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 // import { useLocation } from 'react-router-dom';
 import { setAuthUser, setIsAuthenticated } from '../../store/appSlice';
 import ReelItem from './ReelItem';
+import { useTheme } from '@mui/material/styles';
 import { AnimatePresence, motion } from 'framer-motion';
 
 // const ReelItem = React.lazy(() => import('./ReelItem'));
@@ -58,7 +59,9 @@ type Event = {
   PlaceId: 1;
 };
 
+
 const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
+  const theme = useTheme();
   const dispatch = useDispatch();
 
   // GET current user
@@ -149,7 +152,7 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
   };
 
   return (
-    <main className='reel-container'>
+    <main className='reel-container' style={{ fontSize: theme.typography.fontSize }}>
       <AnimatePresence initial={false}>
         {reels.map((reel) => {
           return (
