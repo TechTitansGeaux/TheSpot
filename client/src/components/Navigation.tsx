@@ -15,6 +15,8 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import List from '@mui/material/List';
 import Avatar from '@mui/material/Avatar';
+import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
+import axios from 'axios';
 
 type Anchor = 'left';
 
@@ -35,6 +37,32 @@ const theme = createTheme({
 });
 
 const Navigation = () => {
+  const [pFriends, setPFriends] = useState([]); // pending friends list
+  const [notifBool, setNotifBool] = useState(false);
+
+  // get all pending friends for current user
+  const getAllPFriends = () => {
+    axios
+      .get('feed/friendlist/pending')
+      .then((response) => {
+        console.log('pending friends:', response.data);
+        setPFriends(response.data);
+        if (pFriends.length !== 0) {
+          setNotifBool(true);
+        } else {
+          setNotifBool(false);
+        }
+      })
+      .catch((err) => {
+        console.error('Could not GET pending friends:', err);
+      });
+  };
+
+  useEffect(() => {
+    getAllPFriends();
+    console.log('notifBool:', notifBool);
+  }, [notifBool]);
+
   const [onPage, setOnPage] = useState(
     <NavLink className='navLink' to='/Feed'>
       <img id='nav-logo' src={logoGradient} alt='app logo' />

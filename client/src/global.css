@@ -171,6 +171,24 @@ button.navLink {
   height: 100%;
 }
 
+.delete-btn {
+  z-index: 9;
+  position: absolute;
+  background-color: var(--violet);
+  color: var(--yellow);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  left: 6%;
+  top: 225%;
+}
+
+button.delete-btn:hover {
+  background-color: var(--pink);
+  color: var(--violet);
+}
 
 .friend-request {
   position: relative;
@@ -340,9 +358,22 @@ video.reel {
 
 .addOrRmFriend {
   position: relative;
-  top: 140px;
+  top: 165px;
   left: -25px;
 
 }
+
+#userMap {
+  height: 75vh;
+  width: 80%;
+  display: flex;
+}
+
+/* #eventMap {
+  height: 75vh;
+  width: 80%;
+  display: none;
+} */
+
 
 

@@ -74,7 +74,7 @@ const Feed: React.FC<Props> = ({user}) => {
       axios
         .get(`/feed/${filter}`)
         .then((response) => {
-          console.log('reels response.data:', response.data);
+          // console.log('reels response.data:', response.data);
           setReels(response.data);
         })
         .catch((err) => {
@@ -87,7 +87,7 @@ const Feed: React.FC<Props> = ({user}) => {
     axios
       .get(`/feed/friendlist`)
       .then((response) => {
-        console.log('friends response.data:', response.data);
+        //console.log('friends response.data:', response.data);
         setFriends(response.data);
       })
       .catch((err) => {
@@ -142,7 +142,7 @@ const Feed: React.FC<Props> = ({user}) => {
           let dist = distance(userLat, otherLat, userLong, otherLong);
           let eventDist = distance(userLat, eventLat, userLong, eventLong);
           // console.log('distance:', dist);
-          console.log('geoF:', geoF);
+          // console.log('geoF:', geoF);
           if (dist <= geoF || eventDist <= geoF) {
             geoReels.push(response.data[i]);
           }
@@ -195,6 +195,7 @@ const Feed: React.FC<Props> = ({user}) => {
         <Reel
           reels={reels}
           friends={friends}
+          getAllReels={getAllReels}
         />
       </div>
     </>

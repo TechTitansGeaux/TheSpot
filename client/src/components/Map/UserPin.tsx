@@ -4,12 +4,8 @@ import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-// import $ from 'jquery';
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React from 'react';
 import axios from 'axios';
-import { setAuthUser } from '../../store/appSlice';
-import { RootState } from '../../store/store';
 import dayjs = require('dayjs');
 dayjs.extend(localizedFormat)
 
@@ -36,6 +32,22 @@ type Props = {
   lng: number
   friendList: number[]
   getFriendList: () => void
+  pendingFriendList: number[]
+  getPendingFriendList: () => void
+  loggedIn: {
+    id: number;
+    username: string;
+    displayName: string;
+    type: string;
+    geolocation: string;
+    mapIcon: string;
+    birthday: string;
+    privacy: string;
+    accessibility: string;
+    email: string;
+    picture: string;
+    googleId: string;
+  }
 };
 
 const addFriendTheme = createTheme({
@@ -68,8 +80,6 @@ const rmFriendTheme = createTheme({
 });
 
 const UserPin: React.FC<Props> = (props) => {
-  const dispatch = useDispatch();
-  const authUser = useSelector((state: RootState) => state.app.authUser);
 
   const togglePopUp = () => {
     const box = document.getElementById('popUp' + props.user.username + props.user.id)
@@ -89,6 +99,7 @@ const UserPin: React.FC<Props> = (props) => {
       })
       .then(() => {
         props.getFriendList();
+        props.getPendingFriendList();
       })
       .catch((err) => {
         console.error('Friend request axios FAILED', err);
@@ -100,24 +111,15 @@ const UserPin: React.FC<Props> = (props) => {
       .delete(`/friends/${props.user.id}`)
       .then(() => {
         props.getFriendList()
+        props.getPendingFriendList();
       })
       .catch((err) => {
         console.error('Remove friend request axios FAILED', err);
       });
   }
 
+  const isNotLoggedInUser = (props.user.id !== props.loggedIn.id) || null;
 
-  useEffect(() => {
-    if (authUser && props.user) {
-      dispatch(setAuthUser(authUser));
-    }
-  }, [authUser, props.user]);
-
-
-
-  const isNotLoggedInUser = (props.user.id !== authUser.id) || null;
-  // const $offset = $(`#${props.user.username + props.user.id}`).offset()
-  // console.log($offset);
 
 
   return (
@@ -139,7 +141,7 @@ const UserPin: React.FC<Props> = (props) => {
           </p>
         </div>
         <div className='addOrRmFriend'>
-        { !props.friendList.includes(props.user.id) && isNotLoggedInUser && (
+        { !props.pendingFriendList.includes(props.user.id) &&  !props.friendList.includes(props.user.id) && isNotLoggedInUser && (
           <div>
             <div style={{position: 'relative', top: '30px', left: '80px'}} >add friend</div>
             <ThemeProvider theme={addFriendTheme}>
@@ -162,7 +164,7 @@ const UserPin: React.FC<Props> = (props) => {
         <div className='addOrRmFriend'>
         { props.friendList.includes(props.user.id) && (
           <div>
-            <div style={{position: 'relative', top: '30px', left: '80px'}} >remove friend</div>
+            <div style={{position: 'relative', top: '30px', left: '60px'}} >remove friend</div>
             <ThemeProvider theme={rmFriendTheme}>
               <div>
                 <Box>
@@ -177,6 +179,13 @@ const UserPin: React.FC<Props> = (props) => {
                 </Box>
               </div>
             </ThemeProvider>
+          </div>
+        )}
+        </div>
+        <div className='addOrRmFriend'>
+        { props.pendingFriendList.includes(props.user.id) && (
+          <div>
+            <div style={{position: 'relative', top: '30px', left: '60px'}} >request pending</div>
           </div>
         )}
         </div>

@@ -15,7 +15,6 @@ const uploadReelToCloudinary = async (file: string) => {
       ],
       q_auto: 'best'
     });
-    console.log(result, '<-----result from upload to cloudinary')
     return result.secure_url;
   } catch (err) {
     console.error('Failed cloudinary reel upload: ', err);
@@ -36,7 +35,6 @@ const storage = multer.diskStorage({
 const fileUpload = multer({storage});
 
 reelRouter.post('/upload', fileUpload.single('video'), async (req: any, res: any) => {
-  // console.log(req.file, '<-----req.file');
 
     const cloudURL = await uploadReelToCloudinary(req.file.path)
     // // cloudURL comes as a mkv, here I jankily turn it into a webm

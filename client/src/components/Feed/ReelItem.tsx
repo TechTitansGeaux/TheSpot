@@ -21,6 +21,7 @@ type Props = {
   requestFriendship: any;
   approveFriendship: any;
   user: any;
+  deleteReel: any;
   disabledNow: any;
 };
 
@@ -45,6 +46,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   requestFriendship,
   approveFriendship,
   user,
+  deleteReel,
   disabledNow,
 }) {
   // REFERENCE VIDEO HTML element in JSX element // Uses a ref to hold an array of generated refs, and assign them when mapping.
@@ -148,6 +150,16 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
               </div>
             </ThemeProvider>
           )}
+
+            {reel.UserId === user.id &&
+             <div className='friend-request'>
+              (<button
+                className='delete-btn'
+                onClick={() => deleteReel(reel.id)}
+              >
+                🗑️
+
+              </button>) </div>}
         </>
 
         <div className='friend-request'>
