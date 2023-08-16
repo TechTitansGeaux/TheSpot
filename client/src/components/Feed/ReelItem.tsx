@@ -27,20 +27,20 @@ type Props = {
   disabledNow: any;
 };
 
-// const theme = createTheme({
-//   palette: {
-//     primary: {
-//       main: '#f0f465',
-//       dark: '#f433ab',
-//       contrastText: '#0b0113',
-//     },
-//     secondary: {
-//       main: '#f433ab',
-//       dark: '#f0f465',
-//       contrastText: '#0b0113',
-//     },
-//   },
-// });
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#f0f465',
+      dark: '#f433ab',
+      contrastText: '#0b0113',
+    },
+    secondary: {
+      main: '#f433ab',
+      dark: '#f0f465',
+      contrastText: '#0b0113',
+    },
+  },
+});
 
 const ReelItem: React.FC<Props> = memo(function ReelItem({
   reel,

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import FriendRequestEntry from './FriendRequestEntry';
+import FriendAcceptedEntry from './FriendAcceptedEntry';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -53,7 +54,7 @@ const FriendRequestList: React.FC<Props> = ({ user }) => {
   useEffect(() => {
     getPendingFriendList();
     getFriendList();
-  }, []);
+  }, [friends]);
 
   // PUT request update friendship from 'pending' to 'approved'
   const approveFriendship = (friend: number) => {
@@ -75,7 +76,7 @@ const FriendRequestList: React.FC<Props> = ({ user }) => {
       <div className='container-full-w'>
         <h1>Pending Friend Requests</h1>
         {pendingFriends !== undefined &&
-          pendingFriends.map((pendingFriend) => {
+          pendingFriends.map((pendingFriend, i) => {
             return (
               <FriendRequestEntry
                 key={pendingFriend.id}
@@ -89,13 +90,13 @@ const FriendRequestList: React.FC<Props> = ({ user }) => {
       <div className='container-full-w'>
         <h1>My Friends</h1>
         {friends.length !== 0 &&
-          friends.map((friend) => {
+          friends.map((friend, i) => {
             return (
-              <FriendRequestEntry
+              <FriendAcceptedEntry
                 key={friend.id}
                 friend={friend}
                 user={user}
-                approveFriendship={approveFriendship}
+                rejectFriendship={() => console.log('friend rejected')}
               />
             );
           })}

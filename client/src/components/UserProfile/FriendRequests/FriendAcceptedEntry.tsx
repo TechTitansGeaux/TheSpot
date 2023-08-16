@@ -2,7 +2,6 @@ import * as React from 'react';
 import Fab from '@mui/material/Fab';
 import Tooltip from '@mui/material/Tooltip';
 import Zoom from '@mui/material/Zoom';
-import AddIcon from '@mui/icons-material/Add';
 import RemoveOutlinedIcon from '@mui/icons-material/RemoveOutlined';
 
 type Props = {
@@ -20,7 +19,7 @@ type Props = {
     picture: string;
     googleId: string;
   };
-  pendingFriend: {
+  friend: {
     id: number;
     status: string;
     requester_id: number;
@@ -28,43 +27,19 @@ type Props = {
     createdAt: string;
     updatedAt: string;
   };
-  approveFriendship: any;
+  rejectFriendship: any;
 };
 
-const FriendRequestEntry: React.FC<Props> = ({
+const FriendAcceptedEntry: React.FC<Props> = ({
   user,
-  approveFriendship,
-  pendingFriend,
+  friend,
+  rejectFriendship,
 }) => {
   return (
     <>
       <div className='friendRequest-container'>
-        <h2 className='friendName'>{pendingFriend?.id}</h2>
+        <h2 className='friendName'>{friend?.id}</h2>
         <div className='btn-container'>
-          <Fab
-            style={{
-              transform: 'scale(0.8)',
-              borderColor: 'white',
-              borderStyle: 'solid',
-              borderWidth: 1,
-            }}
-            size='small'
-            color='primary'
-            aria-label='add'
-            disabled={false}
-          >
-            <Tooltip
-              title='Accept Friend'
-              TransitionComponent={Zoom}
-              placement='top'
-              arrow
-            >
-              <AddIcon
-                sx={{ width: 20, height: 20 }}
-                onClick={() => approveFriendship(pendingFriend.accepter_id)}
-              />
-            </Tooltip>
-          </Fab>
           <Fab
             style={{
               transform: 'scale(0.8)',
@@ -96,4 +71,4 @@ const FriendRequestEntry: React.FC<Props> = ({
   );
 };
 
-export default FriendRequestEntry;
+export default FriendAcceptedEntry;
