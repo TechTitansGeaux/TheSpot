@@ -130,7 +130,6 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
         <>
         <Tooltip
             title={reel.Event.name}
-            TransitionComponent={Zoom}
             placement='left'
             arrow
           >

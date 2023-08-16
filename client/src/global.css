@@ -216,6 +216,7 @@ button.delete-btn:hover {
   z-index: 2;
 }
 
+
 .friend-request {
   position: relative;
   right: 3%;
@@ -385,6 +386,19 @@ button.rejectFriend-btn:hover {
   position: absolute;
   left: 25%;
   top: 25%;
+  margin: 0 5rem;
+  max-width: 350px;
+  color: var(--white);
+  font-size: var(--lg-font);
+  font-family: var(--title-font);
+  background: transparent;
+  border: none;
+}
+
+.name-event-input {
+  position: absolute;
+  left: 50%;
+  top: 50%;
   margin: 0 5rem;
   max-width: 350px;
   color: var(--white);

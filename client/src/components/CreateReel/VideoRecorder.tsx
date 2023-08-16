@@ -8,6 +8,8 @@
   import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
   import { motion } from 'framer-motion';
   import { useNavigate  } from 'react-router-dom';
+  import Tooltip from '@mui/material/Tooltip';
+  import InfoIcon from '@mui/icons-material/Info';
 // import { current } from '@reduxjs/toolkit';
   // import dayjs = require('dayjs');
   // import localizedFormat from 'dayjs/plugin/localizedFormat';
@@ -65,6 +67,7 @@
     });
     const [justRecorded, setJustRecorded] = useState(false);
     const [reelSaved, setReelSaved] = useState(false);
+    const [eventName, setEventName] = useState(currentEvent.name);
 
     type Blob = {
       data: {
@@ -232,11 +235,14 @@
       facingMode: "user",
     };
 
-    // handle input text
-    const handleText = (e: any) => {
-      setText(e.target.value);
-    };
-// console.log(url, '<-----url')
+// handle input text for caption
+const handleText = (e: any) => {
+  setText(e.target.value);
+};
+// handle input for event name
+const handleEventName = (e: any) => {
+  setEventName(e.target.value)
+}
 
 // navigate to feed if just posted reel
 const navigate = useNavigate();
@@ -264,6 +270,20 @@ const redirectToFeed = () => {
                 onChange={handleText}
                 type='text'>
               </input>
+              <input
+              className="event-name-input"
+              placeholder='Edit event name ...'
+              value={eventName}
+              onChange={handleEventName}
+              type='text'>
+              </input>
+              <Tooltip
+            title={currentEvent.name}
+            placement='left'
+            arrow
+          >
+        <InfoIcon className='info-icon'/>
+        </Tooltip>
             </div>
           </div>
         ) : (
