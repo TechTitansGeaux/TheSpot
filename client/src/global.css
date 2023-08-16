@@ -353,9 +353,22 @@ video.reel {
 
 .addOrRmFriend {
   position: relative;
-  top: 140px;
+  top: 165px;
   left: -25px;
 
 }
+
+#userMap {
+  height: 75vh;
+  width: 80%;
+  display: flex;
+}
+
+/* #eventMap {
+  height: 75vh;
+  width: 80%;
+  display: none;
+} */
+
 
 

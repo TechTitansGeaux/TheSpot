@@ -142,7 +142,7 @@ const Feed: React.FC<Props> = ({user}) => {
           let dist = distance(userLat, otherLat, userLong, otherLong);
           let eventDist = distance(userLat, eventLat, userLong, eventLong);
           // console.log('distance:', dist);
-          console.log('geoF:', geoF);
+          // console.log('geoF:', geoF);
           if (dist <= geoF || eventDist <= geoF) {
             geoReels.push(response.data[i]);
           }

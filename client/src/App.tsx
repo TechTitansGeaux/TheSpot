@@ -66,7 +66,7 @@ const App = () => {
           <Route path='/ProfileSetUp' element={<ProfileSetUp  />}></Route>
           <Route path='/Feed' element={<Feed user={user} />}></Route>
           <Route path='/Settings' element={<Settings fontSize={fontSize} />}></Route>
-          <Route path='/Map' element={<Map />}></Route>
+          <Route path='/Map' element={<Map loggedIn={user} />}></Route>
           <Route path='/CreateReel' element={<CreateReel user={user}/>}></Route>
         </Route>
       </Routes>
