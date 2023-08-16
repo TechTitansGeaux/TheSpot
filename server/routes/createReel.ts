@@ -9,13 +9,12 @@ const uploadReelToCloudinary = async (file: string) => {
   try {
     const result = await cloudinary.uploader.upload(file, {
       resource_type: "video",
-      // width: 1102,
-      // height: 620
+      format: 'webm',
       transformation: [
         {aspect_ratio: '3:4', crop: 'fill', width: 465}
-      ]
+      ],
+      q_auto: 'best'
     });
-    console.log(result, '<-----result from upload to cloudinary')
     return result.secure_url;
   } catch (err) {
     console.error('Failed cloudinary reel upload: ', err);
@@ -36,11 +35,10 @@ const storage = multer.diskStorage({
 const fileUpload = multer({storage});
 
 reelRouter.post('/upload', fileUpload.single('video'), async (req: any, res: any) => {
-  console.log(req.file, '<-----req.file');
 
-    let cloudURL = await uploadReelToCloudinary(req.file.path)
-    // cloudURL comes as a mkv, here I jankily turn it into a webm
-    cloudURL = cloudURL.slice(0, cloudURL.length - 3) + 'webm';
+    const cloudURL = await uploadReelToCloudinary(req.file.path)
+    // // cloudURL comes as a mkv, here I jankily turn it into a webm
+    // cloudURL = cloudURL.slice(0, cloudURL.length - 3) + 'webm';
     // also jankily getting the publicID
     const cloudID = cloudURL.slice(cloudURL.length - 23, cloudURL.length - 5);
 

@@ -6,7 +6,6 @@ const { Friendships, Reels, Users, Events } = require('../db/index');
 friendRouter.get('/', (req: any, res: any) => {
   Friendships.findAll()
     .then((data: any) => {
-      console.log('friendRouter GET data', data);
       res.status(200).send(data);
     })
     .catch((err: any) => {
@@ -26,7 +25,6 @@ friendRouter.post('/', (req: any, res: any) => {
     { status: 'pending', requester_id: accepter_id, accepter_id: id },
   ])
     .then((data: any) => {
-      console.log('friendRoute POST friend data', data);
       res.sendStatus(201);
     })
     .catch((err: any) => {
@@ -50,7 +48,6 @@ friendRouter.put('/', (req: any, res: any) => {
     }
   )
     .then((data: any) => {
-      console.log('friendRoute UPDATE friend approved status', data);
       res.sendStatus(200);
     })
     .catch((err: any) => {
@@ -73,7 +70,6 @@ friendRouter.delete('/:otherUsersId',  (req: any, res: any) => {
     }
   )
     .then((data: any) => {
-      console.log('friendRoute DELETE friend from friends list', data);
       res.sendStatus(200);
     })
     .catch((err: any) => {

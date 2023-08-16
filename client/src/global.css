@@ -354,12 +354,17 @@ button.rejectFriend-btn:hover {
   overflow: hidden;
 }
 
-.preview-text {
+.reel-input-caption {
   position: absolute;
+  left: 25%;
+  top: 25%;
   margin: 0 5rem;
   max-width: 350px;
+  color: var(--white);
   font-size: var(--lg-font);
   font-family: var(--title-font);
+  background: transparent;
+  border: none;
 }
 
 .dot {
@@ -401,9 +406,19 @@ button.rejectFriend-btn:hover {
 
 .addOrRmFriend {
   position: relative;
-  top: 140px;
+  top: 165px;
   left: -25px;
-
 }
 
+#userMap {
+  height: 75vh;
+  width: 80%;
+  display: flex;
+}
+
+/* #eventMap {
+  height: 75vh;
+  width: 80%;
+  display: none;
+} */
 

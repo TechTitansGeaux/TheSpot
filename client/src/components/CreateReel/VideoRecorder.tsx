@@ -45,15 +45,12 @@
   const VideoRecorder: React.FC<Props> = ({currentEvent, user, mustCreateEvent, currentEventId}) => {
     const webcamRef = useRef(null);
     const mediaRecorderRef = useRef(null);
-    const [imgSrc, setImgSrc] = useState(null);
     const [capturing, setCapturing] = useState(false);
-    const [selfieTaken, setSelfieTaken] = useState(false);
     const [recordedChunks, setRecordedChunks] = useState([]);
     const [public_id, setPublic_id] = useState('');
     const [url, setUrl] = useState('');
-    const [text, setText] = useState('party time y\'all');
+    const [text, setText] = useState('');
     const [eventId, setEventId] = useState(0)
-    const [reelId, setReelId] = useState(0);
     const [event, setEvent] = useState({
       id: 0,
       name: '',
@@ -170,7 +167,6 @@
       console.log('must create event === true hit')
       await axios.post('/events/create', {
           name: currentEvent.name,
-          rsvp_count: 0,
           date: currentEvent.date,
           geolocation: currentEvent.geolocation,
           twenty_one: currentEvent.twenty_one
@@ -197,12 +193,11 @@
         public_id: public_id,
         url: url,
         text: text,
-        like_count: 0,
         userId: user.id,
         EventId: eventId
     })
     .then((resObj) => {
-      // console.log(resObj, '<--- response from axios post reel')
+      console.log(resObj, '<--- response from axios post reel')
     })
     .catch((err) => {
       console.error('Failed axios post reel: ', err);
@@ -211,6 +206,7 @@
     setJustRecorded(false)
     // reset url
     setUrl('');
+    setText('');
     }
 
     // post reel to db should be invoked whenever eventId has been changed
@@ -227,6 +223,10 @@
       facingMode: "user",
     };
 
+    // handle input text
+    const handleText = (e: any) => {
+      setText(e.target.value);
+    };
 // console.log(url, '<-----url')
 
     return (
@@ -241,7 +241,13 @@
               controls autoPlay
               loop>
               </video>
-              <p className='preview-text'>{text}</p>
+              <input
+                className='reel-input-caption'
+                placeholder='Add caption?'
+                value={text}
+                onChange={handleText}
+                type='text'>
+              </input>
             </div>
           </div>
         ) : (
@@ -264,7 +270,6 @@
             onClick={handleStopCaptureClick}
             color='secondary'
             sx={{ width: 52, height: 52 }}/>
-            // <button onClick={handleStopCaptureClick}>Stop Capture</button>
           ) : (
             <motion.div
             whileHover={{ scale: 1.2 }}
@@ -274,7 +279,6 @@
               color='secondary'
               sx={{ width: 52, height: 52 }}/>
             </motion.div>
-            // <button onClick={handleStartCaptureClick}>Start Capture</button>
           )}
           {justRecorded && (
             <motion.div
@@ -285,7 +289,6 @@
               color='secondary'
               sx={{ width: 52, height: 52 }}/>
             </motion.div>
-            // <button onClick={saveReel}>Post</button>
           )}
         </div>
       </div>

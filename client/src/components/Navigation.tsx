@@ -14,6 +14,8 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import List from '@mui/material/List';
 import Avatar from '@mui/material/Avatar';
+import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
+import axios from 'axios';
 
 type Anchor = 'left';
 type Props = {
@@ -49,7 +51,10 @@ const theme = createTheme({
   },
 });
 
+
 const Navigation: React.FC<Props> = ({ user }) => {
+  const [pFriends, setPFriends] = useState([]); // pending friends list
+  const [notifBool, setNotifBool] = useState(false);
   const [onPage, setOnPage] = useState(
     <NavLink className='navLink' to='/Feed'>
       <img id='nav-logo' src={logoGradient} alt='app logo' />
@@ -57,7 +62,29 @@ const Navigation: React.FC<Props> = ({ user }) => {
   );
   const location = useLocation();
   const feedPath = location.pathname;
-  // console.log('feedPath', feedPath);
+  
+  // get all pending friends for current user
+  const getAllPFriends = () => {
+    axios
+      .get('feed/friendlist/pending')
+      .then((response) => {
+        console.log('pending friends:', response.data);
+        setPFriends(response.data);
+        if (pFriends.length !== 0) {
+          setNotifBool(true);
+        } else {
+          setNotifBool(false);
+        }
+      })
+      .catch((err) => {
+        console.error('Could not GET pending friends:', err);
+      });
+  };
+
+  useEffect(() => {
+    getAllPFriends();
+    console.log('notifBool:', notifBool);
+  }, [notifBool]);
 
   // When the user clicks on the button, scroll to the top of the page
   const handleScrollTop = () => {
