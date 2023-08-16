@@ -57,7 +57,15 @@ const FriendRequestEntry: React.FC<Props> = ({
               title='Accept Friend'
               TransitionComponent={Zoom}
               placement='top'
-              arrow
+              PopperProps={{
+                sx: {
+                  '& .MuiTooltip-tooltip': {
+                    backgroundColor: 'transparent',
+                    border: 'solid #F5FCFA 1px',
+                    color: '#F5FCFA',
+                  },
+                },
+              }}
             >
               <AddIcon
                 sx={{ width: 20, height: 20 }}
@@ -81,7 +89,15 @@ const FriendRequestEntry: React.FC<Props> = ({
               title='Reject Request'
               TransitionComponent={Zoom}
               placement='top'
-              arrow
+              PopperProps={{
+                sx: {
+                  '& .MuiTooltip-tooltip': {
+                    backgroundColor: 'transparent',
+                    border: 'solid #F5FCFA 1px',
+                    color: '#F5FCFA',
+                  },
+                },
+              }}
             >
               <RemoveOutlinedIcon
                 className='rejectFriend-btn'

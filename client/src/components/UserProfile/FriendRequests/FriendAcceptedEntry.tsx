@@ -56,11 +56,21 @@ const FriendAcceptedEntry: React.FC<Props> = ({
               title='Unfriend'
               TransitionComponent={Zoom}
               placement='top'
-              arrow
+              PopperProps={{
+                sx: {
+                  '& .MuiTooltip-tooltip': {
+                    backgroundColor: 'transparent',
+                    border: 'solid #F5FCFA 1px',
+                    color: '#F5FCFA',
+                  },
+                },
+              }}
             >
               <RemoveOutlinedIcon
                 className='rejectFriend-btn'
-                onClick={() => rejectFriendship(friend?.accepter_id, friend?.updatedAt)}
+                onClick={() =>
+                  rejectFriendship(friend?.accepter_id, friend?.updatedAt)
+                }
               />
             </Tooltip>
           </Fab>
