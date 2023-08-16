@@ -79,6 +79,7 @@ const FriendRequestList: React.FC<Props> = ({ user }) => {
             return (
               <FriendRequestEntry
                 key={pendingFriend.id}
+                friend
                 pendingFriend={pendingFriend}
                 user={user}
                 approveFriendship={approveFriendship}
@@ -87,18 +88,19 @@ const FriendRequestList: React.FC<Props> = ({ user }) => {
           })}
       </div>
       <div className='container-full-w'>
-        <h1>My Friends</h1>
+        {/* <h1>My Friends</h1>
         {friends.length !== 0 &&
           friends.map((friend) => {
             return (
               <FriendRequestEntry
                 key={friend.id}
                 friend={friend}
+                pendingFriends={friend}
                 user={user}
                 approveFriendship={approveFriendship}
               />
             );
-          })}
+          })} */}
       </div>
     </>
   );

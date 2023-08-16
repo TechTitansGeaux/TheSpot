@@ -7,6 +7,7 @@
   import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
   import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
   import { motion } from 'framer-motion';
+  import { useNavigate  } from 'react-router-dom';
 // import { current } from '@reduxjs/toolkit';
   // import dayjs = require('dayjs');
   // import localizedFormat from 'dayjs/plugin/localizedFormat';
@@ -198,15 +199,23 @@
     })
     .then((resObj) => {
       console.log(resObj, '<--- response from axios post reel')
-    })
-    .catch((err) => {
-      console.error('Failed axios post reel: ', err);
-    })
-    // no longer just recorded
+          // no longer just recorded
     setJustRecorded(false)
     // reset url
     setUrl('');
     setText('');
+    })
+    .then(() => {
+      redirectToFeed();
+    })
+    .catch((err) => {
+      console.error('Failed axios post reel: ', err);
+    })
+    // // no longer just recorded
+    // setJustRecorded(false)
+    // // reset url
+    // setUrl('');
+    // setText('');
     }
 
     // post reel to db should be invoked whenever eventId has been changed
@@ -228,6 +237,13 @@
       setText(e.target.value);
     };
 // console.log(url, '<-----url')
+
+// navigate to feed if just posted reel
+const navigate = useNavigate();
+  
+const redirectToFeed = () => {
+  navigate('/Feed');
+}
 
     return (
       <div>
