@@ -6,15 +6,16 @@ import Toolbar from '@mui/material/Toolbar';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import Drawer from '@mui/material/Drawer'
+import Drawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
-import ListItem  from '@mui/material/ListItem';
+import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import List from '@mui/material/List';
 import Avatar from '@mui/material/Avatar';
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
+import Tooltip from '@mui/material/Tooltip';
+import Zoom from '@mui/material/Zoom';
 import axios from 'axios';
 
 type Anchor = 'left';
@@ -51,7 +52,6 @@ const theme = createTheme({
   },
 });
 
-
 const Navigation: React.FC<Props> = ({ user }) => {
   const [pFriends, setPFriends] = useState([]); // pending friends list
   const [notifBool, setNotifBool] = useState(false);
@@ -62,7 +62,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
   );
   const location = useLocation();
   const feedPath = location.pathname;
-  
+
   // get all pending friends for current user
   const getAllPFriends = () => {
     axios
@@ -186,33 +186,46 @@ const Navigation: React.FC<Props> = ({ user }) => {
       <ThemeProvider theme={theme}>
         <nav>
           <AppBar position='fixed'>
-            <Toolbar
-              sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                backgroundColor: 'rgba(11, 1, 19, .75)',
-              }}
-            >
-              <div className='navbar-container'>
-                <div>{onPage}</div>
-                <div>
-                  <NavLink className='navLink' to='/Map'>
-                    Map
-                  </NavLink>
+            <div className='toolbar-container'>
+              <Toolbar
+                sx={{
+                  display: 'flex',
+                  backgroundColor: 'rgba(11, 1, 19, .75)',
+                }}
+              >
+                <div className='navbar-container'>
+                  <div>{onPage}</div>
+                  <div>
+                    <NavLink className='navLink mapLink' to='/Map'>
+                      Map
+                    </NavLink>
+                  </div>
+                  <div onClick={toggleDrawer('left', true)}>
+                    <Tooltip
+                      title='Open Settings'
+                      TransitionComponent={Zoom}
+                      placement='left'
+                      PopperProps={{
+                        sx: {
+                          '& .MuiTooltip-tooltip': {
+                            backgroundColor: 'transparent',
+                            border: 'solid #F5FCFA 1px',
+                            color: '#F5FCFA',
+                          },
+                        },
+                      }}
+                    >
+                      <Avatar
+                        src={user?.picture}
+                        alt='User Picture'
+                        className='friend-avatar'
+                        sx={{ width: 48, height: 48 }}
+                      />
+                    </Tooltip>
+                  </div>
                 </div>
-                <button
-                  className='navLink'
-                  onClick={toggleDrawer('left', true)}
-                >
-                  <Avatar
-                    src={user?.picture}
-                    alt='User Picture'
-                    className='friend-avatar'
-                    sx={{ width: 48, height: 48 }}
-                  />
-                </button>
-              </div>
-            </Toolbar>
+              </Toolbar>
+            </div>
           </AppBar>
         </nav>
         <Outlet />
