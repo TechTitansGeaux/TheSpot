@@ -224,6 +224,7 @@ const ProfileSetUp = () => {
             {/* Username field */}
             <div>
             <SpeechToText onTranscriptChange={setUsername} />
+            <p>Click Microphone For Speech To Text</p>
             <TextField
               label="Username"
               variant="outlined"
@@ -242,6 +243,9 @@ const ProfileSetUp = () => {
 
 
             {/* Display Name field */}
+            <div>
+            <SpeechToText onTranscriptChange={setDisplayName} />
+            <p>Click Microphone For Speech To Text</p>
             <TextField
               label="Display Name"
               variant="outlined"
@@ -254,8 +258,9 @@ const ProfileSetUp = () => {
               }}
               helperText={errors.displayName}
               error={!!errors.displayName}
-              style={{ color: 'var(--setupBG)', marginBottom: '1rem' }}
+              style={{ color: 'var(--setupBG)', marginBottom: '1rem', marginTop: '1rem' }}
             />
+            </div>
 
             {/* Type field */}
             <TextField
