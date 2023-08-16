@@ -277,6 +277,36 @@ video.reel {
   margin-bottom: 2rem;
 }
 
+/* ////// FRIEND REQUEST LIST & ENTRY */
+
+.friendName {
+  margin-right: 3rem;
+}
+
+.friendRequest-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1em auto;
+}
+
+.rejectFriend-btn {
+  z-index: 9;
+  position: absolute;
+  background-color: transparent;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+
+button.rejectFriend-btn:hover {
+  background-color: var(--pink);
+  color: var(--violet);
+}
+
 /* ////// CREATE REEL */
 
 .webContainer {

@@ -16,6 +16,22 @@ import List from '@mui/material/List';
 import Avatar from '@mui/material/Avatar';
 
 type Anchor = 'left';
+type Props = {
+  user: {
+    id: number;
+    username: string;
+    displayName: string;
+    type: string;
+    geolocation: string;
+    mapIcon: string;
+    birthday: string;
+    privacy: string;
+    accessibility: string;
+    email: string;
+    picture: string;
+    googleId: string;
+  };
+};
 
 const logoGradient = require('/client/src/img/logo-gradient.jpg');
 const theme = createTheme({
@@ -33,7 +49,7 @@ const theme = createTheme({
   },
 });
 
-const Navigation = () => {
+const Navigation: React.FC<Props> = ({ user }) => {
   const [onPage, setOnPage] = useState(
     <NavLink className='navLink' to='/Feed'>
       <img id='nav-logo' src={logoGradient} alt='app logo' />
@@ -66,9 +82,9 @@ const Navigation = () => {
     }
   }, [location.pathname]);
 
-    const [state, setState] = useState({
-      left: false,
-    });
+  const [state, setState] = useState({
+    left: false,
+  });
 
   const toggleDrawer =
     (anchor: Anchor, open: boolean) =>
@@ -82,7 +98,7 @@ const Navigation = () => {
       }
 
       setState({ ...state, left: open });
-      };
+    };
 
   // Need to Update My Reels // to={<my reels component>}
   const list = (anchor: Anchor) => (
@@ -94,7 +110,7 @@ const Navigation = () => {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List sx={{ paddingTop: '3em' }}>
-        <ListItem  className='drawer-btn' disablePadding>
+        <ListItem className='drawer-btn' disablePadding>
           <ListItemButton
             className='sidebar-btn'
             component={Link}
@@ -104,7 +120,7 @@ const Navigation = () => {
             MY REELS
           </ListItemButton>
         </ListItem>
-        <ListItem  className='drawer-btn' disablePadding>
+        <ListItem className='drawer-btn' disablePadding>
           <ListItemButton
             className='sidebar-btn'
             component={Link}
@@ -114,7 +130,7 @@ const Navigation = () => {
             FRIEND REQUESTS
           </ListItemButton>
         </ListItem>
-        <ListItem  className='drawer-btn' disablePadding>
+        <ListItem className='drawer-btn' disablePadding>
           <ListItemButton
             className='sidebar-btn'
             component={Link}
@@ -124,7 +140,7 @@ const Navigation = () => {
             LIKES
           </ListItemButton>
         </ListItem>
-        <ListItem  className='drawer-btn' disablePadding>
+        <ListItem className='drawer-btn' disablePadding>
           <ListItemButton
             className='sidebar-btn'
             component={Link}
@@ -162,6 +178,8 @@ const Navigation = () => {
                   onClick={toggleDrawer('left', true)}
                 >
                   <Avatar
+                    src={user?.picture}
+                    alt='User Picture'
                     className='friend-avatar'
                     sx={{ width: 48, height: 48 }}
                   />

@@ -64,14 +64,23 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route index element={<SignUp />}></Route>
-        <Route path='/' element={<Navigation />}>
-          <Route path='/ProfileSetUp' element={<ProfileSetUp  />}></Route>
+        <Route path='/' element={<Navigation user={user} />}>
+          <Route path='/ProfileSetUp' element={<ProfileSetUp />}></Route>
           <Route path='/Feed' element={<Feed user={user} />}></Route>
-          <Route path='/FriendRequests' element={<FriendRequestList />}></Route>
-          <Route path='/Likes' element={<LikesList />}></Route>
-          <Route path='/Settings' element={<Settings fontSize={fontSize} />}></Route>
+          <Route
+            path='/FriendRequests'
+            element={<FriendRequestList user={user} />}
+          ></Route>
+          <Route path='/Likes' element={<LikesList user={user} />}></Route>
+          <Route
+            path='/Settings'
+            element={<Settings fontSize={fontSize} />}
+          ></Route>
           <Route path='/Map' element={<Map />}></Route>
-          <Route path='/CreateReel' element={<CreateReel user={user}/>}></Route>
+          <Route
+            path='/CreateReel'
+            element={<CreateReel user={user} />}
+          ></Route>
         </Route>
       </Routes>
     </BrowserRouter>
