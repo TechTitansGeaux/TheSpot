@@ -4,7 +4,6 @@ import FriendAcceptedEntry from './FriendAcceptedEntry';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-
 type Props = {
   user: {
     id: number;
@@ -25,14 +24,20 @@ type Props = {
 const FriendRequestList: React.FC<Props> = ({ user }) => {
   const [pendingFriends, setPendingFriends] = useState([]); // pending friend list for current user
   const [friends, setFriends] = useState([]); // approved friend list for current user
+  const [notifBool, setNotifBool] = useState(false);
 
   // create axios get request to get pending friends
   const getPendingFriendList = () => {
     axios
-      .get(`/feed//friendlist/pending`)
+      .get(`/feed/friendlist/pending`)
       .then((response) => {
-        //console.log('friends response.data:', response.data);
         setPendingFriends(response.data);
+        if (pendingFriends.length !== 0) {
+          setNotifBool(true);
+        } else {
+          setNotifBool(false);
+        }
+        //console.log('friends response.data:', response.data);
       })
       .catch((err) => {
         console.error('Could not GET friends:', err);
@@ -55,7 +60,7 @@ const FriendRequestList: React.FC<Props> = ({ user }) => {
   const rejectFriendship = (friend: number, time: Date) => {
     axios
       .delete(`/friends/:${friend}`, {
-        data: { updatedAt: time }
+        data: { updatedAt: time },
       })
       .then((response) => {
         console.log('friendship deleted', response.data);
@@ -98,6 +103,7 @@ const FriendRequestList: React.FC<Props> = ({ user }) => {
               <FriendRequestEntry
                 key={pendingFriend.id}
                 pendingFriend={pendingFriend}
+                notifBool={notifBool}
                 user={user}
                 approveFriendship={approveFriendship}
               />

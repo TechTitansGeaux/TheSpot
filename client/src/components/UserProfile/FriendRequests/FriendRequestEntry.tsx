@@ -29,12 +29,14 @@ type Props = {
     updatedAt: string;
   };
   approveFriendship: any;
+  notifBool: boolean;
 };
 
 const FriendRequestEntry: React.FC<Props> = ({
   user,
   approveFriendship,
   pendingFriend,
+  notifBool
 }) => {
   return (
     <>

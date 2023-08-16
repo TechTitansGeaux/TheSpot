@@ -161,6 +161,16 @@ const Navigation: React.FC<Props> = ({ user }) => {
           <ListItemButton
             className='sidebar-btn'
             component={Link}
+            to={'/Events'}
+            sx={{ minHeight: '4em', paddingLeft: '1.5em' }}
+          >
+            EVENTS
+          </ListItemButton>
+        </ListItem>
+        <ListItem className='drawer-btn' disablePadding>
+          <ListItemButton
+            className='sidebar-btn'
+            component={Link}
             to={'/Likes'}
             sx={{ minHeight: '4em', paddingLeft: '1.5em' }}
           >
