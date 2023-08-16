@@ -10,6 +10,7 @@ import Zoom from '@mui/material/Zoom';
 import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
+import InfoIcon from '@mui/icons-material/Info';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState, useEffect, useRef } from 'react';
 import { memo } from 'react';
@@ -126,8 +127,16 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
           ></video>
         )}
         <p className='video-text'>{reel.text}</p>
-        {/**Removes addFriend button if already approved friend*/}
         <>
+        <Tooltip
+            title={reel.Event.name}
+            TransitionComponent={Zoom}
+            placement='left'
+            arrow
+          >
+        <InfoIcon className='info-icon'/>
+        </Tooltip>
+          {/**Removes addFriend button if already approved friend*/}
           {!friendList.includes(reel.User.id) && reel.User.id !== user?.id && (
             <ThemeProvider theme={theme}>
               <div className='friend-request'>
