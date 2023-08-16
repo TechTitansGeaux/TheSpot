@@ -331,4 +331,3 @@ useEffect(() => {
 };
 
 export default Settings;
-

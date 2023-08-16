@@ -90,7 +90,7 @@ const App = () => {
           <Route
             path='/CreateReel'
             element={<CreateReel user={user} />}
-          ></Route>     
+          ></Route>
           <Route path='/Map' element={<Map loggedIn={user} />}></Route>
         </Route>
       </Routes>

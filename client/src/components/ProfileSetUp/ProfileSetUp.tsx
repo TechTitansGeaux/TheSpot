@@ -16,6 +16,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
+import SpeechToText from '../ProfileSetUp/SpeechToText'
 
 const theme = createTheme({
   palette: {
@@ -172,6 +173,11 @@ const ProfileSetUp = () => {
     }
   };
 
+  // const handleTranscriptChange = (newTranscript: any) => {
+  //   //  use the newTranscript value to update the relevant text field
+  //   return newTranscript; //updating displayName with transcript
+  // };
+
   return (
     <ThemeProvider theme={theme}>
       <Container className="container-full-w center">
@@ -216,6 +222,8 @@ const ProfileSetUp = () => {
           )}
 
             {/* Username field */}
+            <div>
+            <SpeechToText onTranscriptChange={setUsername} />
             <TextField
               label="Username"
               variant="outlined"
@@ -230,6 +238,8 @@ const ProfileSetUp = () => {
               error={!!errors.username}
               style={{ color: 'var(--setupBG)', marginBottom: '1rem', marginTop: '1rem' }}
             />
+            </div>
+
 
             {/* Display Name field */}
             <TextField
