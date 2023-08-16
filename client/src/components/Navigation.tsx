@@ -17,6 +17,7 @@ import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 import Tooltip from '@mui/material/Tooltip';
 import Zoom from '@mui/material/Zoom';
 import axios from 'axios';
+import './navigation.css';
 
 type Anchor = 'left';
 type Props = {
@@ -95,12 +96,14 @@ const Navigation: React.FC<Props> = ({ user }) => {
   // if location on feed then change logo button to scroll
   useEffect(() => {
     if (feedPath === '/Feed') {
+      getAllPFriends();
       setOnPage(
         <button className='navLink' onClick={handleScrollTop}>
           <img id='nav-logo' src={logoGradient} alt='app logo' />
         </button>
       );
     } else {
+      getAllPFriends();
       setOnPage(
         <NavLink className='navLink' to='/Feed'>
           <img id='nav-logo' src={logoGradient} alt='app logo' />
@@ -200,6 +203,12 @@ const Navigation: React.FC<Props> = ({ user }) => {
                       Map
                     </NavLink>
                   </div>
+                    <div>
+                      {notifBool ?
+                        <CircleNotificationsIcon className="circle" /> :
+                        <h5></h5>
+                      }
+                    </div>
                   <div onClick={toggleDrawer('left', true)}>
                     <Tooltip
                       title='Open Settings'
