@@ -16,37 +16,34 @@ import { memo } from 'react';
 import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
 
-
 type Props = {
   reel: any;
   friendList?: any;
   requestFriendship: any;
-  approveFriendship: any;
   user: any;
   deleteReel: any;
   disabledNow: any;
 };
 
-// const theme = createTheme({
-//   palette: {
-//     primary: {
-//       main: '#f0f465',
-//       dark: '#f433ab',
-//       contrastText: '#0b0113',
-//     },
-//     secondary: {
-//       main: '#f433ab',
-//       dark: '#f0f465',
-//       contrastText: '#0b0113',
-//     },
-//   },
-// });
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#f0f465',
+      dark: '#f433ab',
+      contrastText: '#0b0113',
+    },
+    secondary: {
+      main: '#f433ab',
+      dark: '#f0f465',
+      contrastText: '#0b0113',
+    },
+  },
+});
 
 const ReelItem: React.FC<Props> = memo(function ReelItem({
   reel,
   friendList,
   requestFriendship,
-  approveFriendship,
   user,
   deleteReel,
   disabledNow,
@@ -107,90 +104,116 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
 
   return (
     <div style={{ fontSize: theme.typography.fontSize }}>
-    <>
-      <div className='video-container'>
-        {reel.url.length > 15 && (
-          <video
-            className='reel'
-            ref={myRef}
-            id={`video${reel.id}`}
-            src={reel.url}
-            loop={loop}
-            muted
-            preload='none'
-          ></video>
-        )}
-        <p className='video-text'>{reel.text}</p>
-        {/**Removes addFriend button if already approved friend*/}
-        <>
-          {!friendList.includes(reel.User.id) && reel.User.id !== user?.id && (
-            <ThemeProvider theme={theme}>
-              <div className='friend-request'>
-                <Box className='friend-box'>
-                  <Fab
-                    style={{ transform: 'scale(0.8)' }}
-                    size='small'
-                    color='primary'
-                    aria-label='add'
-                    className='friend-add-btn'
-                    disabled={
-                      disabledNow.includes(reel.User.id) ||
-                      stayDisabled.includes(reel.User.id)
-                    }
-                  >
-                    <Tooltip
-                      title='Add Friend'
-                      TransitionComponent={Zoom}
-                      placement='left'
-                      arrow
-                    >
-                      <AddIcon
-                        sx={{ width: 20, height: 20 }}
-                        onClick={() => requestFriendship(reel.User.id)}
-                      />
-                    </Tooltip>
-                  </Fab>
-                </Box>
-              </div>
-            </ThemeProvider>
+      <>
+        <div className='video-container'>
+          {reel.url.length > 15 && (
+            <video
+              className='reel'
+              ref={myRef}
+              id={`video${reel.id}`}
+              src={reel.url}
+              loop={loop}
+              muted
+              preload='none'
+            ></video>
           )}
+          <p className='video-text'>{reel.text}</p>
+          {/**Removes addFriend button if already approved friend*/}
+          <>
+            {!friendList.includes(reel.User.id) &&
+              reel.User.id !== user?.id && (
+                <ThemeProvider theme={theme}>
+                  <div className='friend-request'>
+                    <Box className='friend-box'>
+                      <Fab
+                        style={{ transform: 'scale(0.8)' }}
+                        size='small'
+                        color='primary'
+                        aria-label='add'
+                        className='friend-add-btn'
+                        disabled={
+                          disabledNow.includes(reel.User.id) ||
+                          stayDisabled.includes(reel.User.id)
+                        }
+                      >
+                        <Tooltip
+                          title='Add Friend'
+                          TransitionComponent={Zoom}
+                          placement='left'
+                          PopperProps={{
+                            sx: {
+                              '& .MuiTooltip-tooltip': {
+                                backgroundColor: 'transparent',
+                                border: 'solid #F5FCFA 1px',
+                                color: '#F5FCFA',
+                              },
+                            },
+                          }}
+                        >
+                          <AddIcon
+                            sx={{ width: 20, height: 20 }}
+                            onClick={() => requestFriendship(reel.User.id)}
+                          />
+                        </Tooltip>
+                      </Fab>
+                    </Box>
+                  </div>
+                </ThemeProvider>
+              )}
 
-            {reel.UserId === user.id &&
-             <div className='friend-request'>
-              (<button
-                className='delete-btn'
-                onClick={() => deleteReel(reel.id)}
-              >
-                🗑️
+            {reel.UserId === user.id && (
+              <div className='friend-request'>
+                (
+                <button
+                  className='delete-btn'
+                  onClick={() => deleteReel(reel.id)}
+                >
+                  🗑️
+                </button>
+                ){' '}
+              </div>
+            )}
+          </>
 
-              </button>) </div>}
-        </>
-
-        <div className='friend-request'>
-          <Tooltip
-            title={reel.User.displayName}
-            TransitionComponent={Zoom}
-            placement='left'
-            arrow
-          >
-            <Avatar
-              className='friend-avatar'
-              sx={{ width: 48, height: 48 }}
-              alt={reel.User.displayName}
-              src={reel.User.picture}
-            />
-          </Tooltip>
+          <div className='friend-request'>
+            <Tooltip
+              title={reel.User.displayName}
+              TransitionComponent={Zoom}
+              placement='left'
+              PopperProps={{
+                sx: {
+                  '& .MuiTooltip-tooltip': {
+                    backgroundColor: 'transparent',
+                    border: 'solid #F5FCFA 1px',
+                    color: '#F5FCFA',
+                  },
+                },
+              }}
+            >
+              <Avatar
+                className='friend-avatar'
+                sx={{ width: 48, height: 48 }}
+                alt={reel.User.displayName}
+                src={reel.User.picture}
+              />
+            </Tooltip>
+          </div>
         </div>
-      </div>
-      <div className='video-links-container'>
-        <Box sx={{ maxWidth: 400 }}>
-          <BottomNavigation>
-            <BottomNavigationAction label='Favorites' icon={<FavoriteIcon />} />
-            <BottomNavigationAction label='Nearby' icon={<LocationOnIcon />} />
-          </BottomNavigation>
-        </Box>
-      </div>
-    </>
+        <div className='video-links-container'>
+          <Box sx={{ maxWidth: 400 }}>
+            <BottomNavigation>
+              <BottomNavigationAction
+                label='Favorites'
+                icon={<FavoriteIcon />}
+              />
+              <BottomNavigationAction
+                label='Nearby'
+                icon={<LocationOnIcon />}
+              />
+            </BottomNavigation>
+          </Box>
+        </div>
+      </>
     </div>
   );
 });

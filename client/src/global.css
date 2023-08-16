@@ -160,6 +160,17 @@ button.navLink {
   outline: inherit;
 }
 
+.mapLink {
+  margin-right: 100px;
+}
+
+.toolbar-container{
+  display: flex;
+  justify-content: center;
+  padding-right: 40px;
+
+}
+
 /* ////// SIDEBAR */
 
 .sidebar-btn {
@@ -279,6 +290,10 @@ video.reel {
 
 /* ////// FRIEND REQUEST LIST & ENTRY */
 
+h1.profile-title {
+  margin-top: 1em;
+}
+
 .friendName {
   margin-right: 3rem;
 }
@@ -288,7 +303,7 @@ video.reel {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin: 1em auto;
+  margin: 2em auto;
 }
 
 .rejectFriend-btn {
