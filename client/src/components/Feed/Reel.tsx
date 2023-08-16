@@ -172,7 +172,6 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
                 reel={reel}
                 friendList={friendList}
                 requestFriendship={requestFriendship}
-                approveFriendship={approveFriendship}
                 disabledNow={disabled}
                 deleteReel={deleteReel}
               />

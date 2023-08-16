@@ -61,14 +61,23 @@ friendRouter.delete('/:otherUsersId',  (req: any, res: any) => {
   // ACCEPTER is req.user
   const { id } = req.user;
   const { otherUsersId } = req.params;
+  const { updatedAt } = req.body;
   Friendships.destroy(
     {
       where: {
-        accepter_id: [id, otherUsersId],
         requester_id: [id, otherUsersId],
+        updatedAt: updatedAt
       },
     }
   )
+    .then((data: any) => {
+      Friendships.destroy({
+        where: {
+          accepter_id: [id, otherUsersId],
+          updatedAt: updatedAt
+        },
+      });
+    })
     .then((data: any) => {
       res.sendStatus(200);
     })

@@ -160,6 +160,17 @@ button.navLink {
   outline: inherit;
 }
 
+.mapLink {
+  margin-right: 100px;
+}
+
+.toolbar-container{
+  display: flex;
+  justify-content: center;
+  padding-right: 40px;
+
+}
+
 /* ////// SIDEBAR */
 
 .sidebar-btn {
@@ -307,6 +318,10 @@ video.reel {
 
 /* ////// FRIEND REQUEST LIST & ENTRY */
 
+h1.profile-title {
+  margin-top: 1em;
+}
+
 .friendName {
   margin-right: 3rem;
 }
@@ -316,7 +331,7 @@ video.reel {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin: 1em auto;
+  margin: 2em auto;
 }
 
 .rejectFriend-btn {
@@ -417,8 +432,7 @@ button.rejectFriend-btn:hover {
   border-radius: 50%;
   display: inline-block;
   position: relative;
-  top: -20px;
-  left: -20px;
+  transform: translate(-45%, -45%);
   z-index: 10;
   cursor: pointer;
   font-size: 30px;
@@ -451,15 +465,23 @@ button.rejectFriend-btn:hover {
   left: -25px;
 }
 
-#userMap {
+#map {
   height: 75vh;
   width: 80%;
   display: flex;
 }
 
-/* #eventMap {
-  height: 75vh;
-  width: 80%;
-  display: none;
-} */
+.event {
+  height: 80px;
+  width: 80px;
+  background-color: var(--yellow);
+  border-radius: 50%;
+  position: relative;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  cursor: pointer;
+  opacity: 65%;
+  border: 3px solid #f0f465;
+}
+
 
