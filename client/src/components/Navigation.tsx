@@ -7,7 +7,6 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Drawer from '@mui/material/Drawer'
-import Button from '@mui/material/Button'
 import Box from '@mui/material/Box';
 import ListItem  from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -19,6 +18,22 @@ import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 import axios from 'axios';
 
 type Anchor = 'left';
+type Props = {
+  user: {
+    id: number;
+    username: string;
+    displayName: string;
+    type: string;
+    geolocation: string;
+    mapIcon: string;
+    birthday: string;
+    privacy: string;
+    accessibility: string;
+    email: string;
+    picture: string;
+    googleId: string;
+  };
+};
 
 const logoGradient = require('/client/src/img/logo-gradient.jpg');
 const theme = createTheme({
@@ -36,10 +51,18 @@ const theme = createTheme({
   },
 });
 
-const Navigation = () => {
+
+const Navigation: React.FC<Props> = ({ user }) => {
   const [pFriends, setPFriends] = useState([]); // pending friends list
   const [notifBool, setNotifBool] = useState(false);
-
+  const [onPage, setOnPage] = useState(
+    <NavLink className='navLink' to='/Feed'>
+      <img id='nav-logo' src={logoGradient} alt='app logo' />
+    </NavLink>
+  );
+  const location = useLocation();
+  const feedPath = location.pathname;
+  
   // get all pending friends for current user
   const getAllPFriends = () => {
     axios
@@ -62,15 +85,6 @@ const Navigation = () => {
     getAllPFriends();
     console.log('notifBool:', notifBool);
   }, [notifBool]);
-
-  const [onPage, setOnPage] = useState(
-    <NavLink className='navLink' to='/Feed'>
-      <img id='nav-logo' src={logoGradient} alt='app logo' />
-    </NavLink>
-  );
-  const location = useLocation();
-  const feedPath = location.pathname;
-  // console.log('feedPath', feedPath);
 
   // When the user clicks on the button, scroll to the top of the page
   const handleScrollTop = () => {
@@ -95,9 +109,9 @@ const Navigation = () => {
     }
   }, [location.pathname]);
 
-    const [state, setState] = useState({
-      left: false,
-    });
+  const [state, setState] = useState({
+    left: false,
+  });
 
   const toggleDrawer =
     (anchor: Anchor, open: boolean) =>
@@ -111,8 +125,9 @@ const Navigation = () => {
       }
 
       setState({ ...state, left: open });
-      };
+    };
 
+  // Need to Update My Reels // to={<my reels component>}
   const list = (anchor: Anchor) => (
     <Box
       sx={{ width: 400, color: '#F5FCFA' }}
@@ -122,24 +137,46 @@ const Navigation = () => {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List sx={{ paddingTop: '3em' }}>
-        {['Profile', 'Friend Requests', 'Likes', 'Settings'].map(
-          (text, index) => (
-            <ListItem key={text} color='secondary' disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index === 3 && (
-                    <NavLink
-                      className='navLink'
-                      to='/Settings'
-                      style={{ marginLeft: '10px' }}
-                    />
-                  )}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          )
-        )}
+        <ListItem className='drawer-btn' disablePadding>
+          <ListItemButton
+            className='sidebar-btn'
+            component={Link}
+            to={'/Feed'}
+            sx={{ minHeight: '4em', paddingLeft: '1.5em' }}
+          >
+            MY REELS
+          </ListItemButton>
+        </ListItem>
+        <ListItem className='drawer-btn' disablePadding>
+          <ListItemButton
+            className='sidebar-btn'
+            component={Link}
+            to={'/FriendRequests'}
+            sx={{ minHeight: '4em', paddingLeft: '1.5em' }}
+          >
+            FRIEND REQUESTS
+          </ListItemButton>
+        </ListItem>
+        <ListItem className='drawer-btn' disablePadding>
+          <ListItemButton
+            className='sidebar-btn'
+            component={Link}
+            to={'/Likes'}
+            sx={{ minHeight: '4em', paddingLeft: '1.5em' }}
+          >
+            LIKES
+          </ListItemButton>
+        </ListItem>
+        <ListItem className='drawer-btn' disablePadding>
+          <ListItemButton
+            className='sidebar-btn'
+            component={Link}
+            to={'/Settings'}
+            sx={{ minHeight: '4em', paddingLeft: '1.5em' }}
+          >
+            SETTINGS
+          </ListItemButton>
+        </ListItem>
       </List>
     </Box>
   );
@@ -163,21 +200,13 @@ const Navigation = () => {
                     Map
                   </NavLink>
                 </div>
-
-                <div>
-                  <NavLink
-                    className='navLink'
-                    to='/Settings'
-                    style={{ marginLeft: '10px' }}
-                  >
-                    Settings
-                  </NavLink>
-                </div>
                 <button
                   className='navLink'
                   onClick={toggleDrawer('left', true)}
                 >
                   <Avatar
+                    src={user?.picture}
+                    alt='User Picture'
                     className='friend-avatar'
                     sx={{ width: 48, height: 48 }}
                   />

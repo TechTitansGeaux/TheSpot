@@ -1,6 +1,7 @@
 /* //// ROOT VARIABLES  */
 :root {
   --violet: #0b0113;
+  --light-violet: #11011e;
   --pink: #f433ab;
   --purple: #7161EF;
   --yellow: #f0f465;
@@ -159,9 +160,26 @@ button.navLink {
   outline: inherit;
 }
 
+/* ////// SIDEBAR */
+
+.sidebar-btn {
+  font-family: var(--title-font);
+  font-size: var(--md-font);
+}
+
 .drawer-container {
   height: 100vh;
-  background-color: var(--violet);
+  background-color: var(--light-violet);
+}
+
+.drawer-btn {
+  transition: color .2s ease-out;
+  transition: background-color .2s ease-out;
+}
+
+.drawer-btn:hover {
+  background-color: var(--yellow);
+  color: var(--light-violet);
 }
 
 /* ////// FEED & REEL */
@@ -182,7 +200,7 @@ button.navLink {
   border: none;
   cursor: pointer;
   left: 6%;
-  top: 225%;
+  top: 125%;
 }
 
 button.delete-btn:hover {
@@ -257,6 +275,36 @@ video.reel {
   height: 3.5em;
   border: solid var(--t25-white);
   margin-bottom: 2rem;
+}
+
+/* ////// FRIEND REQUEST LIST & ENTRY */
+
+.friendName {
+  margin-right: 3rem;
+}
+
+.friendRequest-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1em auto;
+}
+
+.rejectFriend-btn {
+  z-index: 9;
+  position: absolute;
+  background-color: transparent;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+
+button.rejectFriend-btn:hover {
+  background-color: var(--pink);
+  color: var(--violet);
 }
 
 /* ////// CREATE REEL */
