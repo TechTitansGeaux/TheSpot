@@ -306,12 +306,17 @@ video.reel {
   overflow: hidden;
 }
 
-.preview-text {
+.reel-input-caption {
   position: absolute;
+  left: 25%;
+  top: 25%;
   margin: 0 5rem;
   max-width: 350px;
+  color: var(--white);
   font-size: var(--lg-font);
   font-family: var(--title-font);
+  background: transparent;
+  border: none;
 }
 
 .dot {
