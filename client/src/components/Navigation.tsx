@@ -55,7 +55,6 @@ const theme = createTheme({
 
 const Navigation: React.FC<Props> = ({ user }) => {
   const [pFriends, setPFriends] = useState([]); // pending friends list
-  const [notifBool, setNotifBool] = useState(false);
   const [onPage, setOnPage] = useState(
     <NavLink className='navLink' to='/Feed'>
       <img id='nav-logo' src={logoGradient} alt='app logo' />
@@ -69,13 +68,8 @@ const Navigation: React.FC<Props> = ({ user }) => {
     axios
       .get('feed/friendlist/pending')
       .then((response) => {
-        console.log('pending friends:', response.data);
+        // console.log('pending friends:', response.data);
         setPFriends(response.data);
-        if (pFriends.length !== 0) {
-          setNotifBool(true);
-        } else {
-          setNotifBool(false);
-        }
       })
       .catch((err) => {
         console.error('Could not GET pending friends:', err);
@@ -84,8 +78,16 @@ const Navigation: React.FC<Props> = ({ user }) => {
 
   useEffect(() => {
     getAllPFriends();
-    console.log('notifBool:', notifBool);
-  }, [notifBool]);
+
+    const interval = setInterval(() => {
+      getAllPFriends();
+    }, 5000);
+
+    return () => {
+      clearInterval(interval);
+    }
+
+  }, [location.pathname, user]);
 
   // When the user clicks on the button, scroll to the top of the page
   const handleScrollTop = () => {
@@ -158,6 +160,11 @@ const Navigation: React.FC<Props> = ({ user }) => {
             sx={{ minHeight: '4em', paddingLeft: '1.5em' }}
           >
             FRIEND REQUESTS
+            <span>
+              {pFriends.length !== 0 &&
+                <CircleNotificationsIcon className="circle" />
+              }
+            </span>
           </ListItemButton>
         </ListItem>
         <ListItem className='drawer-btn' disablePadding>
@@ -204,9 +211,8 @@ const Navigation: React.FC<Props> = ({ user }) => {
                     </NavLink>
                   </div>
                     <div>
-                      {notifBool ?
-                        <CircleNotificationsIcon className="circle" /> :
-                        <h5></h5>
+                      {pFriends.length !== 0 &&
+                        <CircleNotificationsIcon className="circle" />
                       }
                     </div>
                   <div onClick={toggleDrawer('left', true)}>
