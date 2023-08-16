@@ -7,7 +7,10 @@ const { Events } = require('../db/index');
 eventRouter.get('/all', async (req, res) => {
   await Events.findAll()
     .then((events: any) => {
-      console.log('events: ', events);
+      res.status(200).json(events)
+    })
+    .catch((err: any) => {
+      res.status(500).send(err);
     })
 })
 
