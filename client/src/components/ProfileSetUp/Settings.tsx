@@ -83,7 +83,7 @@ useEffect(() => {
       const response = await axios.delete(`/users/${authUser.id}`);
       if (response && response.data) {
         dispatch(setAuthUser(null));
-        window.location.href = `${process.env.HOST}:4000/`;
+        window.location.href = `${process.env.HOST}/`;
       }
     } catch (error) {
       console.error(error);
@@ -132,7 +132,7 @@ useEffect(() => {
         // Dispatch the updated user object to the Redux store
         dispatch(setAuthUser(response.data));
         // redirect the user to the feed
-    window.location.href = `${process.env.HOST}:4000/Feed`;
+    window.location.href = `${process.env.HOST}/Feed`;
       })
       .catch(error => {
         console.error(error);
@@ -169,7 +169,7 @@ useEffect(() => {
   //       // logout the user by clearing the authUser state
   //       dispatch(setAuthUser(null));
   //       // redirect the user to the homepage
-  //       window.location.href = `${process.env.HOST}:4000/`;
+  //       window.location.href = `${process.env.HOST}/`;
   //     }
   //   } catch (error) {
   //     console.error(error);
@@ -180,7 +180,7 @@ useEffect(() => {
     // logout the user by clearing the authUser state
     dispatch(setAuthUser(null));
     // redirect the user to the homepage
-    window.location.href = `${process.env.HOST}:4000/`;
+    window.location.href = `${process.env.HOST}/`;
   };
 
   return (

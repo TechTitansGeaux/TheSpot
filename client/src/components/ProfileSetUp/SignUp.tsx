@@ -5,7 +5,7 @@ const SignUp = () => {
 
   // redirect user to sign up page
   const redirectToGoogleSSO = () => {
-    window.location.href = `${process.env.HOST}:4000/auth/login/google`;
+    window.location.href = `${process.env.HOST}/auth/login/google`;
   };
 
   return (

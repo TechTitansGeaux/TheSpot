@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { setAuthUser, setIsAuthenticated } from '../../store/appSlice';
 import ReelItem from './ReelItem';
 import { useTheme } from '@mui/material/styles';
-
+import { AnimatePresence, motion } from 'framer-motion';
 
 // const ReelItem = React.lazy(() => import('./ReelItem'));
 
@@ -29,6 +29,7 @@ type Props = {
     requester_id: number;
     accepter_id: number;
   }[];
+  getAllReels: any;
 };
 
 type User = {
@@ -58,10 +59,9 @@ type Event = {
   PlaceId: 1;
 };
 
-const Reel: React.FC<Props> = ({ reels }) => {
 
+const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
   const theme = useTheme();
-
   const dispatch = useDispatch();
 
   // GET current user
@@ -92,13 +92,10 @@ const Reel: React.FC<Props> = ({ reels }) => {
     axios
       .get('/feed/friendlist')
       .then(({ data }) => {
-        console.log('data from friends Axios GET ==>', data);
+        // console.log('data from friends Axios GET ==>', data);
         data.map((user: any) => {
           if (user?.status === 'approved') {
-            setFriendList([...friendList, user.accepter_id]);
-          }
-          if (user?.status === 'pending') {
-            setDisabled([...disabled, user.accepter_id]);
+            setFriendList((prev) => [...prev, user.accepter_id]);
           }
         });
       })
@@ -112,6 +109,7 @@ const Reel: React.FC<Props> = ({ reels }) => {
   // POST request friendship 'pending' status to db
   const requestFriendship = (friend: number) => {
     console.log('your friendship is requested', friend);
+    setDisabled([...disabled, friend]);
     axios
       .post('/friends', {
         // accepter_id is user on reel
@@ -133,28 +131,55 @@ const Reel: React.FC<Props> = ({ reels }) => {
         requester_id: friend,
       })
       .then((data) => {
-        console.log('Friend request approved PUT', data);
+        // console.log('Friend request approved PUT', data);
       })
       .catch((err) => {
         console.error('Friend PUT request axios FAILED:', err);
       });
   };
 
+  // DELETE your own reel
+  const deleteReel = (reelId: number) => {
+    axios
+      .delete(`/feed/delete/${reelId}`)
+      .then((data) => {
+        console.log('Reel deleted', data);
+        getAllReels();
+      })
+      .catch((err) => {
+        console.error('Could not DELETE reel', err);
+      })
+  };
+
   return (
     <main className='reel-container' style={{ fontSize: theme.typography.fontSize }}>
-      {reels.map((reel) => {
-        return (
-          <div key={reel.id + 'reel'}>
-            <ReelItem
-              user={user}
-              reel={reel}
-              friendList={friendList}
-              requestFriendship={requestFriendship}
-              approveFriendship={approveFriendship}
-            />
-          </div>
-        );
-      })}
+      <AnimatePresence initial={false}>
+        {reels.map((reel) => {
+          return (
+            <motion.div
+              key={reel.id + 'reel'}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{
+                ease: 'anticipate',
+                duration: 0.2,
+                delay: 0.2,
+              }}
+            >
+              <ReelItem
+                user={user}
+                reel={reel}
+                friendList={friendList}
+                requestFriendship={requestFriendship}
+                approveFriendship={approveFriendship}
+                disabledNow={disabled}
+                deleteReel={deleteReel}
+              />
+            </motion.div>
+          );
+        })}
+      </AnimatePresence>
     </main>
   );
 };

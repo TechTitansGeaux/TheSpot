@@ -100,7 +100,51 @@ feedRouter.get('/friendlist', (req: any, res: any) => {
     })
 });
 
+// get pending friends
+feedRouter.get('/friendlist/pending', (req: any, res: any) => {
+  const { id } = req.user;
+  Friendships.findAll({
+    where: {
+      status: 'pending',
+      requester_id: id,
+    },
+  })
+    .then((response: any) => {
+      if (response === null) {
+        console.log('friends do not exist');
+        res.sendStatus(404);
+      } else {
+        res.status(200).send(response);
+      }
+    })
+    .catch((err: any) => {
+      console.error('Cannot GET friends', err);
+      res.sendStatus(500);
+    });
+});
 
+// delete a reel
+feedRouter.delete('/delete/:id', (req: any, res: any) => {
+  const { id } = req.params;
+  //console.log('req.params:', req.params);
+  Reels.destroy({
+    where: {
+      id: id
+    }
+  })
+    .then((response: any) => {
+      if (response) {
+        // console.log('Reels deleted:', response);
+        res.sendStatus(200);
+      } else {
+        console.log('Reel does not exist');
+        res.sendStatus(404);
+      }
+    })
+    .catch((err: any) => {
+      console.error('Failed to DELETE Reel:', err);
+    })
+});
 
 export default feedRouter;
 

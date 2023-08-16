@@ -3,6 +3,15 @@ import { Router } from 'express';
 const eventRouter = Router();
 const { Events } = require('../db/index');
 
+// get all events
+eventRouter.get('/all', async (req, res) => {
+  await Events.findAll()
+    .then((events: any) => {
+      console.log('events: ', events);
+    })
+})
+
+
 // get event by location
 eventRouter.get('/:geolocation', async (req: any, res: any) => {
   // access geolocation from request parameters
@@ -25,6 +34,7 @@ eventRouter.get('/:geolocation', async (req: any, res: any) => {
 
 
 })
+
 
 // create new event
 eventRouter.post('/create', async (req, res) => {
