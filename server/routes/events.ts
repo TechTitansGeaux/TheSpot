@@ -7,10 +7,11 @@ const { Events } = require('../db/index');
 eventRouter.get('/all', async (req, res) => {
   await Events.findAll()
     .then((events: any) => {
-      res.status(200).json(events)
+      console.log('events: ', events);
+      res.status(200).send(events);
     })
     .catch((err: any) => {
-      res.status(500).send(err);
+      console.error('Failed to GET all events: ', err);
     })
 })
 
@@ -59,6 +60,30 @@ eventRouter.post('/create', async (req, res) => {
     console.log('Failed to CREATE event: ', err)
     res.sendStatus(500)
   })
+})
+
+// patch event
+eventRouter.patch('/:id', async (req, res) => {
+  const { id } = req.params;
+  const { eventUpdate } = req.body;
+  try {
+    // find event by id
+    const event = await Events.findByPk(id);
+
+    if (!event) {
+      // send 404 if event does not exist
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // update event info
+    await event.update(eventUpdate);
+
+    // send back updated event
+    res.json(event);
+  } catch (err) {
+    console.error('Failed to PATCH event: ', err);
+    res.sendStatus(500)
+  }
 })
 
 export default eventRouter;
