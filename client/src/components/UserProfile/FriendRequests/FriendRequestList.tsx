@@ -4,6 +4,7 @@ import FriendAcceptedEntry from './FriendAcceptedEntry';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
+
 type Props = {
   user: {
     id: number;
@@ -51,9 +52,25 @@ const FriendRequestList: React.FC<Props> = ({ user }) => {
       });
   };
 
+  const rejectFriendship = (friend: number, time: Date) => {
+    axios
+      .delete(`/friends/:${friend}`, {
+        data: { updatedAt: time }
+      })
+      .then((response) => {
+        console.log('friendship deleted', response.data);
+      })
+      .catch((err) => {
+        console.error('Delete friendship FAILED axios request:', err);
+      });
+  };
+
   useEffect(() => {
+    const controller = new AbortController();
     getPendingFriendList();
     getFriendList();
+    // aborts axios request when component unmounts
+    return () => controller?.abort();
   }, [friends]);
 
   // PUT request update friendship from 'pending' to 'approved'
@@ -96,7 +113,7 @@ const FriendRequestList: React.FC<Props> = ({ user }) => {
                 key={friend.id}
                 friend={friend}
                 user={user}
-                rejectFriendship={() => console.log('friend rejected')}
+                rejectFriendship={rejectFriendship}
               />
             );
           })}

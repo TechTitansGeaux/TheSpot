@@ -21,7 +21,6 @@ type Props = {
   reel: any;
   friendList?: any;
   requestFriendship: any;
-  approveFriendship: any;
   user: any;
   deleteReel: any;
   disabledNow: any;
@@ -46,7 +45,6 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   reel,
   friendList,
   requestFriendship,
-  approveFriendship,
   user,
   deleteReel,
   disabledNow,

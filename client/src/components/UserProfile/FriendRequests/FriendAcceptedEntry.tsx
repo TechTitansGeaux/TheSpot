@@ -24,8 +24,8 @@ type Props = {
     status: string;
     requester_id: number;
     accepter_id: number;
-    createdAt: string;
-    updatedAt: string;
+    createdAt: Date;
+    updatedAt: Date;
   };
   rejectFriendship: any;
 };
@@ -53,14 +53,14 @@ const FriendAcceptedEntry: React.FC<Props> = ({
             disabled={false}
           >
             <Tooltip
-              title='Reject Request'
+              title='Unfriend'
               TransitionComponent={Zoom}
               placement='top'
               arrow
             >
               <RemoveOutlinedIcon
                 className='rejectFriend-btn'
-                onClick={() => console.log('delete request')}
+                onClick={() => rejectFriendship(friend?.accepter_id, friend?.updatedAt)}
               />
             </Tooltip>
           </Fab>
