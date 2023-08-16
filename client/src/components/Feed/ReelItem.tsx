@@ -15,6 +15,10 @@ import { useState, useEffect, useRef } from 'react';
 import { memo } from 'react';
 import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(relativeTime);
 
 
 type Props = {
@@ -106,6 +110,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   }, []);
 
   return (
+    <div className='vid-and-stamp'>
     <div style={{ fontSize: theme.typography.fontSize }}>
     <>
       <div className='video-container'>
@@ -154,7 +159,6 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
               </div>
             </ThemeProvider>
           )}
-
             {reel.UserId === user.id &&
              <div className='friend-request'>
               (<button
@@ -192,6 +196,10 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
       </div>
     </>
     </div>
+      <h5 className='video-timestamp'>
+        ... {dayjs(`${reel.createdAt}`).fromNow()}
+      </h5>
+      </div>
   );
 });
 

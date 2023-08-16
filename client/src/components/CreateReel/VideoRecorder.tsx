@@ -240,7 +240,7 @@
 
 // navigate to feed if just posted reel
 const navigate = useNavigate();
-  
+
 const redirectToFeed = () => {
   navigate('/Feed');
 }
