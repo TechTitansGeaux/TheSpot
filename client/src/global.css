@@ -344,14 +344,16 @@ button.rejectFriend-btn:hover {
 /* ////// CREATE REEL */
 
 .webContainer {
-  display: flex;
+  position: relative;
+  display: inline-flex;
   justify-content: center;
   align-items: center;
   width: 100vw;
 }
 
 .webcam {
-  display: flex;
+  display: inline-flex;
+  position: relative;
   justify-content: center;
   align-items: center;
   height: 100vh;
@@ -401,35 +403,21 @@ button.rejectFriend-btn:hover {
   border: none;
 }
 
-.name-event-input {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  margin: 0 5rem;
-  max-width: 350px;
-  color: var(--white);
-  font-size: var(--lg-font);
-  font-family: var(--title-font);
-  background: transparent;
-  border: none;
-}
-
 .popUpEventForm {
+  position:absolute;
+  align-items: center;
+  bottom: 7%;
   display: none;
+  padding: 1%;
   transition: all .5s ease;
-  height: 300px;
+  height: 200px;
   width: 200px;
-  border: solid var(--pink);
   border-width: 4px;
   border-radius: 15px;
   background-color: var(--violet);
   font-family: var(--title-font);
   color: white;
-  position: relative;
-  top: 0%;
-  left: 50%;
-  text-transform: uppercase;
-  z-index: 11;
+  z-index: 5;
 }
 
 .dot {

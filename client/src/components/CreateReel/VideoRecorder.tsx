@@ -264,7 +264,47 @@ const togglePopUp = () => {
 
     return (
       <div>
-        <div className='webContainer'> { justRecorded ? (
+        <div className='webContainer'>
+        <div
+                id='event-form'
+                className='popUpEventForm'
+                >
+                  <label
+                  htmlFor='eventName'>
+                  Event name:
+                  </label>
+                  <br></br>
+                  <input
+                  id='eventName'
+                  type='text'>
+                  </input>
+                  <br></br>
+                  <label
+                  htmlFor='eventDate'>
+                    Date:
+                  </label>
+                  <br></br>
+                  <input
+                  id='eventDate'
+                  type='text'>
+                  </input>
+                  <br></br>
+                  <label
+                  htmlFor='eventTime'>
+                    Time:
+                  </label>
+                  <br></br>
+                  <input
+                  id='eventTime'
+                  type='text'>
+                  </input>
+                  <br></br>
+                  <input
+                  type='submit'
+                  value='Save'>
+                  </input>
+              </div>
+          { justRecorded ? (
           <div className='preview-mask'>
             <div className='webcam'>
               <video
@@ -365,39 +405,6 @@ const togglePopUp = () => {
                       sx={{ width: 52, height: 52 }}/>
                   </motion.div>
                   </Tooltip>
-              </div>
-              <div
-                id='event-form'
-                className='popUpEventForm'
-                >
-                  <label
-                  htmlFor='eventName'>
-                  Event name:
-                  </label>
-                  <input
-                  id='eventName'
-                  type='text'>
-                  </input>
-                  <label
-                  htmlFor='eventDate'>
-                    Date:
-                  </label>
-                  <input
-                  id='eventDate'
-                  type='text'>
-                  </input>
-                  <label
-                  htmlFor='eventTime'>
-                    Time:
-                  </label>
-                  <input
-                  id='eventTime'
-                  type='text'>
-                  </input>
-                  <input
-                  type='submit'
-                  value='Save'>
-                  </input>
               </div>
             </div>
           )}
