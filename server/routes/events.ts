@@ -63,7 +63,7 @@ eventRouter.post('/create', async (req, res) => {
 })
 
 // patch event
-eventRouter.patch('/:id', async (req, res) => {
+eventRouter.patch('/:id', async (req: any, res) => {
   const { id } = req.params;
   const { name, date, twenty_one } = req.body;
 
@@ -81,7 +81,7 @@ eventRouter.patch('/:id', async (req, res) => {
     }
 
     // update event info
-    await event.update({name : name, date: date, twenty_one: twenty_one }, {
+    await event.update({name: name, date: date, twenty_one: twenty_one }, {
       where: {
         id: id
       }
@@ -89,7 +89,7 @@ eventRouter.patch('/:id', async (req, res) => {
 
     // send back updated event
     res.json(event);
-  } catch (err) {
+  } catch (err: any) {
     console.error('Failed to PATCH event: ', err);
     res.sendStatus(500)
   }

@@ -240,16 +240,26 @@
 const handleText = (e: any) => {
   setText(e.target.value);
 };
-// handle input for event name
-const handleEventName = (e: any) => {
-  setEventName(e.target.value)
-}
+// // handle input for event name
+// const handleEventName = (e: any) => {
+//   setEventName(e.target.value)
+// }
 
 // navigate to feed if just posted reel
 const navigate = useNavigate();
 
 const redirectToFeed = () => {
   navigate('/Feed');
+}
+
+// toggle pop up modal
+const togglePopUp = () => {
+  const box = document.getElementById('event-form')
+  if (box.style.display === 'block') {
+    box.style.display = 'none';
+  } else {
+    box.style.display = 'block';
+  }
 }
 
     return (
@@ -332,27 +342,63 @@ const redirectToFeed = () => {
           )}
           {justRecorded && (
             <div>
-              <Tooltip
-              title='Add event details'
-              placement='top'
-              PopperProps={{
-                sx: {
-                  '& .MuiTooltip-tooltip': {
-                    backgroundColor: 'transparent',
-                    border: 'solid #F5FCFA 1px',
-                    color: '#F5FCFA',
-                  },
-                },
-              }}
-            >
-            <motion.div
-            whileHover={{ scale: 1.2 }}
-            >
-              <EventNoteIcon
-              color='secondary'
-              sx={{ width: 52, height: 52 }}/>
-            </motion.div>
-            </Tooltip>
+              <div
+              onClick={togglePopUp}>
+                  <Tooltip
+                  title='Add event details'
+                  placement='top'
+                  PopperProps={{
+                    sx: {
+                      '& .MuiTooltip-tooltip': {
+                        backgroundColor: 'transparent',
+                        border: 'solid #F5FCFA 1px',
+                        color: '#F5FCFA',
+                      },
+                    },
+                  }}
+                  >
+                  <motion.div
+                    whileHover={{ scale: 1.2 }}
+                    >
+                      <EventNoteIcon
+                      color='secondary'
+                      sx={{ width: 52, height: 52 }}/>
+                  </motion.div>
+                  </Tooltip>
+              </div>
+              <div
+                id='event-form'
+                className='popUpEventForm'
+                >
+                  <label
+                  htmlFor='eventName'>
+                  Event name:
+                  </label>
+                  <input
+                  id='eventName'
+                  type='text'>
+                  </input>
+                  <label
+                  htmlFor='eventDate'>
+                    Date:
+                  </label>
+                  <input
+                  id='eventDate'
+                  type='text'>
+                  </input>
+                  <label
+                  htmlFor='eventTime'>
+                    Time:
+                  </label>
+                  <input
+                  id='eventTime'
+                  type='text'>
+                  </input>
+                  <input
+                  type='submit'
+                  value='Save'>
+                  </input>
+              </div>
             </div>
           )}
         </div>

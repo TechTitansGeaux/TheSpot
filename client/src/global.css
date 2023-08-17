@@ -414,6 +414,24 @@ button.rejectFriend-btn:hover {
   border: none;
 }
 
+.popUpEventForm {
+  display: none;
+  transition: all .5s ease;
+  height: 300px;
+  width: 200px;
+  border: solid var(--pink);
+  border-width: 4px;
+  border-radius: 15px;
+  background-color: var(--violet);
+  font-family: var(--title-font);
+  color: white;
+  position: relative;
+  top: 0%;
+  left: 50%;
+  text-transform: uppercase;
+  z-index: 11;
+}
+
 .dot {
   align-items: center;
   justify-content: center;
