@@ -146,5 +146,31 @@ feedRouter.delete('/delete/:id', (req: any, res: any) => {
     })
 });
 
+// GET your own reels
+feedRouter.get('/reel/user', (req: any, res: any) => {
+  const { id } = req.user;
+
+  Reels.findAll({ include: [
+    { model: Users },
+    { model: Events }
+  ],
+    where: {
+      UserId: id,
+    }})
+    .then((response: any) => {
+      if (response === null) {
+        console.log('user feed/reels does not exist');
+        res.sendStatus(404);
+      } else {
+        res.status(200).send(response);
+      }
+    })
+    .catch((err: any) => {
+      console.error('Cannot GET user reels:', err);
+      res.sendStatus(500);
+    })
+});
+
+
 export default feedRouter;
 

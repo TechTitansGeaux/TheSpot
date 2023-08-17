@@ -18,7 +18,7 @@ auth.get(
 auth.get(
   '/google/callback',
   passport.authenticate('google', { failureRedirect: errorLoginUrl }),
-  async (req: express.Request, res: express.Response) => {
+  async (req: any, res: express.Response) => {
     try {
       if (req.user) {
         // Check if the user exists in the database by googleId

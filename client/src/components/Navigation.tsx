@@ -55,6 +55,7 @@ const theme = createTheme({
 
 const Navigation: React.FC<Props> = ({ user }) => {
   const [pFriends, setPFriends] = useState([]); // pending friends list
+  const [userReels, setUserReels] = useState([]); // logged in user's reels
   const [onPage, setOnPage] = useState(
     <NavLink className='navLink' to='/Feed'>
       <img id='nav-logo' src={logoGradient} alt='app logo' />
@@ -88,6 +89,23 @@ const Navigation: React.FC<Props> = ({ user }) => {
     }
 
   }, [location.pathname, user]);
+
+  // get your own reels and like count
+  const getOwnReels = () => {
+    axios
+      .get('/feed/user')
+      .then((response) => {
+        console.log('users own reels:', response.data);
+        setUserReels(response.data);
+      })
+      .catch((err) => {
+        console.error('Could not GET user reels:', err);
+      });
+  };
+
+  useEffect(() => {
+    getOwnReels();
+  }, []);
 
   // When the user clicks on the button, scroll to the top of the page
   const handleScrollTop = () => {
