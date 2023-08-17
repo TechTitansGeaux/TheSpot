@@ -9,6 +9,8 @@ import Navigation from './components/Navigation';
 import './global.css';
 import SignUp from './components/ProfileSetUp/SignUp';
 import ProfileSetUp from './components/ProfileSetUp/ProfileSetUp';
+import BusinessProfile from './components/ProfileSetUp/BusinessProfile';
+import UserType  from './components/ProfileSetUp/UserType';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Settings from './components/ProfileSetUp/Settings'
@@ -77,6 +79,8 @@ const App = () => {
         <Route index element={<SignUp />}></Route>
         <Route path='/' element={<Navigation user={user} />}>
           <Route path='/ProfileSetUp' element={<ProfileSetUp />}></Route>
+          <Route path='/BusinessProfile' element={<BusinessProfile />}></Route>
+          <Route path='/UserType' element={<UserType />}></Route>
           <Route path='/Feed' element={<Feed user={user} />}></Route>
           <Route
             path='/FriendRequests'
