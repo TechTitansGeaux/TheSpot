@@ -211,7 +211,7 @@ button.navLink {
   border: none;
   cursor: pointer;
   left: 6%;
-  top: 125%;
+  top: 200%;
 }
 
 button.delete-btn:hover {
@@ -222,7 +222,7 @@ button.delete-btn:hover {
 .info-icon {
   position: absolute;
   cursor: pointer;
-  bottom: 14%;
+  top: 77%;
   left: 87.1%;
   z-index: 2;
 }
@@ -232,7 +232,7 @@ button.delete-btn:hover {
   position: relative;
   right: 3%;
   height: 35px;
-  top: 85%;
+  top: 78%;
 }
 
 .friend-add-btn {
@@ -274,15 +274,6 @@ video.reel {
   max-height: 100%;
 }
 
-.vid-and-stamp {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding-top: 0rem;
-  padding-bottom: 2rem;
-}
-
 .video-container {
   position: relative;
   background-color: var(--white);
@@ -302,8 +293,8 @@ video.reel {
 .video-timestamp {
   position: relative;
   margin: 0 1rem;
-  top: 100%;
-  right: -25%;
+  top: 96%;
+  right: -65%;
   max-width: 350px;
   font-size: var(--reg-font);
   font-family: var(--title-font);
