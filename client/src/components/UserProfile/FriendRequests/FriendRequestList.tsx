@@ -96,7 +96,6 @@ const FriendRequestList: React.FC<Props> = ({ user }) => {
             return (
               <FriendRequestEntry
                 key={pendingFriend.id}
-                friend
                 pendingFriend={pendingFriend}
                 user={user}
                 approveFriendship={approveFriendship}
