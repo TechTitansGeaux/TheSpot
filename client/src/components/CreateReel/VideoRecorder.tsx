@@ -3,13 +3,13 @@
   import { useEffect, useCallback, useRef, useState } from "react";
   import Webcam from "react-webcam";
   import axios from 'axios';
+  import NewEventForm from './NewEventForm';
   import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
   import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
   import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
   import { motion } from 'framer-motion';
   import { useNavigate  } from 'react-router-dom';
   import Tooltip from '@mui/material/Tooltip';
-  import InfoIcon from '@mui/icons-material/Info';
   import EventNoteIcon from '@mui/icons-material/EventNote';
 // import { current } from '@reduxjs/toolkit';
   // import dayjs = require('dayjs');
@@ -68,7 +68,6 @@
     });
     const [justRecorded, setJustRecorded] = useState(false);
     const [reelSaved, setReelSaved] = useState(false);
-    const [eventName, setEventName] = useState(currentEvent.name);
 
     type Blob = {
       data: {
@@ -236,14 +235,10 @@
       facingMode: "user",
     };
 
-// handle input text for caption
-const handleText = (e: any) => {
+  // handle input text for caption
+  const handleText = (e: any) => {
   setText(e.target.value);
 };
-// // handle input for event name
-// const handleEventName = (e: any) => {
-//   setEventName(e.target.value)
-// }
 
 // navigate to feed if just posted reel
 const navigate = useNavigate();
@@ -265,45 +260,7 @@ const togglePopUp = () => {
     return (
       <div>
         <div className='webContainer'>
-        <div
-                id='event-form'
-                className='popUpEventForm'
-                >
-                  <label
-                  htmlFor='eventName'>
-                  Event name:
-                  </label>
-                  <br></br>
-                  <input
-                  id='eventName'
-                  type='text'>
-                  </input>
-                  <br></br>
-                  <label
-                  htmlFor='eventDate'>
-                    Date:
-                  </label>
-                  <br></br>
-                  <input
-                  id='eventDate'
-                  type='text'>
-                  </input>
-                  <br></br>
-                  <label
-                  htmlFor='eventTime'>
-                    Time:
-                  </label>
-                  <br></br>
-                  <input
-                  id='eventTime'
-                  type='text'>
-                  </input>
-                  <br></br>
-                  <input
-                  type='submit'
-                  value='Save'>
-                  </input>
-              </div>
+        <NewEventForm />
           { justRecorded ? (
           <div className='preview-mask'>
             <div className='webcam'>
