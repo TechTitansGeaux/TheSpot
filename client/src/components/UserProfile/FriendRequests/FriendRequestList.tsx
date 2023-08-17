@@ -1,5 +1,6 @@
 import * as React from 'react';
 import FriendRequestEntry from './FriendRequestEntry';
+import FriendAcceptedEntry from './FriendAcceptedEntry';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -27,10 +28,10 @@ const FriendRequestList: React.FC<Props> = ({ user }) => {
   // create axios get request to get pending friends
   const getPendingFriendList = () => {
     axios
-      .get(`/feed//friendlist/pending`)
+      .get(`/feed/friendlist/pending`)
       .then((response) => {
-        //console.log('friends response.data:', response.data);
         setPendingFriends(response.data);
+        //console.log('friends response.data:', response.data);
       })
       .catch((err) => {
         console.error('Could not GET friends:', err);
@@ -50,10 +51,26 @@ const FriendRequestList: React.FC<Props> = ({ user }) => {
       });
   };
 
+  const rejectFriendship = (friend: number, time: Date) => {
+    axios
+      .delete(`/friends/:${friend}`, {
+        data: { updatedAt: time },
+      })
+      .then((response) => {
+        console.log('friendship deleted', response.data);
+      })
+      .catch((err) => {
+        console.error('Delete friendship FAILED axios request:', err);
+      });
+  };
+
   useEffect(() => {
+    const controller = new AbortController();
     getPendingFriendList();
     getFriendList();
-  }, []);
+    // aborts axios request when component unmounts
+    return () => controller?.abort();
+  }, [friends]);
 
   // PUT request update friendship from 'pending' to 'approved'
   const approveFriendship = (friend: number) => {
@@ -73,7 +90,7 @@ const FriendRequestList: React.FC<Props> = ({ user }) => {
   return (
     <>
       <div className='container-full-w'>
-        <h1>Pending Friend Requests</h1>
+        <h1 className='profile-title'>Pending Friend Requests</h1>
         {pendingFriends !== undefined &&
           pendingFriends.map((pendingFriend) => {
             return (
@@ -88,19 +105,18 @@ const FriendRequestList: React.FC<Props> = ({ user }) => {
           })}
       </div>
       <div className='container-full-w'>
-        {/* <h1>My Friends</h1>
+        <h1 className='profile-title'>My Friends</h1>
         {friends.length !== 0 &&
           friends.map((friend) => {
             return (
-              <FriendRequestEntry
+              <FriendAcceptedEntry
                 key={friend.id}
                 friend={friend}
-                pendingFriends={friend}
                 user={user}
-                approveFriendship={approveFriendship}
+                rejectFriendship={rejectFriendship}
               />
             );
-          })} */}
+          })}
       </div>
     </>
   );

@@ -1,24 +1,26 @@
-// import React, { useState, useEffect } from 'react';
-
-// type Props = {
-//   event: {
-//     id: number,
-//     name: string,
-//     rsvp_count: number,
-//     geolocation: string,
-//     twenty_one: boolean,
-//     PlaceId: number,
-//   }
-//   lat: number
-//   lng: number
-// }
+import React, { useState, useEffect } from 'react';
 
 
-// const Event: React.FC<Props> = ({ event }) => {
+type Props = {
+  event: {
+    id: number,
+    name: string,
+    rsvp_count: number,
+    geolocation: string,
+    twenty_one: boolean,
+    PlaceId: number,
+  }
+  lat: number
+  lng: number
+}
 
-//   return (
-//     <div>
-//       {event.name}
-//     </div>
-//   )
-// }
+
+const Event: React.FC<Props> = ({ event }) => {
+
+  return (
+    <div className='event' >
+    </div>
+  )
+}
+
+export default Event;

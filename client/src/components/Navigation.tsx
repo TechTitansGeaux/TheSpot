@@ -6,16 +6,18 @@ import Toolbar from '@mui/material/Toolbar';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import Drawer from '@mui/material/Drawer'
+import Drawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
-import ListItem  from '@mui/material/ListItem';
+import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import List from '@mui/material/List';
 import Avatar from '@mui/material/Avatar';
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
+import Tooltip from '@mui/material/Tooltip';
+import Zoom from '@mui/material/Zoom';
 import axios from 'axios';
+import './navigation.css';
 
 type Anchor = 'left';
 type Props = {
@@ -51,10 +53,8 @@ const theme = createTheme({
   },
 });
 
-
 const Navigation: React.FC<Props> = ({ user }) => {
   const [pFriends, setPFriends] = useState([]); // pending friends list
-  const [notifBool, setNotifBool] = useState(false);
   const [onPage, setOnPage] = useState(
     <NavLink className='navLink' to='/Feed'>
       <img id='nav-logo' src={logoGradient} alt='app logo' />
@@ -62,19 +62,14 @@ const Navigation: React.FC<Props> = ({ user }) => {
   );
   const location = useLocation();
   const feedPath = location.pathname;
-  
+
   // get all pending friends for current user
   const getAllPFriends = () => {
     axios
       .get('feed/friendlist/pending')
       .then((response) => {
-        console.log('pending friends:', response.data);
+        // console.log('pending friends:', response.data);
         setPFriends(response.data);
-        if (pFriends.length !== 0) {
-          setNotifBool(true);
-        } else {
-          setNotifBool(false);
-        }
       })
       .catch((err) => {
         console.error('Could not GET pending friends:', err);
@@ -83,8 +78,16 @@ const Navigation: React.FC<Props> = ({ user }) => {
 
   useEffect(() => {
     getAllPFriends();
-    console.log('notifBool:', notifBool);
-  }, [notifBool]);
+
+    const interval = setInterval(() => {
+      getAllPFriends();
+    }, 5000);
+
+    return () => {
+      clearInterval(interval);
+    }
+
+  }, [location.pathname, user]);
 
   // When the user clicks on the button, scroll to the top of the page
   const handleScrollTop = () => {
@@ -95,12 +98,14 @@ const Navigation: React.FC<Props> = ({ user }) => {
   // if location on feed then change logo button to scroll
   useEffect(() => {
     if (feedPath === '/Feed') {
+      getAllPFriends();
       setOnPage(
         <button className='navLink' onClick={handleScrollTop}>
           <img id='nav-logo' src={logoGradient} alt='app logo' />
         </button>
       );
     } else {
+      getAllPFriends();
       setOnPage(
         <NavLink className='navLink' to='/Feed'>
           <img id='nav-logo' src={logoGradient} alt='app logo' />
@@ -155,6 +160,21 @@ const Navigation: React.FC<Props> = ({ user }) => {
             sx={{ minHeight: '4em', paddingLeft: '1.5em' }}
           >
             FRIEND REQUESTS
+            <span>
+              {pFriends.length !== 0 &&
+                <CircleNotificationsIcon className="circle" />
+              }
+            </span>
+          </ListItemButton>
+        </ListItem>
+        <ListItem className='drawer-btn' disablePadding>
+          <ListItemButton
+            className='sidebar-btn'
+            component={Link}
+            to={'/Events'}
+            sx={{ minHeight: '4em', paddingLeft: '1.5em' }}
+          >
+            EVENTS
           </ListItemButton>
         </ListItem>
         <ListItem className='drawer-btn' disablePadding>
@@ -186,33 +206,51 @@ const Navigation: React.FC<Props> = ({ user }) => {
       <ThemeProvider theme={theme}>
         <nav>
           <AppBar position='fixed'>
-            <Toolbar
-              sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                backgroundColor: 'rgba(11, 1, 19, .75)',
-              }}
-            >
-              <div className='navbar-container'>
-                <div>{onPage}</div>
-                <div>
-                  <NavLink className='navLink' to='/Map'>
-                    Map
-                  </NavLink>
+            <div className='toolbar-container'>
+              <Toolbar
+                sx={{
+                  display: 'flex',
+                  backgroundColor: 'rgba(11, 1, 19, .75)',
+                }}
+              >
+                <div className='navbar-container'>
+                  <div>{onPage}</div>
+                  <div>
+                    <NavLink className='navLink mapLink' to='/Map'>
+                      Map
+                    </NavLink>
+                  </div>
+                    <div>
+                      {pFriends.length !== 0 &&
+                        <CircleNotificationsIcon className="circle" />
+                      }
+                    </div>
+                  <div onClick={toggleDrawer('left', true)}>
+                    <Tooltip
+                      title='Open Settings'
+                      TransitionComponent={Zoom}
+                      placement='left'
+                      PopperProps={{
+                        sx: {
+                          '& .MuiTooltip-tooltip': {
+                            backgroundColor: 'transparent',
+                            border: 'solid #F5FCFA 1px',
+                            color: '#F5FCFA',
+                          },
+                        },
+                      }}
+                    >
+                      <Avatar
+                        src={user?.picture}
+                        alt='User Picture'
+                        className='friend-avatar'
+                        sx={{ width: 48, height: 48 }}
+                      />
+                    </Tooltip>
+                  </div>
                 </div>
-                <button
-                  className='navLink'
-                  onClick={toggleDrawer('left', true)}
-                >
-                  <Avatar
-                    src={user?.picture}
-                    alt='User Picture'
-                    className='friend-avatar'
-                    sx={{ width: 48, height: 48 }}
-                  />
-                </button>
-              </div>
-            </Toolbar>
+              </Toolbar>
+            </div>
           </AppBar>
         </nav>
         <Outlet />

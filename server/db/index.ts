@@ -203,6 +203,10 @@ const Friendships = sequelize.define(
   { timestamps: true }
 );
 
+// FOREIGN Keys UserId AS {} to Friendships // THIS BREAKS W/O RE-SEED // accepterUserId
+// Users.hasMany(Friendships);
+// Friendships.belongsTo(Users, { as: 'accepter' });
+
 // FOREIGN Keys UserId AND EventId to Reels
 Users.hasMany(Reels);
 Reels.belongsTo(Users);
