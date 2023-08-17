@@ -10,6 +10,7 @@
   import { useNavigate  } from 'react-router-dom';
   import Tooltip from '@mui/material/Tooltip';
   import InfoIcon from '@mui/icons-material/Info';
+  import EventNoteIcon from '@mui/icons-material/EventNote';
 // import { current } from '@reduxjs/toolkit';
   // import dayjs = require('dayjs');
   // import localizedFormat from 'dayjs/plugin/localizedFormat';
@@ -300,6 +301,7 @@ const redirectToFeed = () => {
           </div>
         )}
         </div>
+        <div className='cam-buttons-container'>
         <div className='cameraButtons'>
           {capturing ? (
             <RadioButtonCheckedIcon
@@ -317,6 +319,20 @@ const redirectToFeed = () => {
             </motion.div>
           )}
           {justRecorded && (
+            <div>
+              <Tooltip
+              title='Post reel'
+              placement='top'
+              PopperProps={{
+                sx: {
+                  '& .MuiTooltip-tooltip': {
+                    backgroundColor: 'transparent',
+                    border: 'solid #F5FCFA 1px',
+                    color: '#F5FCFA',
+                  },
+                },
+              }}
+            >
             <motion.div
             whileHover={{ scale: 1.2 }}
             >
@@ -325,8 +341,36 @@ const redirectToFeed = () => {
               color='secondary'
               sx={{ width: 52, height: 52 }}/>
             </motion.div>
+            </Tooltip>
+            </div>
+          )}
+          {justRecorded && (
+            <div>
+              <Tooltip
+              title='Create New Event'
+              placement='top'
+              PopperProps={{
+                sx: {
+                  '& .MuiTooltip-tooltip': {
+                    backgroundColor: 'transparent',
+                    border: 'solid #F5FCFA 1px',
+                    color: '#F5FCFA',
+                  },
+                },
+              }}
+            >
+            <motion.div
+            whileHover={{ scale: 1.2 }}
+            >
+              <EventNoteIcon
+              color='secondary'
+              sx={{ width: 52, height: 52 }}/>
+            </motion.div>
+            </Tooltip>
+            </div>
           )}
         </div>
+      </div>
       </div>
     );
   }
