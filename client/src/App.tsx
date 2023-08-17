@@ -9,6 +9,8 @@ import Navigation from './components/Navigation';
 import './global.css';
 import SignUp from './components/ProfileSetUp/SignUp';
 import ProfileSetUp from './components/ProfileSetUp/ProfileSetUp';
+import BusinessProfile from './components/ProfileSetUp/BusinessProfile';
+import UserType  from './components/ProfileSetUp/UserType';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Settings from './components/ProfileSetUp/Settings';
@@ -67,30 +69,32 @@ const App = () => {
 
   return (
     <div style={{ fontSize: theme.typography.fontSize }}>
-      <BrowserRouter>
-        <Routes>
-          <Route index element={<SignUp />}></Route>
-          <Route path='/' element={<Navigation user={user} />}>
-            <Route path='/ProfileSetUp' element={<ProfileSetUp />}></Route>
-            <Route path='/Feed' element={<Feed user={user} />}></Route>
-            <Route
-              path='/FriendRequests'
-              element={<FriendRequestList user={user} />}
-            ></Route>
-            <Route path='/Events' element={<EventsList user={user} />}></Route>
-            <Route path='/Likes' element={<LikesList user={user} />}></Route>
-            <Route
-              path='/Settings'
-              element={<Settings fontSize={fontSize} />}
-            ></Route>
-            <Route
-              path='/CreateReel'
-              element={<CreateReel user={user} />}
-            ></Route>
-            <Route path='/Map' element={<Map loggedIn={user} />}></Route>
-          </Route>
-        </Routes>
-      </BrowserRouter>
+    <BrowserRouter>
+      <Routes>
+        <Route index element={<SignUp />}></Route>
+        <Route path='/' element={<Navigation user={user} />}>
+          <Route path='/ProfileSetUp' element={<ProfileSetUp />}></Route>
+          <Route path='/BusinessProfile' element={<BusinessProfile />}></Route>
+          <Route path='/Events' element={<EventsList user={user} />}></Route>
+          <Route path='/UserType' element={<UserType />}></Route>
+          <Route path='/Feed' element={<Feed user={user} />}></Route>
+          <Route
+            path='/FriendRequests'
+            element={<FriendRequestList user={user} />}
+          ></Route>
+          <Route path='/Likes' element={<LikesList user={user} />}></Route>
+          <Route
+            path='/Settings'
+            element={<Settings fontSize={fontSize} />}
+          ></Route>
+          <Route
+            path='/CreateReel'
+            element={<CreateReel user={user} />}
+          ></Route>
+          <Route path='/Map' element={<Map loggedIn={user} />}></Route>
+        </Route>
+      </Routes>
+    </BrowserRouter>
     </div>
   );
 };

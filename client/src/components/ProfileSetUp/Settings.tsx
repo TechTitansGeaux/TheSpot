@@ -14,6 +14,7 @@ import UploadFile from '@mui/icons-material/UploadFile';
 import MenuItem from '@mui/material/MenuItem';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Location from './Location';
+import SpeechToText from '../ProfileSetUp/SpeechToText'
 
 type Props = {
 fontSize: string;
@@ -213,15 +214,21 @@ useEffect(() => {
         </div>
         <Location />
 
+        <div>
+            <SpeechToText onTranscriptChange={setDisplayName} />
+            <p>Click Microphone For Speech To Text</p>
             <TextField
-              label="Edit Display Name"
+              label="Display Name"
               variant="outlined"
               color="secondary"
               fullWidth
               value={displayName}
-              onChange={e => setDisplayName(e.target.value)}
-              style={{ color: 'var(--setupBG)', marginBottom: '1rem' }}
+              onChange={(e) => {
+                setDisplayName(e.target.value);
+              }}
+              style={{ color: 'var(--setupBG)', marginBottom: '1rem', marginTop: '1rem' }}
             />
+            </div>
 
 
         <TextField
@@ -331,4 +338,3 @@ useEffect(() => {
 };
 
 export default Settings;
-

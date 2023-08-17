@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { setAuthUser } from '../../store/appSlice';
 import { RootState } from '../../store/store';
-import Location from './Location';
+// import Location from './Location';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -16,7 +16,8 @@ import MenuItem from '@mui/material/MenuItem';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
-import SpeechToText from '../ProfileSetUp/SpeechToText'
+import SpeechToText from '../ProfileSetUp/SpeechToText';
+import Geocode from "react-geocode";
 
 const theme = createTheme({
   palette: {
@@ -33,12 +34,13 @@ const theme = createTheme({
   },
 });
 
-const ProfileSetUp = () => {
+const BusinessProfile = () => {
   const dispatch = useDispatch();
   const authUser = useSelector((state: RootState) => state.app.authUser);
 
   const [username, setUsername] = useState('');
   const [displayName, setDisplayName] = useState('');
+  const [address, setAddress] = useState('');
   const [birthday, setBirthday] = useState('');
   const [picture, setPicture] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
@@ -51,7 +53,7 @@ const ProfileSetUp = () => {
     displayName: '',
     birthday: '',
     picture: '',
-    geolocation: '',
+    address: '',
     mapIcon: '',
     uploadImage: '',
     saveProfile: '',
@@ -65,7 +67,7 @@ const ProfileSetUp = () => {
     }
   }, [authUser]);
 
-  const handleProfileSetup = () => {
+  const handleBusinessProfile = async () => {
     const newErrors = { ...errors };
 
     if (!username) {
@@ -80,16 +82,16 @@ const ProfileSetUp = () => {
       newErrors.displayName = '';
     }
 
-    if (!geolocation) {
-      newErrors.geolocation = 'Geolocation is required.';
-    } else {
-      newErrors.geolocation = '';
-    }
-
     if (!birthday) {
       newErrors.birthday = 'Birthday is required.';
     } else {
       newErrors.birthday = '';
+    }
+
+    if (!address) {
+      newErrors.address = 'Address is required.';
+    } else {
+      newErrors.address = '';
     }
 
     if (!selectedMapIcon) {
@@ -109,7 +111,7 @@ const ProfileSetUp = () => {
     if (
       newErrors.username ||
       newErrors.displayName ||
-      newErrors.geolocation ||
+      newErrors.address ||
       newErrors.birthday ||
       newErrors.mapIcon ||
       newErrors.privacy
@@ -123,7 +125,7 @@ const ProfileSetUp = () => {
       birthday,
       picture,
       mapIcon: selectedMapIcon,
-      geolocation,
+      geolocation: geolocation,
       privacy
     };
 
@@ -137,6 +139,21 @@ const ProfileSetUp = () => {
         console.error(error);
         setErrors({ ...errors, saveProfile: 'An error occurred while saving your profile. Please try again later.' });
       });
+
+      // Convert address to geolocation
+    if (address) {
+      try {
+        Geocode.setApiKey(`${process.env.GOOGLE_MAPS_API}`);
+        const response = await Geocode.fromAddress(address);
+        const { lat, lng } = response.results[0].geometry.location;
+
+        setGeolocation(`${lat},${lng}`);
+      } catch (error) {
+        console.error(error);
+        setErrors({ ...errors, address: 'Error converting address to geolocation.' });
+        return;
+      }
+    }
   };
 
   const handleImageChange = (event: any) => {
@@ -163,15 +180,18 @@ const ProfileSetUp = () => {
     }
   };
 
+
+
   // const handleTranscriptChange = (newTranscript: any) => {
   //   //  use the newTranscript value to update the relevant text field
   //   return newTranscript; //updating displayName with transcript
   // };
 
+
   return (
     <ThemeProvider theme={theme}>
       <Container className="container-full-w center">
-        <h1>User Profile Setup</h1>
+        <h1>Business Profile Setup</h1>
         <p>Click Avatar To Edit Image</p>
         <Card style={{ backgroundColor: 'var(--yellow)', marginTop: '1rem' }}>
           <CardContent>
@@ -204,12 +224,24 @@ const ProfileSetUp = () => {
               </Alert>
             )}
 
-            <Location />
-            {errors.geolocation && (
-              <Alert severity="error">
-              {errors.geolocation}
-            </Alert>
-          )}
+          {/* Address field */}
+          <div>
+          <SpeechToText onTranscriptChange={setAddress} />
+          <p>Click Microphone For Speech To Text</p>
+          <TextField
+            placeholder='123 Main Street, Cityville, State 12345, Country
+          '
+            label="Address"
+            variant="outlined"
+            color="secondary"
+            fullWidth
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            helperText={errors.address}
+            error={!!errors.address}
+            style={{ color: 'var(--setupBG)', marginBottom: '1rem', marginTop: '1rem' }}
+          />
+          </div>
 
             {/* Username field */}
             <div>
@@ -252,6 +284,7 @@ const ProfileSetUp = () => {
             />
             </div>
 
+
             {/* Privacy field */}
             <TextField
             select
@@ -284,17 +317,14 @@ const ProfileSetUp = () => {
               error={!!errors.mapIcon}
               style={{ color: 'var(--setupBG)', marginBottom: '1rem' }}
             >
-            <MenuItem value="https://img.icons8.com/?size=512&id=qzpodiwSoTXX&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=qzpodiwSoTXX&format=png'/></MenuItem>
-            <MenuItem value="https://img.icons8.com/?size=512&id=20880&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=20880&format=png'/></MenuItem>
-            <MenuItem value="https://img.icons8.com/?size=512&id=58781&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=58781&format=png'/></MenuItem>
-            <MenuItem value="https://img.icons8.com/?size=512&id=32002&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=32002&format=png'/></MenuItem>
-            <MenuItem value="https://img.icons8.com/?size=512&id=35183&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=35183&format=png'/></MenuItem>
-            <MenuItem value="https://img.icons8.com/?size=512&id=78491&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=78491&format=png'/></MenuItem>
-            <MenuItem value="https://img.icons8.com/?size=512&id=luN7421eTXGW&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=luN7421eTXGW&format=png'/></MenuItem>
-            <MenuItem value="https://img.icons8.com/?size=512&id=77988&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=77988&format=png'/></MenuItem>
-            <MenuItem value="https://img.icons8.com/?size=512&id=juRF5DiUGr4p&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=juRF5DiUGr4p&format=png'/></MenuItem>
-            <MenuItem value="https://img.icons8.com/?size=512&id=21731&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=21731&format=png'/></MenuItem>
-            <MenuItem value="https://img.icons8.com/?size=512&id=rn0oscjrJY2d&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=rn0oscjrJY2d&format=png'/></MenuItem>
+            <MenuItem value="https://img.icons8.com/?size=512&id=2t0cgXala8a2&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=2t0cgXala8a2&format=png'/></MenuItem>
+            <MenuItem value="https://img.icons8.com/?size=512&id=WSGHwEwOs25O&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=WSGHwEwOs25O&format=png'/></MenuItem>
+            <MenuItem value="https://img.icons8.com/?size=512&id=xCLiCEaCIH7B&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=xCLiCEaCIH7B&format=png'/></MenuItem>
+            <MenuItem value="https://img.icons8.com/?size=512&id=IldxgfyDVjuz&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=IldxgfyDVjuz&format=png'/></MenuItem>
+            <MenuItem value="https://img.icons8.com/?size=512&id=UB3ruGFlmIRr&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=UB3ruGFlmIRr&format=png'/></MenuItem>
+            <MenuItem value="https://img.icons8.com/?size=512&id=HFEnXvDe0D4p&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=HFEnXvDe0D4p&format=png'/></MenuItem>
+            <MenuItem value="https://img.icons8.com/?size=512&id=qWX5b0uTbFHX&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=qWX5b0uTbFHX&format=png'/></MenuItem>
+            <MenuItem value="https://img.icons8.com/?size=512&id=GuOROHDN3mQt&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=GuOROHDN3mQt&format=png'/></MenuItem>
             </TextField>
 
             <TextField
@@ -315,7 +345,7 @@ const ProfileSetUp = () => {
             <Button
               variant="contained"
               color="secondary"
-              onClick={handleProfileSetup}
+              onClick={handleBusinessProfile}
               style={{ marginTop: '1rem', marginBottom: '1rem' }}
             >
               Create Profile
@@ -334,6 +364,6 @@ const ProfileSetUp = () => {
   );
 };
 
-export default ProfileSetUp;
+export default BusinessProfile;
 
 
