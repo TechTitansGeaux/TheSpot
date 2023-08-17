@@ -271,20 +271,6 @@ const redirectToFeed = () => {
                 onChange={handleText}
                 type='text'>
               </input>
-              <input
-              className="event-name-input"
-              placeholder='Edit event name ...'
-              value={eventName}
-              onChange={handleEventName}
-              type='text'>
-              </input>
-              <Tooltip
-            title={currentEvent.name}
-            placement='left'
-            arrow
-          >
-        <InfoIcon className='info-icon'/>
-        </Tooltip>
             </div>
           </div>
         ) : (
@@ -347,7 +333,7 @@ const redirectToFeed = () => {
           {justRecorded && (
             <div>
               <Tooltip
-              title='Create New Event'
+              title='Add event details'
               placement='top'
               PopperProps={{
                 sx: {
