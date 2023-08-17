@@ -107,6 +107,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
     return () => observer.disconnect();
   }, []);
 
+  // console.log('reel ==>', reel);
   return (
     <div className='vid-and-stamp'>
     <div style={{ fontSize: theme.typography.fontSize }}>

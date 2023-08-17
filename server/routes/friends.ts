@@ -88,24 +88,3 @@ friendRouter.delete('/:otherUsersId',  (req: any, res: any) => {
 
 export default friendRouter;
 
-// // update put request for friendship with 'approved' status
-// friendRouter.put('/', (req: any, res: any) => {
-//   // const { id } = req.user;
-//   const { requester_id, accepter_id } = req.body;
-//   Friendships.update(
-//     { status: 'approved' },
-//     {
-//       where: {
-//         accepter_id: [6, 2],
-//         status: 'pending',
-//       },
-//     }
-//   )
-//     .then((data: any) => {
-//       console.log('friendRoute UPDATE friend data', data);
-//       res.sendStatus(200);
-//     })
-//     .catch((err: any) => {
-//       console.error('friendRouter UPDATE to database Error:', err);
-//     });
-// });

@@ -4,7 +4,6 @@ import FriendAcceptedEntry from './FriendAcceptedEntry';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-
 type Props = {
   user: {
     id: number;
@@ -29,10 +28,10 @@ const FriendRequestList: React.FC<Props> = ({ user }) => {
   // create axios get request to get pending friends
   const getPendingFriendList = () => {
     axios
-      .get(`/feed//friendlist/pending`)
+      .get(`/feed/friendlist/pending`)
       .then((response) => {
-        //console.log('friends response.data:', response.data);
         setPendingFriends(response.data);
+        //console.log('friends response.data:', response.data);
       })
       .catch((err) => {
         console.error('Could not GET friends:', err);
@@ -55,7 +54,7 @@ const FriendRequestList: React.FC<Props> = ({ user }) => {
   const rejectFriendship = (friend: number, time: Date) => {
     axios
       .delete(`/friends/:${friend}`, {
-        data: { updatedAt: time }
+        data: { updatedAt: time },
       })
       .then((response) => {
         console.log('friendship deleted', response.data);
@@ -108,7 +107,7 @@ const FriendRequestList: React.FC<Props> = ({ user }) => {
       <div className='container-full-w'>
         <h1 className='profile-title'>My Friends</h1>
         {friends.length !== 0 &&
-          friends.map((friend, i) => {
+          friends.map((friend) => {
             return (
               <FriendAcceptedEntry
                 key={friend.id}
