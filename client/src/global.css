@@ -222,7 +222,7 @@ button.delete-btn:hover {
 .info-icon {
   position: absolute;
   cursor: pointer;
-  bottom: 14%;
+  bottom: 18%;
   left: 87.1%;
   z-index: 2;
 }
@@ -244,7 +244,7 @@ button.delete-btn:hover {
 .friend-avatar {
   position: absolute;
   cursor: pointer;
-  bottom: 5%;
+  bottom: 12%;
   left: 87%;
 }
 
