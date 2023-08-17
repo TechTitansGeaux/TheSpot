@@ -7,7 +7,7 @@ const { Events } = require('../db/index');
 eventRouter.get('/all', async (req, res) => {
   await Events.findAll()
     .then((events: any) => {
-      console.log('events: ', events);
+      // console.log('events: ', events);
       res.status(200).send(events);
     })
     .catch((err: any) => {
@@ -63,12 +63,17 @@ eventRouter.post('/create', async (req, res) => {
 })
 
 // patch event
-eventRouter.patch('/:id', async (req, res) => {
+eventRouter.patch('/:id', async (req: any, res) => {
   const { id } = req.params;
-  const { eventUpdate } = req.body;
+  const { name, date, twenty_one } = req.body;
+
   try {
     // find event by id
-    const event = await Events.findByPk(id);
+    const event = await Events.findOne({
+      where: {
+        id: id
+      }
+    });
 
     if (!event) {
       // send 404 if event does not exist
@@ -76,11 +81,15 @@ eventRouter.patch('/:id', async (req, res) => {
     }
 
     // update event info
-    await event.update(eventUpdate);
+    await event.update({name: name, date: date, twenty_one: twenty_one }, {
+      where: {
+        id: id
+      }
+    });
 
     // send back updated event
     res.json(event);
-  } catch (err) {
+  } catch (err: any) {
     console.error('Failed to PATCH event: ', err);
     res.sendStatus(500)
   }

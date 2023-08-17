@@ -211,7 +211,7 @@ button.navLink {
   border: none;
   cursor: pointer;
   left: 6%;
-  top: 125%;
+  top: 200%;
 }
 
 button.delete-btn:hover {
@@ -222,7 +222,7 @@ button.delete-btn:hover {
 .info-icon {
   position: absolute;
   cursor: pointer;
-  bottom: 14%;
+  top: 77%;
   left: 87.1%;
   z-index: 2;
 }
@@ -232,7 +232,7 @@ button.delete-btn:hover {
   position: relative;
   right: 3%;
   height: 35px;
-  top: 85%;
+  top: 78%;
 }
 
 .friend-add-btn {
@@ -274,15 +274,6 @@ video.reel {
   max-height: 100%;
 }
 
-.vid-and-stamp {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding-top: 0rem;
-  padding-bottom: 2rem;
-}
-
 .video-container {
   position: relative;
   background-color: var(--white);
@@ -302,8 +293,8 @@ video.reel {
 .video-timestamp {
   position: relative;
   margin: 0 1rem;
-  top: 100%;
-  right: -25%;
+  top: 96%;
+  right: -63%;
   max-width: 350px;
   font-size: var(--reg-font);
   font-family: var(--title-font);
@@ -353,14 +344,16 @@ button.rejectFriend-btn:hover {
 /* ////// CREATE REEL */
 
 .webContainer {
-  display: flex;
+  position: relative;
+  display: inline-flex;
   justify-content: center;
   align-items: center;
   width: 100vw;
 }
 
 .webcam {
-  display: flex;
+  display: inline-flex;
+  position: relative;
   justify-content: center;
   align-items: center;
   height: 100vh;
@@ -410,17 +403,21 @@ button.rejectFriend-btn:hover {
   border: none;
 }
 
-.name-event-input {
+.popUpEventForm {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  margin: 0 5rem;
-  max-width: 350px;
-  color: var(--white);
-  font-size: var(--lg-font);
+  align-items: center;
+  bottom: 7%;
+  display: none;
+  padding: 1%;
+  transition: all .5s ease;
+  height: 200px;
+  width: 200px;
+  border-width: 10px;
+  border-radius: 10px;
+  background-color: var(--violet);
   font-family: var(--title-font);
-  background: transparent;
-  border: none;
+  color: white;
+  z-index: 5;
 }
 
 .dot {
