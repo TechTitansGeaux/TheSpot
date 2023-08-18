@@ -244,7 +244,7 @@ button.delete-btn:hover {
 .friend-avatar {
   position: absolute;
   cursor: pointer;
-  bottom: 5%;
+  bottom: 12%;
   left: 87%;
 }
 
@@ -261,6 +261,29 @@ button.accept-friend:hover {
   border: solid var(--t25-white);
   padding-top: 2rem;
   min-height: 667px;
+}
+
+.bottom-nav-parent{
+  position: relative;
+}
+
+.like-count-container{
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 25px;
+  height: auto;
+}
+
+p.like-counter {
+  margin-left: 5px;
+  color: var(--violet);
+}
+
+p.rsvp-counter {
+  margin-left: 15px;
+  color: var(--violet);
 }
 
 /* jackie made changes to push video to right  */
