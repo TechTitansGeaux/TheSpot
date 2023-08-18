@@ -212,7 +212,6 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                 </div>
               )}
             </>
-
             <div className='friend-request'>
               <Tooltip
                 title={reel.User.displayName}
