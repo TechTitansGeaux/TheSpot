@@ -3,13 +3,14 @@
   import { useEffect, useCallback, useRef, useState } from "react";
   import Webcam from "react-webcam";
   import axios from 'axios';
+  import NewEventForm from './NewEventForm';
   import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
   import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
   import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
   import { motion } from 'framer-motion';
   import { useNavigate  } from 'react-router-dom';
   import Tooltip from '@mui/material/Tooltip';
-  import InfoIcon from '@mui/icons-material/Info';
+  import EventNoteIcon from '@mui/icons-material/EventNote';
 // import { current } from '@reduxjs/toolkit';
   // import dayjs = require('dayjs');
   // import localizedFormat from 'dayjs/plugin/localizedFormat';
@@ -67,7 +68,6 @@
     });
     const [justRecorded, setJustRecorded] = useState(false);
     const [reelSaved, setReelSaved] = useState(false);
-    const [eventName, setEventName] = useState(currentEvent.name);
 
     type Blob = {
       data: {
@@ -235,14 +235,10 @@
       facingMode: "user",
     };
 
-// handle input text for caption
-const handleText = (e: any) => {
+  // handle input text for caption
+  const handleText = (e: any) => {
   setText(e.target.value);
 };
-// handle input for event name
-const handleEventName = (e: any) => {
-  setEventName(e.target.value)
-}
 
 // navigate to feed if just posted reel
 const navigate = useNavigate();
@@ -251,9 +247,21 @@ const redirectToFeed = () => {
   navigate('/Feed');
 }
 
+// toggle pop up modal
+const togglePopUp = () => {
+  const box = document.getElementById('event-form')
+  if (box.style.display === 'block') {
+    box.style.display = 'none';
+  } else {
+    box.style.display = 'block';
+  }
+}
+
     return (
       <div>
-        <div className='webContainer'> { justRecorded ? (
+        <div className='webContainer'>
+        <NewEventForm />
+          { justRecorded ? (
           <div className='preview-mask'>
             <div className='webcam'>
               <video
@@ -270,20 +278,6 @@ const redirectToFeed = () => {
                 onChange={handleText}
                 type='text'>
               </input>
-              <input
-              className="event-name-input"
-              placeholder='Edit event name ...'
-              value={eventName}
-              onChange={handleEventName}
-              type='text'>
-              </input>
-              <Tooltip
-            title={currentEvent.name}
-            placement='left'
-            arrow
-          >
-        <InfoIcon className='info-icon'/>
-        </Tooltip>
             </div>
           </div>
         ) : (
@@ -300,6 +294,7 @@ const redirectToFeed = () => {
           </div>
         )}
         </div>
+        <div className='cam-buttons-container'>
         <div className='cameraButtons'>
           {capturing ? (
             <RadioButtonCheckedIcon
@@ -317,6 +312,20 @@ const redirectToFeed = () => {
             </motion.div>
           )}
           {justRecorded && (
+            <div>
+              <Tooltip
+              title='Post reel'
+              placement='top'
+              PopperProps={{
+                sx: {
+                  '& .MuiTooltip-tooltip': {
+                    backgroundColor: 'transparent',
+                    border: 'solid #F5FCFA 1px',
+                    color: '#F5FCFA',
+                  },
+                },
+              }}
+            >
             <motion.div
             whileHover={{ scale: 1.2 }}
             >
@@ -325,8 +334,39 @@ const redirectToFeed = () => {
               color='secondary'
               sx={{ width: 52, height: 52 }}/>
             </motion.div>
+            </Tooltip>
+            </div>
+          )}
+          {justRecorded && (
+            <div>
+              <div
+              onClick={togglePopUp}>
+                  <Tooltip
+                  title='Add event details'
+                  placement='top'
+                  PopperProps={{
+                    sx: {
+                      '& .MuiTooltip-tooltip': {
+                        backgroundColor: 'transparent',
+                        border: 'solid #F5FCFA 1px',
+                        color: '#F5FCFA',
+                      },
+                    },
+                  }}
+                  >
+                  <motion.div
+                    whileHover={{ scale: 1.2 }}
+                    >
+                      <EventNoteIcon
+                      color='secondary'
+                      sx={{ width: 52, height: 52 }}/>
+                  </motion.div>
+                  </Tooltip>
+              </div>
+            </div>
           )}
         </div>
+      </div>
       </div>
     );
   }
