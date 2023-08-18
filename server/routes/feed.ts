@@ -171,24 +171,5 @@ feedRouter.get('/reel/user', (req: any, res: any) => {
     })
 });
 
-// GET likes from likes table
-feedRouter.get('/likesTable', (req: any, res: any) => {
-
-  Likes.findAll({})
-    .then((response: any) => {
-      if (response === null) {
-        console.log('likes do not exist');
-        res.sendStatus(404);
-      } else {
-        res.status(200).send(response);
-      }
-    })
-    .catch((err: any) => {
-      console.error('Cannot GET likes:', err);
-      res.sendStatus(500);
-    })
-});
-
-
 export default feedRouter;
 

@@ -147,6 +147,9 @@ const Likes = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
+    checked: {
+      type: DataTypes.BOOLEAN
+    }
   },
   { timestamps: true }
 );
