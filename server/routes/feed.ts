@@ -1,6 +1,6 @@
 const express = require('express');
 const feedRouter = express.Router();
-const { Reels, Users, Events, Friendships } = require('../db/index');
+const { Reels, Users, Events, Friendships, Likes } = require('../db/index');
 // import Reels from '../db/index';
 
 feedRouter.get('/reel', (req: any, res: any) => {
@@ -145,6 +145,50 @@ feedRouter.delete('/delete/:id', (req: any, res: any) => {
       console.error('Failed to DELETE Reel:', err);
     })
 });
+
+// GET your own reels
+feedRouter.get('/reel/user', (req: any, res: any) => {
+  const { id } = req.user;
+
+  Reels.findAll({ include: [
+    { model: Users },
+    { model: Events }
+  ],
+    where: {
+      UserId: id,
+    }})
+    .then((response: any) => {
+      if (response === null) {
+        console.log('user feed/reels does not exist');
+        res.sendStatus(404);
+      } else {
+        res.status(200).send(response);
+      }
+    })
+    .catch((err: any) => {
+      console.error('Cannot GET user reels:', err);
+      res.sendStatus(500);
+    })
+});
+
+// GET likes from likes table
+feedRouter.get('/likesTable', (req: any, res: any) => {
+
+  Likes.findAll({})
+    .then((response: any) => {
+      if (response === null) {
+        console.log('likes do not exist');
+        res.sendStatus(404);
+      } else {
+        res.status(200).send(response);
+      }
+    })
+    .catch((err: any) => {
+      console.error('Cannot GET likes:', err);
+      res.sendStatus(500);
+    })
+});
+
 
 export default feedRouter;
 
