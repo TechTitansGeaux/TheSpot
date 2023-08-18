@@ -109,7 +109,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
     return () => observer.disconnect();
   }, []);
 
-  console.log('reel ==>', reel);
+  // console.log('reel ==>', reel);
   return (
       <div style={{ fontSize: theme.typography.fontSize }}>
         <>
