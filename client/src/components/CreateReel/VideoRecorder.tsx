@@ -43,10 +43,11 @@
       googleId: string;
     },
     mustCreateEvent: boolean,
-    currentEventId: number
+    currentEventId: number,
+    updateMustCreateEvent: () => void
   };
 
-  const VideoRecorder: React.FC<Props> = ({currentEvent, user, mustCreateEvent, currentEventId}) => {
+  const VideoRecorder: React.FC<Props> = ({currentEvent, user, mustCreateEvent, currentEventId, updateMustCreateEvent}) => {
     const webcamRef = useRef(null);
     const mediaRecorderRef = useRef(null);
     const [capturing, setCapturing] = useState(false);
@@ -260,7 +261,10 @@ const togglePopUp = () => {
     return (
       <div>
         <div className='webContainer'>
-        <NewEventForm />
+        <NewEventForm
+        user={user}
+        mustCreateEvent={mustCreateEvent}
+        updateMustCreateEvent={updateMustCreateEvent}/>
           { justRecorded ? (
           <div className='preview-mask'>
             <div className='webcam'>

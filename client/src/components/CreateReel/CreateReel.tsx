@@ -1,3 +1,4 @@
+  /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from 'react';
 import axios from 'axios';
 import { useState, useRef, useEffect } from "react";
@@ -55,9 +56,18 @@ useEffect(() => {
   eventCheck();
 }, [])
 
+const updateMustCreateEvent = () => {
+  setMustCreateEvent(false)
+}
+
   return (
     <div>
-      <VideoRecorder currentEvent={currentEvent} currentEventId={currentEvent.id} user={user} mustCreateEvent={mustCreateEvent}/>
+      <VideoRecorder
+      currentEvent={currentEvent}
+      currentEventId={currentEvent.id}
+      user={user}
+      mustCreateEvent={mustCreateEvent}
+      updateMustCreateEvent={updateMustCreateEvent}/>
     </div>
   )
 };
