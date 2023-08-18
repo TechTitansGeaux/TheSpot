@@ -295,14 +295,21 @@ const BusinessProfile = () => {
               error={!!errors.mapIcon}
               style={{ color: 'var(--setupBG)', marginBottom: '1rem' }}
             >
-            <MenuItem value="https://img.icons8.com/?size=512&id=2t0cgXala8a2&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=2t0cgXala8a2&format=png'/></MenuItem>
-            <MenuItem value="https://img.icons8.com/?size=512&id=WSGHwEwOs25O&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=WSGHwEwOs25O&format=png'/></MenuItem>
-            <MenuItem value="https://img.icons8.com/?size=512&id=xCLiCEaCIH7B&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=xCLiCEaCIH7B&format=png'/></MenuItem>
-            <MenuItem value="https://img.icons8.com/?size=512&id=IldxgfyDVjuz&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=IldxgfyDVjuz&format=png'/></MenuItem>
-            <MenuItem value="https://img.icons8.com/?size=512&id=UB3ruGFlmIRr&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=UB3ruGFlmIRr&format=png'/></MenuItem>
-            <MenuItem value="https://img.icons8.com/?size=512&id=HFEnXvDe0D4p&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=HFEnXvDe0D4p&format=png'/></MenuItem>
-            <MenuItem value="https://img.icons8.com/?size=512&id=qWX5b0uTbFHX&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=qWX5b0uTbFHX&format=png'/></MenuItem>
-            <MenuItem value="https://img.icons8.com/?size=512&id=GuOROHDN3mQt&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=GuOROHDN3mQt&format=png'/></MenuItem>
+            <MenuItem value="https://img.icons8.com/?size=512&id=rMv4B3bzTLCX&format=png"><img style={{ width: '40px', height: '40px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=rMv4B3bzTLCX&format=png'/></MenuItem>
+
+            <MenuItem value="https://img.icons8.com/?size=512&id=GTba5IMgy3gc&format=png"><img style={{ width: '40px', height: '40px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=GTba5IMgy3gc&format=png'/></MenuItem>
+
+            <MenuItem value="https://img.icons8.com/?size=512&id=xCLiCEaCIH7B&format=png"><img style={{ width: '40px', height: '40px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=xCLiCEaCIH7B&format=png'/></MenuItem>
+
+            <MenuItem value="https://img.icons8.com/?size=512&id=rYCIDB4Eyl3Y&format=png"><img style={{ width: '40px', height: '40px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=rYCIDB4Eyl3Y&format=png'/></MenuItem>
+
+            <MenuItem value="https://img.icons8.com/?size=512&id=knkdasdhCwXa&format=png"><img style={{ width: '40px', height: '40px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=knkdasdhCwXa&format=png'/></MenuItem>
+
+            <MenuItem value="https://img.icons8.com/?size=512&id=abOoUFblJ-3v&format=png"><img style={{ width: '40px', height: '40px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=abOoUFblJ-3v&format=png'/></MenuItem>
+
+            <MenuItem value="https://img.icons8.com/?size=512&id=0My7pGwQmrg4&format=png"><img style={{ width: '40px', height: '40px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=0My7pGwQmrg4&format=png'/></MenuItem>
+
+            <MenuItem value="https://img.icons8.com/?size=512&id=k0o3gBVVzzUr&format=png"><img style={{ width: '40px', height: '40px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=k0o3gBVVzzUr&format=png'/></MenuItem>
             </TextField>
 
             <TextField
