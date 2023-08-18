@@ -132,13 +132,13 @@ feedRouter.delete('/delete/:id', (req: any, res: any) => {
       id: id
     }
   })
-    .then((response: any) => {
-      Likes.destroy({
-        where: {
-          ReelId: id,
-        },
-      })
-    })
+    // .then((response: any) => {
+    //   Likes.destroy({
+    //     where: {
+    //       ReelId: id,
+    //     },
+    //   })
+    // })
     .then((response: any) => {
       if (response) {
         // console.log('Reels deleted:', response);
