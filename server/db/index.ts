@@ -87,6 +87,12 @@ const Events = sequelize.define(
     date: {
       type: DataTypes.STRING(100),
     },
+    time: {
+      type: DataTypes.STRING(100),
+    },
+    endTime: {
+      type: DataTypes.STRING(100),
+    },
     geolocation: {
       type: DataTypes.STRING(100),
       allowNull: false,

@@ -11,17 +11,15 @@
   import { useNavigate  } from 'react-router-dom';
   import Tooltip from '@mui/material/Tooltip';
   import EventNoteIcon from '@mui/icons-material/EventNote';
-// import { current } from '@reduxjs/toolkit';
-  // import dayjs = require('dayjs');
-  // import localizedFormat from 'dayjs/plugin/localizedFormat';
-  // dayjs.extend(localizedFormat)
 
   type Props = {
     currentEvent: {
       id: number;
       name: string;
       rsvp_count: number;
-      date: Date;
+      date: string;
+      time: string;
+      endTime: string;
       geolocation: string; // i.e. "29.947126049254177, -90.18719199978266"
       twenty_one: boolean;
       createdAt: string;
@@ -56,17 +54,17 @@
     const [url, setUrl] = useState('');
     const [text, setText] = useState('');
     const [eventId, setEventId] = useState(0)
-    const [event, setEvent] = useState({
-      id: 0,
-      name: '',
-      rsvp_count: 0,
-      date: new Date,
-      geolocation: '',
-      twenty_one: false,
-      createdAt: '',
-      updatedAt: '',
-      PlaceId: 0,
-    });
+    // const [event, setEvent] = useState({
+    //   id: 0,
+    //   name: '',
+    //   rsvp_count: 0,
+    //   date: new Date,
+    //   geolocation: '',
+    //   twenty_one: false,
+    //   createdAt: '',
+    //   updatedAt: '',
+    //   PlaceId: 0,
+    // });
     const [justRecorded, setJustRecorded] = useState(false);
     const [reelSaved, setReelSaved] = useState(false);
     const [businessAccount, setBusinessAccount] = useState(false);
@@ -161,9 +159,9 @@
       };
       upload();
     }, [justRecorded, mediaRecorderRef, recordedChunks])
-    // console.log(recordedChunks, '<-----recorded chunks OUTSIDE')
 
-    // console.log(mustCreateEvent, '<-----must create event outside')
+    // get built in 3 hour event default end time
+    const defaultEndTime = (Number(currentEvent.time.slice(0, 2)) + 3) + currentEvent.time.slice(2);
 
     // save reel to databases
     // get all reel properties from predetermined event properties
@@ -174,6 +172,8 @@
       await axios.post('/events/create', {
           name: currentEvent.name,
           date: currentEvent.date,
+          time: currentEvent.time,
+          endTime: defaultEndTime,
           geolocation: currentEvent.geolocation,
           twenty_one: currentEvent.twenty_one
       })
@@ -219,11 +219,6 @@
     .catch((err) => {
       console.error('Failed axios post reel: ', err);
     })
-    // // no longer just recorded
-    // setJustRecorded(false)
-    // // reset url
-    // setUrl('');
-    // setText('');
     }
 
     // post reel to db should be invoked whenever eventId has been changed

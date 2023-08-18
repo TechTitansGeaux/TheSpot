@@ -21,10 +21,6 @@
     mustCreateEvent: boolean,
     updateMustCreateEvent: () => void,
     updateEventId: (newId: number) => void
-    // eventName: string,
-    // eventDate: string,
-    // eventTime: string,
-    // twentyOne: boolean
   }
 
   const NewEventForm: React.FC<Props> = ({user, mustCreateEvent, updateMustCreateEvent, updateEventId}) => {
@@ -32,6 +28,7 @@
   const [eventName, setEventName] = useState('');
   const [eventDate, setEventDate] = useState('');
   const [eventTime, setEventTime] = useState('');
+  const [endTime, setEndTime] = useState('');
   const [twentyOne, setTwentyOne] = useState(false);
 
   //weeeeee
@@ -51,6 +48,10 @@ const handleEventTime = (e: any) => {
   setEventTime(e.target.value)
 }
 
+const handleEndTime = (e: any) => {
+  setEndTime(e.target.value)
+}
+
 // handle changing to 21 +
 const handleTwentyOne = () => {
   if (!twentyOne) {
@@ -66,7 +67,8 @@ const handleTwentyOne = () => {
 const createEvent = () => {
   axios.post('/events/create', {
     name: eventName,
-    date: `${eventDate} ${eventTime}`,
+    date: eventDate,
+    time: eventTime,
     geolocation: user.geolocation,
     twenty_one: twentyOne
   })
@@ -119,6 +121,18 @@ console.log(`${eventDate} ${eventTime}`, '<----date and time')
           id='eventTime'
           value={eventTime}
           onChange={handleEventTime}
+          type='time'>
+          </input>
+          <br></br>
+          <label
+          htmlFor='endTime'>
+            Time:
+          </label>
+          <br></br>
+          <input
+          id='endTime'
+          value={endTime}
+          onChange={handleEndTime}
           type='time'>
           </input>
           <br></br>
