@@ -261,7 +261,9 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                           onClick={() => handleRemoveLike(reel.id)}
                         />
                       ) : (
-                        <FavoriteIcon onClick={() => handleAddLike(reel.id)} />
+                        <FavoriteIcon
+                          onClick={() => handleAddLike(reel.id)}
+                        />
                       )}
                       {reel.like_count !== 0 && (
                         <p className='like-counter'>
