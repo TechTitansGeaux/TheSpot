@@ -30,6 +30,10 @@ type Props = {
   user: any;
   deleteReel: any;
   disabledNow: any;
+  handleAddLike: any;
+  handleRemoveLike: any;
+  likes: any;
+  likeTotal: number;
 };
 
 const theme = createTheme({
@@ -54,6 +58,10 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   user,
   deleteReel,
   disabledNow,
+  handleAddLike,
+  handleRemoveLike,
+  likes,
+  likeTotal,
 }) {
   const theme = useTheme();
   // REFERENCE VIDEO HTML element in JSX element // Uses a ref to hold an array of generated refs, and assign them when mapping.
@@ -109,12 +117,11 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
     return () => observer.disconnect();
   }, []);
 
-  console.log('reel ==>', reel);
+  console.log('likes', likes);
+
+  // console.log('reel ==>', reel);
   return (
-    <div
-      className='reel-child'
-      style={{ fontSize: theme.typography.fontSize }}
-    >
+    <div className='reel-child' style={{ fontSize: theme.typography.fontSize }}>
       <>
         <div className='video-container'>
           {reel.url.length > 15 && (
@@ -248,9 +255,18 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                 icon={
                   <React.Fragment>
                     <div className='like-count-container'>
-                      <FavoriteIcon color='secondary' />
+                      {likes.includes(reel.id) ? (
+                        <FavoriteIcon
+                          color='secondary'
+                          onClick={() => handleRemoveLike(reel.id)}
+                        />
+                      ) : (
+                        <FavoriteIcon onClick={() => handleAddLike(reel.id)} />
+                      )}
                       {reel.like_count !== 0 && (
-                        <p className='like-counter'>{reel.like_count}</p>
+                        <p className='like-counter'>
+                          {reel.like_count + likeTotal}
+                        </p>
                       )}
                     </div>
                   </React.Fragment>

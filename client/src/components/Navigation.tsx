@@ -116,7 +116,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
       axios
         .get('/feed/likesTable')
         .then((response) => {
-          console.log('likes:', response.data);
+          // console.log('likes:', response.data);
           for (let i = 0; i < response.data.length; i++) {
             if (user.id === response.data[i].UserId) {
               likes.push(response.data[i]);
