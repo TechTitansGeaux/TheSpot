@@ -135,7 +135,7 @@ feedRouter.delete('/delete/:id', (req: any, res: any) => {
     // .then((response: any) => {
     //   Likes.destroy({
     //     where: {
-    //       ReelId: id,
+    //       ReelId: null,
     //     },
     //   })
     // })
