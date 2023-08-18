@@ -69,6 +69,7 @@
     });
     const [justRecorded, setJustRecorded] = useState(false);
     const [reelSaved, setReelSaved] = useState(false);
+    const [businessAccount, setBusinessAccount] = useState(false);
 
     type Blob = {
       data: {
@@ -258,6 +259,21 @@ const togglePopUp = () => {
   }
 }
 
+// determine user type
+const checkUserType = () => {
+  if (user.type === 'business') {
+    setBusinessAccount(true);
+  }
+}
+
+useEffect(() => {
+  checkUserType();
+}, [])
+
+console.log(user.type, '<---- user type')
+console.log(businessAccount, '<------business account')
+
+
     return (
       <div>
         <div className='webContainer'>
@@ -341,7 +357,7 @@ const togglePopUp = () => {
             </Tooltip>
             </div>
           )}
-          {justRecorded && (
+          {justRecorded && businessAccount && (
             <div>
               <div
               onClick={togglePopUp}>
