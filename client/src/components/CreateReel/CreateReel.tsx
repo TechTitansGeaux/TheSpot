@@ -41,21 +41,23 @@ const CreateReel: React.FC<Props> = ({user}) => {
   const [mustCreateEvent, setMustCreateEvent] = useState(false);
 
 
-  // today variable 
-  const today = new Date().toDateString();
+  // today variable
+  const today = dayjs(new Date()).format('YYYY-MM-DD');
   // current time variable
-  const timeNow = new Date().toLocaleTimeString();
+  const timeNow = dayjs(new Date()).format('HH:mm:ss');
+
+  console.log(today, '<-----today')
 
 // check to see if there are any events happening at users location today
 const eventCheck = () => {
   axios.get(`/events/${user.geolocation}/${today}`)
     .then((resObj) => {
-      console.log(resObj, '<----- axios response for get events by location')
+      console.log(resObj, '<----- axios response for get events by location and day')
       // response object is event happening at LOCATION; must check to see if theres one happening at NOW
       // iterate through HERE/ TODAY events
-      for (let i = 0; i < resObj.data.events; i++) {
+      for (let i = 0; i < resObj.data.events.length; i++) {
         //determine if any are happening right now
-        if (resObj.data.events[i].time <= timeNow && resObj.data.events[i].endTime > timeNow) {
+        if (resObj.data.events[i].time <= timeNow && resObj.data.events[i].endTime >= timeNow) {
           setCurrentEvent(resObj.data.events[i]);
         }
       }
