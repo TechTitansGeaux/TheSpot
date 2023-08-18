@@ -263,6 +263,29 @@ button.accept-friend:hover {
   min-height: 667px;
 }
 
+.bottom-nav-parent{
+  position: relative;
+}
+
+.like-count-container{
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 25px;
+  height: auto;
+}
+
+p.like-counter {
+  margin-left: 5px;
+  color: var(--violet);
+}
+
+p.rsvp-counter {
+  margin-left: 15px;
+  color: var(--violet);
+}
+
 /* jackie made changes to push video to right  */
 /* it was at left:-50% before */
 video.reel {

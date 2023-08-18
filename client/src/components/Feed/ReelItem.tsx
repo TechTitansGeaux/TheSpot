@@ -11,6 +11,7 @@ import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import InfoIcon from '@mui/icons-material/Info';
+import RsvpSharpIcon from '@mui/icons-material/RsvpSharp';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState, useEffect, useRef } from 'react';
 import { memo } from 'react';
@@ -18,6 +19,7 @@ import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import './feed.css';
 
 dayjs.extend(relativeTime);
 
@@ -234,15 +236,53 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
             </div>
           </div>
           <div className='video-links-container'>
-            <Box sx={{ maxWidth: 400 }}>
+            <Box sx={{ width: '100%' }}>
               <BottomNavigation>
                 <BottomNavigationAction
-                  label='Favorites'
-                  icon={<FavoriteIcon />}
+                  className='bottom-nav-parent'
+                  label='Likes'
+                  icon={
+                    <React.Fragment>
+                      <div className='like-count-container'>
+                        <FavoriteIcon color='secondary' />
+                        {reel.like_count !== 0 && (
+                          <p className='like-counter'>{reel.like_count}</p>
+                        )}
+                      </div>
+                    </React.Fragment>
+                  }
+                  showLabel={false}
                 />
                 <BottomNavigationAction
-                  label='Nearby'
-                  icon={<LocationOnIcon />}
+                  label='Event Location'
+                  icon={
+                    true ? (
+                      <LocationOnIcon color='primary' />
+                    ) : (
+                      <LocationOnIcon />
+                    )
+                  }
+                  showLabel={false}
+                />
+                <BottomNavigationAction
+                  className='bottom-nav-parent'
+                  label='Going'
+                  icon={
+                    <React.Fragment>
+                      <div className='like-count-container'>
+                        <RsvpSharpIcon
+                          style={{ transform: 'scale(2)' }}
+                          color='secondary'
+                        />
+                        {reel.Event.rsvp_count !== 0 && (
+                          <p className='rsvp-counter'>
+                            {reel.Event.rsvp_count}
+                          </p>
+                        )}
+                      </div>
+                    </React.Fragment>
+                  }
+                  showLabel={false}
                 />
               </BottomNavigation>
             </Box>

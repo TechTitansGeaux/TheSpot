@@ -2,23 +2,6 @@ const express = require('express');
 const likesRouter = express.Router();
 const { Likes, Reels } = require('../db/index');
 
-// // get route to retrieve ALL likes throughout app
-// likesRouter.get('/', (req: any, res: any) => {
-//   const { likes_count } = req.body;
-//   Reels.findAll({
-//       where: {
-//       likes_count,
-//     },
-//   })
-//     .then((data: any) => {
-//       console.log('Likes GET request success', data)
-//       res.status(200).send(data);
-//     })
-//     .catch((err: any) => {
-//       console.error('likeRouter GET from database Error', err);
-//       res.sendStatus(500);
-//     });
-// });
 
 // update route increment likes
 likesRouter.put('/addLike/:ReelId', (req: any, res: any) => {
