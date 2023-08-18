@@ -56,19 +56,34 @@ const FriendAcceptedEntry: React.FC<Props> = ({
   allUsers
 }) => {
 
-  const friendConfirmed = allUsers.reduce((name: String, otherUser: any) => {
+  const friendName = allUsers.reduce((name: String, otherUser: any) => {
     if (otherUser?.id === friend?.accepter_id) {
       name = otherUser.displayName;
-      console.log('friend displayName:', otherUser.displayName);
     }
     return name;
   }, '');
 
+const friendIcon = allUsers.reduce((icon: string, otherUser: any) => {
+  if (otherUser?.id === friend?.accepter_id) {
+    icon = otherUser.mapIcon;
+    console.log('friend icon:', otherUser.mapIcon);
+  }
+  return icon;
+}, '');
 
   return (
     <>
       <div className='friendRequest-container'>
-        <h2 className='friendName'>{friendConfirmed}</h2>
+        <img
+          src={friendIcon}
+          alt={friendName}
+          style={{
+            width: '40px',
+            height: '40px',
+            marginRight: '10px',
+          }}
+        />
+        <h2 className='friendName'>{friendName}</h2>
         <div className='btn-container'>
           <Fab
             style={{

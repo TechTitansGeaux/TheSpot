@@ -58,18 +58,34 @@ const FriendRequestEntry: React.FC<Props> = ({
   allUsers
 }) => {
 
-  const pendingFriendConfirmed = allUsers.reduce((name: String, otherUser: any) => {
+  const pendingFriendName = allUsers.reduce((name: string, otherUser: any) => {
     if (otherUser?.id === pendingFriend?.accepter_id) {
       name = otherUser.displayName;
-      console.log('friend displayName:', otherUser.displayName);
     }
     return name;
+  }, '');
+
+  const pendingFriendIcon = allUsers.reduce((icon: string, otherUser: any) => {
+    if (otherUser?.id === pendingFriend?.accepter_id) {
+      icon = otherUser.mapIcon;
+      console.log('friend icon:', otherUser.mapIcon);
+    }
+    return icon;
   }, '');
 
   return (
     <>
       <div className='friendRequest-container'>
-        <h2 className='friendName'>{pendingFriendConfirmed}</h2>
+        <img
+          src={pendingFriendIcon}
+          alt={pendingFriendName}
+          style={{
+            width: '40px',
+            height: '40px',
+            marginRight: '10px'
+          }}
+        />
+        <h2 className='friendName'>{pendingFriendName}</h2>
         <div className='btn-container'>
           <Fab
             style={{

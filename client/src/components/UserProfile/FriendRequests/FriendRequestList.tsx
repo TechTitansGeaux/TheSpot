@@ -42,6 +42,7 @@ type Props = {
 const FriendRequestList: React.FC<Props> = ({ user, allUsers }) => {
   const [pendingFriends, setPendingFriends] = useState([]); // pending friend list for current user
   const [friends, setFriends] = useState([]); // approved friend list for current user
+  const [count, setCount] = useState(-1);
 
   // create axios get request to get pending friends
   const getPendingFriendList = () => {
@@ -50,6 +51,7 @@ const FriendRequestList: React.FC<Props> = ({ user, allUsers }) => {
       .then((response) => {
         setPendingFriends(response.data);
         //console.log('friends response.data:', response.data);
+        setCount(count - 1);
       })
       .catch((err) => {
         console.error('Could not GET friends:', err);
@@ -63,6 +65,7 @@ const FriendRequestList: React.FC<Props> = ({ user, allUsers }) => {
       .then((response) => {
         //console.log('friends response.data:', response.data);
         setFriends(response.data);
+        setCount(count + 1);
       })
       .catch((err) => {
         console.error('Could not GET friends:', err);
@@ -82,10 +85,14 @@ const FriendRequestList: React.FC<Props> = ({ user, allUsers }) => {
       });
   };
 
+
   useEffect(() => {
     getPendingFriendList();
+  }, []);
+
+  useEffect(() => {
     getFriendList();
-  }, [friends]);
+  }, []);
 
   // PUT request update friendship from 'pending' to 'approved'
   const approveFriendship = (friend: number) => {
