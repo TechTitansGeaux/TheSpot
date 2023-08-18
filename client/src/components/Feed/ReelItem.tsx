@@ -111,7 +111,6 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
 
   console.log('reel ==>', reel);
   return (
-    <div className='vid-and-stamp'>
       <div style={{ fontSize: theme.typography.fontSize }}>
         <>
           <div className='video-container'>
@@ -126,6 +125,9 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                 preload='none'
               ></video>
             )}
+              <h5 className='video-timestamp'>
+                ... {dayjs(`${reel.createdAt}`).fromNow()}
+              </h5>
             <p className='video-text'>{reel.text}</p>
             <>
               <Tooltip
@@ -289,10 +291,6 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
           </div>
         </>
       </div>
-      <h5 className='video-timestamp'>
-        ... {dayjs(`${reel.createdAt}`).fromNow()}
-      </h5>
-    </div>
   );
 });
 
