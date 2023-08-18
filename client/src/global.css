@@ -429,7 +429,7 @@ button.rejectFriend-btn:hover {
   border-radius: 50%;
   display: inline-block;
   position: relative;
-  transform: translate(-45%, -45%);
+  transform: translate(-50%, -50%);
   z-index: 10;
   cursor: pointer;
   font-size: 30px;
@@ -450,7 +450,7 @@ button.rejectFriend-btn:hover {
   font-family: var(--title-font);
   color: white;
   position: relative;
-  top: -25px;
+  top: -28.5px;
   left: -100px;
   text-transform: uppercase;
   z-index: 11;
@@ -468,7 +468,7 @@ button.rejectFriend-btn:hover {
   display: flex;
 }
 
-.event {
+/* .event {
   height: 80px;
   width: 80px;
   background-color: var(--yellow);
@@ -479,6 +479,6 @@ button.rejectFriend-btn:hover {
   cursor: pointer;
   opacity: 65%;
   border: 3px solid #f0f465;
-}
+} */
 
 
