@@ -154,14 +154,22 @@ const Navigation: React.FC<Props> = ({ user }) => {
       getAllPFriends();
       setOnPage(
         <button className='navLink' onClick={handleScrollTop}>
-          <img id='nav-logo' src={logoGradient} alt='app logo' />
+          <img
+            id='nav-logo'
+            src={logoGradient}
+            alt='app logo'
+          />
         </button>
       );
     } else {
       getAllPFriends();
       setOnPage(
         <NavLink className='navLink' to='/Feed'>
-          <img id='nav-logo' src={logoGradient} alt='app logo' />
+          <img
+            id='nav-logo'
+            src={logoGradient}
+            alt='app logo'
+          />
         </NavLink>
       );
     }
@@ -215,7 +223,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
             FRIEND REQUESTS
             <span>
               {pFriends.length !== 0 &&
-                <CircleNotificationsIcon className="circle" />
+                <CircleNotificationsIcon className="circle" sx={{ marginLeft: 1 }} />
               }
             </span>
           </ListItemButton>
@@ -281,7 +289,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
                   </div>
                     <div>
                       {(likesArr.length !== 0 || pFriends.length !== 0) &&
-                        <CircleNotificationsIcon className="circle" />
+                        <CircleNotificationsIcon className="circle" sx={{ position: 'absolute', right: -30, zIndex: "4", top: 5 }} />
                       }
                     </div>
                   <div onClick={toggleDrawer('left', true)}>

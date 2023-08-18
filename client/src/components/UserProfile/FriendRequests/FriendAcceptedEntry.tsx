@@ -3,6 +3,24 @@ import Fab from '@mui/material/Fab';
 import Tooltip from '@mui/material/Tooltip';
 import Zoom from '@mui/material/Zoom';
 import RemoveOutlinedIcon from '@mui/icons-material/RemoveOutlined';
+import { StateToString } from 'redux-logger';
+
+
+
+type User = {
+  id: number;
+  username: string;
+  displayName: string;
+  type: string;
+  geolocation: string;
+  mapIcon: string;
+  birthday: string;
+  privacy: string;
+  accessibility: string;
+  email: string;
+  picture: string;
+  googleId: string;
+};
 
 type Props = {
   user: {
@@ -28,17 +46,44 @@ type Props = {
     updatedAt: Date;
   };
   rejectFriendship: any;
+  allUsers: any;
 };
 
 const FriendAcceptedEntry: React.FC<Props> = ({
   user,
   friend,
   rejectFriendship,
+  allUsers
 }) => {
+
+  const friendName = allUsers.reduce((name: String, otherUser: any) => {
+    if (otherUser?.id === friend?.accepter_id) {
+      name = otherUser.displayName;
+    }
+    return name;
+  }, '');
+
+const friendIcon = allUsers.reduce((icon: string, otherUser: any) => {
+  if (otherUser?.id === friend?.accepter_id) {
+    icon = otherUser.mapIcon;
+    console.log('friend icon:', otherUser.mapIcon);
+  }
+  return icon;
+}, '');
+
   return (
     <>
       <div className='friendRequest-container'>
-        <h2 className='friendName'>{friend?.id}</h2>
+        <img
+          src={friendIcon}
+          alt={friendName}
+          style={{
+            width: '40px',
+            height: '40px',
+            marginRight: '10px',
+          }}
+        />
+        <h2 className='friendName'>{friendName}</h2>
         <div className='btn-container'>
           <Fab
             style={{
