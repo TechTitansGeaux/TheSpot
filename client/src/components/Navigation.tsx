@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from 'react';
 import { Outlet, NavLink, Link } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
