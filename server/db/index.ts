@@ -85,7 +85,7 @@ const Events = sequelize.define(
       defaultValue: 0
     },
     date: {
-      type: DataTypes.DATE,
+      type: DataTypes.STRING(100),
     },
     geolocation: {
       type: DataTypes.STRING(100),

@@ -66,7 +66,7 @@ const handleTwentyOne = () => {
 const createEvent = () => {
   axios.post('/events/create', {
     name: eventName,
-    date: new Date,
+    date: `${eventDate} ${eventTime}`,
     geolocation: user.geolocation,
     twenty_one: twentyOne
   })
@@ -79,8 +79,7 @@ const createEvent = () => {
   })
 }
 
-
-console.log(twentyOne, '<-------21')
+console.log(`${eventDate} ${eventTime}`, '<----date and time')
 
     return (
       <div
@@ -101,15 +100,14 @@ console.log(twentyOne, '<-------21')
           <br></br>
           <label
           htmlFor='eventDate'>
-            Date:
+            Date and time:
           </label>
           <br></br>
           <input
           id='eventDate'
           value={eventDate}
           onChange={handleEventDate}
-          placeholder='MM/DD/YYYY'
-          type='text'>
+          type="date">
           </input>
           <br></br>
           <label
@@ -121,8 +119,7 @@ console.log(twentyOne, '<-------21')
           id='eventTime'
           value={eventTime}
           onChange={handleEventTime}
-          placeholder='0:00 AM/PM'
-          type='text'>
+          type='time'>
           </input>
           <br></br>
           <label
