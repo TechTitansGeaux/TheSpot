@@ -69,6 +69,7 @@ const createEvent = () => {
     name: eventName,
     date: eventDate,
     time: eventTime,
+    endTime: endTime,
     geolocation: user.geolocation,
     twenty_one: twentyOne
   })
@@ -80,8 +81,6 @@ const createEvent = () => {
     console.error('Failed to axios POST event: ', err)
   })
 }
-
-console.log(`${eventDate} ${eventTime}`, '<----date and time')
 
     return (
       <div
