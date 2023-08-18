@@ -56,7 +56,8 @@ const theme = createTheme({
 
 const Navigation: React.FC<Props> = ({ user }) => {
   const [pFriends, setPFriends] = useState([]); // pending friends list
-  const likes: any = []; // user's reels that have been liked
+
+  const [likesArr, setLikesArr] = useState([]); // state version of likes
 
   const [onPage, setOnPage] = useState(
     <NavLink className='navLink' to='/Feed'>
@@ -92,18 +93,20 @@ const Navigation: React.FC<Props> = ({ user }) => {
 
   }, [location.pathname, user]);
 
-  // get reels that have been liked
+  // get reels that have been liked AND checked
   const getLikes = () => {
+    const likes: any = []; // user's reels that have been liked
     if (user) {
       axios
         .get('/likes/likes')
         .then((response) => {
-          console.log('likes:', response.data);
+          // console.log('likes:', response.data);
           for (let i = 0; i < response.data.length; i++) {
-            if (user.id === response.data[i].UserId) {
+            if (user.id === response.data[i].UserId && response.data[i].checked !== true) {
               likes.push(response.data[i]);
             }
           }
+          setLikesArr(likes);
         })
         .catch((err) => {
           console.error('Could not GET all likes:', err);
@@ -113,7 +116,31 @@ const Navigation: React.FC<Props> = ({ user }) => {
 
   useEffect(() => {
     getLikes();
-  }, [user]);
+
+    const interval = setInterval(() => {
+      getLikes();
+    }, 5000);
+
+    return () => {
+      clearInterval(interval);
+    }
+  }, [location.pathname, user]);
+
+  // once you click on likes sidebar, set likes checked column to true
+  const checkedLikes = () => {
+    for (let i = 0; i < likesArr.length; i++) {
+      let id = likesArr[i].id;
+      axios
+        .put(`/likes/checked/${id}`)
+        .then((response) => {
+          console.log('updated LIKES table column checked');
+        })
+        .catch((err) => {
+          console.error('Did not update LIKES checked column', err);
+        })
+    }
+    setLikesArr([]);
+  };
 
   // When the user clicks on the button, scroll to the top of the page
   const handleScrollTop = () => {
@@ -209,8 +236,14 @@ const Navigation: React.FC<Props> = ({ user }) => {
             component={Link}
             to={'/Likes'}
             sx={{ minHeight: '4em', paddingLeft: '1.5em' }}
+            onClick={checkedLikes}
           >
             LIKES
+            <span>
+              {likesArr.length !== 0 &&
+                <CircleNotificationsIcon className="circle" />
+              }
+            </span>
           </ListItemButton>
         </ListItem>
         <ListItem className='drawer-btn' disablePadding>
@@ -247,7 +280,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
                     </NavLink>
                   </div>
                     <div>
-                      {pFriends.length !== 0 &&
+                      {(likesArr.length !== 0 || pFriends.length !== 0) &&
                         <CircleNotificationsIcon className="circle" />
                       }
                     </div>
