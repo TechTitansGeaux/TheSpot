@@ -19,14 +19,15 @@
       googleId: string;
     },
     mustCreateEvent: boolean,
-    updateMustCreateEvent: () => void
+    updateMustCreateEvent: () => void,
+    updateEventId: (newId: number) => void
     // eventName: string,
     // eventDate: string,
     // eventTime: string,
     // twentyOne: boolean
   }
 
-  const NewEventForm: React.FC<Props> = ({user, mustCreateEvent, updateMustCreateEvent}) => {
+  const NewEventForm: React.FC<Props> = ({user, mustCreateEvent, updateMustCreateEvent, updateEventId}) => {
 
   const [eventName, setEventName] = useState('');
   const [eventDate, setEventDate] = useState('');
@@ -69,7 +70,8 @@ const createEvent = () => {
     geolocation: user.geolocation,
     twenty_one: twentyOne
   })
-  .then(() => {
+  .then((res) => {
+    updateEventId(res.data.event.id)
     updateMustCreateEvent();
   })
   .catch((err) => {

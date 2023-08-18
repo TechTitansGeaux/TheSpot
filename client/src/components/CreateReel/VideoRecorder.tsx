@@ -180,18 +180,21 @@
       .then((res) => {
         // console.log(res, '<----- response from axios post event')
         setEventId(res.data.event.id)
+        setReelSaved(true);
       })
       .catch((err) => {
         console.error('Failed axios post event: ', err);
       })
     } else {
       // If event did not need to be created, set event id to the one passed down from props
+      if (currentEventId !== 0) {
       setEventId(currentEventId);
+      }
       setReelSaved(true)
     }
     };
 
-    // console.log(eventId, '<---- eventId in state')
+    console.log(eventId, '<---- eventId in state')
 
     // POST THE REEL to the db, but only AFTER eventId has been GOT
     const postReelToDb = async () => {
@@ -229,7 +232,7 @@
         postReelToDb();
         setReelSaved(false);
       }
-    }, [eventId])
+    }, [eventId, reelSaved])
 
     const videoConstraints = {
       // width: 420,
@@ -270,8 +273,12 @@ useEffect(() => {
   checkUserType();
 }, [])
 
-console.log(user.type, '<---- user type')
-console.log(businessAccount, '<------business account')
+// set event id from new event form component
+const updateEventId = (newId: number) => {
+  setEventId(newId);
+}
+// console.log(user.type, '<---- user type')
+// console.log(businessAccount, '<------business account')
 
 
     return (
@@ -280,7 +287,8 @@ console.log(businessAccount, '<------business account')
         <NewEventForm
         user={user}
         mustCreateEvent={mustCreateEvent}
-        updateMustCreateEvent={updateMustCreateEvent}/>
+        updateMustCreateEvent={updateMustCreateEvent}
+        updateEventId={updateEventId}/>
           { justRecorded ? (
           <div className='preview-mask'>
             <div className='webcam'>
