@@ -14,6 +14,7 @@ import UserType  from './components/ProfileSetUp/UserType';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Settings from './components/ProfileSetUp/Settings';
+import BusinessSettings from './components/ProfileSetUp/BusinessSettings';
 import FriendRequestList from './components/UserProfile/FriendRequests/FriendRequestList';
 import LikesList from './components/UserProfile/Likes/LikesList';
 import EventsList from './components/UserProfile/Events/EventsList';
@@ -44,6 +45,7 @@ const App = () => {
   // get all users to pass down as props
   const [user, setUser] = useState<User>(null);
   const fontSize = useSelector((state: RootState) => state.app.fontSize); // Default font size
+
 
   const fetchAuthUser = async () => {
     try {
@@ -87,6 +89,7 @@ const App = () => {
             path='/Settings'
             element={<Settings fontSize={fontSize} />}
           ></Route>
+          <Route path='/BusinessSettings' element={<BusinessSettings fontSize={fontSize}/>}></Route>
           <Route
             path='/CreateReel'
             element={<CreateReel user={user} />}
