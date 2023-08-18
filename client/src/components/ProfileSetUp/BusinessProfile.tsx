@@ -17,10 +17,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import SpeechToText from '../ProfileSetUp/SpeechToText';
-import PlacesAutocomplete, {
-  geocodeByAddress,
-  getLatLng,
-} from 'react-places-autocomplete';
+import LocationSearchInput from './LocationSearchInput';
 
 
 const theme = createTheme({
@@ -44,21 +41,19 @@ const BusinessProfile = () => {
 
   const [username, setUsername] = useState('');
   const [displayName, setDisplayName] = useState('');
-  const [address, setAddress] = useState('');
-  const [addressCoordinates, setAddressCoordinates] = useState('');
   const [birthday, setBirthday] = useState('');
   const [picture, setPicture] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
   const [isImageSelected, setIsImageSelected] = useState(false);
-  const [selectedMapIcon, setSelectedMapIcon] = useState('');
   const [geolocation, setGeolocation] = useState('');
+  const [selectedMapIcon, setSelectedMapIcon] = useState('');
   const [privacy, setPrivacy] = React.useState('');
   const [errors, setErrors] = useState({
     username: '',
     displayName: '',
     birthday: '',
     picture: '',
-    address: '',
+    geolocation: '',
     mapIcon: '',
     uploadImage: '',
     saveProfile: '',
@@ -68,6 +63,7 @@ const BusinessProfile = () => {
   useEffect(() => {
     if (authUser) {
       setPicture(authUser.picture);
+      setGeolocation(authUser.geolocation);
     }
   }, [authUser]);
 
@@ -86,16 +82,16 @@ const BusinessProfile = () => {
       newErrors.displayName = '';
     }
 
+    if (!geolocation) {
+      newErrors.geolocation = 'Geolocation is required.';
+    } else {
+      newErrors.geolocation = '';
+    }
+
     if (!birthday) {
       newErrors.birthday = 'Birthday is required.';
     } else {
       newErrors.birthday = '';
-    }
-
-    if (!address) {
-      newErrors.address = 'Address is required.';
-    } else {
-      newErrors.address = '';
     }
 
     if (!selectedMapIcon) {
@@ -115,7 +111,7 @@ const BusinessProfile = () => {
     if (
       newErrors.username ||
       newErrors.displayName ||
-      newErrors.address ||
+      newErrors.geolocation ||
       newErrors.birthday ||
       newErrors.mapIcon ||
       newErrors.privacy
@@ -126,10 +122,10 @@ const BusinessProfile = () => {
     const profileData = {
       username,
       displayName,
+      geolocation,
       birthday,
       picture,
       mapIcon: selectedMapIcon,
-      geolocation: geolocation,
       privacy
     };
 
@@ -145,26 +141,7 @@ const BusinessProfile = () => {
       });
 };
 
-      // Convert address to geolocation
-      const handleAddressChange = async (newAddress: string) => {
-        // const results = await geocodeByAddress(newAddress);
-        // const latLng = await getLatLng(results[0]);
-        setAddress(newAddress);
-        // setAddressCoordinates(`${latLng}`); 
-        // setGeolocation(addressCoordinates);
-      };
 
-      const handleSelect = async (selectedAddress: string) => {
-        try {
-          const results = await geocodeByAddress(selectedAddress);
-          const latLng = await getLatLng(results[0]);
-          setAddress(selectedAddress);
-          setAddressCoordinates(`${latLng}`);
-          setGeolocation(addressCoordinates);
-        } catch (error) {
-          console.error('Error getting address coordinates', error);
-        }
-  }
 
 
   const handleImageChange = (event: any) => {
@@ -237,47 +214,12 @@ const BusinessProfile = () => {
               </Alert>
             )}
 
-        {/* Address field */}
-        <PlacesAutocomplete
-          value={address}
-          onChange={handleAddressChange}
-          onSelect={handleSelect}
-        >
-          {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-            <div>
-            <SpeechToText onTranscriptChange={setAddress} />
-            <p>Click Microphone For Speech To Text</p>
-              <TextField
-                label="Address"
-                variant="outlined"
-                color="secondary"
-                fullWidth
-                {...getInputProps({ placeholder: 'Type address' })}
-                helperText={errors.address}
-                error={!!errors.address}
-                style={{ color: 'var(--setupBG)', marginBottom: '1rem', marginTop: '1rem' }}
-              />
-              <div>
-                {loading ? <div>Loading...</div> : null}
-
-                {suggestions.map((suggestion, index) => {
-                  const style = {
-                    backgroundColor: suggestion.active ? '#41b6e6' : '#fff',
-                    cursor: 'pointer',
-                  };
-                  return (
-                    <div
-                      {...getSuggestionItemProps(suggestion, { style })}
-                      key={index}
-                    >
-                      {suggestion.description}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+          <LocationSearchInput />
+            {errors.geolocation && (
+              <Alert severity="error">
+              {errors.geolocation}
+            </Alert>
           )}
-        </PlacesAutocomplete>
 
             {/* Username field */}
             <div>
