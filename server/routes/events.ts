@@ -15,6 +15,21 @@ eventRouter.get('/all', async (req, res) => {
     })
 })
 
+// get all of one user's events
+eventRouter.get('/userEvents', async (req: any, res: any) => {
+  // access user id from req.user
+  const { userId } = req.user;
+
+  await Events.findAll({where: {userId: userId}})
+    .then((resObj) => {
+      console.log(resObj, '<----res from get all user\'s events')
+      res.status(200).send(resObj);
+    })
+    .catch((err) => {
+      console.error('Failed to GET all of user\'s events: ', err);
+      res.sendStatus(500)
+    })
+})
 
 // get event by location AND date 
 eventRouter.get('/:geolocation/:date', async (req: any, res: any) => {
