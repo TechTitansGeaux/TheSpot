@@ -4,6 +4,23 @@ import FriendAcceptedEntry from './FriendAcceptedEntry';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
+
+type User = {
+  id: number;
+  username: string;
+  displayName: string;
+  type: string;
+  geolocation: string;
+  mapIcon: string;
+  birthday: string;
+  privacy: string;
+  accessibility: string;
+  email: string;
+  picture: string;
+  googleId: string;
+};
+
+
 type Props = {
   user: {
     id: number;
@@ -19,9 +36,10 @@ type Props = {
     picture: string;
     googleId: string;
   };
+  allUsers: [User];
 };
 
-const FriendRequestList: React.FC<Props> = ({ user }) => {
+const FriendRequestList: React.FC<Props> = ({ user, allUsers }) => {
   const [pendingFriends, setPendingFriends] = useState([]); // pending friend list for current user
   const [friends, setFriends] = useState([]); // approved friend list for current user
 
@@ -65,11 +83,8 @@ const FriendRequestList: React.FC<Props> = ({ user }) => {
   };
 
   useEffect(() => {
-    const controller = new AbortController();
     getPendingFriendList();
     getFriendList();
-    // aborts axios request when component unmounts
-    return () => controller?.abort();
   }, [friends]);
 
   // PUT request update friendship from 'pending' to 'approved'
@@ -98,7 +113,9 @@ const FriendRequestList: React.FC<Props> = ({ user }) => {
                 key={pendingFriend.id}
                 pendingFriend={pendingFriend}
                 user={user}
+                allUsers={allUsers}
                 approveFriendship={approveFriendship}
+                rejectFriendship={rejectFriendship}
               />
             );
           })}
@@ -112,6 +129,7 @@ const FriendRequestList: React.FC<Props> = ({ user }) => {
                 key={friend.id}
                 friend={friend}
                 user={user}
+                allUsers={allUsers}
                 rejectFriendship={rejectFriendship}
               />
             );

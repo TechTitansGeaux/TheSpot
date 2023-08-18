@@ -41,7 +41,6 @@ friendRouter.put('/', (req: any, res: any) => {
     {
       where: {
         accepter_id: [id, requester_id],
-        // requester_id: [id, requester_id],
         status: 'pending'
       },
     })

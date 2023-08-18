@@ -117,9 +117,6 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
     return () => observer.disconnect();
   }, []);
 
-  console.log('likes', likes);
-
-  // console.log('reel ==>', reel);
   return (
     <div className='reel-child' style={{ fontSize: theme.typography.fontSize }}>
       <>
