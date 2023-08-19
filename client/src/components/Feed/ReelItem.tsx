@@ -1,7 +1,6 @@
 import * as React from 'react';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 // import AddFriend from '../AddFriend';
 import Avatar from '@mui/material/Avatar';
@@ -19,6 +18,7 @@ import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import Likes from './Likes';
 import './feed.css';
 
 dayjs.extend(relativeTime);
@@ -116,6 +116,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
 
     return () => observer.disconnect();
   }, []);
+
 
   return (
     <div className='reel-child' style={{ fontSize: theme.typography.fontSize }}>
@@ -252,16 +253,13 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                 icon={
                   <React.Fragment>
                     <div className='like-count-container'>
-                      {likes.includes(reel.id) ? (
-                        <FavoriteIcon
-                          color='secondary'
-                          onClick={() => handleRemoveLike(reel.id)}
-                        />
-                      ) : (
-                        <FavoriteIcon
-                          onClick={() => handleAddLike(reel.id)}
-                        />
-                      )}
+                      <Likes
+                        handleAddLike={handleAddLike}
+                        handleRemoveLike={handleRemoveLike}
+                        reel={reel}
+                        likes={likes}
+                        likeTotal={likeTotal}
+                      />
                       {reel.like_count >= 0 && (
                         <p className='like-counter'>
                           {reel.like_count + likeTotal}

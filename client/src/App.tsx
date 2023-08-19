@@ -79,7 +79,6 @@ const App = () => {
       const response = await axios.get('/users/');
 
       if (response && response.data) {
-        console.log('getAllUsers response ==>', response.data)
         setAllUsers(response.data);
       }
     } catch (error) {

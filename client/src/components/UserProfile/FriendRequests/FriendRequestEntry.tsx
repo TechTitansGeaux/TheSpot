@@ -59,16 +59,15 @@ const FriendRequestEntry: React.FC<Props> = ({
 }) => {
 
   const pendingFriendName = allUsers.reduce((name: string, otherUser: any) => {
-    if (otherUser?.id === pendingFriend?.accepter_id) {
+    if (otherUser?.id === pendingFriend?.accepter_id) { // CHANGE to requester_id
       name = otherUser.displayName;
     }
     return name;
   }, '');
 
   const pendingFriendIcon = allUsers.reduce((icon: string, otherUser: any) => {
-    if (otherUser?.id === pendingFriend?.accepter_id) {
+    if (otherUser?.id === pendingFriend?.accepter_id) { // CHANGE to requester_id
       icon = otherUser.mapIcon;
-      console.log('friend icon:', otherUser.mapIcon);
     }
     return icon;
   }, '');

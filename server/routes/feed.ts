@@ -106,7 +106,7 @@ feedRouter.get('/friendlist/pending', (req: any, res: any) => {
   Friendships.findAll({
     where: {
       status: 'pending',
-      requester_id: id,
+      requester_id: id, // accepter_id CHANGE
     },
   })
     .then((response: any) => {

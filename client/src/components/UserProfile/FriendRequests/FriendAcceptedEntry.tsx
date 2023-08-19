@@ -58,6 +58,7 @@ const FriendAcceptedEntry: React.FC<Props> = ({
 
   const friendName = allUsers.reduce((name: String, otherUser: any) => {
     if (otherUser?.id === friend?.accepter_id) {
+      // CHANGE to requester_id
       name = otherUser.displayName;
     }
     return name;
@@ -65,6 +66,7 @@ const FriendAcceptedEntry: React.FC<Props> = ({
 
 const friendIcon = allUsers.reduce((icon: string, otherUser: any) => {
   if (otherUser?.id === friend?.accepter_id) {
+    // CHANGE to requester_id
     icon = otherUser.mapIcon;
     console.log('friend icon:', otherUser.mapIcon);
   }

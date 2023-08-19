@@ -1,7 +1,7 @@
 import * as React from 'react';
 import FriendRequestEntry from './FriendRequestEntry';
 import FriendAcceptedEntry from './FriendAcceptedEntry';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo} from 'react';
 import axios from 'axios';
 
 
@@ -41,8 +41,14 @@ type Props = {
 
 const FriendRequestList: React.FC<Props> = ({ user, allUsers }) => {
   const [pendingFriends, setPendingFriends] = useState([]); // pending friend list for current user
+  const [ pendingFriendsId, setPendingFriendsId ] = useState([])
   const [friends, setFriends] = useState([]); // approved friend list for current user
-  const [count, setCount] = useState(-1);
+  const [friendsId, setFriendsId] = useState([])
+
+
+  // const userFriend = useMemo(() => {
+  //   userName: friends.name;
+  // })
 
   // create axios get request to get pending friends
   const getPendingFriendList = () => {
@@ -51,7 +57,6 @@ const FriendRequestList: React.FC<Props> = ({ user, allUsers }) => {
       .then((response) => {
         setPendingFriends(response.data);
         //console.log('friends response.data:', response.data);
-        setCount(count - 1);
       })
       .catch((err) => {
         console.error('Could not GET friends:', err);
@@ -65,7 +70,6 @@ const FriendRequestList: React.FC<Props> = ({ user, allUsers }) => {
       .then((response) => {
         //console.log('friends response.data:', response.data);
         setFriends(response.data);
-        setCount(count + 1);
       })
       .catch((err) => {
         console.error('Could not GET friends:', err);
@@ -88,11 +92,9 @@ const FriendRequestList: React.FC<Props> = ({ user, allUsers }) => {
 
   useEffect(() => {
     getPendingFriendList();
-  }, []);
-
-  useEffect(() => {
     getFriendList();
   }, []);
+
 
   // PUT request update friendship from 'pending' to 'approved'
   const approveFriendship = (friend: number) => {
@@ -103,12 +105,15 @@ const FriendRequestList: React.FC<Props> = ({ user, allUsers }) => {
       })
       .then((data) => {
         console.log('Friend request approved PUT', data);
+        setFriendsId((prev) => [...prev, friend]);
+
       })
       .catch((err) => {
         console.error('Friend PUT request axios FAILED:', err);
       });
   };
 
+  console.log('friends id from state arr in FriendRequestList', friendsId);
   return (
     <>
       <div className='container-full-w'>
