@@ -62,6 +62,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
   const [pFriends, setPFriends] = useState([]); // pending friends list
   const [open, setOpen] = useState(false); // open and close snackbar
   const [likesArr, setLikesArr] = useState([]); // state version of likes
+  const [userReels, setUserReels] = useState([]); // user's own reels
 
   const [onPage, setOnPage] = useState(
     <NavLink className='navLink' to='/Feed'>
@@ -99,6 +100,23 @@ const Navigation: React.FC<Props> = ({ user }) => {
 
   }, [location.pathname, user]);
 
+  // get your own reels
+  const getOwnReels = () => {
+    axios
+      .get('/feed/reel/user')
+      .then((response: any) => {
+        console.log('users own reels:', response.data);
+        setUserReels(response.data);
+      })
+      .catch((err: any) => {
+        console.error('Cannot get own reels:', err);
+      })
+  };
+
+  useEffect(() => {
+    getOwnReels();
+  }, []);
+
   // get reels that have been liked AND checked
   const getLikes = () => {
     const likes: any = []; // user's reels that have been liked
@@ -108,8 +126,10 @@ const Navigation: React.FC<Props> = ({ user }) => {
         .then((response) => {
           // console.log('likes:', response.data);
           for (let i = 0; i < response.data.length; i++) {
-            if (user.id === response.data[i].UserId && response.data[i].checked !== true) {
-              likes.push(response.data[i]);
+            for (let j = 0; j < userReels.length; j++) {
+              if (response.data[i].ReelId === userReels[j].id && response.data[i].checked !== true) {
+                likes.push(response.data[i]);
+              }
             }
           }
           setLikesArr(likes);
