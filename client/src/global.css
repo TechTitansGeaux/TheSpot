@@ -555,8 +555,6 @@ button.rejectFriend-btn:hover {
 }
 
 .eventCard {
-  /* display: flex;
-  flex-direction: row; */
   position: relative;
   height: 175px;
   width: 200px;
@@ -564,7 +562,6 @@ button.rejectFriend-btn:hover {
   padding: 10px;
   text-align: center;
   align-items: center;
-  /* background-color: var(--pink); */
   border: solid var(--yellow);
   border-radius: 3px;
 }
@@ -579,3 +576,8 @@ button.rejectFriend-btn:hover {
   top: 10px;
 }
 
+.eventDetailInput {
+  color: var(--white);
+  background: transparent;
+  border: none;
+}
