@@ -100,7 +100,7 @@ const FriendRequestList: React.FC<Props> = ({ user, allUsers }) => {
     console.log('friendship approved');
     axios
       .put('/friends', {
-        requester_id: friend,
+        requester_id: friend, 
       })
       .then((data) => {
         // console.log('Friend request approved PUT', data);

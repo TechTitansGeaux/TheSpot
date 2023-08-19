@@ -156,8 +156,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
     return () => observer.disconnect();
   }, []);
 
-  // console.log('reels user type', reels)
-  // console.log('reel user type', reel)
+
   return (
     <div>
       {true && (
@@ -181,7 +180,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
               <h5 className='video-timestamp'>
                 ... {dayjs(`${reel.createdAt}`).fromNow()}
               </h5>
-              <p className='video-text'>{reel.text}</p>
+              <p className='video-text'>{reel.text + reel.User.type}</p>
               <>
                 <Tooltip
                   title={reel.Event.name}

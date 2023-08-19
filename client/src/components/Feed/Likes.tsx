@@ -1,6 +1,7 @@
 import * as React from 'react';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useState } from 'react';
+import axios from 'axios';
 
 type Props = {
   reel: any;
@@ -18,6 +19,13 @@ const Likes: React.FC<Props> = ({
   reel,
 }) => {
   const [clicked, setClicked] = useState(false);
+  // const [myLikes, setMyLikes] = useState([]); // array of my likes
+
+  // const getAllLikes = () => {
+  //   axios.get('/likes/likes')
+
+  // }
+
 
   const handleLikeClick = (reelId: number) => {
     if (!clicked) {
