@@ -198,7 +198,7 @@ button.navLink {
 
 /* ////// FEED & REEL */
 
-.reel-container {
+/* .reel-container {
   scroll-snap-type: mandatory;
   scroll-snap-type: y mandatory;
   scroll-padding-top: 5em;
@@ -207,7 +207,7 @@ button.navLink {
 
 .reel-child {
   scroll-snap-align: start;
-}
+} */
 
 .click {
   width: 100%;

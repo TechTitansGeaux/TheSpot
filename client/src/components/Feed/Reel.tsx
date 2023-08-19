@@ -155,7 +155,7 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
 
   // ADD ONE LIKE per Reel
   const handleAddLike = (reelId: number) => {
-    console.log('ADD like of reelId =>', reelId);
+    // console.log('ADD like of reelId =>', reelId);
     axios
       .put(`/likes/addLike/${reelId}`)
       .then((data) => {
@@ -168,7 +168,7 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
 
   // REMOVE ONE LIKE per Reel
   const handleRemoveLike = (reelId: number) => {
-    console.log('REMOVE like of reelId =>', reelId);
+    // console.log('REMOVE like of reelId =>', reelId);
     axios
       .put(`/likes/removeLike/${reelId}`)
       .then((data) => {
