@@ -2,7 +2,6 @@
 import * as React from 'react';
 import { useState } from 'react';
 import axios from 'axios';
-import CreateIcon from '@mui/icons-material/Create';
 
 type Props = {
   event: {
@@ -119,9 +118,6 @@ const UpcomingEvent: React.FC<Props> = ({event}) => {
             {justSaved && <button>
               Saved!</button>}
           </div>
-        </div>
-        <div className='editIcon'>
-          <CreateIcon />
         </div>
       </div>
     </div>

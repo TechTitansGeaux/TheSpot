@@ -548,7 +548,8 @@ button.rejectFriend-btn:hover {
 
 .event-cards-row {
   display: flex;
-  justify-content: center;
+  /* center? */
+  justify-content: left;
   flex-wrap: wrap;
   margin-right: 10%;
   margin-left: 10%;
@@ -568,12 +569,6 @@ button.rejectFriend-btn:hover {
 
 .eventCardDetails {
   text-align: left;
-}
-
-.editIcon {
-  position: absolute;
-  right: 10px;
-  top: 10px;
 }
 
 .eventDetailInput {

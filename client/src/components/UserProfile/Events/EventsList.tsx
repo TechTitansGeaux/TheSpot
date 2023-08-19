@@ -34,9 +34,9 @@ const EventsList: React.FC<Props> = ({user}) => {
     axios.get('/events/userEvents')
       .then((res) => {
         // upcoming event container
-        const upcomingArr = [];
+        let upcomingArr = [];
         // past event container
-        const pastArr = [];
+        let pastArr = [];
         // iterate through events
         for (let i = 0; i < res.data.length; i++) {
           // determine if THEIR date is before ot after today
@@ -47,8 +47,11 @@ const EventsList: React.FC<Props> = ({user}) => {
             pastArr.push(res.data[i])
           }
         }
+        // sort upcoming events by soonest coming up
+        upcomingArr = upcomingArr.sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
         // set upcoming events
         setUpcomingEvents(upcomingArr);
+        pastArr = pastArr.sort((a, b) => Date.parse(a.date) - Date.parse(b.date))
         setPastEvents(pastArr);
       })
       .catch((err) => {
