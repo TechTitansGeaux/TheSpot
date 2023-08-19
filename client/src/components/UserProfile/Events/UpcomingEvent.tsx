@@ -27,26 +27,29 @@ const UpcomingEvent: React.FC<Props> = ({event}) => {
   const [time, setTime] = useState(event.time);
   const [endTime, setEndTime] = useState(event.endTime);
   const [twentyOne, setTwentyOne] = useState(event.twenty_one)
+  const [justSaved, setJustSaved] = useState(false);
 
   const handleNameChange = (e: any) => {
-    setDate(e.target.value);
+    setName(e.target.value);
+    setJustSaved(false);
   }
 
   const handleDateChange = (e: any) => {
     setDate(e.target.value);
+    setJustSaved(false);
   }
   const handleTimeChange = (e: any) => {
     setTime(e.target.value);
+    setJustSaved(false);
   }
   const handleEndTimeChange = (e: any) => {
     setEndTime(e.target.value);
+    setJustSaved(false);
   }
   const handleTwentyOneChange = (e: any) => {
     setTwentyOne(e.target.value);
+    setJustSaved(false);
   }
-  console.log(date, '<----date')
-  console.log(time, '<----begins')
-  console.log(endTime, '<------ends')
 
 
   // patch those changes in event in database
@@ -58,7 +61,7 @@ const UpcomingEvent: React.FC<Props> = ({event}) => {
       endTime: endTime
     })
     .then(() => {
-
+      setJustSaved(true);
     })
     .catch((err) => {
       console.error('Failed to axios PATCH event: ', err);
@@ -68,9 +71,13 @@ const UpcomingEvent: React.FC<Props> = ({event}) => {
     <div className='column-md-2'>
       <div className='eventCard'>
         <div>
-          <h3 style={{color: '#f0f465'}}>
-            {event.name}
-          </h3>
+          <input
+          className='eventNameInput'
+          placeholder={name}
+          value={name}
+          onChange={handleNameChange}
+          type='text'>
+          </input>
           <div className='eventCardDetails'>
             <br></br>
             Date:
@@ -104,10 +111,13 @@ const UpcomingEvent: React.FC<Props> = ({event}) => {
             <br></br>
             {event.twenty_one && '21+'}
             <br></br>
-            <button
+            <br></br>
+            {!justSaved && <button
             onClick={saveChanges}>
               Save
-            </button>
+            </button>}
+            {justSaved && <button>
+              Saved!</button>}
           </div>
         </div>
         <div className='editIcon'>
