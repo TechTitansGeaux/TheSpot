@@ -18,7 +18,7 @@ type Props = {
 }
 const EventsEntry: React.FC<Props> = ({event}) => {
   return (
-    <div>
+    <div className='eventCard'>
       {event.name}
     </div>
   );
