@@ -31,18 +31,18 @@ const fontSizes = {
 const BusinessSettings: React.FC<Props> = ({fontSize}) => {
   const dispatch = useDispatch();
   const authUser = useSelector((state: RootState) => state.app.authUser);
-  const [username, setUsername] = React.useState('');
-  const [displayName, setDisplayName] = React.useState('');
-  const [picture, setPicture] = React.useState('');
-  const [type, setType] = React.useState('');
-  const [selectedImage, setSelectedImage] = React.useState(null||'');
+  // Initialize state variables with existing user data
+  const [username, setUsername] = React.useState(authUser.username);
+  const [displayName, setDisplayName] = React.useState(authUser.displayName);
+  const [picture, setPicture] = React.useState(authUser.picture);
+  const [selectedImage, setSelectedImage] = React.useState(null);
   const [isImageSelected, setIsImageSelected] = useState(false);
-  const [selectedMapIcon, setSelectedMapIcon] = React.useState('');
-  const [geolocation, setGeolocation] = React.useState('');
-  const [privacy, setPrivacy] = React.useState('');
+  const [selectedMapIcon, setSelectedMapIcon] = React.useState(authUser.mapIcon);
+  const [geolocation, setGeolocation] = React.useState(authUser.geolocation);
+  const [privacy, setPrivacy] = React.useState(authUser.privacy);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-  //const fontSize = useSelector((state: RootState) => state.app.fontSize); // Fetch font size from the Redux store
-  const [selectedFont, setSelectedFont] = useState('reg-font'); // Local state to manage the selected font size
+  const [selectedFont, setSelectedFont] = useState(fontSize);
+  const [type, setType] = React.useState(authUser.type);
 
 
   const theme = createTheme({

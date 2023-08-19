@@ -138,10 +138,11 @@ const UserPin: React.FC<Props> = (props) => {
 
 
   return (
-    <div>
+<div>
       {props.user.id === props.loggedIn.id || // Always show logged in user
       (props.user.privacy === 'friends only' &&
-        props.friendList.includes(props.user.id)) || // Show users friends if privacy is 'friends only'
+        props.friendList.includes(props.user.id)) || // Show user if friend and privacy is 'friends only'
+      (props.user.privacy === 'public') || // Show user if privacy is 'public'
       (props.user.privacy === 'private' &&
         props.user.id === props.loggedIn.id) ? ( // Show if user is private but also self
         <div className={props.user.type === 'business' ? 'dotBusiness' : 'dot'} id={props.user.username + props.user.id} onClick={togglePopUp}>
@@ -152,6 +153,7 @@ const UserPin: React.FC<Props> = (props) => {
           />
         </div>
       ) : null}
+
         <div className='popUpBox' id={'popUp' + props.user.username + props.user.id}>
         <div style={{ textAlign: 'center', fontSize: '20px' }}>
               {props.user.displayName}
