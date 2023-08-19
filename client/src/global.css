@@ -588,4 +588,20 @@ button.rejectFriend-btn:hover {
 .eventTypeContainer{
   display: flex;
   flex-direction: row;
+  color: var(--yellow);
+  cursor: pointer;
+}
+
+.save-event-detail-button {
+  color: var(--white);
+  background-color: var(--pink);
+  border: solid var(--pink);
+  border-radius: 3px;
+}
+
+.save-event-success-button {
+  color: var(--white);
+  background-color: var(--pink);
+  border: solid var(--pink);
+  border-radius: 3px;
 }

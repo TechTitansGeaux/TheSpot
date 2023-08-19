@@ -79,11 +79,10 @@ const EventsList: React.FC<Props> = ({user}) => {
       <div
       className='eventTypeContainer'>
         <h3
-        style={{color: '#f0f465'}}
-        onClick={showUpcomingView}>
+        onClick={showUpcomingView}
+        >
           Upcoming &#160;| &#160;</h3>
         <h3
-        style={{color: '#f0f465'}}
         onClick={showPastView}>
            Past</h3>
       </div>

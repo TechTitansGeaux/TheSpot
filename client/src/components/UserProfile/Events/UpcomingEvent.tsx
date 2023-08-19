@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import axios from 'axios';
+import Tooltip from '@mui/material/Tooltip';
 
 type Props = {
   event: {
@@ -112,10 +113,13 @@ const UpcomingEvent: React.FC<Props> = ({event}) => {
             <br></br>
             <br></br>
             {!justSaved && <button
+            className='save-event-detail-button'
+             style={{ cursor: 'pointer'}}
             onClick={saveChanges}>
               Save
             </button>}
-            {justSaved && <button>
+            {justSaved && <button
+            className='save-event-success-button'>
               Saved!</button>}
           </div>
         </div>
