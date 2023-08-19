@@ -112,7 +112,8 @@ const UpcomingEvent: React.FC<Props> = ({event}) => {
             {event.twenty_one && '21+'}
             <br></br>
             <br></br>
-            {!justSaved && <button
+          </div>
+          {!justSaved && <button
             className='save-event-detail-button'
              style={{ cursor: 'pointer'}}
             onClick={saveChanges}>
@@ -121,7 +122,6 @@ const UpcomingEvent: React.FC<Props> = ({event}) => {
             {justSaved && <button
             className='save-event-success-button'>
               Saved!</button>}
-          </div>
         </div>
       </div>
     </div>

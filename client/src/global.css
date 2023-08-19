@@ -331,10 +331,11 @@ video.reel {
 }
 
 .video-timestamp {
+  text-align: end;
   position: relative;
   margin: 0 1rem;
   top: 95%;
-  right: -70%;
+  /* right: 10%; */
   max-width: 350px;
   font-size: var(--reg-font);
   font-family: var(--title-font);
@@ -450,7 +451,7 @@ button.rejectFriend-btn:hover {
   display: none;
   padding: 1%;
   transition: all .5s ease;
-  height: 200px;
+  height: 230px;
   width: 200px;
   border-width: 10px;
   border-radius: 10px;
@@ -593,15 +594,25 @@ button.rejectFriend-btn:hover {
 }
 
 .save-event-detail-button {
+  /* color: var(--violet);
+  background-color: var(--yellow);
+  border: solid var(--yellow);
+  border-radius: 5px; */
+
   color: var(--white);
   background-color: var(--pink);
   border: solid var(--pink);
-  border-radius: 3px;
+  border-radius: 5px;
 }
 
 .save-event-success-button {
-  color: var(--white);
+  /* color: var(--white);
   background-color: var(--pink);
   border: solid var(--pink);
-  border-radius: 3px;
+  border-radius: 5px; */
+
+  color: var(--violet);
+  background-color: var(--yellow);
+  border: solid var(--yellow);
+  border-radius: 5px;
 }
