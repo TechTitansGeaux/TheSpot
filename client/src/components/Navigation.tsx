@@ -339,13 +339,6 @@ const Navigation: React.FC<Props> = ({ user }) => {
                       {(likesArr.length !== 0 || pFriends.length !== 0) &&
                       <div>
                         <CircleNotificationsIcon className="circle" sx={{ position: 'absolute', right: -30, zIndex: "4", top: 5 }} />
-                        <Snackbar
-                        open={open}
-                        autoHideDuration={6000}
-                        onClick={handleClose}
-                        message="You have pending friends request(s)"
-                        action={action}
-                      />
                       </div>
                       }
                     </div>
@@ -392,6 +385,19 @@ const Navigation: React.FC<Props> = ({ user }) => {
           <Link to='/CreateReel'>
             <AddCircleIcon color='secondary' sx={{ width: 52, height: 52 }} />
           </Link>
+          <div>
+              {(pFriends.length !== 0) &&
+              <div>
+                <Snackbar
+                open={open}
+                autoHideDuration={6000}
+                onClick={handleClose}
+                message="You have pending friends request(s)"
+                action={action}
+              />
+              </div>
+              }
+            </div>
         </footer>
       </ThemeProvider>
     </>
