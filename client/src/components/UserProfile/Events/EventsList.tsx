@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import UpcomingEvent from './UpcomingEvent';
+import PastEvent from './PastEvent';
 import axios from 'axios';
 
 type Props = {
@@ -23,6 +24,7 @@ const EventsList: React.FC<Props> = ({user}) => {
 
   const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [pastEvents, setPastEvents] = useState([]);
+  const [showPast, setShowPast] = useState(false);
 
   const todayRaw = new Date().toDateString();
   const today = Date.parse(todayRaw);
@@ -64,14 +66,20 @@ const EventsList: React.FC<Props> = ({user}) => {
   return (
     <div className='container-full-w'>
       <h1>EventsList</h1>
-      {upcomingEvents.map((event) => {
+      {!showPast && upcomingEvents.map((event) => {
         return (
           <UpcomingEvent
           event={event}
           key={'event' + event.id}/>
         )
       })}
-
+      {showPast && pastEvents.map((event) => {
+        return (
+          <PastEvent
+          event={event}
+          key={'event' + event.id}/>
+        )
+      })}
     </div>
   );
 };
