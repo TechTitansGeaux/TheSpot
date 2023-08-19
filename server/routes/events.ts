@@ -38,7 +38,6 @@ eventRouter.get('/:geolocation/:date', async (req: any, res: any) => {
   // find event by geolocation
     await Events.findAll({where: {geolocation: geolocation, date: date}})
     .then((events: any) => {
-       console.log(events, '<-----response from get event by location')
       if (events.length !== 0) {
         res.status(200).json({
           events

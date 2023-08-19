@@ -64,22 +64,24 @@ const EventsList: React.FC<Props> = ({user}) => {
   console.log(pastEvents, '<------past events')
 
   return (
-    <div className='container-full-w'>
+    <div className='flex-container-events'>
       <h1>EventsList</h1>
-      {!showPast && upcomingEvents.map((event) => {
-        return (
-          <UpcomingEvent
-          event={event}
-          key={'event' + event.id}/>
-        )
-      })}
-      {showPast && pastEvents.map((event) => {
-        return (
-          <PastEvent
-          event={event}
-          key={'event' + event.id}/>
-        )
-      })}
+      <div className="event-cards-row">
+        {!showPast && upcomingEvents.map((event) => {
+          return (
+            <UpcomingEvent
+            event={event}
+            key={'event' + event.id}/>
+          )
+        })}
+        {showPast && pastEvents.map((event) => {
+          return (
+            <PastEvent
+            event={event}
+            key={'event' + event.id}/>
+          )
+        })}
+      </div>
     </div>
   );
 };

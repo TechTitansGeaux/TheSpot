@@ -18,8 +18,12 @@ type Props = {
 }
 const UpcomingEvent: React.FC<Props> = ({event}) => {
   return (
-    <div className='eventCard'>
-      {event.name}
+    <div className='column-md-2'>
+      <div className='eventCard'>
+        <h3>
+          {event.name}
+        </h3>
+      </div>
     </div>
   );
 };
