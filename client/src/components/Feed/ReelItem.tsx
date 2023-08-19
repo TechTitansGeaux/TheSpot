@@ -23,11 +23,49 @@ import './feed.css';
 
 dayjs.extend(relativeTime);
 
+type User = {
+  id: number;
+  username: string;
+  displayName: string;
+  type: string;
+  geolocation: string;
+  mapIcon: string;
+  birthday: string;
+  privacy: string;
+  accessibility: string;
+  email: string;
+  picture: string;
+  googleId: string;
+};
+
+type Event = {
+  id: number;
+  name: string;
+  rsvp_count: number;
+  date: string;
+  geolocation: string;
+  twenty_one: boolean;
+  createdAt: string;
+  updatedAt: string;
+  PlaceId: 1;
+};
+
 type Props = {
   reel: any;
+  reels: {
+    id: string;
+    public_id: number;
+    url: string;
+    text?: string;
+    like_count?: number;
+    UserId: number;
+    EventId?: number;
+    User: User;
+    Event: Event;
+  }[];
   friendList?: any;
   requestFriendship: any;
-  user: any;
+  user: User;
   deleteReel: any;
   disabledNow: any;
   handleAddLike: any;
@@ -53,6 +91,7 @@ const theme = createTheme({
 
 const ReelItem: React.FC<Props> = memo(function ReelItem({
   reel,
+  reels,
   friendList,
   requestFriendship,
   user,
@@ -117,89 +156,36 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
     return () => observer.disconnect();
   }, []);
 
-
+  // console.log('reels user type', reels)
+  // console.log('reel user type', reel)
   return (
-    <div className='reel-child' style={{ fontSize: theme.typography.fontSize }}>
-      <>
-        <div className='video-container'>
-          {reel.url.length > 15 && (
-            <video
-              className='reel'
-              ref={myRef}
-              id={`video${reel.id}`}
-              src={reel.url}
-              loop={loop}
-              muted
-              preload='none'
-            ></video>
-          )}
-          <h5 className='video-timestamp'>
-            ... {dayjs(`${reel.createdAt}`).fromNow()}
-          </h5>
-          <p className='video-text'>{reel.text}</p>
+    <div>
+      {true && (
+        <div
+          className='reel-child'
+          style={{ fontSize: theme.typography.fontSize }}
+        >
           <>
-            <Tooltip
-              title={reel.Event.name}
-              placement='left'
-              PopperProps={{
-                sx: {
-                  '& .MuiTooltip-tooltip': {
-                    backgroundColor: 'transparent',
-                    border: 'solid #F5FCFA 1px',
-                    color: '#F5FCFA',
-                  },
-                },
-              }}
-            >
-              <InfoIcon className='info-icon' />
-            </Tooltip>
-            {/**Removes addFriend button if already approved friend*/}
-            {!friendList.includes(reel.User.id) &&
-              reel.User.id !== user?.id && (
-                <ThemeProvider theme={theme}>
-                  <div className='friend-request'>
-                    <Box className='friend-box'>
-                      <Fab
-                        style={{ transform: 'scale(0.6)' }}
-                        size='small'
-                        color='primary'
-                        aria-label='add'
-                        className='friend-add-btn'
-                        disabled={
-                          disabledNow.includes(reel.User.id) ||
-                          stayDisabled.includes(reel.User.id)
-                        }
-                      >
-                        <Tooltip
-                          title='Add Friend'
-                          TransitionComponent={Zoom}
-                          placement='left'
-                          PopperProps={{
-                            sx: {
-                              '& .MuiTooltip-tooltip': {
-                                backgroundColor: 'transparent',
-                                border: 'solid #F5FCFA 1px',
-                                color: '#F5FCFA',
-                              },
-                            },
-                          }}
-                        >
-                          <AddIcon
-                            sx={{ width: 20, height: 20 }}
-                            onClick={() => requestFriendship(reel.User.id)}
-                          />
-                        </Tooltip>
-                      </Fab>
-                    </Box>
-                  </div>
-                </ThemeProvider>
+            <div className='video-container'>
+              {reel.url.length > 15 && (
+                <video
+                  className='reel'
+                  ref={myRef}
+                  id={`video${reel.id}`}
+                  src={reel.url}
+                  loop={loop}
+                  muted
+                  preload='none'
+                ></video>
               )}
-            {reel.UserId === user.id && (
-              <div className='friend-request'>
+              <h5 className='video-timestamp'>
+                ... {dayjs(`${reel.createdAt}`).fromNow()}
+              </h5>
+              <p className='video-text'>{reel.text}</p>
+              <>
                 <Tooltip
-                  title='Delete Reel'
-                  TransitionComponent={Zoom}
-                  placement='right'
+                  title={reel.Event.name}
+                  placement='left'
                   PopperProps={{
                     sx: {
                       '& .MuiTooltip-tooltip': {
@@ -210,110 +196,173 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                     },
                   }}
                 >
-                  <button
-                    className='delete-btn'
-                    onClick={() => deleteReel(reel.id)}
-                  >
-                    🗑️
-                  </button>
+                  <InfoIcon className='info-icon' />
+                </Tooltip>
+                {/**Removes addFriend button if already approved friend*/}
+                {!friendList.includes(reel.User.id) &&
+                  reel.User.id !== user?.id && (
+                    <ThemeProvider theme={theme}>
+                      <div className='friend-request'>
+                        <Box className='friend-box'>
+                          <Fab
+                            style={{ transform: 'scale(0.6)' }}
+                            size='small'
+                            color='primary'
+                            aria-label='add'
+                            className='friend-add-btn'
+                            disabled={
+                              disabledNow.includes(reel.User.id) ||
+                              stayDisabled.includes(reel.User.id)
+                            }
+                          >
+                            <Tooltip
+                              title='Add Friend'
+                              TransitionComponent={Zoom}
+                              placement='left'
+                              PopperProps={{
+                                sx: {
+                                  '& .MuiTooltip-tooltip': {
+                                    backgroundColor: 'transparent',
+                                    border: 'solid #F5FCFA 1px',
+                                    color: '#F5FCFA',
+                                  },
+                                },
+                              }}
+                            >
+                              <AddIcon
+                                sx={{ width: 20, height: 20 }}
+                                onClick={() => requestFriendship(reel.User.id)}
+                              />
+                            </Tooltip>
+                          </Fab>
+                        </Box>
+                      </div>
+                    </ThemeProvider>
+                  )}
+                {reel.UserId === user.id && (
+                  <div className='friend-request'>
+                    <Tooltip
+                      title='Delete Reel'
+                      TransitionComponent={Zoom}
+                      placement='right'
+                      PopperProps={{
+                        sx: {
+                          '& .MuiTooltip-tooltip': {
+                            backgroundColor: 'transparent',
+                            border: 'solid #F5FCFA 1px',
+                            color: '#F5FCFA',
+                          },
+                        },
+                      }}
+                    >
+                      <button
+                        className='delete-btn'
+                        onClick={() => deleteReel(reel.id)}
+                      >
+                        🗑️
+                      </button>
+                    </Tooltip>
+                  </div>
+                )}
+              </>
+              <div className='friend-request'>
+                <Tooltip
+                  title={reel.User.displayName}
+                  TransitionComponent={Zoom}
+                  placement='left'
+                  PopperProps={{
+                    sx: {
+                      '& .MuiTooltip-tooltip': {
+                        backgroundColor: 'transparent',
+                        border: 'solid #F5FCFA 1px',
+                        color: '#F5FCFA',
+                      },
+                    },
+                  }}
+                >
+                  <Avatar
+                    className='friend-avatar'
+                    sx={{ width: 48, height: 48 }}
+                    alt={reel.User.displayName}
+                    src={reel.User.picture}
+                  />
                 </Tooltip>
               </div>
-            )}
+            </div>
+            <div className='video-links-container'>
+              <Box sx={{ width: '100%' }}>
+                <BottomNavigation>
+                  <BottomNavigationAction
+                    className='bottom-nav-parent'
+                    label='Likes'
+                    icon={
+                      <React.Fragment>
+                        <div className='like-count-container'>
+                          <Likes
+                            handleAddLike={handleAddLike}
+                            handleRemoveLike={handleRemoveLike}
+                            reel={reel}
+                            likes={likes}
+                            likeTotal={likeTotal}
+                          />
+                          {reel.like_count >= 0 && (
+                            <p className='like-counter'>
+                              {reel.like_count + likeTotal}
+                            </p>
+                          )}
+                        </div>
+                      </React.Fragment>
+                    }
+                    showLabel={false}
+                  />
+                  <BottomNavigationAction
+                    label='Event Location'
+                    icon={
+                      <Tooltip
+                        title='See Event Location'
+                        TransitionComponent={Zoom}
+                        placement='top'
+                        PopperProps={{
+                          sx: {
+                            '& .MuiTooltip-tooltip': {
+                              backgroundColor: '#0b0113',
+                              border: 'solid #F5FCFA 1px',
+                              color: '#F5FCFA',
+                            },
+                          },
+                        }}
+                      >
+                        <LocationOnIcon color='primary' />
+                      </Tooltip>
+                    }
+                    showLabel={false}
+                  />
+                  <BottomNavigationAction
+                    className='bottom-nav-parent'
+                    label='Going'
+                    icon={
+                      <React.Fragment>
+                        <div className='like-count-container'>
+                          <RsvpSharpIcon
+                            style={{ transform: 'scale(2)' }}
+                            color='secondary'
+                          />
+                          {reel.Event.rsvp_count !== 0 && (
+                            <p className='rsvp-counter'>
+                              {reel.Event.rsvp_count}
+                            </p>
+                          )}
+                        </div>
+                      </React.Fragment>
+                    }
+                    showLabel={false}
+                  />
+                </BottomNavigation>
+              </Box>
+            </div>
           </>
-          <div className='friend-request'>
-            <Tooltip
-              title={reel.User.displayName}
-              TransitionComponent={Zoom}
-              placement='left'
-              PopperProps={{
-                sx: {
-                  '& .MuiTooltip-tooltip': {
-                    backgroundColor: 'transparent',
-                    border: 'solid #F5FCFA 1px',
-                    color: '#F5FCFA',
-                  },
-                },
-              }}
-            >
-              <Avatar
-                className='friend-avatar'
-                sx={{ width: 48, height: 48 }}
-                alt={reel.User.displayName}
-                src={reel.User.picture}
-              />
-            </Tooltip>
-          </div>
         </div>
-        <div className='video-links-container'>
-          <Box sx={{ width: '100%' }}>
-            <BottomNavigation>
-              <BottomNavigationAction
-                className='bottom-nav-parent'
-                label='Likes'
-                icon={
-                  <React.Fragment>
-                    <div className='like-count-container'>
-                      <Likes
-                        handleAddLike={handleAddLike}
-                        handleRemoveLike={handleRemoveLike}
-                        reel={reel}
-                        likes={likes}
-                        likeTotal={likeTotal}
-                      />
-                      {reel.like_count >= 0 && (
-                        <p className='like-counter'>
-                          {reel.like_count + likeTotal}
-                        </p>
-                      )}
-                    </div>
-                  </React.Fragment>
-                }
-                showLabel={false}
-              />
-              <BottomNavigationAction
-                label='Event Location'
-                icon={
-                  <Tooltip
-                    title='See Event Location'
-                    TransitionComponent={Zoom}
-                    placement='top'
-                    PopperProps={{
-                      sx: {
-                        '& .MuiTooltip-tooltip': {
-                          backgroundColor: '#0b0113',
-                          border: 'solid #F5FCFA 1px',
-                          color: '#F5FCFA',
-                        },
-                      },
-                    }}
-                  >
-                    <LocationOnIcon color='primary' />
-                  </Tooltip>
-                }
-                showLabel={false}
-              />
-              <BottomNavigationAction
-                className='bottom-nav-parent'
-                label='Going'
-                icon={
-                  <React.Fragment>
-                    <div className='like-count-container'>
-                      <RsvpSharpIcon
-                        style={{ transform: 'scale(2)' }}
-                        color='secondary'
-                      />
-                      {reel.Event.rsvp_count !== 0 && (
-                        <p className='rsvp-counter'>{reel.Event.rsvp_count}</p>
-                      )}
-                    </div>
-                  </React.Fragment>
-                }
-                showLabel={false}
-              />
-            </BottomNavigation>
-          </Box>
-        </div>
-      </>
+      )}
     </div>
   );
 });

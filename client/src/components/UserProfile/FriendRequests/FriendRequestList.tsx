@@ -41,7 +41,7 @@ type Props = {
 
 const FriendRequestList: React.FC<Props> = ({ user, allUsers }) => {
   const [pendingFriends, setPendingFriends] = useState([]); // pending friend list for current user
-  const [ pendingFriendsId, setPendingFriendsId ] = useState([])
+  const [ reject, setReject ] = useState([]) // state for immediate friend removal on reject
   const [friends, setFriends] = useState([]); // approved friend list for current user
   const [friendsId, setFriendsId] = useState([])
 
@@ -77,24 +77,23 @@ const FriendRequestList: React.FC<Props> = ({ user, allUsers }) => {
   };
 
   const rejectFriendship = (friend: number, time: Date) => {
+    const foundFriend = friends.indexOf(friend);
+    if (foundFriend !== -1) {
+      setFriendsId((prev) => prev.splice(foundFriend, 1));
+    }
+    setReject((prev) => [...prev, time]);
     axios
       .delete(`/friends/:${friend}`, {
         data: { updatedAt: time },
       })
       .then((response) => {
-        console.log('friendship deleted', response.data);
+        // console.log('friendship deleted', response.data);
+
       })
       .catch((err) => {
         console.error('Delete friendship FAILED axios request:', err);
       });
   };
-
-
-  useEffect(() => {
-    getPendingFriendList();
-    getFriendList();
-  }, []);
-
 
   // PUT request update friendship from 'pending' to 'approved'
   const approveFriendship = (friend: number) => {
@@ -104,21 +103,25 @@ const FriendRequestList: React.FC<Props> = ({ user, allUsers }) => {
         requester_id: friend,
       })
       .then((data) => {
-        console.log('Friend request approved PUT', data);
+        // console.log('Friend request approved PUT', data);
         setFriendsId((prev) => [...prev, friend]);
 
       })
       .catch((err) => {
         console.error('Friend PUT request axios FAILED:', err);
       });
-  };
+    };
 
-  console.log('friends id from state arr in FriendRequestList', friendsId);
+    useEffect(() => {
+      getFriendList();
+      getPendingFriendList();
+    }, [reject, friendsId]);
+
   return (
     <>
       <div className='container-full-w'>
         <h1 className='profile-title'>Pending Friend Requests</h1>
-        {pendingFriends !== undefined &&
+        {pendingFriends.length !== 0 &&
           pendingFriends.map((pendingFriend) => {
             return (
               <FriendRequestEntry

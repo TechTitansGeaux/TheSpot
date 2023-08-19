@@ -227,6 +227,7 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
               <ReelItem
                 user={user}
                 reel={reel}
+                reels={reels}
                 friendList={friendList}
                 requestFriendship={requestFriendship}
                 disabledNow={disabled}
