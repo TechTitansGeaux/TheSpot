@@ -548,18 +548,34 @@ button.rejectFriend-btn:hover {
 
 .event-cards-row {
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
   margin-right: 10%;
   margin-left: 10%;
 }
 
 .eventCard {
+  /* display: flex;
+  flex-direction: row; */
+  position: relative;
   height: 175px;
   width: 200px;
   margin: 10px;
   padding: 10px;
-  background-color: var(--pink);
-  border: solid var(--pink);
+  text-align: center;
+  align-items: center;
+  /* background-color: var(--pink); */
+  border: solid var(--yellow);
   border-radius: 3px;
+}
+
+.eventCardDetails {
+  text-align: left;
+}
+
+.editIcon {
+  position: absolute;
+  right: 10px;
+  top: 10px;
 }
 

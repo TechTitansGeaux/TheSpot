@@ -18,8 +18,22 @@ type Props = {
 }
 const PastEvent: React.FC<Props> = ({event}) => {
   return (
-    <div className='eventCard'>
-      {event.name}
+    <div className='column-md-2'>
+      <div className='eventCard'>
+        <h3>
+          {event.name}
+        </h3>
+        <br></br>
+        Date: {event.date}
+        <br></br>
+        Began: {event.time}
+        <br></br>
+        Ended: {event.endTime}
+        <br></br>
+        RSVPs: {event.rsvp_count}
+        <br></br>
+        21+ {event.twenty_one}
+      </div>
     </div>
   );
 };

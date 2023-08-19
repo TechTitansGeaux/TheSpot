@@ -1,4 +1,5 @@
 import * as React from 'react';
+import CreateIcon from '@mui/icons-material/Create';
 
 type Props = {
   event: {
@@ -20,9 +21,26 @@ const UpcomingEvent: React.FC<Props> = ({event}) => {
   return (
     <div className='column-md-2'>
       <div className='eventCard'>
-        <h3>
-          {event.name}
-        </h3>
+        <div>
+          <h3 style={{color: '#f0f465'}}>
+            {event.name}
+          </h3>
+          <div className='eventCardDetails'>
+          <br></br>
+          Date: {event.date}
+          <br></br>
+          Begins: {event.time}
+          <br></br>
+          Ends: {event.endTime}
+          <br></br>
+          RSVPs: {event.rsvp_count}
+          <br></br>
+          {event.twenty_one && '21+'}
+        </div>
+        </div>
+        <div className='editIcon'>
+          <CreateIcon />
+        </div>
       </div>
     </div>
   );
