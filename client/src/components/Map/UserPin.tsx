@@ -124,14 +124,14 @@ const UserPin: React.FC<Props> = (props) => {
 
   return (
     <div>
-      <div className='dot' id={props.user.username + props.user.id} onClick={togglePopUp} >
+      <div className='userDot' id={props.user.username + props.user.id} onClick={togglePopUp} >
         <img
           src={props.user.mapIcon}
           alt={props.user.username}
           style={{ width: '40px', height: '40px', marginLeft: '1.5px', marginTop: '2.5px'}}
         />
       </div>
-      <div className='popUpBox' id={'popUp' + props.user.username + props.user.id} >
+      <div className='userPopUp' id={'popUp' + props.user.username + props.user.id} >
         <div style={{ textAlign: 'center', fontSize:'20px' }}>
           {props.user.username}
         </div>

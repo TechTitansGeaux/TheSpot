@@ -15,7 +15,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Settings from './components/ProfileSetUp/Settings';
 import FriendRequestList from './components/UserProfile/FriendRequests/FriendRequestList';
-import LikesList from './components/UserProfile/Likes/LikesList';
+import LikesList from './components/UserProfile/Likes/LIkesList';
 import EventsList from './components/UserProfile/Events/EventsList';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAuthUser, setIsAuthenticated, setFontSize } from './store/appSlice';
