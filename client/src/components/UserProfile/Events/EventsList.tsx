@@ -23,7 +23,7 @@ const EventsList: React.FC<Props> = ({user}) => {
 
   const [events, setEvents] = useState([])
 
-  // get all of user's events
+  // function to get all of user's events
   const getMyEvents = () => {
     axios.get('/events/userEvents')
       .then((res) => {
@@ -33,15 +33,22 @@ const EventsList: React.FC<Props> = ({user}) => {
         console.error('Failed to axios GET user events: ', err);
       })
   }
-  console.log(events, '<---- my events')
-
+  // call my my events once when page is rendered
   useEffect(() => {
     getMyEvents();
   }, [])
+
   return (
     <div className='container-full-w'>
       <h1>EventsList</h1>
-      <EventsEntry />
+      {events.map((event) => {
+        return (
+          <EventsEntry
+          event={event}
+          key={'event' + event.id}/>
+        )
+      })}
+
     </div>
   );
 };
