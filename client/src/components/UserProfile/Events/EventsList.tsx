@@ -18,6 +18,8 @@ type Props = {
   };
 };
 const EventsList: React.FC<Props> = ({user}) => {
+
+  // get all of user's events
   return (
     <div className='container-full-w'>
       <h1>EventsList</h1>

@@ -13,8 +13,8 @@ import TextField from '@mui/material/TextField';
 import UploadFile from '@mui/icons-material/UploadFile';
 import MenuItem from '@mui/material/MenuItem';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Location from './Location';
-import SpeechToText from '../ProfileSetUp/SpeechToText'
+import LocationSearchInput from './LocationSearchInput';
+import SpeechToText from './SpeechToText'
 
 type Props = {
 fontSize: string;
@@ -28,7 +28,7 @@ const fontSizes = {
 };
 
 
-const Settings: React.FC<Props> = ({fontSize}) => {
+const BusinessSettings: React.FC<Props> = ({fontSize}) => {
   const dispatch = useDispatch();
   const authUser = useSelector((state: RootState) => state.app.authUser);
   const [username, setUsername] = React.useState('');
@@ -76,23 +76,30 @@ useEffect(() => {
     setShowDeleteConfirmation(false);
   };
 
+  useEffect(() => {
+    if (authUser) {
+      setPicture(authUser.picture);
+      setGeolocation(authUser.geolocation);
+    }
+  }, [authUser]);
+
 
   const handleDeleteConfirm = async () => {
-      setShowDeleteConfirmation(false);
-      setUsername(`user${Math.floor(Math.random())}`);
-      setDisplayName(`user${Math.floor(Math.random())}`);
-      setGeolocation('-24.4879217, -46.6741555');
-      setPrivacy('private');
-      setPicture('no pic');
-      setSelectedMapIcon('no icon');
-      setType('');
+    setShowDeleteConfirmation(false);
+    setUsername(`user${Math.floor(Math.random())}`);
+    setDisplayName(`user${Math.floor(Math.random())}`);
+    setGeolocation('-24.4879217, -46.6741555');
+    setPrivacy('private');
+    setPicture('no pic');
+    setSelectedMapIcon('no icon');
+    setType('');
 
       const profileData = {
         username: username,
         displayName: displayName,
         picture: picture,
-        mapIcon: selectedMapIcon,
         geolocation: geolocation,
+        mapIcon: selectedMapIcon,
         privacy: privacy,
         type: type
       };
@@ -111,7 +118,6 @@ useEffect(() => {
         console.error(error);
       });
 };
-
 
   useEffect(() => {
     if (authUser) {
@@ -144,7 +150,8 @@ useEffect(() => {
       displayName,
       picture,
       mapIcon: selectedMapIcon,
-      privacy
+      privacy,
+      geolocation
     };
 
     // Update user's profile on the server using Axios
@@ -184,6 +191,20 @@ useEffect(() => {
     }
   };
 
+  // const handleDeleteUser = async () => {
+  //   try {
+  //     const response = await axios.delete(`/users/${authUser.id}`);
+  //     if (response && response.data) {
+  //       // logout the user by clearing the authUser state
+  //       dispatch(setAuthUser(null));
+  //       // redirect the user to the homepage
+  //       window.location.href = `${process.env.HOST}/`;
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
   const handleLogout = () => {
     // logout the user by clearing the authUser state
     dispatch(setAuthUser(null));
@@ -219,7 +240,7 @@ useEffect(() => {
             </Button>
           )}
         </div>
-        <Location />
+        <LocationSearchInput />
 
         <div>
             <SpeechToText onTranscriptChange={setDisplayName} />
@@ -248,17 +269,21 @@ useEffect(() => {
           onChange={e => setSelectedMapIcon(e.target.value)}
           style={{ color: 'var(--setupBG)', marginBottom: '1rem' }}
         >
-          <MenuItem value="https://img.icons8.com/?size=512&id=qzpodiwSoTXX&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=qzpodiwSoTXX&format=png'/></MenuItem>
-          <MenuItem value="https://img.icons8.com/?size=512&id=20880&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=20880&format=png'/></MenuItem>
-          <MenuItem value="https://img.icons8.com/?size=512&id=58781&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=58781&format=png'/></MenuItem>
-          <MenuItem value="https://img.icons8.com/?size=512&id=32002&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=32002&format=png'/></MenuItem>
-          <MenuItem value="https://img.icons8.com/?size=512&id=35183&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=35183&format=png'/></MenuItem>
-          <MenuItem value="https://img.icons8.com/?size=512&id=78491&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=78491&format=png'/></MenuItem>
-          <MenuItem value="https://img.icons8.com/?size=512&id=luN7421eTXGW&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=luN7421eTXGW&format=png'/></MenuItem>
-          <MenuItem value="https://img.icons8.com/?size=512&id=77988&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=77988&format=png'/></MenuItem>
-          <MenuItem value="https://img.icons8.com/?size=512&id=juRF5DiUGr4p&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=juRF5DiUGr4p&format=png'/></MenuItem>
-          <MenuItem value="https://img.icons8.com/?size=512&id=21731&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=21731&format=png'/></MenuItem>
-          <MenuItem value="https://img.icons8.com/?size=512&id=rn0oscjrJY2d&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=rn0oscjrJY2d&format=png'/></MenuItem>
+          <MenuItem value="https://img.icons8.com/?size=512&id=rMv4B3bzTLCX&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=rMv4B3bzTLCX&format=png'/></MenuItem>
+
+            <MenuItem value="https://img.icons8.com/?size=512&id=GTba5IMgy3gc&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=GTba5IMgy3gc&format=png'/></MenuItem>
+
+            <MenuItem value="https://img.icons8.com/?size=512&id=xCLiCEaCIH7B&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=xCLiCEaCIH7B&format=png'/></MenuItem>
+
+            <MenuItem value="https://img.icons8.com/?size=512&id=rYCIDB4Eyl3Y&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=rYCIDB4Eyl3Y&format=png'/></MenuItem>
+
+            <MenuItem value="https://img.icons8.com/?size=512&id=knkdasdhCwXa&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=knkdasdhCwXa&format=png'/></MenuItem>
+
+            <MenuItem value="https://img.icons8.com/?size=512&id=abOoUFblJ-3v&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=abOoUFblJ-3v&format=png'/></MenuItem>
+
+            <MenuItem value="https://img.icons8.com/?size=512&id=0My7pGwQmrg4&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=0My7pGwQmrg4&format=png'/></MenuItem>
+
+            <MenuItem value="https://img.icons8.com/?size=512&id=k0o3gBVVzzUr&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=k0o3gBVVzzUr&format=png'/></MenuItem>
         </TextField>
 
         <TextField
@@ -344,4 +369,4 @@ useEffect(() => {
   );
 };
 
-export default Settings;
+export default BusinessSettings;

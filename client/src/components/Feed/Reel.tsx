@@ -68,6 +68,9 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
   const [user, setUser] = useState<User>(null);
   const [friendList, setFriendList] = useState([]);
   const [disabled, setDisabled] = useState([]);
+  const [likeTotal, setLikeTotal] = useState(0);
+  // const [removeLike, setRemoveLike] = useState([]);
+  const [likes, setLikes] = useState([]); // user's reels that have been liked
 
   const fetchAuthUser = async () => {
     try {
@@ -148,11 +151,69 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
       })
       .catch((err) => {
         console.error('Could not DELETE reel', err);
-      })
+      });
   };
 
+  // ADD like
+  const handleAddLike = (reelId: number) => {
+    console.log('Add like of reelId =>', reelId);
+    axios
+      .put(`/likes/addLike/${reelId}`)
+      .then((data) => {
+        // console.log('Likes Updated AXIOS', data);
+        setLikes((prev) => [...prev, reelId]);
+        setLikeTotal((prev) => prev + 1);
+      })
+      .catch((err) => console.error('Like AXIOS route Error', err));
+  };
+
+  // Remove like
+  const handleRemoveLike = (reelId: number) => {
+    console.log('Remove like');
+    axios
+      .put(`/likes/removeLike/${reelId}`)
+      .then((data) => {
+        // console.log('Likes Updated AXIOS', data);
+        const foundLike = likes.indexOf(reelId)
+        // console.log('foundLike', foundLike)
+        if (foundLike !== -1) {
+          setLikes((prev) => prev.splice(foundLike, 1));
+          // console.log('splice likes', likes.splice(foundLike, 1))
+        }
+        setLikeTotal((prev) => prev - 1);
+      })
+      .catch((err) => console.error('Like AXIOS route Error', err));
+  };
+
+  // get reels that have been liked
+  const getLikes = () => {
+    if (user) {
+      axios
+        .get('/feed/likesTable')
+        .then((response) => {
+          // console.log('likes:', response.data);
+          for (let i = 0; i < response.data.length; i++) {
+            if (user?.id === response.data[i].UserId) {
+              setLikes((prev) => [...prev, response.data[i].ReelId]);
+            }
+          }
+        })
+        .catch((err) => {
+          console.error('Could not GET all likes:', err);
+        });
+    }
+  };
+
+  useEffect(() => {
+    getLikes();
+  }, [user]);
+
+
   return (
-    <main className='reel-container' style={{ fontSize: theme.typography.fontSize }}>
+    <main
+      className='reel-container'
+      style={{ fontSize: theme.typography.fontSize }}
+    >
       <AnimatePresence initial={false}>
         {reels.map((reel) => {
           return (
@@ -174,6 +235,10 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
                 requestFriendship={requestFriendship}
                 disabledNow={disabled}
                 deleteReel={deleteReel}
+                handleAddLike={handleAddLike}
+                handleRemoveLike={handleRemoveLike}
+                likeTotal={likeTotal}
+                likes={likes}
               />
             </motion.div>
           );

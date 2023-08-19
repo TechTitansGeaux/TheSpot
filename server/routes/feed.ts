@@ -123,15 +123,22 @@ feedRouter.get('/friendlist/pending', (req: any, res: any) => {
     });
 });
 
-// delete a reel
+// delete a reel REMEMBER TO DESTROY THE LIKES ENTRIES TOO
 feedRouter.delete('/delete/:id', (req: any, res: any) => {
-  const { id } = req.params;
-  //console.log('req.params:', req.params);
+  const { id } = req.params; // id is ReelId in Likes table
+
   Reels.destroy({
     where: {
       id: id
     }
   })
+    // .then((response: any) => {
+    //   Likes.destroy({
+    //     where: {
+    //       ReelId: null,
+    //     },
+    //   })
+    // })
     .then((response: any) => {
       if (response) {
         // console.log('Reels deleted:', response);
@@ -170,25 +177,6 @@ feedRouter.get('/reel/user', (req: any, res: any) => {
       res.sendStatus(500);
     })
 });
-
-// GET likes from likes table
-feedRouter.get('/likesTable', (req: any, res: any) => {
-
-  Likes.findAll({})
-    .then((response: any) => {
-      if (response === null) {
-        console.log('likes do not exist');
-        res.sendStatus(404);
-      } else {
-        res.status(200).send(response);
-      }
-    })
-    .catch((err: any) => {
-      console.error('Cannot GET likes:', err);
-      res.sendStatus(500);
-    })
-});
-
 
 export default feedRouter;
 

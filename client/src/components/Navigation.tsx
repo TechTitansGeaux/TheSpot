@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from 'react';
 import { Outlet, NavLink, Link } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
@@ -56,8 +57,8 @@ const theme = createTheme({
 
 const Navigation: React.FC<Props> = ({ user }) => {
   const [pFriends, setPFriends] = useState([]); // pending friends list
-  const [userReels, setUserReels] = useState([]); // logged in user's reels
-  const likes: any = []; // user's reels that have been liked
+
+  const [likesArr, setLikesArr] = useState([]); // state version of likes
 
   const [onPage, setOnPage] = useState(
     <NavLink className='navLink' to='/Feed'>
@@ -66,6 +67,8 @@ const Navigation: React.FC<Props> = ({ user }) => {
   );
   const location = useLocation();
   const feedPath = location.pathname;
+  const [setting, setSetting] = useState('');
+  const [userType, setUserType] = useState(null);
 
   // get all pending friends for current user
   const getAllPFriends = () => {
@@ -93,35 +96,20 @@ const Navigation: React.FC<Props> = ({ user }) => {
 
   }, [location.pathname, user]);
 
-  // get your own reels
-  const getOwnReels = () => {
-    axios
-      .get('/feed/reel/user')
-      .then((response) => {
-        console.log('users own reels:', response.data);
-        setUserReels(response.data);
-      })
-      .catch((err) => {
-        console.error('Could not GET user reels:', err);
-      });
-  };
-
-  useEffect(() => {
-    getOwnReels();
-  }, [location.pathname, user]);
-
-  // get reels that have been liked
+  // get reels that have been liked AND checked
   const getLikes = () => {
+    const likes: any = []; // user's reels that have been liked
     if (user) {
       axios
-        .get('/feed/likesTable')
+        .get('/likes/likes')
         .then((response) => {
-          console.log('likes:', response.data);
+          // console.log('likes:', response.data);
           for (let i = 0; i < response.data.length; i++) {
-            if (user.id === response.data[i].UserId) {
+            if (user.id === response.data[i].UserId && response.data[i].checked !== true) {
               likes.push(response.data[i]);
             }
           }
+          setLikesArr(likes);
         })
         .catch((err) => {
           console.error('Could not GET all likes:', err);
@@ -131,7 +119,31 @@ const Navigation: React.FC<Props> = ({ user }) => {
 
   useEffect(() => {
     getLikes();
-  }, [user]);
+
+    const interval = setInterval(() => {
+      getLikes();
+    }, 5000);
+
+    return () => {
+      clearInterval(interval);
+    }
+  }, [location.pathname, user]);
+
+  // once you click on likes sidebar, set likes checked column to true
+  const checkedLikes = () => {
+    for (let i = 0; i < likesArr.length; i++) {
+      let id = likesArr[i].id;
+      axios
+        .put(`/likes/checked/${id}`)
+        .then((response) => {
+          console.log('updated LIKES table column checked');
+        })
+        .catch((err) => {
+          console.error('Did not update LIKES checked column', err);
+        })
+    }
+    setLikesArr([]);
+  };
 
   // When the user clicks on the button, scroll to the top of the page
   const handleScrollTop = () => {
@@ -145,14 +157,22 @@ const Navigation: React.FC<Props> = ({ user }) => {
       getAllPFriends();
       setOnPage(
         <button className='navLink' onClick={handleScrollTop}>
-          <img id='nav-logo' src={logoGradient} alt='app logo' />
+          <img
+            id='nav-logo'
+            src={logoGradient}
+            alt='app logo'
+          />
         </button>
       );
     } else {
       getAllPFriends();
       setOnPage(
         <NavLink className='navLink' to='/Feed'>
-          <img id='nav-logo' src={logoGradient} alt='app logo' />
+          <img
+            id='nav-logo'
+            src={logoGradient}
+            alt='app logo'
+          />
         </NavLink>
       );
     }
@@ -175,6 +195,21 @@ const Navigation: React.FC<Props> = ({ user }) => {
 
       setState({ ...state, left: open });
     };
+
+    // const settingsType = () => {
+      useEffect(() => {
+        if (user) {
+          if (user.type === 'personal' || user.type === null) {
+            // Redirect to '/Settings' for personal user type
+            setSetting('/Settings');
+          } else if (user.type === 'business') {
+            // Redirect to '/BusinessSettings' for business user type
+            setSetting('/BusinessSettings');
+          }
+        }
+      }, [user]);
+      // return setting;
+    // }
 
   // Need to Update My Reels // to={<my reels component>}
   const list = (anchor: Anchor) => (
@@ -206,7 +241,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
             FRIEND REQUESTS
             <span>
               {pFriends.length !== 0 &&
-                <CircleNotificationsIcon className="circle" />
+                <CircleNotificationsIcon className="circle" sx={{ marginLeft: 1 }} />
               }
             </span>
           </ListItemButton>
@@ -227,15 +262,21 @@ const Navigation: React.FC<Props> = ({ user }) => {
             component={Link}
             to={'/Likes'}
             sx={{ minHeight: '4em', paddingLeft: '1.5em' }}
+            onClick={checkedLikes}
           >
             LIKES
+            <span>
+              {likesArr.length !== 0 &&
+                <CircleNotificationsIcon className="circle" />
+              }
+            </span>
           </ListItemButton>
         </ListItem>
         <ListItem className='drawer-btn' disablePadding>
           <ListItemButton
             className='sidebar-btn'
             component={Link}
-            to={'/Settings'}
+            to={setting}
             sx={{ minHeight: '4em', paddingLeft: '1.5em' }}
           >
             SETTINGS
@@ -265,11 +306,11 @@ const Navigation: React.FC<Props> = ({ user }) => {
                     </NavLink>
                   </div>
                     <div>
-                      {pFriends.length !== 0 &&
-                        <CircleNotificationsIcon className="circle" />
+                      {(likesArr.length !== 0 || pFriends.length !== 0) &&
+                        <CircleNotificationsIcon className="circle" sx={{ position: 'absolute', right: -30, zIndex: "4", top: 5 }} />
                       }
                     </div>
-                  <div onClick={toggleDrawer('left', true)}>
+                  <div onClick={(toggleDrawer('left', true))}>
                     <Tooltip
                       title='Open Settings'
                       TransitionComponent={Zoom}
