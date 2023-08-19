@@ -31,8 +31,10 @@ const fontSizes = {
 const Settings: React.FC<Props> = ({fontSize}) => {
   const dispatch = useDispatch();
   const authUser = useSelector((state: RootState) => state.app.authUser);
+  const [username, setUsername] = React.useState('');
   const [displayName, setDisplayName] = React.useState('');
   const [picture, setPicture] = React.useState('');
+  const [type, setType] = React.useState('');
   const [selectedImage, setSelectedImage] = React.useState(null||'');
   const [isImageSelected, setIsImageSelected] = useState(false);
   const [selectedMapIcon, setSelectedMapIcon] = React.useState('');
@@ -74,22 +76,41 @@ useEffect(() => {
     setShowDeleteConfirmation(false);
   };
 
-  const handleDeleteConfirm = async () => {
-    try {
-      setShowDeleteConfirmation(false);
 
+  const handleDeleteConfirm = async () => {
+      setShowDeleteConfirmation(false);
+      setUsername(`user${Math.floor(Math.random())}`);
+      setDisplayName(`user${Math.floor(Math.random())}`);
+      setGeolocation('-24.4879217, -46.6741555');
+      setPrivacy('private');
+      setPicture('no pic');
+      setSelectedMapIcon('no icon');
+      setType('');
+
+      const profileData = {
+        username: username,
+        displayName: displayName,
+        picture: picture,
+        mapIcon: selectedMapIcon,
+        geolocation: geolocation,
+        privacy: privacy,
+        type: type
+      };
+
+      axios
+      .patch(`/users/${authUser.id}`, profileData)
+      .then(response => {
+      // Dispatch the updated user object to the Redux store
+      dispatch(setAuthUser(response.data));
       // success message
       alert("Account deleted successfully!");
-
-      const response = await axios.delete(`/users/${authUser.id}`);
-      if (response && response.data) {
-        dispatch(setAuthUser(null));
-        window.location.href = `${process.env.HOST}/`;
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+      // redirect the user to the signup
+      window.location.href = `${process.env.HOST}/`;
+      })
+      .catch(error => {
+        console.error(error);
+      });
+};
 
 
   useEffect(() => {
@@ -163,20 +184,6 @@ useEffect(() => {
     }
   };
 
-  // const handleDeleteUser = async () => {
-  //   try {
-  //     const response = await axios.delete(`/users/${authUser.id}`);
-  //     if (response && response.data) {
-  //       // logout the user by clearing the authUser state
-  //       dispatch(setAuthUser(null));
-  //       // redirect the user to the homepage
-  //       window.location.href = `${process.env.HOST}/`;
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
   const handleLogout = () => {
     // logout the user by clearing the authUser state
     dispatch(setAuthUser(null));
@@ -241,17 +248,17 @@ useEffect(() => {
           onChange={e => setSelectedMapIcon(e.target.value)}
           style={{ color: 'var(--setupBG)', marginBottom: '1rem' }}
         >
-          <MenuItem value="https://img.icons8.com/?size=512&id=qzpodiwSoTXX&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=qzpodiwSoTXX&format=png'/></MenuItem>
-          <MenuItem value="https://img.icons8.com/?size=512&id=20880&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=20880&format=png'/></MenuItem>
-          <MenuItem value="https://img.icons8.com/?size=512&id=58781&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=58781&format=png'/></MenuItem>
-          <MenuItem value="https://img.icons8.com/?size=512&id=32002&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=32002&format=png'/></MenuItem>
-          <MenuItem value="https://img.icons8.com/?size=512&id=35183&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=35183&format=png'/></MenuItem>
-          <MenuItem value="https://img.icons8.com/?size=512&id=78491&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=78491&format=png'/></MenuItem>
-          <MenuItem value="https://img.icons8.com/?size=512&id=luN7421eTXGW&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=luN7421eTXGW&format=png'/></MenuItem>
-          <MenuItem value="https://img.icons8.com/?size=512&id=77988&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=77988&format=png'/></MenuItem>
-          <MenuItem value="https://img.icons8.com/?size=512&id=juRF5DiUGr4p&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=juRF5DiUGr4p&format=png'/></MenuItem>
-          <MenuItem value="https://img.icons8.com/?size=512&id=21731&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=21731&format=png'/></MenuItem>
-          <MenuItem value="https://img.icons8.com/?size=512&id=rn0oscjrJY2d&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=rn0oscjrJY2d&format=png'/></MenuItem>
+          <MenuItem value="https://img.icons8.com/?size=512&id=qzpodiwSoTXX&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=qzpodiwSoTXX&format=png'/></MenuItem>
+          <MenuItem value="https://img.icons8.com/?size=512&id=20880&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=20880&format=png'/></MenuItem>
+          <MenuItem value="https://img.icons8.com/?size=512&id=58781&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=58781&format=png'/></MenuItem>
+          <MenuItem value="https://img.icons8.com/?size=512&id=32002&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=32002&format=png'/></MenuItem>
+          <MenuItem value="https://img.icons8.com/?size=512&id=35183&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=35183&format=png'/></MenuItem>
+          <MenuItem value="https://img.icons8.com/?size=512&id=78491&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=78491&format=png'/></MenuItem>
+          <MenuItem value="https://img.icons8.com/?size=512&id=luN7421eTXGW&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=luN7421eTXGW&format=png'/></MenuItem>
+          <MenuItem value="https://img.icons8.com/?size=512&id=77988&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=77988&format=png'/></MenuItem>
+          <MenuItem value="https://img.icons8.com/?size=512&id=juRF5DiUGr4p&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=juRF5DiUGr4p&format=png'/></MenuItem>
+          <MenuItem value="https://img.icons8.com/?size=512&id=21731&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=21731&format=png'/></MenuItem>
+          <MenuItem value="https://img.icons8.com/?size=512&id=rn0oscjrJY2d&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=rn0oscjrJY2d&format=png'/></MenuItem>
         </TextField>
 
         <TextField
