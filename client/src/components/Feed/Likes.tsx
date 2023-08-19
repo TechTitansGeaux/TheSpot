@@ -23,8 +23,14 @@ const Likes: React.FC<Props> = ({
 
   // const getAllLikes = () => {
   //   axios.get('/likes/likes')
-
+  //     .then((response) => {
+  //       console.log('Response from Axios getAllLikes request:', response);
+  //     })
+  //     .catch((err) => {
+  //       console.error('Error in Axios getAllLikes in Likes.tsx:', err);
+  //   })
   // }
+
 
 
   const handleLikeClick = (reelId: number) => {

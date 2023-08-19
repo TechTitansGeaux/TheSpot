@@ -180,7 +180,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
               <h5 className='video-timestamp'>
                 ... {dayjs(`${reel.createdAt}`).fromNow()}
               </h5>
-              <p className='video-text'>{reel.text + reel.User.type}</p>
+              <p className='video-text'>{reel.text}</p>
               <>
                 <Tooltip
                   title={reel.Event.name}
