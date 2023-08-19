@@ -180,7 +180,7 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
           setLikes((prev) => prev.splice(foundLike, 1));
           // console.log('splice likes', likes.splice(foundLike, 1))
         }
-        setLikeTotal((prev) => prev - 1);
+        // setLikeTotal(likeTotal - 1);
       })
       .catch((err) => console.error('Like AXIOS route Error', err));
   };

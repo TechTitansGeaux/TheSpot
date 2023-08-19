@@ -262,7 +262,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                           onClick={() => handleAddLike(reel.id)}
                         />
                       )}
-                      {reel.like_count !== 0 && (
+                      {reel.like_count >= 0 && (
                         <p className='like-counter'>
                           {reel.like_count + likeTotal}
                         </p>

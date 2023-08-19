@@ -21,17 +21,17 @@ eventRouter.get('/userEvents', async (req: any, res: any) => {
   const { userId } = req.user;
 
   await Events.findAll({where: {userId: userId}})
-    .then((resObj) => {
+    .then((resObj: any) => {
       console.log(resObj, '<----res from get all user\'s events')
       res.status(200).send(resObj);
     })
-    .catch((err) => {
+    .catch((err: any) => {
       console.error('Failed to GET all of user\'s events: ', err);
       res.sendStatus(500)
     })
 })
 
-// get event by location AND date 
+// get event by location AND date
 eventRouter.get('/:geolocation/:date', async (req: any, res: any) => {
   // access geolocation from request parameters
   const { geolocation, date } = req.params;
