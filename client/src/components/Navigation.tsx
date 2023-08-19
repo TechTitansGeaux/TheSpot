@@ -19,6 +19,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Zoom from '@mui/material/Zoom';
 import axios from 'axios';
 import './navigation.css';
+// import Badge from '@mui/material/Badge';
 
 type Anchor = 'left';
 type Props = {
@@ -56,6 +57,9 @@ const theme = createTheme({
 
 const Navigation: React.FC<Props> = ({ user }) => {
   const [pFriends, setPFriends] = useState([]); // pending friends list
+
+  const [likesArr, setLikesArr] = useState([]); // state version of likes
+
   const [onPage, setOnPage] = useState(
     <NavLink className='navLink' to='/Feed'>
       <img id='nav-logo' src={logoGradient} alt='app logo' />
@@ -92,6 +96,55 @@ const Navigation: React.FC<Props> = ({ user }) => {
 
   }, [location.pathname, user]);
 
+  // get reels that have been liked AND checked
+  const getLikes = () => {
+    const likes: any = []; // user's reels that have been liked
+    if (user) {
+      axios
+        .get('/likes/likes')
+        .then((response) => {
+          // console.log('likes:', response.data);
+          for (let i = 0; i < response.data.length; i++) {
+            if (user.id === response.data[i].UserId && response.data[i].checked !== true) {
+              likes.push(response.data[i]);
+            }
+          }
+          setLikesArr(likes);
+        })
+        .catch((err) => {
+          console.error('Could not GET all likes:', err);
+        });
+    }
+  };
+
+  useEffect(() => {
+    getLikes();
+
+    const interval = setInterval(() => {
+      getLikes();
+    }, 5000);
+
+    return () => {
+      clearInterval(interval);
+    }
+  }, [location.pathname, user]);
+
+  // once you click on likes sidebar, set likes checked column to true
+  const checkedLikes = () => {
+    for (let i = 0; i < likesArr.length; i++) {
+      let id = likesArr[i].id;
+      axios
+        .put(`/likes/checked/${id}`)
+        .then((response) => {
+          console.log('updated LIKES table column checked');
+        })
+        .catch((err) => {
+          console.error('Did not update LIKES checked column', err);
+        })
+    }
+    setLikesArr([]);
+  };
+
   // When the user clicks on the button, scroll to the top of the page
   const handleScrollTop = () => {
     document.body.scrollTop = 0; // For Safari
@@ -104,14 +157,22 @@ const Navigation: React.FC<Props> = ({ user }) => {
       getAllPFriends();
       setOnPage(
         <button className='navLink' onClick={handleScrollTop}>
-          <img id='nav-logo' src={logoGradient} alt='app logo' />
+          <img
+            id='nav-logo'
+            src={logoGradient}
+            alt='app logo'
+          />
         </button>
       );
     } else {
       getAllPFriends();
       setOnPage(
         <NavLink className='navLink' to='/Feed'>
-          <img id='nav-logo' src={logoGradient} alt='app logo' />
+          <img
+            id='nav-logo'
+            src={logoGradient}
+            alt='app logo'
+          />
         </NavLink>
       );
     }
@@ -180,7 +241,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
             FRIEND REQUESTS
             <span>
               {pFriends.length !== 0 &&
-                <CircleNotificationsIcon className="circle" />
+                <CircleNotificationsIcon className="circle" sx={{ marginLeft: 1 }} />
               }
             </span>
           </ListItemButton>
@@ -201,8 +262,14 @@ const Navigation: React.FC<Props> = ({ user }) => {
             component={Link}
             to={'/Likes'}
             sx={{ minHeight: '4em', paddingLeft: '1.5em' }}
+            onClick={checkedLikes}
           >
             LIKES
+            <span>
+              {likesArr.length !== 0 &&
+                <CircleNotificationsIcon className="circle" />
+              }
+            </span>
           </ListItemButton>
         </ListItem>
         <ListItem className='drawer-btn' disablePadding>
@@ -239,8 +306,8 @@ const Navigation: React.FC<Props> = ({ user }) => {
                     </NavLink>
                   </div>
                     <div>
-                      {pFriends.length !== 0 &&
-                        <CircleNotificationsIcon className="circle" />
+                      {(likesArr.length !== 0 || pFriends.length !== 0) &&
+                        <CircleNotificationsIcon className="circle" sx={{ position: 'absolute', right: -30, zIndex: "4", top: 5 }} />
                       }
                     </div>
                   <div onClick={(toggleDrawer('left', true))}>

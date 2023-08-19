@@ -11,6 +11,7 @@ import "./db/auth/passport";
 import feedRouter from './routes/feed';
 import friendRouter from './routes/friends';
 import eventRouter  from './routes/events';
+import likesRouter  from './routes/likes';
 
 
 
@@ -59,6 +60,8 @@ app.use('/feed', feedRouter);
 app.use('/friends', friendRouter);
 // events route
 app.use('/events', eventRouter)
+// events route
+app.use('/likes', likesRouter)
 
 
 app.get('/*', (req: Request, res: Response) => {

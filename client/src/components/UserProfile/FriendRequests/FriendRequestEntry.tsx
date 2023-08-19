@@ -5,6 +5,23 @@ import Zoom from '@mui/material/Zoom';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveOutlinedIcon from '@mui/icons-material/RemoveOutlined';
 
+
+
+type User = {
+  id: number;
+  username: string;
+  displayName: string;
+  type: string;
+  geolocation: string;
+  mapIcon: string;
+  birthday: string;
+  privacy: string;
+  accessibility: string;
+  email: string;
+  picture: string;
+  googleId: string;
+};
+
 type Props = {
   user: {
     id: number;
@@ -29,17 +46,46 @@ type Props = {
     updatedAt: string;
   };
   approveFriendship: any;
+  rejectFriendship: any;
+  allUsers: [User];
 };
 
 const FriendRequestEntry: React.FC<Props> = ({
   user,
   approveFriendship,
+  rejectFriendship,
   pendingFriend,
+  allUsers
 }) => {
+
+  const pendingFriendName = allUsers.reduce((name: string, otherUser: any) => {
+    if (otherUser?.id === pendingFriend?.accepter_id) {
+      name = otherUser.displayName;
+    }
+    return name;
+  }, '');
+
+  const pendingFriendIcon = allUsers.reduce((icon: string, otherUser: any) => {
+    if (otherUser?.id === pendingFriend?.accepter_id) {
+      icon = otherUser.mapIcon;
+      console.log('friend icon:', otherUser.mapIcon);
+    }
+    return icon;
+  }, '');
+
   return (
     <>
       <div className='friendRequest-container'>
-        <h2 className='friendName'>{pendingFriend?.id}</h2>
+        <img
+          src={pendingFriendIcon}
+          alt={pendingFriendName}
+          style={{
+            width: '40px',
+            height: '40px',
+            marginRight: '10px'
+          }}
+        />
+        <h2 className='friendName'>{pendingFriendName}</h2>
         <div className='btn-container'>
           <Fab
             style={{
@@ -101,7 +147,12 @@ const FriendRequestEntry: React.FC<Props> = ({
             >
               <RemoveOutlinedIcon
                 className='rejectFriend-btn'
-                onClick={() => console.log('delete request')}
+                onClick={() =>
+                  rejectFriendship(
+                    pendingFriend.accepter_id,
+                    pendingFriend?.updatedAt
+                  )
+                }
               />
             </Tooltip>
           </Fab>

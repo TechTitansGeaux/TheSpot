@@ -3,24 +3,23 @@
   import { useEffect, useCallback, useRef, useState } from "react";
   import Webcam from "react-webcam";
   import axios from 'axios';
+  import NewEventForm from './NewEventForm';
   import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
   import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
   import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
   import { motion } from 'framer-motion';
   import { useNavigate  } from 'react-router-dom';
   import Tooltip from '@mui/material/Tooltip';
-  import InfoIcon from '@mui/icons-material/Info';
-// import { current } from '@reduxjs/toolkit';
-  // import dayjs = require('dayjs');
-  // import localizedFormat from 'dayjs/plugin/localizedFormat';
-  // dayjs.extend(localizedFormat)
+  import EventNoteIcon from '@mui/icons-material/EventNote';
 
   type Props = {
     currentEvent: {
       id: number;
       name: string;
       rsvp_count: number;
-      date: Date;
+      date: string;
+      time: string;
+      endTime: string;
       geolocation: string; // i.e. "29.947126049254177, -90.18719199978266"
       twenty_one: boolean;
       createdAt: string;
@@ -42,10 +41,11 @@
       googleId: string;
     },
     mustCreateEvent: boolean,
-    currentEventId: number
+    currentEventId: number,
+    updateMustCreateEvent: () => void
   };
 
-  const VideoRecorder: React.FC<Props> = ({currentEvent, user, mustCreateEvent, currentEventId}) => {
+  const VideoRecorder: React.FC<Props> = ({currentEvent, user, mustCreateEvent, currentEventId, updateMustCreateEvent}) => {
     const webcamRef = useRef(null);
     const mediaRecorderRef = useRef(null);
     const [capturing, setCapturing] = useState(false);
@@ -54,20 +54,20 @@
     const [url, setUrl] = useState('');
     const [text, setText] = useState('');
     const [eventId, setEventId] = useState(0)
-    const [event, setEvent] = useState({
-      id: 0,
-      name: '',
-      rsvp_count: 0,
-      date: new Date,
-      geolocation: '',
-      twenty_one: false,
-      createdAt: '',
-      updatedAt: '',
-      PlaceId: 0,
-    });
+    // const [event, setEvent] = useState({
+    //   id: 0,
+    //   name: '',
+    //   rsvp_count: 0,
+    //   date: new Date,
+    //   geolocation: '',
+    //   twenty_one: false,
+    //   createdAt: '',
+    //   updatedAt: '',
+    //   PlaceId: 0,
+    // });
     const [justRecorded, setJustRecorded] = useState(false);
     const [reelSaved, setReelSaved] = useState(false);
-    const [eventName, setEventName] = useState(currentEvent.name);
+    const [businessAccount, setBusinessAccount] = useState(false);
 
     type Blob = {
       data: {
@@ -159,9 +159,9 @@
       };
       upload();
     }, [justRecorded, mediaRecorderRef, recordedChunks])
-    // console.log(recordedChunks, '<-----recorded chunks OUTSIDE')
 
-    // console.log(mustCreateEvent, '<-----must create event outside')
+    // get built in 3 hour event default end time
+    const defaultEndTime = (Number(currentEvent.time.slice(0, 2)) + 3) + currentEvent.time.slice(2);
 
     // save reel to databases
     // get all reel properties from predetermined event properties
@@ -172,24 +172,29 @@
       await axios.post('/events/create', {
           name: currentEvent.name,
           date: currentEvent.date,
+          time: currentEvent.time,
+          endTime: defaultEndTime,
           geolocation: currentEvent.geolocation,
           twenty_one: currentEvent.twenty_one
       })
       .then((res) => {
         // console.log(res, '<----- response from axios post event')
         setEventId(res.data.event.id)
+        setReelSaved(true);
       })
       .catch((err) => {
         console.error('Failed axios post event: ', err);
       })
     } else {
       // If event did not need to be created, set event id to the one passed down from props
+      if (currentEventId !== 0) {
       setEventId(currentEventId);
+      }
       setReelSaved(true)
     }
     };
 
-    // console.log(eventId, '<---- eventId in state')
+    console.log(eventId, '<---- eventId in state')
 
     // POST THE REEL to the db, but only AFTER eventId has been GOT
     const postReelToDb = async () => {
@@ -214,11 +219,6 @@
     .catch((err) => {
       console.error('Failed axios post reel: ', err);
     })
-    // // no longer just recorded
-    // setJustRecorded(false)
-    // // reset url
-    // setUrl('');
-    // setText('');
     }
 
     // post reel to db should be invoked whenever eventId has been changed
@@ -227,7 +227,7 @@
         postReelToDb();
         setReelSaved(false);
       }
-    }, [eventId])
+    }, [eventId, reelSaved])
 
     const videoConstraints = {
       // width: 420,
@@ -235,14 +235,10 @@
       facingMode: "user",
     };
 
-// handle input text for caption
-const handleText = (e: any) => {
+  // handle input text for caption
+  const handleText = (e: any) => {
   setText(e.target.value);
 };
-// handle input for event name
-const handleEventName = (e: any) => {
-  setEventName(e.target.value)
-}
 
 // navigate to feed if just posted reel
 const navigate = useNavigate();
@@ -251,9 +247,46 @@ const redirectToFeed = () => {
   navigate('/Feed');
 }
 
+// toggle pop up modal
+const togglePopUp = () => {
+  const box = document.getElementById('event-form')
+  if (box.style.display === 'block') {
+    box.style.display = 'none';
+  } else {
+    box.style.display = 'block';
+  }
+}
+
+// determine user type
+const checkUserType = () => {
+  if (user.type === 'business') {
+    setBusinessAccount(true);
+  }
+}
+
+useEffect(() => {
+  checkUserType();
+}, [])
+
+// set event id from new event form component
+const updateEventId = (newId: number) => {
+  setEventId(newId);
+}
+
+console.log(user.geolocation, '<-----geolo')
+// console.log(user.type, '<---- user type')
+// console.log(businessAccount, '<------business account')
+
+
     return (
       <div>
-        <div className='webContainer'> { justRecorded ? (
+        <div className='webContainer'>
+        <NewEventForm
+        user={user}
+        mustCreateEvent={mustCreateEvent}
+        updateMustCreateEvent={updateMustCreateEvent}
+        updateEventId={updateEventId}/>
+          { justRecorded ? (
           <div className='preview-mask'>
             <div className='webcam'>
               <video
@@ -270,20 +303,6 @@ const redirectToFeed = () => {
                 onChange={handleText}
                 type='text'>
               </input>
-              <input
-              className="event-name-input"
-              placeholder='Edit event name ...'
-              value={eventName}
-              onChange={handleEventName}
-              type='text'>
-              </input>
-              <Tooltip
-            title={currentEvent.name}
-            placement='left'
-            arrow
-          >
-        <InfoIcon className='info-icon'/>
-        </Tooltip>
             </div>
           </div>
         ) : (
@@ -300,6 +319,7 @@ const redirectToFeed = () => {
           </div>
         )}
         </div>
+        <div className='cam-buttons-container'>
         <div className='cameraButtons'>
           {capturing ? (
             <RadioButtonCheckedIcon
@@ -317,6 +337,20 @@ const redirectToFeed = () => {
             </motion.div>
           )}
           {justRecorded && (
+            <div>
+              <Tooltip
+              title='Post reel'
+              placement='top'
+              PopperProps={{
+                sx: {
+                  '& .MuiTooltip-tooltip': {
+                    backgroundColor: 'transparent',
+                    border: 'solid #F5FCFA 1px',
+                    color: '#F5FCFA',
+                  },
+                },
+              }}
+            >
             <motion.div
             whileHover={{ scale: 1.2 }}
             >
@@ -325,8 +359,39 @@ const redirectToFeed = () => {
               color='secondary'
               sx={{ width: 52, height: 52 }}/>
             </motion.div>
+            </Tooltip>
+            </div>
+          )}
+          {justRecorded && businessAccount && (
+            <div>
+              <div
+              onClick={togglePopUp}>
+                  <Tooltip
+                  title='Add event details'
+                  placement='top'
+                  PopperProps={{
+                    sx: {
+                      '& .MuiTooltip-tooltip': {
+                        backgroundColor: 'transparent',
+                        border: 'solid #F5FCFA 1px',
+                        color: '#F5FCFA',
+                      },
+                    },
+                  }}
+                  >
+                  <motion.div
+                    whileHover={{ scale: 1.2 }}
+                    >
+                      <EventNoteIcon
+                      color='secondary'
+                      sx={{ width: 52, height: 52 }}/>
+                  </motion.div>
+                  </Tooltip>
+              </div>
+            </div>
           )}
         </div>
+      </div>
       </div>
     );
   }

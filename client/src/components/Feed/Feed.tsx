@@ -156,7 +156,7 @@ const Feed: React.FC<Props> = ({user}) => {
 
   useEffect(() => {
     userCoord(user);
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     getAllReels();

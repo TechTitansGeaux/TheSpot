@@ -1,4 +1,7 @@
 
 .circle {
-  color: rgb(255, 51, 51);
+  color: var(--yellow);
+  background-color: var(--violet);
+  border-radius: 50%;
+  margin: 2px;
 }

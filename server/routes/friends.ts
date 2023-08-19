@@ -19,11 +19,10 @@ friendRouter.post('/', (req: any, res: any) => {
   // REQUESTER is req.user
   const { id } = req.user;
   const { accepter_id } = req.body;
-  Friendships.bulkCreate([
+  Friendships.create(
     // set to approved for testing
-    { status: 'pending', requester_id: id, accepter_id },
-    { status: 'pending', requester_id: accepter_id, accepter_id: id },
-  ])
+    { status: 'pending', requester_id: id, accepter_id }
+  )
     .then((data: any) => {
       res.sendStatus(201);
     })
@@ -42,11 +41,15 @@ friendRouter.put('/', (req: any, res: any) => {
     {
       where: {
         accepter_id: [id, requester_id],
-        requester_id: [id, requester_id],
         status: 'pending'
       },
-    }
-  )
+    })
+    .then((data: any) => {
+      Friendships.create(
+        // set to approved for testing
+        { status: 'approved', requester_id: requester_id, accepter_id: id }
+      );
+    })
     .then((data: any) => {
       res.sendStatus(200);
     })
