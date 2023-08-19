@@ -16,11 +16,14 @@ const UserType = () => {
 
   useEffect(() => {
     if (authUser) {
-      setType(authUser.type);
+      console.log(authUser);
     }
   }, [authUser]);
 
   const handleProfileSelection = (profileType: any) => {
+
+    setType(profileType);
+
     const profileData = {
       type,
     };
@@ -33,12 +36,12 @@ const UserType = () => {
       .catch((error) => {
         console.error(error);
       });
-
-    if (profileType === 'personal') {
-      window.location.href = `${process.env.HOST}/ProfileSetUp`
-    } else if (profileType === 'business') {
-      window.location.href = `${process.env.HOST}/BusinessProfile`
-    }
+      
+      if (profileData.type === 'personal') {
+        window.location.href = `${process.env.HOST}/ProfileSetUp`
+      } else if (profileData.type === 'business') {
+        window.location.href = `${process.env.HOST}/BusinessProfile`
+      }
   };
 
   return (

@@ -17,10 +17,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import SpeechToText from '../ProfileSetUp/SpeechToText';
-import PlacesAutocomplete, {
-  geocodeByAddress,
-  getLatLng,
-} from 'react-places-autocomplete';
+import LocationSearchInput from './LocationSearchInput';
 
 
 const theme = createTheme({
@@ -44,21 +41,19 @@ const BusinessProfile = () => {
 
   const [username, setUsername] = useState('');
   const [displayName, setDisplayName] = useState('');
-  const [address, setAddress] = useState('');
-  const [addressCoordinates, setAddressCoordinates] = useState('');
   const [birthday, setBirthday] = useState('');
   const [picture, setPicture] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
   const [isImageSelected, setIsImageSelected] = useState(false);
-  const [selectedMapIcon, setSelectedMapIcon] = useState('');
   const [geolocation, setGeolocation] = useState('');
+  const [selectedMapIcon, setSelectedMapIcon] = useState('');
   const [privacy, setPrivacy] = React.useState('');
   const [errors, setErrors] = useState({
     username: '',
     displayName: '',
     birthday: '',
     picture: '',
-    address: '',
+    geolocation: '',
     mapIcon: '',
     uploadImage: '',
     saveProfile: '',
@@ -68,6 +63,7 @@ const BusinessProfile = () => {
   useEffect(() => {
     if (authUser) {
       setPicture(authUser.picture);
+      setGeolocation(authUser.geolocation);
     }
   }, [authUser]);
 
@@ -86,16 +82,16 @@ const BusinessProfile = () => {
       newErrors.displayName = '';
     }
 
+    if (!geolocation) {
+      newErrors.geolocation = 'Geolocation is required.';
+    } else {
+      newErrors.geolocation = '';
+    }
+
     if (!birthday) {
       newErrors.birthday = 'Birthday is required.';
     } else {
       newErrors.birthday = '';
-    }
-
-    if (!address) {
-      newErrors.address = 'Address is required.';
-    } else {
-      newErrors.address = '';
     }
 
     if (!selectedMapIcon) {
@@ -115,7 +111,7 @@ const BusinessProfile = () => {
     if (
       newErrors.username ||
       newErrors.displayName ||
-      newErrors.address ||
+      newErrors.geolocation ||
       newErrors.birthday ||
       newErrors.mapIcon ||
       newErrors.privacy
@@ -126,10 +122,10 @@ const BusinessProfile = () => {
     const profileData = {
       username,
       displayName,
+      geolocation,
       birthday,
       picture,
       mapIcon: selectedMapIcon,
-      geolocation: geolocation,
       privacy
     };
 
@@ -145,26 +141,7 @@ const BusinessProfile = () => {
       });
 };
 
-      // Convert address to geolocation
-      const handleAddressChange = async (newAddress: string) => {
-        // const results = await geocodeByAddress(newAddress);
-        // const latLng = await getLatLng(results[0]);
-        setAddress(newAddress);
-        // setAddressCoordinates(`${latLng}`); 
-        // setGeolocation(addressCoordinates);
-      };
 
-      const handleSelect = async (selectedAddress: string) => {
-        try {
-          const results = await geocodeByAddress(selectedAddress);
-          const latLng = await getLatLng(results[0]);
-          setAddress(selectedAddress);
-          setAddressCoordinates(`${latLng}`);
-          setGeolocation(addressCoordinates);
-        } catch (error) {
-          console.error('Error getting address coordinates', error);
-        }
-  }
 
 
   const handleImageChange = (event: any) => {
@@ -237,47 +214,12 @@ const BusinessProfile = () => {
               </Alert>
             )}
 
-        {/* Address field */}
-        <PlacesAutocomplete
-          value={address}
-          onChange={handleAddressChange}
-          onSelect={handleSelect}
-        >
-          {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-            <div>
-            <SpeechToText onTranscriptChange={setAddress} />
-            <p>Click Microphone For Speech To Text</p>
-              <TextField
-                label="Address"
-                variant="outlined"
-                color="secondary"
-                fullWidth
-                {...getInputProps({ placeholder: 'Type address' })}
-                helperText={errors.address}
-                error={!!errors.address}
-                style={{ color: 'var(--setupBG)', marginBottom: '1rem', marginTop: '1rem' }}
-              />
-              <div>
-                {loading ? <div>Loading...</div> : null}
-
-                {suggestions.map((suggestion, index) => {
-                  const style = {
-                    backgroundColor: suggestion.active ? '#41b6e6' : '#fff',
-                    cursor: 'pointer',
-                  };
-                  return (
-                    <div
-                      {...getSuggestionItemProps(suggestion, { style })}
-                      key={index}
-                    >
-                      {suggestion.description}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+          <LocationSearchInput />
+            {errors.geolocation && (
+              <Alert severity="error">
+              {errors.geolocation}
+            </Alert>
           )}
-        </PlacesAutocomplete>
 
             {/* Username field */}
             <div>
@@ -353,14 +295,21 @@ const BusinessProfile = () => {
               error={!!errors.mapIcon}
               style={{ color: 'var(--setupBG)', marginBottom: '1rem' }}
             >
-            <MenuItem value="https://img.icons8.com/?size=512&id=2t0cgXala8a2&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=2t0cgXala8a2&format=png'/></MenuItem>
-            <MenuItem value="https://img.icons8.com/?size=512&id=WSGHwEwOs25O&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=WSGHwEwOs25O&format=png'/></MenuItem>
-            <MenuItem value="https://img.icons8.com/?size=512&id=xCLiCEaCIH7B&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=xCLiCEaCIH7B&format=png'/></MenuItem>
-            <MenuItem value="https://img.icons8.com/?size=512&id=IldxgfyDVjuz&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=IldxgfyDVjuz&format=png'/></MenuItem>
-            <MenuItem value="https://img.icons8.com/?size=512&id=UB3ruGFlmIRr&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=UB3ruGFlmIRr&format=png'/></MenuItem>
-            <MenuItem value="https://img.icons8.com/?size=512&id=HFEnXvDe0D4p&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=HFEnXvDe0D4p&format=png'/></MenuItem>
-            <MenuItem value="https://img.icons8.com/?size=512&id=qWX5b0uTbFHX&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=qWX5b0uTbFHX&format=png'/></MenuItem>
-            <MenuItem value="https://img.icons8.com/?size=512&id=GuOROHDN3mQt&format=png"><img style={{ width: '32px', height: '32px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=GuOROHDN3mQt&format=png'/></MenuItem>
+            <MenuItem value="https://img.icons8.com/?size=512&id=rMv4B3bzTLCX&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=rMv4B3bzTLCX&format=png'/></MenuItem>
+
+            <MenuItem value="https://img.icons8.com/?size=512&id=GTba5IMgy3gc&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=GTba5IMgy3gc&format=png'/></MenuItem>
+
+            <MenuItem value="https://img.icons8.com/?size=512&id=xCLiCEaCIH7B&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=xCLiCEaCIH7B&format=png'/></MenuItem>
+
+            <MenuItem value="https://img.icons8.com/?size=512&id=rYCIDB4Eyl3Y&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=rYCIDB4Eyl3Y&format=png'/></MenuItem>
+
+            <MenuItem value="https://img.icons8.com/?size=512&id=knkdasdhCwXa&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=knkdasdhCwXa&format=png'/></MenuItem>
+
+            <MenuItem value="https://img.icons8.com/?size=512&id=abOoUFblJ-3v&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=abOoUFblJ-3v&format=png'/></MenuItem>
+
+            <MenuItem value="https://img.icons8.com/?size=512&id=0My7pGwQmrg4&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=0My7pGwQmrg4&format=png'/></MenuItem>
+
+            <MenuItem value="https://img.icons8.com/?size=512&id=k0o3gBVVzzUr&format=png"><img style={{ width: '18px', height: '18px', marginLeft: '0.5rem' }} src='https://img.icons8.com/?size=512&id=k0o3gBVVzzUr&format=png'/></MenuItem>
             </TextField>
 
             <TextField

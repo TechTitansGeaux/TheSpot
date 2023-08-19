@@ -16,7 +16,7 @@ passport.use(
     },
     async (req, accessToken: any, refreshToken: any, profile: any, done: any) => {
       try {
-        if (!profile || !profile.displayName) {
+        if (!profile || !profile.displayName || profile.picture === 'no pic') {
           // Handle the case where the profile is missing or the displayName property is not present
           return done(new Error("Invalid profile data"), null);
         }
@@ -25,7 +25,8 @@ passport.use(
           displayName: profile.displayName,
           email: profile.emails[0]?.value,
           picture: profile.photos[0]?.value,
-          googleId: profile.id
+          googleId: profile.id,
+          geolocation: '-24.4879217, -46.6741555'
         };
 
         // check if the user already exists in the database, if not create one

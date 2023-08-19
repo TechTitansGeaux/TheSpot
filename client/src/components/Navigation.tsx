@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from 'react';
 import { Outlet, NavLink, Link } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
@@ -66,6 +67,8 @@ const Navigation: React.FC<Props> = ({ user }) => {
   );
   const location = useLocation();
   const feedPath = location.pathname;
+  const [setting, setSetting] = useState('');
+  const [userType, setUserType] = useState(null);
 
   // get all pending friends for current user
   const getAllPFriends = () => {
@@ -193,6 +196,21 @@ const Navigation: React.FC<Props> = ({ user }) => {
       setState({ ...state, left: open });
     };
 
+    // const settingsType = () => {
+      useEffect(() => {
+        if (user) {
+          if (user.type === 'personal' || user.type === null) {
+            // Redirect to '/Settings' for personal user type
+            setSetting('/Settings');
+          } else if (user.type === 'business') {
+            // Redirect to '/BusinessSettings' for business user type
+            setSetting('/BusinessSettings');
+          }
+        }
+      }, [user]);
+      // return setting;
+    // }
+
   // Need to Update My Reels // to={<my reels component>}
   const list = (anchor: Anchor) => (
     <Box
@@ -258,7 +276,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
           <ListItemButton
             className='sidebar-btn'
             component={Link}
-            to={'/Settings'}
+            to={setting}
             sx={{ minHeight: '4em', paddingLeft: '1.5em' }}
           >
             SETTINGS
@@ -292,7 +310,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
                         <CircleNotificationsIcon className="circle" sx={{ position: 'absolute', right: -30, zIndex: "4", top: 5 }} />
                       }
                     </div>
-                  <div onClick={toggleDrawer('left', true)}>
+                  <div onClick={(toggleDrawer('left', true))}>
                     <Tooltip
                       title='Open Settings'
                       TransitionComponent={Zoom}
