@@ -71,7 +71,8 @@ const createEvent = () => {
     time: eventTime,
     endTime: endTime,
     geolocation: user.geolocation,
-    twenty_one: twentyOne
+    twenty_one: twentyOne,
+    UserId: user.id
   })
   .then((res) => {
     updateEventId(res.data.event.id)

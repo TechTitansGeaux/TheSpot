@@ -175,7 +175,8 @@
           time: currentEvent.time,
           endTime: defaultEndTime,
           geolocation: currentEvent.geolocation,
-          twenty_one: currentEvent.twenty_one
+          twenty_one: currentEvent.twenty_one,
+          UserId: user.id
       })
       .then((res) => {
         // console.log(res, '<----- response from axios post event')

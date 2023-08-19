@@ -18,11 +18,11 @@ eventRouter.get('/all', async (req, res) => {
 // get all of one user's events
 eventRouter.get('/userEvents', async (req: any, res: any) => {
   // access user id from req.user
-  const { userId } = req.user;
 
-  await Events.findAll({where: {userId: userId}})
+  const { id } = req.user;
+
+  await Events.findAll({where: {userId: id}})
     .then((resObj: any) => {
-      console.log(resObj, '<----res from get all user\'s events')
       res.status(200).send(resObj);
     })
     .catch((err: any) => {
@@ -31,7 +31,7 @@ eventRouter.get('/userEvents', async (req: any, res: any) => {
     })
 })
 
-// get event by location AND date 
+// get event by location AND date
 eventRouter.get('/:geolocation/:date', async (req: any, res: any) => {
   // access geolocation from request parameters
   const { geolocation, date } = req.params;
@@ -59,7 +59,7 @@ eventRouter.get('/:geolocation/:date', async (req: any, res: any) => {
 // create new event
 eventRouter.post('/create', async (req, res) => {
   // access event properties from request body
-  const { name, date, time, endTime, geolocation, twenty_one } = req.body;
+  const { name, date, time, endTime, geolocation, twenty_one, UserId } = req.body;
   // sequelize create method
   await Events.create({
     name,
@@ -67,7 +67,8 @@ eventRouter.post('/create', async (req, res) => {
     time,
     endTime,
     geolocation,
-    twenty_one
+    twenty_one,
+    UserId
   })
   .then((event: any) => {
     res.status(201).json({

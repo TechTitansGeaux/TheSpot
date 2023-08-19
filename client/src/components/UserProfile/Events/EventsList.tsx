@@ -1,5 +1,7 @@
 import * as React from 'react';
+import { useState, useEffect } from 'react';
 import EventsEntry from './EventsEntry';
+import axios from 'axios';
 
 type Props = {
   user: {
@@ -19,7 +21,23 @@ type Props = {
 };
 const EventsList: React.FC<Props> = ({user}) => {
 
+  const [events, setEvents] = useState([])
+
   // get all of user's events
+  const getMyEvents = () => {
+    axios.get('/events/userEvents')
+      .then((res) => {
+        setEvents(res.data);
+      })
+      .catch((err) => {
+        console.error('Failed to axios GET user events: ', err);
+      })
+  }
+  console.log(events, '<---- my events')
+
+  useEffect(() => {
+    getMyEvents();
+  }, [])
   return (
     <div className='container-full-w'>
       <h1>EventsList</h1>
