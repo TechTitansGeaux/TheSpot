@@ -66,9 +66,27 @@ const EventsList: React.FC<Props> = ({user}) => {
   console.log(upcomingEvents, '<-----upcoming events');
   console.log(pastEvents, '<------past events')
 
+  const showPastView = () => {
+    setShowPast(true);
+  }
+  const showUpcomingView = () => {
+    setShowPast(false);
+  }
+
   return (
     <div className='flex-container-events'>
-      <h1>EventsList</h1>
+      {/* <h3 style={{color: '#f0f465'}}>Events</h3> */}
+      <div
+      className='eventTypeContainer'>
+        <h3
+        style={{color: '#f0f465'}}
+        onClick={showUpcomingView}>
+          Upcoming &#160;| &#160;</h3>
+        <h3
+        style={{color: '#f0f465'}}
+        onClick={showPastView}>
+           Past</h3>
+      </div>
       <div className="event-cards-row">
         {!showPast && upcomingEvents.map((event) => {
           return (

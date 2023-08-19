@@ -584,3 +584,8 @@ button.rejectFriend-btn:hover {
   background: transparent;
   border: none;
 }
+
+.eventTypeContainer{
+  display: flex;
+  flex-direction: row;
+}
