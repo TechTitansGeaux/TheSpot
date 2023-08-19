@@ -85,8 +85,6 @@ const createEvent = () => {
   })
 }
 
-console.log(user.id, '<-----userId')
-
     return (
       <div
         id='event-form'

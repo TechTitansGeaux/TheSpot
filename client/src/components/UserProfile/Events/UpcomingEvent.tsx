@@ -16,7 +16,7 @@ type Props = {
     updatedAt: string
   }
 }
-const EventsEntry: React.FC<Props> = ({event}) => {
+const UpcomingEvent: React.FC<Props> = ({event}) => {
   return (
     <div className='eventCard'>
       {event.name}
@@ -24,4 +24,4 @@ const EventsEntry: React.FC<Props> = ({event}) => {
   );
 };
 
-export default EventsEntry;
+export default UpcomingEvent;
