@@ -222,9 +222,11 @@ Reels.belongsTo(Users);
 Events.hasMany(Reels);
 Reels.belongsTo(Events);
 
-// FOREIGN Keys PlaceId to Events
+// FOREIGN Keys PlaceId AND UserId to Events
 Places.hasMany(Events);
 Events.belongsTo(Places);
+Users.hasMany(Events);
+Events.belongsTo(Users);
 
 // FOREIGN Keys ReelId AND UserId to Likes
 Reels.hasMany(Likes);

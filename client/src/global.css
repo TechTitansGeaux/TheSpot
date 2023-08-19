@@ -331,10 +331,11 @@ video.reel {
 }
 
 .video-timestamp {
+  text-align: end;
   position: relative;
   margin: 0 1rem;
   top: 95%;
-  right: -70%;
+  /* right: 10%; */
   max-width: 350px;
   font-size: var(--reg-font);
   font-family: var(--title-font);
@@ -450,7 +451,7 @@ button.rejectFriend-btn:hover {
   display: none;
   padding: 1%;
   transition: all .5s ease;
-  height: 200px;
+  height: 230px;
   width: 200px;
   border-width: 10px;
   border-radius: 10px;
@@ -460,3 +461,72 @@ button.rejectFriend-btn:hover {
   z-index: 5;
 }
 
+/* MY EVENTS PAGE */
+
+.flex-container-events {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+.event-cards-row {
+  display: flex;
+  /* center? */
+  justify-content: left;
+  flex-wrap: wrap;
+  margin-right: 10%;
+  margin-left: 10%;
+}
+
+.eventCard {
+  position: relative;
+  height: 200px;
+  width: 200px;
+  margin: 10px;
+  padding: 10px;
+  text-align: center;
+  align-items: center;
+  border: solid var(--yellow);
+  border-radius: 3px;
+}
+
+.eventCardDetails {
+  text-align: left;
+}
+
+.eventDetailInput {
+  color: var(--white);
+  background: transparent;
+  border: none;
+}
+
+.eventNameInput {
+  font-family: var(--title-font);
+  font-size: 1.5rem;
+  color: var(--yellow);
+  background: transparent;
+  border: none;
+}
+
+.eventTypeContainer{
+  display: flex;
+  flex-direction: row;
+  color: var(--yellow);
+  cursor: pointer;
+}
+
+.save-event-detail-button {
+  color: var(--white);
+  background-color: var(--pink);
+  border: solid var(--pink);
+  border-radius: 5px;
+}
+
+.save-event-success-button {
+  color: var(--violet);
+  background-color: var(--yellow);
+  border: solid var(--yellow);
+  border-radius: 5px;
+}

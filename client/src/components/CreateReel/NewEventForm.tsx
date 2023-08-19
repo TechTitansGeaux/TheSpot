@@ -20,10 +20,11 @@
     },
     mustCreateEvent: boolean,
     updateMustCreateEvent: () => void,
-    updateEventId: (newId: number) => void
+    updateEventId: (newId: number) => void,
+    togglePopUp: () => void
   }
 
-  const NewEventForm: React.FC<Props> = ({user, mustCreateEvent, updateMustCreateEvent, updateEventId}) => {
+  const NewEventForm: React.FC<Props> = ({user, mustCreateEvent, updateMustCreateEvent, updateEventId, togglePopUp}) => {
 
   const [eventName, setEventName] = useState('');
   const [eventDate, setEventDate] = useState('');
@@ -71,11 +72,13 @@ const createEvent = () => {
     time: eventTime,
     endTime: endTime,
     geolocation: user.geolocation,
-    twenty_one: twentyOne
+    twenty_one: twentyOne,
+    UserId: user.id
   })
   .then((res) => {
     updateEventId(res.data.event.id)
     updateMustCreateEvent();
+    togglePopUp();
   })
   .catch((err) => {
     console.error('Failed to axios POST event: ', err)
