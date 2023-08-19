@@ -61,7 +61,7 @@ const theme = createTheme({
 const Navigation: React.FC<Props> = ({ user }) => {
   const [pFriends, setPFriends] = useState([]); // pending friends list
   const [open, setOpen] = useState(false); // open and close snackbar
-  const [likesArr, setLikesArr] = useState([]); // state version of likes
+  const [likesArr, setLikesArr] = useState([]); // user's own reels that have been liked FROM likes table
   const [userReels, setUserReels] = useState([]); // user's own reels
 
   const [onPage, setOnPage] = useState(
@@ -105,7 +105,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
     axios
       .get('/feed/reel/user')
       .then((response: any) => {
-        console.log('users own reels:', response.data);
+        //console.log('users own reels:', response.data);
         setUserReels(response.data);
       })
       .catch((err: any) => {
@@ -115,7 +115,15 @@ const Navigation: React.FC<Props> = ({ user }) => {
 
   useEffect(() => {
     getOwnReels();
-  }, []);
+
+    const interval = setInterval(() => {
+      getOwnReels();
+    }, 5000);
+
+    return () => {
+      clearInterval(interval);
+    }
+  }, [location.pathname]);
 
   // get reels that have been liked AND checked
   const getLikes = () => {
@@ -124,12 +132,10 @@ const Navigation: React.FC<Props> = ({ user }) => {
       axios
         .get('/likes/likes')
         .then((response) => {
-          // console.log('likes:', response.data);
+          //console.log('likes:', response.data);
           for (let i = 0; i < response.data.length; i++) {
             for (let j = 0; j < userReels.length; j++) {
-              if (response.data[i].ReelId === userReels[j].id && response.data[i].checked !== true) {
-                likes.push(response.data[i]);
-              }
+              if (response.data[i].ReelId === userReels[j].id && response.data[i].checked !== true) { likes.push(response.data[i]); }
             }
           }
           setLikesArr(likes);
