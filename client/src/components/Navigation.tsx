@@ -19,7 +19,10 @@ import Tooltip from '@mui/material/Tooltip';
 import Zoom from '@mui/material/Zoom';
 import axios from 'axios';
 import './navigation.css';
-// import Badge from '@mui/material/Badge';
+import Snackbar from '@mui/material/Snackbar';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+
 
 type Anchor = 'left';
 type Props = {
@@ -57,7 +60,7 @@ const theme = createTheme({
 
 const Navigation: React.FC<Props> = ({ user }) => {
   const [pFriends, setPFriends] = useState([]); // pending friends list
-
+  const [open, setOpen] = useState(false); // open and close snackbar
   const [likesArr, setLikesArr] = useState([]); // state version of likes
 
   const [onPage, setOnPage] = useState(
@@ -211,6 +214,33 @@ const Navigation: React.FC<Props> = ({ user }) => {
       // return setting;
     // }
 
+    // Snackbar stuff
+    useEffect(() => {
+      if (pFriends.length > 0) {
+        setOpen(true);
+      }
+    }, [pFriends.length]);
+
+    const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+      setOpen(false);
+    };
+
+    const action = (
+      <React.Fragment>
+        <IconButton
+          size="small"
+          aria-label="close"
+          color="inherit"
+          onClick={handleClose}
+        >
+          <CloseIcon fontSize="small" />
+        </IconButton>
+      </React.Fragment>
+    );
+
   // Need to Update My Reels // to={<my reels component>}
   const list = (anchor: Anchor) => (
     <Box
@@ -307,7 +337,16 @@ const Navigation: React.FC<Props> = ({ user }) => {
                   </div>
                     <div>
                       {(likesArr.length !== 0 || pFriends.length !== 0) &&
+                      <div>
                         <CircleNotificationsIcon className="circle" sx={{ position: 'absolute', right: -30, zIndex: "4", top: 5 }} />
+                        <Snackbar
+                        open={open}
+                        autoHideDuration={6000}
+                        onClick={handleClose}
+                        message="You have pending friends request(s)"
+                        action={action}
+                      />
+                      </div>
                       }
                     </div>
                   <div onClick={(toggleDrawer('left', true))}>

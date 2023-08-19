@@ -463,8 +463,8 @@ button.rejectFriend-btn:hover {
 .dot {
   align-items: center, start;
   justify-content: center;
-  height: 20px;
-  width: 18px;
+  height: 25px;
+  width: 25px;
   background-color: var(--pink);
   border-radius: 50%;
   display: inline-block;

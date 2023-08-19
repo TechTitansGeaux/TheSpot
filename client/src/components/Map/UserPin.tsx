@@ -135,7 +135,7 @@ const UserPin: React.FC<Props> = (props) => {
           <img
             src={props.user.mapIcon}
             alt={props.user.username}
-            style={{ width: props.user.type === 'business' ? '38px' : '15px', height: props.user.type === 'business' ? '38px' : '16px', verticalAlign: 'text-top' }}
+            style={{ width: props.user.type === 'business' ? '38px' : '25px', height: props.user.type === 'business' ? '38px' : '25px', verticalAlign: 'text-top' }}
           />
         </div>
       )}
