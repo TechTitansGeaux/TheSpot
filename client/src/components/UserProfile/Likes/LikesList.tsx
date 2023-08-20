@@ -82,7 +82,7 @@ const LikesList: React.FC<Props> = ({user, allUsers}) => {
 
     useEffect(() => {
       getLikes();
-    }, [user]);
+    }, [user, userReels]);
 
   return (
     <ul>
