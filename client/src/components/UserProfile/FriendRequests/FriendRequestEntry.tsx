@@ -2,10 +2,8 @@ import * as React from 'react';
 import Fab from '@mui/material/Fab';
 import Tooltip from '@mui/material/Tooltip';
 import Zoom from '@mui/material/Zoom';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveOutlinedIcon from '@mui/icons-material/RemoveOutlined';
-
-
+import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
+import CheckIcon from '@mui/icons-material/Check';
 
 type User = {
   id: number;
@@ -48,6 +46,7 @@ type Props = {
   approveFriendship: any;
   rejectFriendship: any;
   allUsers: [User];
+  // reject: boolean;
 };
 
 const FriendRequestEntry: React.FC<Props> = ({
@@ -55,20 +54,21 @@ const FriendRequestEntry: React.FC<Props> = ({
   approveFriendship,
   rejectFriendship,
   pendingFriend,
-  allUsers
+  allUsers,
+  // reject,
 }) => {
-
   const pendingFriendName = allUsers.reduce((name: string, otherUser: any) => {
-    if (otherUser?.id === pendingFriend?.accepter_id) {
+    if (otherUser?.id === pendingFriend?.requester_id) {
+      // CHANGE to requester_id
       name = otherUser.displayName;
     }
     return name;
   }, '');
 
   const pendingFriendIcon = allUsers.reduce((icon: string, otherUser: any) => {
-    if (otherUser?.id === pendingFriend?.accepter_id) {
+    if (otherUser?.id === pendingFriend?.requester_id) {
+      // CHANGE to requester_id
       icon = otherUser.mapIcon;
-      console.log('friend icon:', otherUser.mapIcon);
     }
     return icon;
   }, '');
@@ -82,7 +82,7 @@ const FriendRequestEntry: React.FC<Props> = ({
           style={{
             width: '40px',
             height: '40px',
-            marginRight: '10px'
+            marginRight: '10px',
           }}
         />
         <h2 className='friendName'>{pendingFriendName}</h2>
@@ -113,7 +113,7 @@ const FriendRequestEntry: React.FC<Props> = ({
                 },
               }}
             >
-              <AddIcon
+              <CheckIcon
                 sx={{ width: 20, height: 20 }}
                 onClick={() => approveFriendship(pendingFriend.accepter_id)}
               />
@@ -145,7 +145,7 @@ const FriendRequestEntry: React.FC<Props> = ({
                 },
               }}
             >
-              <RemoveOutlinedIcon
+              <ClearOutlinedIcon
                 className='rejectFriend-btn'
                 onClick={() =>
                   rejectFriendship(
@@ -158,7 +158,7 @@ const FriendRequestEntry: React.FC<Props> = ({
           </Fab>
         </div>
       </div>
-      <hr></hr>
+    <hr></hr>
     </>
   );
 };

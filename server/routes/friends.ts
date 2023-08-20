@@ -35,19 +35,24 @@ friendRouter.post('/', (req: any, res: any) => {
 friendRouter.put('/', (req: any, res: any) => {
   // ACCEPTER is req.user
   const { id } = req.user;
-  const { requester_id } = req.body;
+  const { accepter_id } = req.body;
   Friendships.update(
     { status: 'approved' },
     {
       where: {
-        accepter_id: [id, requester_id],
-        status: 'pending'
+        accepter_id: id, // changed from [id, requester_id] to id
+        status: 'pending',
       },
-    })
+    }
+  )
     .then((data: any) => {
       Friendships.create(
         // set to approved for testing
-        { status: 'approved', requester_id: requester_id, accepter_id: id }
+        {
+          status: 'approved',
+          accepter_id: accepter_id,
+          requester_id: id,
+        } // SWAPPED requester_id: id AND accepter_id: requester_id:
       );
     })
     .then((data: any) => {

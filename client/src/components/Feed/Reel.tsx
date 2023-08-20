@@ -69,7 +69,6 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
   const [friendList, setFriendList] = useState([]);
   const [disabled, setDisabled] = useState([]);
   const [likeTotal, setLikeTotal] = useState(0);
-  // const [removeLike, setRemoveLike] = useState([]);
   const [likes, setLikes] = useState([]); // user's reels that have been liked
 
   const fetchAuthUser = async () => {
@@ -131,7 +130,7 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
     console.log('friendship approved');
     axios
       .put('/friends', {
-        requester_id: friend,
+        accepter_id: friend, // CHANGED from requester_id
       })
       .then((data) => {
         // console.log('Friend request approved PUT', data);
@@ -154,33 +153,32 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
       });
   };
 
-  // ADD like
+  // ADD ONE LIKE per Reel
   const handleAddLike = (reelId: number) => {
-    console.log('Add like of reelId =>', reelId);
+    // console.log('ADD like of reelId =>', reelId);
     axios
       .put(`/likes/addLike/${reelId}`)
       .then((data) => {
         // console.log('Likes Updated AXIOS', data);
         setLikes((prev) => [...prev, reelId]);
-        setLikeTotal((prev) => prev + 1);
+        setLikeTotal(likeTotal + 1);
       })
       .catch((err) => console.error('Like AXIOS route Error', err));
   };
 
-  // Remove like
+  // REMOVE ONE LIKE per Reel
   const handleRemoveLike = (reelId: number) => {
-    console.log('Remove like');
+    // console.log('REMOVE like of reelId =>', reelId);
     axios
       .put(`/likes/removeLike/${reelId}`)
       .then((data) => {
-        // console.log('Likes Updated AXIOS', data);
         const foundLike = likes.indexOf(reelId)
-        // console.log('foundLike', foundLike)
         if (foundLike !== -1) {
           setLikes((prev) => prev.splice(foundLike, 1));
-          // console.log('splice likes', likes.splice(foundLike, 1))
+
         }
-        setLikeTotal((prev) => prev - 1);
+        setLikes((prev) => prev.splice(foundLike, 1));
+        setLikeTotal(likeTotal - 1);
       })
       .catch((err) => console.error('Like AXIOS route Error', err));
   };
@@ -191,7 +189,6 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
       axios
         .get('/feed/likesTable')
         .then((response) => {
-          // console.log('likes:', response.data);
           for (let i = 0; i < response.data.length; i++) {
             if (user?.id === response.data[i].UserId) {
               setLikes((prev) => [...prev, response.data[i].ReelId]);
@@ -206,8 +203,7 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
 
   useEffect(() => {
     getLikes();
-  }, [user]);
-
+  }, [likeTotal]);
 
   return (
     <main
@@ -231,6 +227,7 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
               <ReelItem
                 user={user}
                 reel={reel}
+                reels={reels}
                 friendList={friendList}
                 requestFriendship={requestFriendship}
                 disabledNow={disabled}

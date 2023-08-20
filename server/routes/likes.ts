@@ -25,7 +25,7 @@ likesRouter.put('/addLike/:ReelId', (req: any, res: any) => {
       });
     })
     .then((response: any) => {
-      console.log('Likes UPDATE addLike success');
+      // console.log('Likes UPDATE addLike success');
       res.sendStatus(200);
     })
     .catch((err: any) => {
@@ -57,7 +57,7 @@ likesRouter.put('/removeLike/:ReelId', (req: any, res: any) => {
       });
     })
     .then((response: any) => {
-      console.log('Likes UPDATE removeLike success');
+      // console.log('Likes UPDATE removeLike success');
       res.sendStatus(200);
     })
     .catch((err: any) => {

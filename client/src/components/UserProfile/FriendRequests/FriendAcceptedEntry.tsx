@@ -2,10 +2,8 @@ import * as React from 'react';
 import Fab from '@mui/material/Fab';
 import Tooltip from '@mui/material/Tooltip';
 import Zoom from '@mui/material/Zoom';
-import RemoveOutlinedIcon from '@mui/icons-material/RemoveOutlined';
-import { StateToString } from 'redux-logger';
-
-
+import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
+import { useState } from 'react';
 
 type User = {
   id: number;
@@ -47,33 +45,37 @@ type Props = {
   };
   rejectFriendship: any;
   allUsers: any;
+  // reject: number[];
 };
 
 const FriendAcceptedEntry: React.FC<Props> = ({
   user,
   friend,
   rejectFriendship,
-  allUsers
+  allUsers,
+  // reject
 }) => {
 
   const friendName = allUsers.reduce((name: String, otherUser: any) => {
-    if (otherUser?.id === friend?.accepter_id) {
+    if (otherUser?.id === friend?.requester_id) {
+      // CHANGE to requester_id
       name = otherUser.displayName;
     }
     return name;
   }, '');
 
-const friendIcon = allUsers.reduce((icon: string, otherUser: any) => {
-  if (otherUser?.id === friend?.accepter_id) {
-    icon = otherUser.mapIcon;
-    console.log('friend icon:', otherUser.mapIcon);
-  }
-  return icon;
-}, '');
+  const friendIcon = allUsers.reduce((icon: string, otherUser: any) => {
+    if (otherUser?.id === friend?.requester_id) {
+      // CHANGE to requester_id
+      icon = otherUser.mapIcon;
+
+    }
+    return icon;
+  }, '');
 
   return (
-    <>
-      <div className='friendRequest-container'>
+    <React.Fragment>
+      {<div className='friendRequest-container'>
         <img
           src={friendIcon}
           alt={friendName}
@@ -111,7 +113,7 @@ const friendIcon = allUsers.reduce((icon: string, otherUser: any) => {
                 },
               }}
             >
-              <RemoveOutlinedIcon
+              <ClearOutlinedIcon
                 className='rejectFriend-btn'
                 onClick={() =>
                   rejectFriendship(friend?.accepter_id, friend?.updatedAt)
@@ -120,9 +122,9 @@ const friendIcon = allUsers.reduce((icon: string, otherUser: any) => {
             </Tooltip>
           </Fab>
         </div>
-      </div>
-      <hr></hr>
-    </>
+      </div>}
+    <hr></hr>
+    </React.Fragment>
   );
 };
 

@@ -42,6 +42,11 @@ type Props = {
   };
 };
 
+const listStyles = {
+  '&:hover': { backgroundColor: '#f0f465', color: '#11011e' },
+  '&:focus': { backgroundColor: '#f0f465', color: '#11011e' },
+  '&:focus-visible': { backgroundColor: '#f0f465', color: '#11011e' },
+};
 const logoGradient = require('/client/src/img/logo-gradient.jpg');
 const theme = createTheme({
   palette: {
@@ -238,7 +243,6 @@ const Navigation: React.FC<Props> = ({ user }) => {
         }
       }, [user]);
       // return setting;
-    // }
 
     // Snackbar stuff
     useEffect(() => {
@@ -277,7 +281,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List sx={{ paddingTop: '3em' }}>
-        <ListItem className='drawer-btn' disablePadding>
+        <ListItem className='drawer-btn' disablePadding >
           <ListItemButton
             className='sidebar-btn'
             component={Link}
@@ -294,11 +298,14 @@ const Navigation: React.FC<Props> = ({ user }) => {
             to={'/FriendRequests'}
             sx={{ minHeight: '4em', paddingLeft: '1.5em' }}
           >
-            FRIEND REQUESTS
+            FRIENDS
             <span>
-              {pFriends.length !== 0 &&
-                <CircleNotificationsIcon className="circle" sx={{ marginLeft: 1 }} />
-              }
+              {pFriends.length !== 0 && (
+                <CircleNotificationsIcon
+                  className='circle'
+                  sx={{ marginLeft: 1 }}
+                />
+              )}
             </span>
           </ListItemButton>
         </ListItem>
@@ -322,9 +329,9 @@ const Navigation: React.FC<Props> = ({ user }) => {
           >
             LIKES
             <span>
-              {likesArr.length !== 0 &&
-                <CircleNotificationsIcon className="circle" />
-              }
+              {likesArr.length !== 0 && (
+                <CircleNotificationsIcon className='circle' />
+              )}
             </span>
           </ListItemButton>
         </ListItem>
