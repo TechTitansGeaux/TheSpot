@@ -42,7 +42,7 @@
     },
     mustCreateEvent: boolean,
     currentEventId: number,
-    updateMustCreateEvent: () => void
+    updateMustCreateEvent: () => void,
   };
 
   const VideoRecorder: React.FC<Props> = ({currentEvent, user, mustCreateEvent, currentEventId, updateMustCreateEvent}) => {
@@ -175,7 +175,8 @@
           time: currentEvent.time,
           endTime: defaultEndTime,
           geolocation: currentEvent.geolocation,
-          twenty_one: currentEvent.twenty_one
+          twenty_one: currentEvent.twenty_one,
+          UserId: user.id
       })
       .then((res) => {
         // console.log(res, '<----- response from axios post event')
@@ -285,7 +286,8 @@ console.log(user.geolocation, '<-----geolo')
         user={user}
         mustCreateEvent={mustCreateEvent}
         updateMustCreateEvent={updateMustCreateEvent}
-        updateEventId={updateEventId}/>
+        updateEventId={updateEventId}
+        togglePopUp={togglePopUp}/>
           { justRecorded ? (
           <div className='preview-mask'>
             <div className='webcam'>

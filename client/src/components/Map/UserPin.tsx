@@ -85,9 +85,18 @@ const UserPin: React.FC<Props> = (props) => {
     const box = document.getElementById('popUp' + props.user.username + props.user.id)
 
         // Check if the map icon can be viewed based on privacy setting
-        if (props.user.privacy === 'friends only' && !props.friendList.includes(props.user.id)) {
+        if (props.user.privacy === 'friends only' && props.user.id !== props.loggedIn.id && !props.friendList.includes(props.user.id)) {
           return; // Don't show the pop-up if not a friend
         }
+
+
+    if (
+      props.user.privacy === 'private' &&
+      props.user.id !== props.loggedIn.id
+    ) {
+      return; // Don't show the pop-up for private users
+    }
+
 
     if (box.style.display === 'block') {
       box.style.display = 'none';
@@ -130,15 +139,14 @@ const UserPin: React.FC<Props> = (props) => {
 
   return (
     <div>
-        {props.user.privacy === 'friends only' && !props.friendList.includes(props.user.id) ? null : (
-        <div className={props.user.type === 'business' ? 'dotBusiness' : 'dot'} id={props.user.username + props.user.id} onClick={togglePopUp}>
-          <img
-            src={props.user.mapIcon}
-            alt={props.user.username}
-            style={{ width: props.user.type === 'business' ? '38px' : '25px', height: props.user.type === 'business' ? '38px' : '25px', verticalAlign: 'text-top' }}
-          />
-        </div>
-      )}
+      <div className='userDot' id={props.user.username + props.user.id} onClick={togglePopUp} >
+        <img
+          src={props.user.mapIcon}
+          alt={props.user.username}
+          style={{ width: '40px', height: '40px', marginLeft: '1.5px', marginTop: '2.5px'}}
+        />
+      </div>
+
         <div className='popUpBox' id={'popUp' + props.user.username + props.user.id}>
         <div style={{ textAlign: 'center', fontSize: '20px' }}>
               {props.user.displayName}
