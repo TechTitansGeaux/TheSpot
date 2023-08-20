@@ -165,7 +165,13 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
           style={{ fontSize: theme.typography.fontSize }}
         >
           <>
-            <div className='video-container'>
+            <div
+              className={
+                reel?.User.type === 'personal'
+                  ? 'video-container'
+                  : 'video-container video-business-container'
+              }
+            >
               {reel.url.length > 15 && (
                 <video
                   className='reel'
