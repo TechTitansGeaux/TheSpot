@@ -4,7 +4,6 @@ import GoogleMapReact from 'google-map-react';
 import useSupercluster from 'use-supercluster';
 import axios from 'axios';
 import UserPin from './UserPin';
-import Event from './Event'
 import socketIOClient from 'socket.io-client';
 import UserClusterPin from './UserClusterPin';
 import EventPin from './EventPin';
