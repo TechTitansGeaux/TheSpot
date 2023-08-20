@@ -103,7 +103,7 @@ const App = () => {
             path='/FriendRequests'
               element={<FriendRequestList allUsers={allUsers}  user={user} />}
           ></Route>
-          <Route path='/Likes' element={<LikesList user={user} />}></Route>
+          <Route path='/Likes' element={<LikesList allUsers={allUsers} user={user} />}></Route>
           <Route
             path='/Settings'
             element={<Settings fontSize={fontSize} />}
