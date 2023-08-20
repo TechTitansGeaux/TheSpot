@@ -63,6 +63,21 @@ app.use('/events', eventRouter)
 // events route
 app.use('/likes', likesRouter)
 
+// Emit user geolocation updates to connected clients
+io.on('connection', (socket) => {
+  console.log('A user connected');
+
+  // Listen for geolocation updates from clients
+  socket.on('updateGeolocation', (userId, geolocation) => {
+    // Broadcast the updated geolocation to all other clients
+    socket.broadcast.emit('userGeolocationUpdate', userId, geolocation);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected');
+  });
+});
+
 
 app.get('/*', (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, '../client/dist/index.html'), (err) => {

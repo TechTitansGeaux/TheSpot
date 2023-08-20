@@ -18,7 +18,6 @@ eventRouter.get('/all', async (req, res) => {
 // get all of one user's events
 eventRouter.get('/userEvents', async (req: any, res: any) => {
   // access user id from req.user
-
   const { id } = req.user;
 
   await Events.findAll({where: {userId: id}})

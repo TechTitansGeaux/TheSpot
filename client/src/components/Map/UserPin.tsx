@@ -85,9 +85,18 @@ const UserPin: React.FC<Props> = (props) => {
     const box = document.getElementById('popUp' + props.user.username + props.user.id)
 
         // Check if the map icon can be viewed based on privacy setting
-        if (props.user.privacy === 'friends only' && !props.friendList.includes(props.user.id)) {
+        if (props.user.privacy === 'friends only' && props.user.id !== props.loggedIn.id && !props.friendList.includes(props.user.id)) {
           return; // Don't show the pop-up if not a friend
         }
+
+
+    if (
+      props.user.privacy === 'private' &&
+      props.user.id !== props.loggedIn.id
+    ) {
+      return; // Don't show the pop-up for private users
+    }
+
 
     if (box.style.display === 'block') {
       box.style.display = 'none';
@@ -130,7 +139,6 @@ const UserPin: React.FC<Props> = (props) => {
 
   return (
     <div>
-
       <div className='userDot' id={props.user.username + props.user.id} onClick={togglePopUp} >
         <img
           src={props.user.mapIcon}
@@ -138,58 +146,7 @@ const UserPin: React.FC<Props> = (props) => {
           style={{ width: '40px', height: '40px', marginLeft: '1.5px', marginTop: '2.5px'}}
         />
       </div>
-      <div className='userPopUp' id={'popUp' + props.user.username + props.user.id} >
-        <div style={{ textAlign: 'center', fontSize:'20px' }}>
-          {props.user.username}
-        </div>
-        <div style={{ textAlign: 'center', fontSize:'20px' }}>
-          <p>
-            {`Member Since: ${dayjs(props.user.createdAt).format('ll')}`}
-          </p>
-        </div>
-        <div className='addOrRmFriend'>
-        { !props.pendingFriendList.includes(props.user.id) &&  !props.friendList.includes(props.user.id) && isNotLoggedInUser && (
-          <div>
-            <div style={{position: 'relative', top: '30px', left: '80px'}} >add friend</div>
-            <ThemeProvider theme={addFriendTheme}>
-              <div>
-                <Box>
-                  <Fab
-                    size='small'
-                    color='primary'
-                    aria-label='add'
-                    className='friend-add-btn'
-                  >
-                    <AddIcon onClick={() => { addFriend(); }}/>
-                  </Fab>
-                </Box>
-              </div>
-            </ThemeProvider>
-          </div>
-        )}
-        </div>
-        <div className='addOrRmFriend'>
-        { props.friendList.includes(props.user.id) && (
-          <div>
-            <div style={{position: 'relative', top: '30px', left: '60px'}} >remove friend</div>
-            <ThemeProvider theme={rmFriendTheme}>
-              <div>
-                <Box>
-                  <Fab
-                    size='small'
-                    color='primary'
-                    aria-label='add'
-                    className='friend-add-btn'
-                  >
-                    <RemoveIcon onClick={() => { removeFriend(); }}/>
-                  </Fab>
-                </Box>
-              </div>
-            </ThemeProvider>
-          </div>
-        )}
-        </div>
-      )}
+
         <div className='popUpBox' id={'popUp' + props.user.username + props.user.id}>
         <div style={{ textAlign: 'center', fontSize: '20px' }}>
               {props.user.displayName}

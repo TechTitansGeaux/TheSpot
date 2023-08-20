@@ -4,6 +4,8 @@ import GoogleMapReact from 'google-map-react';
 import useSupercluster from 'use-supercluster';
 import axios from 'axios';
 import UserPin from './UserPin';
+import Event from './Event'
+import socketIOClient from 'socket.io-client';
 import UserClusterPin from './UserClusterPin';
 import EventPin from './EventPin';
 import EventClusterPin from './EventClusterPin';
@@ -118,15 +120,39 @@ const Map: React.FC<Props> = (props) => {
     return arr;
   }
 
+
+  // watch for geolocation updates
+  useEffect(() => {
+    const socket = socketIOClient(`${process.env.HOST}`); // Connect to your server
+
+    socket.on('userGeolocationUpdate', (userId, newGeolocation) => {
+      // Update the user's geolocation in the users array based on userId
+      setUsers((prevUsers) => {
+        return prevUsers.map((user) =>
+          user.id === userId ? { ...user, geolocation: newGeolocation } : user
+        );
+      });
+    });
+
+    return () => {
+      socket.disconnect(); // Disconnect when the component unmounts
+    };
+  }, []);
+
   // track map boundaries and zoom level
   const mapRef = useRef();
   const [ zoom, setZoom ] = useState(15); // <== must match default zoom
   const [ bounds, setBounds ] = useState(null);
 
   const userPoints = users.filter((user) => {
-    if (user.privacy === 'private' && user.id !== loggedIn.id) {
+    if (user.id === loggedIn.id) {
+    return true;
+    } else if (user.privacy === 'private') {
       return false;
-    } else if (user.type === 'business') {
+    } else if (user.privacy === 'friends only' && !friendList.includes(user.id)){
+     return false;
+    }
+    else if (user.type === 'business') {
       return false
     } else {
       return true;
@@ -202,6 +228,7 @@ const Map: React.FC<Props> = (props) => {
     minZoom: 10,
     maxZoom: 19,
   }
+
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center'}}>

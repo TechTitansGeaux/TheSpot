@@ -22,6 +22,7 @@ const Location: React.FC = () => {
   }, [authUser]);
 
   const success = (position: GeolocationPosition) => {
+    console.log(position);
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
 
