@@ -87,7 +87,7 @@ const LikesList: React.FC<Props> = ({user, allUsers}) => {
   return (
     <ul>
     <div className='container-full-w'>
-      <h1>LikesList</h1>
+      <h1>Likes List</h1>
       {likesArr.map((like, index) => {
         return <LikesEntry key={`${index}-${like.id}`}
         like={like}
