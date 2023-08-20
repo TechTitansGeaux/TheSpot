@@ -284,7 +284,7 @@ button.accept-friend:hover {
   position: relative;
 }
 
-.like-count-container{
+.count-container{
   position: relative;
   display: flex;
   justify-content: center;

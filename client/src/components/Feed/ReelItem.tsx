@@ -20,6 +20,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Likes from './Likes';
 import './feed.css';
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 
 dayjs.extend(relativeTime);
 
@@ -300,25 +301,49 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                   <BottomNavigationAction
                     className='bottom-nav-parent'
                     label='Likes'
-                    icon={
-                      <React.Fragment>
-                        <div className='like-count-container'>
-                          <Likes
-                            handleAddLike={handleAddLike}
-                            handleRemoveLike={handleRemoveLike}
-                            reel={reel}
-                            likes={likes}
-                            likeTotal={likeTotal}
-                          />
-                          {reel.like_count >= 0 && (
-                            <p className='like-counter'>
-                              {reel.like_count + likeTotal}
-                            </p>
-                          )}
-                        </div>
-                      </React.Fragment>
-                    }
                     showLabel={false}
+                    icon={
+                      reel?.User.type === 'personal' ? (
+                        <React.Fragment>
+                          <div className='count-container'>
+                            <Likes
+                              handleAddLike={handleAddLike}
+                              handleRemoveLike={handleRemoveLike}
+                              reel={reel}
+                              likes={likes}
+                              likeTotal={likeTotal}
+                            />
+                            {reel.like_count >= 0 && (
+                              <p className='like-counter'>
+                                {reel.like_count + likeTotal}
+                              </p>
+                            )}
+                          </div>
+                        </React.Fragment>
+                      ) : (
+                        <React.Fragment>
+                          <div className='count-container'>
+                            <Tooltip
+                              title='Follow Us'
+                              TransitionComponent={Zoom}
+                              placement='top'
+                              PopperProps={{
+                                sx: {
+                                  '& .MuiTooltip-tooltip': {
+                                    backgroundColor: '#0b0113',
+                                    border: 'solid #F5FCFA 1px',
+                                    color: '#F5FCFA',
+                                  },
+                                },
+                              }}
+                            >
+                              <ThumbUpAltIcon color='primary' />
+                            </Tooltip>
+                            <p className='follow-counter'></p>
+                          </div>
+                        </React.Fragment>
+                      )
+                    }
                   />
                   <BottomNavigationAction
                     label='Event Location'
@@ -347,7 +372,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                     label='Going'
                     icon={
                       <React.Fragment>
-                        <div className='like-count-container'>
+                        <div className='count-container'>
                           <RsvpSharpIcon
                             style={{ transform: 'scale(2)' }}
                             color='secondary'
