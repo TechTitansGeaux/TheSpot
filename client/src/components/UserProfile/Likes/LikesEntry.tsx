@@ -1,4 +1,5 @@
 import * as React from 'react';
+import './likes.css';
 
 type User = {
   id: number;
@@ -42,9 +43,9 @@ const LikesEntry: React.FC<Props> = ({user, allUsers, like}) => {
     }
     return name;
   }, '');
-  
+
   return (
-    <li>
+    <li className='like-entry'>
       {`${likeName} liked your reel`}
     </li>
   );

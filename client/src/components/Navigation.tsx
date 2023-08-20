@@ -137,7 +137,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
       axios
         .get('/likes/likes')
         .then((response) => {
-          //console.log('likes:', response.data);
+          // console.log('likes:', response.data);
           for (let i = 0; i < response.data.length; i++) {
             for (let j = 0; j < userReels.length; j++) {
               if (response.data[i].ReelId === userReels[j].id && response.data[i].checked !== true) { likes.push(response.data[i]); }
