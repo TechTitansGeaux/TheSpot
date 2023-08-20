@@ -48,6 +48,20 @@ users.get('/', async (req: any, res: any) => {
   }
 });
 
+users.get('/businesses', async (req: any, res: any) => {
+  try {
+    // Retrieve all users from the database
+    const users = await Users.findAll({ where: {type: 'business'} });
+
+    // Respond with the retrieved users
+    res.json(users);
+  } catch (error) {
+    // Handle any errors that occur
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 users.get('/user', isUserAuthenticated, (req: any, res: any) => {
   res.json(req.user);
 });
