@@ -48,6 +48,7 @@ const Map: React.FC<Props> = (props) => {
           acc.push(user.accepter_id);
           return acc;
         }, []);
+        console.log(friendsIds);
         setFriendList(friendsIds)
       })
       .catch((err) => {
