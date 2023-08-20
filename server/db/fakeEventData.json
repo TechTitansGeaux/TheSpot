@@ -8,7 +8,8 @@
     "endTime": "23:00",
     "geolocation": "30.039587748382235,-90.2405565887334",
     "twenty_one": true,
-    "PlaceId": 1
+    "PlaceId": 1,
+    "UserId": 1
   },
   {
     "id": 2,
@@ -19,7 +20,8 @@
     "endTime": "18:00",
     "geolocation": "29.94274204513914,-90.06446969325872",
     "twenty_one": false,
-    "PlaceId": 2
+    "PlaceId": 2,
+    "UserId": 2
   },
   {
     "id": 3,
@@ -30,6 +32,7 @@
     "endTime": "16:00",
     "geolocation": "30.031003882054566,-90.050313779948",
     "twenty_one": false,
-    "PlaceId": 3
+    "PlaceId": 3,
+    "UserId": 2
   }
 ]

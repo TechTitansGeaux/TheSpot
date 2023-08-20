@@ -16,7 +16,7 @@ import axios from 'axios';
 import Settings from './components/ProfileSetUp/Settings';
 import BusinessSettings from './components/ProfileSetUp/BusinessSettings';
 import FriendRequestList from './components/UserProfile/FriendRequests/FriendRequestList';
-import LikesList from './components/UserProfile/Likes/LikesList';
+import LikesList from './components/UserProfile/Likes/LIkesList';
 import EventsList from './components/UserProfile/Events/EventsList';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAuthUser, setIsAuthenticated, setFontSize } from './store/appSlice';
@@ -102,7 +102,7 @@ const App = () => {
             path='/FriendRequests'
               element={<FriendRequestList allUsers={allUsers}  user={user} />}
           ></Route>
-          <Route path='/Likes' element={<LikesList user={user} />}></Route>
+          <Route path='/Likes' element={<LikesList allUsers={allUsers} user={user} />}></Route>
           <Route
             path='/Settings'
             element={<Settings fontSize={fontSize} />}

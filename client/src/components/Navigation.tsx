@@ -19,7 +19,10 @@ import Tooltip from '@mui/material/Tooltip';
 import Zoom from '@mui/material/Zoom';
 import axios from 'axios';
 import './navigation.css';
-// import Badge from '@mui/material/Badge';
+import Snackbar from '@mui/material/Snackbar';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+
 
 type Anchor = 'left';
 type Props = {
@@ -62,8 +65,9 @@ const theme = createTheme({
 
 const Navigation: React.FC<Props> = ({ user }) => {
   const [pFriends, setPFriends] = useState([]); // pending friends list
-
-  const [likesArr, setLikesArr] = useState([]); // state version of likes
+  const [open, setOpen] = useState(false); // open and close snackbar
+  const [likesArr, setLikesArr] = useState([]); // user's own reels that have been liked FROM likes table
+  const [userReels, setUserReels] = useState([]); // user's own reels
 
   const [onPage, setOnPage] = useState(
     <NavLink className='navLink' to='/Feed'>
@@ -101,6 +105,31 @@ const Navigation: React.FC<Props> = ({ user }) => {
 
   }, [location.pathname, user]);
 
+  // get your own reels
+  const getOwnReels = () => {
+    axios
+      .get('/feed/reel/user')
+      .then((response: any) => {
+        //console.log('users own reels:', response.data);
+        setUserReels(response.data);
+      })
+      .catch((err: any) => {
+        console.error('Cannot get own reels:', err);
+      })
+  };
+
+  useEffect(() => {
+    getOwnReels();
+
+    const interval = setInterval(() => {
+      getOwnReels();
+    }, 5000);
+
+    return () => {
+      clearInterval(interval);
+    }
+  }, [location.pathname]);
+
   // get reels that have been liked AND checked
   const getLikes = () => {
     const likes: any = []; // user's reels that have been liked
@@ -108,10 +137,10 @@ const Navigation: React.FC<Props> = ({ user }) => {
       axios
         .get('/likes/likes')
         .then((response) => {
-          // console.log('likes:', response.data);
+          //console.log('likes:', response.data);
           for (let i = 0; i < response.data.length; i++) {
-            if (user.id === response.data[i].UserId && response.data[i].checked !== true) {
-              likes.push(response.data[i]);
+            for (let j = 0; j < userReels.length; j++) {
+              if (response.data[i].ReelId === userReels[j].id && response.data[i].checked !== true) { likes.push(response.data[i]); }
             }
           }
           setLikesArr(likes);
@@ -214,7 +243,34 @@ const Navigation: React.FC<Props> = ({ user }) => {
         }
       }, [user]);
       // return setting;
-    // }
+
+    // Snackbar stuff
+    useEffect(() => {
+      if (pFriends.length > 0) {
+        setOpen(true);
+      }
+    }, [pFriends.length]);
+
+    const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+      setOpen(false);
+    };
+
+    const action = (
+      <React.Fragment>
+        <IconButton
+          size="small"
+          aria-label="close"
+          color="inherit"
+          onClick={handleClose}
+        >
+          <CloseIcon fontSize="small" />
+        </IconButton>
+      </React.Fragment>
+    );
+
   // Need to Update My Reels // to={<my reels component>}
   const list = (anchor: Anchor) => (
     <Box
@@ -314,7 +370,9 @@ const Navigation: React.FC<Props> = ({ user }) => {
                   </div>
                     <div>
                       {(likesArr.length !== 0 || pFriends.length !== 0) &&
+                      <div>
                         <CircleNotificationsIcon className="circle" sx={{ position: 'absolute', right: -30, zIndex: "4", top: 5 }} />
+                      </div>
                       }
                     </div>
                   <div onClick={(toggleDrawer('left', true))}>
@@ -360,6 +418,19 @@ const Navigation: React.FC<Props> = ({ user }) => {
           <Link to='/CreateReel'>
             <AddCircleIcon color='secondary' sx={{ width: 52, height: 52 }} />
           </Link>
+          <div>
+              {(pFriends.length !== 0) &&
+              <div>
+                <Snackbar
+                open={open}
+                autoHideDuration={6000}
+                onClick={handleClose}
+                message="You have pending friends request(s)"
+                action={action}
+              />
+              </div>
+              }
+            </div>
         </footer>
       </ThemeProvider>
     </>
