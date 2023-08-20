@@ -312,8 +312,12 @@ const Map: React.FC<Props> = (props) => {
         }
         </GoogleMapReact>
       </div>
+      <div className='legend'>
+        <div className='userDot'></div>
+        <div className='businessDot'></div>
+        <div className='eventDot'></div>
+      </div>
     </div>
-
   );
 };
 
