@@ -48,9 +48,11 @@ const Likes: React.FC<Props> = ({
     }
   };
 
+  console.log('likes from likes.tsx', likes);
+  console.log('reel from likes.tsx', reel);
   return (
     <React.Fragment>
-      { clicked ? (
+      { (likes.includes(reel.id) || clicked) ? (
         <FavoriteIcon
           color='secondary'
           onClick={() => handleLikeClick(reel.id)}
