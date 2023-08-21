@@ -66,10 +66,10 @@ likesRouter.put('/removeLike/:ReelId', (req: any, res: any) => {
     });
 });
 
-// GET likes from likes table
+// GET likes from likes table in most recent order
 likesRouter.get('/likes', (req: any, res: any) => {
 
-  Likes.findAll({})
+  Likes.findAll({order: [['createdAt', 'DESC']]})
     .then((response: any) => {
       if (response === null) {
         console.log('likes do not exist');

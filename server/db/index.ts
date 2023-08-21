@@ -229,7 +229,9 @@ Users.hasMany(Events);
 Events.belongsTo(Users);
 
 // FOREIGN Keys ReelId AND UserId to Likes
-Reels.hasMany(Likes);
+Reels.hasMany(Likes, {
+  onDelete: 'CASCADE'
+});
 Likes.belongsTo(Reels);
 Users.hasMany(Likes);
 Likes.belongsTo(Users);
