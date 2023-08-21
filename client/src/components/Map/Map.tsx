@@ -48,6 +48,7 @@ const Map: React.FC<Props> = (props) => {
           acc.push(user.accepter_id);
           return acc;
         }, []);
+        console.log(friendsIds);
         setFriendList(friendsIds)
       })
       .catch((err) => {
@@ -66,7 +67,7 @@ const Map: React.FC<Props> = (props) => {
   }
 
   const getPendingFriendList = () => {
-    axios.get('/feed/friendlist/pending')
+    axios.get('/friends/pending')
       .then(({ data }) => {
         const pendingFriendsIds = data.reduce((acc: number[], user: any) => {
           acc.push(user.accepter_id);
