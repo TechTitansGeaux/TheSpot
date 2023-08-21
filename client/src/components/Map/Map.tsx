@@ -67,7 +67,7 @@ const Map: React.FC<Props> = (props) => {
   }
 
   const getPendingFriendList = () => {
-    axios.get('/feed/friendlist/pending')
+    axios.get('/friends/pending')
       .then(({ data }) => {
         const pendingFriendsIds = data.reduce((acc: number[], user: any) => {
           acc.push(user.accepter_id);
@@ -312,12 +312,8 @@ const Map: React.FC<Props> = (props) => {
         }
         </GoogleMapReact>
       </div>
-      <div className='legend'>
-        <div className='userDot'></div>
-        <div className='businessDot'></div>
-        <div className='eventDot'></div>
-      </div>
     </div>
+
   );
 };
 
