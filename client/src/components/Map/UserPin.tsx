@@ -48,6 +48,7 @@ type Props = {
     picture: string;
     googleId: string;
   }
+
 };
 
 const addFriendTheme = createTheme({

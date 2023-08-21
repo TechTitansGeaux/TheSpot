@@ -33,10 +33,9 @@ type Props =  {
 const Map: React.FC<Props> = (props) => {
   const { loggedIn } = props;
 
+  const [ renders, setRenders ] = useState(0)
   const [ users, setUsers ] = useState([]);
   const [ events, setEvents ] = useState([])
-  const [ loggedInLat, setLoggedInLat ] = useState(0);
-  const [ loggedInLng, setLoggedInLng ] = useState(0);
   const [ friendList, setFriendList ] = useState([]);
   const [ pendingFriendList, setPendingFriendList ] = useState([]);
   const [ businesses, setBusinesses ] = useState([]);
@@ -103,16 +102,13 @@ const Map: React.FC<Props> = (props) => {
   }
 
   useEffect(() => {
-    const [lat, lng] = splitCoords(loggedIn.geolocation);
-    setLoggedInLat(+lat);
-    setLoggedInLng(+lng);
-    // ^ coords of user to make map centered on user when opened
     getUsers();
     getFriendList();
     getPendingFriendList();
     getEvents();
     getBusinesses();
   }, [])
+
 
   // function to split coordinates into array so lat and lng can easily be destructured
   const splitCoords = (coords: string) => {
@@ -229,88 +225,106 @@ const Map: React.FC<Props> = (props) => {
     maxZoom: 19,
   }
 
+  const [lat, lng] = splitCoords(loggedIn.geolocation);
+  const defaultCenter = {lat: +lat, lng: +lng}
+  const [ center, setCenter ] = useState(defaultCenter);
+
+  // const noop = () => {
+  //   setRenders(renders + 1);
+  //   console.log(renders);
+  // };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center'}}>
-      <div id='map'>
-        <GoogleMapReact
-          bootstrapURLKeys={{ key: "AIzaSyAYtb7y6JZ2DxgdIESWJky8NyhWuu_YFVg" }}
-          defaultZoom={15}
-          defaultCenter={{lat: loggedInLat, lng: loggedInLng}}
-          options={options}
-          yesIWantToUseGoogleMapApiInternals
-          onGoogleApiLoaded={({ map }) => {
-            mapRef.current = map;
-          }}
-          onChange={({ zoom, bounds }) => {
-            setZoom(zoom);
-            setBounds([
-              bounds.nw.lng,
-              bounds.se.lat,
-              bounds.se.lng,
-              bounds.nw.lat
-            ])
-          }}
-        >
-        {
-          userClusters.map((cluster: any, i: number) => {
-            const [ lng, lat ] = cluster.geometry.coordinates;
-            const { cluster: isCluster, point_count: pointCount, user} = cluster.properties;
+    <div className='mapParent'>
+      <div className='mapChild'>
+        <div id='map'>
+          <GoogleMapReact
+            bootstrapURLKeys={{ key: "AIzaSyAYtb7y6JZ2DxgdIESWJky8NyhWuu_YFVg" }}
+            defaultZoom={15}
+            center={center}
+            options={options}
+            // onDrag={noop}
+            yesIWantToUseGoogleMapApiInternals
+            onGoogleApiLoaded={({ map }) => {
+              mapRef.current = map;
+            }}
+            onChange={({ zoom, bounds, center }) => {
+              setCenter(center);
+              setZoom(zoom);
+              setBounds([
+                bounds.nw.lng,
+                bounds.se.lat,
+                bounds.se.lng,
+                bounds.nw.lat
+              ])
+            }}
+          >
+          {
+            userClusters.map((cluster: any, i: number) => {
+              const [ lng, lat ] = cluster.geometry.coordinates;
+              const { cluster: isCluster, point_count: pointCount, user} = cluster.properties;
 
-            if (isCluster) {
-              return <UserClusterPin amount={pointCount} key={'userCluster' + i} lat={lat} lng={lng}/>;
-            } else {
-              return <UserPin
-              getPendingFriendList={getPendingFriendList}
-              pendingFriendList={pendingFriendList}
-              getFriendList={getFriendList}
-              friendList={friendList}
-              user={user}
-              key={'user' + i}
-              lat={lat}
-              lng={lng}
-              loggedIn={loggedIn}
-            />;
-            }
-          })
-        }
-        {
-          businessClusters.map((cluster: any, i: number) => {
-            const [ lng, lat ] = cluster.geometry.coordinates;
-            const { cluster: isCluster, point_count: pointCount, business} = cluster.properties;
+              if (isCluster) {
+                return <UserClusterPin amount={pointCount} key={'userCluster' + i} lat={lat} lng={lng}/>;
+              } else {
+                return <UserPin
+                getPendingFriendList={getPendingFriendList}
+                pendingFriendList={pendingFriendList}
+                getFriendList={getFriendList}
+                friendList={friendList}
+                user={user}
+                key={'user' + i}
+                lat={lat}
+                lng={lng}
+                loggedIn={loggedIn}
+              />;
+              }
+            })
+          }
+          {
+            businessClusters.map((cluster: any, i: number) => {
+              const [ lng, lat ] = cluster.geometry.coordinates;
+              const { cluster: isCluster, point_count: pointCount, business} = cluster.properties;
 
-            if (isCluster) {
-              return <BusinessClusterPin amount={pointCount} key={'eventCluster' + i} lat={lat} lng={lng} />;
-            } else {
-              return <BusinessPin
-              business={business}
-              key={'business' + i}
-              lat={lat}
-              lng={lng}
-            />;
-            }
-          })
-        }
-        {
-          eventClusters.map((cluster: any, i: number) => {
-            const [ lng, lat ] = cluster.geometry.coordinates;
-            const { cluster: isCluster, point_count: pointCount, event} = cluster.properties;
+              if (isCluster) {
+                return <BusinessClusterPin amount={pointCount} key={'eventCluster' + i} lat={lat} lng={lng} />;
+              } else {
+                return <BusinessPin
+                business={business}
+                key={'business' + i}
+                lat={lat}
+                lng={lng}
+              />;
+              }
+            })
+          }
+          {
+            eventClusters.map((cluster: any, i: number) => {
+              const [ lng, lat ] = cluster.geometry.coordinates;
+              const { cluster: isCluster, point_count: pointCount, event} = cluster.properties;
 
-            if (isCluster) {
-              return <EventClusterPin amount={pointCount} key={'eventCluster' + i} lat={lat} lng={lng} />;
-            } else if (!isCluster && zoom >= 16) {
-              return <EventRadialMarker zoom={zoom} key={'eventRadialMarker' + i} lat={lat} lng={lng} />
-            } else {
-              return <EventPin
-                event={event}
-                lat={+lat}
-                lng={+lng}
-                key={'event' + i}
-              />
-            }
-          })
-        }
-        </GoogleMapReact>
+              if (isCluster) {
+                return <EventClusterPin amount={pointCount} key={'eventCluster' + i} lat={lat} lng={lng} />;
+              } else if (!isCluster && zoom >= 16) {
+                return <EventRadialMarker zoom={zoom} key={'eventRadialMarker' + i} lat={lat} lng={lng} />
+              } else {
+                return <EventPin
+                  event={event}
+                  lat={+lat}
+                  lng={+lng}
+                  key={'event' + i}
+                />
+              }
+            })
+          }
+          </GoogleMapReact>
+        </div>
+        <div className='legend'>
+          <div className='userKey'> user </div>
+          <div className='businessKey'> business </div>
+          <div className='eventKey'> event </div>
+          <div className='recenterButton'> recenter </div>
+        </div>
       </div>
     </div>
 
