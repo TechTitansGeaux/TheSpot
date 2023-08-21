@@ -275,6 +275,23 @@ const Map: React.FC<Props> = (props) => {
           })
         }
         {
+          businessClusters.map((cluster: any, i: number) => {
+            const [ lng, lat ] = cluster.geometry.coordinates;
+            const { cluster: isCluster, point_count: pointCount, business} = cluster.properties;
+
+            if (isCluster) {
+              return <BusinessClusterPin amount={pointCount} key={'eventCluster' + i} lat={lat} lng={lng} />;
+            } else {
+              return <BusinessPin
+              business={business}
+              key={'business' + i}
+              lat={lat}
+              lng={lng}
+            />;
+            }
+          })
+        }
+        {
           eventClusters.map((cluster: any, i: number) => {
             const [ lng, lat ] = cluster.geometry.coordinates;
             const { cluster: isCluster, point_count: pointCount, event} = cluster.properties;
@@ -290,23 +307,6 @@ const Map: React.FC<Props> = (props) => {
                 lng={+lng}
                 key={'event' + i}
               />
-            }
-          })
-        }
-        {
-          businessClusters.map((cluster: any, i: number) => {
-            const [ lng, lat ] = cluster.geometry.coordinates;
-            const { cluster: isCluster, point_count: pointCount, business} = cluster.properties;
-
-            if (isCluster) {
-              return <BusinessClusterPin amount={pointCount} key={'eventCluster' + i} lat={lat} lng={lng} />;
-            } else {
-              return <BusinessPin
-              business={business}
-              key={'business' + i}
-              lat={lat}
-              lng={lng}
-            />;
             }
           })
         }
