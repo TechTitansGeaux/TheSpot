@@ -14,6 +14,29 @@ friendRouter.get('/', (req: any, res: any) => {
     });
 });
 
+friendRouter.get('/pending', (req: any, res: any) => {
+  const { id } = req.user;
+  Friendships.findAll({
+    where: {
+      status: 'pending',
+      requester_id: id,
+    },
+  })
+    .then((response: any) => {
+      if (response === null) {
+        console.log('friends do not exist');
+        res.sendStatus(404);
+      } else {
+        res.status(200).send(response);
+      }
+    })
+    .catch((err: any) => {
+      console.error('Cannot GET friends', err);
+      res.sendStatus(500);
+    });
+});
+
+
 //  POST request for friendship with 'pending' status
 friendRouter.post('/', (req: any, res: any) => {
   // REQUESTER is req.user

@@ -83,7 +83,7 @@ feedRouter.get('/friendlist', (req: any, res: any) => {
   Friendships.findAll({
     where: {
       status: 'approved',
-      requester_id: id // CHANGED from requester_id: id
+      requester_id: id
     }
   })
     .then((response: any) => {
@@ -174,6 +174,29 @@ feedRouter.get('/reel/user', (req: any, res: any) => {
     })
     .catch((err: any) => {
       console.error('Cannot GET user reels:', err);
+      res.sendStatus(500);
+    })
+});
+
+// friends list
+feedRouter.get('/frens', (req: any, res: any) => {
+  const { id } = req.user;
+  Friendships.findAll({
+    where: {
+      status: 'approved',
+      requester_id: id
+    }
+  })
+    .then((response: any) => {
+      if (response === null) {
+        console.log('friends do not exist');
+        res.sendStatus(404);
+      } else {
+        res.status(200).send(response);
+      }
+    })
+    .catch((err: any) => {
+      console.error('Cannot GET friends', err);
       res.sendStatus(500);
     })
 });

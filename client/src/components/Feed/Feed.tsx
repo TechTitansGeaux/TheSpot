@@ -85,7 +85,7 @@ const Feed: React.FC<Props> = ({user}) => {
 
   const getFriendList = () => {
     axios
-      .get(`/feed/friendlist`)
+      .get(`/feed/frens`)
       .then((response) => {
         //console.log('friends response.data:', response.data);
         setFriends(response.data);

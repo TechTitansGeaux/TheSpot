@@ -1,4 +1,7 @@
 import React from 'react';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
+import dayjs = require('dayjs');
+dayjs.extend(localizedFormat);
 
 type Props = {
   business: {
@@ -41,14 +44,17 @@ const BusinessPin: React.FC<Props> = ({ business }) => {
         />
       </div>
       <div className='businessPopUp' id={'popUp' + business.username + business.id} >
-        <div style={{ textAlign: 'center', fontSize:'20px' }}>
-          {business.username}
-        </div>
-        <div style={{ textAlign: 'center', fontSize:'20px' }}>
-          {/* <p>
-            {`Member Since: ${dayjs(business.createdAt).format('ll')}`}
-          </p> */}
-        </div>
+        <div style={{ textAlign: 'center', fontSize: '20px' }}>
+            {business.displayName}
+          </div>
+          <div style={{ textAlign: 'center', fontSize: '14px' }}>
+            @{business.username}
+          </div>
+          <div style={{ textAlign: 'center', fontSize: '15px' }}>
+            <p>
+              {`Member Since: ${dayjs(business.createdAt).format('ll')}`}
+            </p>
+          </div>
       </div>
     </div>
   )
