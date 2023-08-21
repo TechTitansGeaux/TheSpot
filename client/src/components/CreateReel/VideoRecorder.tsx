@@ -283,7 +283,6 @@ console.log(user.geolocation, '<-----geolo')
 // console.log(user.type, '<---- user type')
 // console.log(businessAccount, '<------business account')
 
-
   return (
     <div>
       <div className='webContainer'>
@@ -319,10 +318,12 @@ console.log(user.geolocation, '<-----geolo')
             className='webcam'
             height={700}
             width={700}
-            audio={false}
+            audio={true}
             mirrored={false}
             ref={webcamRef}
             videoConstraints={videoConstraints}
+            muted={true}
+            //
           />
         </div>
       )}
