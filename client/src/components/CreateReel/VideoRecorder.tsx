@@ -323,6 +323,7 @@ console.log(user.geolocation, '<-----geolo')
             ref={webcamRef}
             videoConstraints={videoConstraints}
             muted={true}
+            //
           />
         </div>
       )}
