@@ -130,7 +130,7 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
     console.log('friendship approved');
     axios
       .put('/friends', {
-        accepter_id: friend, // CHANGED from requester_id
+        requester_id: friend, // CHANGED from requester_id
       })
       .then((data) => {
         // console.log('Friend request approved PUT', data);

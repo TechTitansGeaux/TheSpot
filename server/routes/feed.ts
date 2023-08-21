@@ -77,13 +77,13 @@ feedRouter.get('/likes', (req: any, res: any) => {
     })
 });
 
-// friends list
+// friends list // BERNIE's FRIEND LIST
 feedRouter.get('/friendlist', (req: any, res: any) => {
   const { id } = req.user;
   Friendships.findAll({
     where: {
       status: 'approved',
-      accepter_id: id // CHANGED from requester_id: id
+      requester_id: id // CHANGED from requester_id: id
     }
   })
     .then((response: any) => {
