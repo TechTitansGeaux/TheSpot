@@ -1,51 +1,56 @@
 import * as React from 'react';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
+
+
+type User = {
+  id: number;
+  username: string;
+  displayName: string;
+  type: string;
+  geolocation: string;
+  mapIcon: string;
+  birthday: string;
+  privacy: string;
+  accessibility: string;
+  email: string;
+  picture: string;
+  googleId: string;
+};
+
 
 type Props = {
   reel: any;
   handleAddLike: any;
   handleRemoveLike: any;
-  likes: any;
-  likeTotal: number;
+  user: User;
+  likes: any[];
 };
 
 const Likes: React.FC<Props> = ({
   handleRemoveLike,
   handleAddLike,
-  likes,
-  likeTotal,
   reel,
+  likes,
+  user
 }) => {
   const [clicked, setClicked] = useState(false);
-  // const [myLikes, setMyLikes] = useState([]); // array of my likes
-
-  // const getAllLikes = () => {
-  //   axios.get('/likes/likes')
-  //     .then((response) => {
-  //       console.log('Response from Axios getAllLikes request:', response);
-  //     })
-  //     .catch((err) => {
-  //       console.error('Error in Axios getAllLikes in Likes.tsx:', err);
-  //   })
-  // }
-
 
 
   const handleLikeClick = (reelId: number) => {
     if (!clicked) {
-      setClicked(!clicked)
+      setClicked(true);
       handleAddLike(reelId);
     } else {
-      setClicked(!clicked)
+      setClicked(false);
       handleRemoveLike(reelId);
     }
-}
+  };
 
   return (
     <React.Fragment>
-      {clicked ? (
+      { clicked ? (
         <FavoriteIcon
           color='secondary'
           onClick={() => handleLikeClick(reel.id)}

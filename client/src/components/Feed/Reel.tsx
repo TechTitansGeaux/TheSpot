@@ -59,7 +59,6 @@ type Event = {
   PlaceId: 1;
 };
 
-
 const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
@@ -70,6 +69,7 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
   const [disabled, setDisabled] = useState([]);
   const [likeTotal, setLikeTotal] = useState(0);
   const [likes, setLikes] = useState([]); // user's reels that have been liked
+  const [likesPersist, setLikesPersist] = useState([]);
 
   const fetchAuthUser = async () => {
     try {
@@ -172,10 +172,9 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
     axios
       .put(`/likes/removeLike/${reelId}`)
       .then((data) => {
-        const foundLike = likes.indexOf(reelId)
+        const foundLike = likes.indexOf(reelId);
         if (foundLike !== -1) {
           setLikes((prev) => prev.splice(foundLike, 1));
-
         }
         setLikes((prev) => prev.splice(foundLike, 1));
         setLikeTotal(likeTotal - 1);
@@ -186,14 +185,22 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
   // get reels that have been liked
   const getLikes = () => {
     if (user) {
-      axios
-        .get('/feed/likesTable')
+     axios
+       .get('/likes/likes')
         .then((response) => {
           for (let i = 0; i < response.data.length; i++) {
-            if (user?.id === response.data[i].UserId) {
-              setLikes((prev) => [...prev, response.data[i].ReelId]);
+            for (let j = 0; j < reels.length; j++) {
+              if (response.data[i].ReelId === reels[j].id) {
+                likes.push(response.data[i].ReelId);
+              }
             }
           }
+          setLikesPersist(likes);
+          // for (let i = 0; i < response.data.length; i++) {
+          //   if (user?.id === response.data[i].UserId) {
+          //     setLikes((prev) => [...prev, response.data[i].ReelId]);
+          //   }
+          // }
         })
         .catch((err) => {
           console.error('Could not GET all likes:', err);
@@ -203,8 +210,10 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
 
   useEffect(() => {
     getLikes();
-  }, [likeTotal]);
+  }, [user]);
 
+  // console.log('likes from reel.tsx', likes);
+  // console.log('likes persist from reel.tsx', likesPersist);
   return (
     <main
       className='reel-container'
