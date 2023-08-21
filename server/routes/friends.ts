@@ -54,11 +54,11 @@ friendRouter.post('/', (req: any, res: any) => {
     });
 });
 
-// PUT request to update friendship with 'approved' status
+// PUT request to update friendship with 'approved' status // don't APPROVE if already in database
 friendRouter.put('/', (req: any, res: any) => {
   // ACCEPTER is req.user
   const { id } = req.user;
-  const { accepter_id } = req.body;
+  const { requester_id } = req.body;
   Friendships.update(
     { status: 'approved' },
     {
@@ -73,8 +73,8 @@ friendRouter.put('/', (req: any, res: any) => {
         // set to approved for testing
         {
           status: 'approved',
-          accepter_id: accepter_id,
           requester_id: id,
+          accepter_id: requester_id,
         } // SWAPPED requester_id: id AND accepter_id: requester_id:
       );
     })

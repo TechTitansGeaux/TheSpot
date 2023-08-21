@@ -115,7 +115,7 @@ const FriendRequestEntry: React.FC<Props> = ({
             >
               <CheckIcon
                 sx={{ width: 20, height: 20 }}
-                onClick={() => approveFriendship(pendingFriend.accepter_id)}
+                onClick={() => approveFriendship(pendingFriend?.requester_id)}
               />
             </Tooltip>
           </Fab>
