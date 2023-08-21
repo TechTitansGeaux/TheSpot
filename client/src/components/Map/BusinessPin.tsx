@@ -22,6 +22,7 @@ type Props = {
   }
   lat: number
   lng: number
+
 }
 
 const BusinessPin: React.FC<Props> = ({ business }) => {

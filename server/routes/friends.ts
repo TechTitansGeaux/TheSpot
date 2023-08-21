@@ -88,6 +88,25 @@ friendRouter.put('/', (req: any, res: any) => {
 
 // DELETE request to delete a friend
 
+friendRouter.delete('/removeFriend/:otherUsersId',  (req: any, res: any) => {
+  // ACCEPTER is req.user
+  const { id } = req.user;
+  const { otherUsersId } = req.params;
+  Friendships.destroy(
+    {
+      where: {
+        requester_id: [id, otherUsersId],
+      },
+    }
+  )
+    .then((data: any) => {
+      res.sendStatus(200);
+    })
+    .catch((err: any) => {
+      console.error('friendRouter DELETE to database Error:', err);
+    });
+});
+
 friendRouter.delete('/:otherUsersId',  (req: any, res: any) => {
   // ACCEPTER is req.user
   const { id } = req.user;
