@@ -110,7 +110,7 @@ const UserPin: React.FC<Props> = (props) => {
 
   const removeFriend = () => {
     axios
-      .delete(`/friends/${props.user.id}`, { data: { updatedAt: props.user.updatedAt }})
+      .delete(`/friends/removeFriend/${props.user.id}`, { data: { updatedAt: props.user.updatedAt }})
       .then(() => {
         props.getFriendList()
         props.getPendingFriendList();
