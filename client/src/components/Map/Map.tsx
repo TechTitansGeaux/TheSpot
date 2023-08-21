@@ -4,7 +4,7 @@ import GoogleMapReact from 'google-map-react';
 import useSupercluster from 'use-supercluster';
 import axios from 'axios';
 import UserPin from './UserPin';
-import socketIOClient from 'socket.io-client';
+
 import UserClusterPin from './UserClusterPin';
 import EventPin from './EventPin';
 import EventClusterPin from './EventClusterPin';
@@ -119,25 +119,6 @@ const Map: React.FC<Props> = (props) => {
     const arr = coords.split(',');
     return arr;
   }
-
-
-  // watch for geolocation updates
-  useEffect(() => {
-    const socket = socketIOClient(`${process.env.HOST}`); // Connect to your server
-
-    socket.on('userGeolocationUpdate', (userId, newGeolocation) => {
-      // Update the user's geolocation in the users array based on userId
-      setUsers((prevUsers) => {
-        return prevUsers.map((user) =>
-          user.id === userId ? { ...user, geolocation: newGeolocation } : user
-        );
-      });
-    });
-
-    return () => {
-      socket.disconnect(); // Disconnect when the component unmounts
-    };
-  }, []);
 
   // track map boundaries and zoom level
   const mapRef = useRef();
