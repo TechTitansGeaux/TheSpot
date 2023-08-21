@@ -14,6 +14,29 @@ friendRouter.get('/', (req: any, res: any) => {
     });
 });
 
+friendRouter.get('/pending', (req: any, res: any) => {
+  const { id } = req.user;
+  Friendships.findAll({
+    where: {
+      status: 'pending',
+      requester_id: id,
+    },
+  })
+    .then((response: any) => {
+      if (response === null) {
+        console.log('friends do not exist');
+        res.sendStatus(404);
+      } else {
+        res.status(200).send(response);
+      }
+    })
+    .catch((err: any) => {
+      console.error('Cannot GET friends', err);
+      res.sendStatus(500);
+    });
+});
+
+
 //  POST request for friendship with 'pending' status
 friendRouter.post('/', (req: any, res: any) => {
   // REQUESTER is req.user
@@ -31,11 +54,11 @@ friendRouter.post('/', (req: any, res: any) => {
     });
 });
 
-// PUT request to update friendship with 'approved' status
+// PUT request to update friendship with 'approved' status // don't APPROVE if already in database
 friendRouter.put('/', (req: any, res: any) => {
   // ACCEPTER is req.user
   const { id } = req.user;
-  const { accepter_id } = req.body;
+  const { requester_id } = req.body;
   Friendships.update(
     { status: 'approved' },
     {
@@ -50,8 +73,8 @@ friendRouter.put('/', (req: any, res: any) => {
         // set to approved for testing
         {
           status: 'approved',
-          accepter_id: accepter_id,
           requester_id: id,
+          accepter_id: requester_id,
         } // SWAPPED requester_id: id AND accepter_id: requester_id:
       );
     })

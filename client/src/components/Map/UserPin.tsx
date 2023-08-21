@@ -7,7 +7,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import React from 'react';
 import axios from 'axios';
 import dayjs = require('dayjs');
-dayjs.extend(localizedFormat)
+dayjs.extend(localizedFormat);
 
 
 
@@ -64,6 +64,7 @@ const addFriendTheme = createTheme({
     },
   },
 });
+
 const rmFriendTheme = createTheme({
   palette: {
     primary: {
@@ -83,20 +84,6 @@ const UserPin: React.FC<Props> = (props) => {
 
   const togglePopUp = () => {
     const box = document.getElementById('popUp' + props.user.username + props.user.id)
-
-        // Check if the map icon can be viewed based on privacy setting
-        if (props.user.privacy === 'friends only' && props.user.id !== props.loggedIn.id && !props.friendList.includes(props.user.id)) {
-          return; // Don't show the pop-up if not a friend
-        }
-
-
-    if (
-      props.user.privacy === 'private' &&
-      props.user.id !== props.loggedIn.id
-    ) {
-      return; // Don't show the pop-up for private users
-    }
-
 
     if (box.style.display === 'block') {
       box.style.display = 'none';
@@ -146,69 +133,70 @@ const UserPin: React.FC<Props> = (props) => {
           style={{ width: '40px', height: '40px', marginLeft: '1.5px', marginTop: '2.5px'}}
         />
       </div>
-
-        <div className='userPopUp' id={'popUp' + props.user.username + props.user.id}>
+      <div className='userPopUp' id={'popUp' + props.user.username + props.user.id}>
         <div style={{ textAlign: 'center', fontSize: '20px' }}>
-              {props.user.displayName}
+          {props.user.displayName}
+        </div>
+        <div style={{ textAlign: 'center', fontSize: '14px' }}>
+          @{props.user.username}
+        </div>
+        <div style={{ textAlign: 'center', fontSize: '15px' }}>
+          <p>
+            {`Member Since: ${dayjs(props.user.createdAt).format('ll')}`}
+          </p>
+        </div>
+        <div className='addOrRmFriend'>
+          {!props.pendingFriendList.includes(props.user.id) && !props.friendList.includes(props.user.id) && isNotLoggedInUser && (
+            <div>
+              <div style={{ position: 'relative', top: '18px', left: '80px' }}>add friend</div>
+              <div style={{ position: 'relative', top: '-7.5px' }}>
+                <ThemeProvider theme={addFriendTheme}>
+                  <div>
+                    <Box>
+                      <Fab
+                        size='small'
+                        color='primary'
+                        aria-label='add'
+                        className='friend-add-btn'
+                      >
+                        <AddIcon onClick={() => { addFriend(); } } />
+                      </Fab>
+                    </Box>
+                  </div>
+                </ThemeProvider>
+              </div>
             </div>
-            <div style={{ textAlign: 'center', fontSize: '14px' }}>
-              @{props.user.username}
-            </div>
-            <div style={{ textAlign: 'center', fontSize: '15px' }}>
-              <p>
-                {`Member Since: ${dayjs(props.user.createdAt).format('ll')}`}
-              </p>
-            </div>
-            <div className='addOrRmFriend'>
-              {!props.pendingFriendList.includes(props.user.id) && !props.friendList.includes(props.user.id) && isNotLoggedInUser && (
+          )}
+        </div>
+        <div className='addOrRmFriend'>
+          {props.friendList.includes(props.user.id) && (
+            <div>
+              <div style={{ position: 'relative', top: '18px', left: '60px' }}>remove friend</div>
+              <ThemeProvider theme={rmFriendTheme}>
                 <div>
-                  <div style={{ position: 'relative', top: '18px', left: '80px' }}>add friend</div>
-                  <ThemeProvider theme={addFriendTheme}>
-                    <div>
-                      <Box>
-                        <Fab
-                          size='small'
-                          color='primary'
-                          aria-label='add'
-                          className='friend-add-btn'
-                        >
-                          <AddIcon onClick={() => { addFriend(); } } />
-                        </Fab>
-                      </Box>
-                    </div>
-                  </ThemeProvider>
+                  <Box>
+                    <Fab
+                      size='small'
+                      color='primary'
+                      aria-label='add'
+                      className='friend-add-btn'
+                    >
+                      <RemoveIcon onClick={() => { removeFriend(); } } />
+                    </Fab>
+                  </Box>
                 </div>
-              )}
+              </ThemeProvider>
             </div>
-            <div className='addOrRmFriend'>
-              {props.friendList.includes(props.user.id) && (
-                <div>
-                  <div style={{ position: 'relative', top: '18px', left: '60px' }}>remove friend</div>
-                  <ThemeProvider theme={rmFriendTheme}>
-                    <div>
-                      <Box>
-                        <Fab
-                          size='small'
-                          color='primary'
-                          aria-label='add'
-                          className='friend-add-btn'
-                        >
-                          <RemoveIcon onClick={() => { removeFriend(); } } />
-                        </Fab>
-                      </Box>
-                    </div>
-                  </ThemeProvider>
-                </div>
-              )}
+          )}
+        </div>
+        <div className='addOrRmFriend'>
+          {props.pendingFriendList.includes(props.user.id) && (
+            <div>
+              <div style={{ position: 'relative', top: '18px', left: '60px' }}>request pending</div>
             </div>
-            <div className='addOrRmFriend'>
-              {props.pendingFriendList.includes(props.user.id) && (
-                <div>
-                  <div style={{ position: 'relative', top: '18px', left: '60px' }}>request pending</div>
-                </div>
-              )}
-            </div>
-          </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

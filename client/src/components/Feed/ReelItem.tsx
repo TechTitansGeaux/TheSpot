@@ -108,6 +108,37 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   const myRef = useRef<HTMLVideoElement>(null);
   const [loop, setLoop] = useState(false);
   const [stayDisabled, setStayDisabled] = useState([]);
+  const [likesArr, setLikesArr] = useState([]); // user's own reels that have been liked FROM likes table
+
+ const getLikes = () => {
+   const likes: any = []; // user's reels that have been liked
+   if (user) {
+     axios
+       .get('/likes/likes')
+       .then((response) => {
+         //console.log('likes:', response.data);
+         for (let i = 0; i < response.data.length; i++) {
+           for (let j = 0; j < reels.length; j++) {
+             if (response.data[i].ReelId === reels[j].id) {
+               likes.push(
+                 response.data[i].ReelId,
+               );
+             }
+           }
+         }
+         setLikesArr(likes);
+        //  console.log('likes array:', likesArr);
+
+       })
+       .catch((err) => {
+         console.error('Could not GET all likes:', err);
+       });
+   }
+ };
+
+ useEffect(() => {
+   getLikes();
+ }, [user]);
 
   // GET request get friendList from Friendship table in DB // set to state variable
   useEffect(() => {
@@ -157,6 +188,8 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
     return () => observer.disconnect();
   }, []);
 
+  // console.log('(now likes) above return ==>', likes)
+  // console.log('likesArr (now likes) above return ==>', likesArr)
 
   return (
     <div>
@@ -303,46 +336,20 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                     label='Likes'
                     showLabel={false}
                     icon={
-                      reel?.User.type === 'personal' ? (
-                        <React.Fragment>
-                          <div className='count-container'>
-                            <Likes
-                              handleAddLike={handleAddLike}
-                              handleRemoveLike={handleRemoveLike}
-                              reel={reel}
-                              likes={likes}
-                              likeTotal={likeTotal}
-                            />
-                            {reel.like_count >= 0 && (
-                              <p className='like-counter'>
-                                {reel.like_count + likeTotal}
-                              </p>
-                            )}
-                          </div>
-                        </React.Fragment>
-                      ) : (
-                        <React.Fragment>
-                          <div className='count-container'>
-                            <Tooltip
-                              title='Follow Us'
-                              TransitionComponent={Zoom}
-                              placement='top'
-                              PopperProps={{
-                                sx: {
-                                  '& .MuiTooltip-tooltip': {
-                                    backgroundColor: '#0b0113',
-                                    border: 'solid #F5FCFA 1px',
-                                    color: '#F5FCFA',
-                                  },
-                                },
-                              }}
-                            >
-                              <ThumbUpAltIcon color='primary' />
-                            </Tooltip>
-                            <p className='follow-counter'></p>
-                          </div>
-                        </React.Fragment>
-                      )
+                      <div className='count-container'>
+                        <Likes
+                          handleAddLike={handleAddLike}
+                          handleRemoveLike={handleRemoveLike}
+                          reel={reel}
+                          user={user}
+                          likes={likes}
+                        />
+                        {reel.like_count >= 0 && (
+                          <p className='like-counter'>
+                            {reel.like_count + likeTotal}
+                          </p>
+                        )}
+                      </div>
                     }
                   />
                   <BottomNavigationAction

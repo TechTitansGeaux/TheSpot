@@ -1,0 +1,5 @@
+.like-entry {
+  font-family: var(--title-font);
+  font-size: var(--lg-font);
+  color: var(--yellow);
+}
