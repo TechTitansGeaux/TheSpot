@@ -21,8 +21,12 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import Likes from './Likes';
 import './feed.css';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
 
 dayjs.extend(relativeTime);
+dayjs.extend(localizedFormat)
+
+dayjs().format('L LT')
 
 type User = {
   id: number;
@@ -109,6 +113,9 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   const [loop, setLoop] = useState(false);
   const [stayDisabled, setStayDisabled] = useState([]);
   const [likesArr, setLikesArr] = useState([]); // user's own reels that have been liked FROM likes table
+
+  // event info to display on info icon hover: name, date, time
+  const eventInfo = `${reel.Event.name} on ${dayjs(reel.Event.date + reel.Event.time).format('ddd, MMM D, h:mm A')}`;
 
  const getLikes = () => {
    const likes: any = []; // user's reels that have been liked
@@ -223,7 +230,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
               <p className='video-text'>{reel.text}</p>
               <>
                 <Tooltip
-                  title={reel.Event.name}
+                  title={eventInfo}
                   placement='left'
                   PopperProps={{
                     sx: {
