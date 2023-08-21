@@ -147,7 +147,7 @@ const UserPin: React.FC<Props> = (props) => {
         />
       </div>
 
-        <div className='popUpBox' id={'popUp' + props.user.username + props.user.id}>
+        <div className='userPopUp' id={'popUp' + props.user.username + props.user.id}>
         <div style={{ textAlign: 'center', fontSize: '20px' }}>
               {props.user.displayName}
             </div>
