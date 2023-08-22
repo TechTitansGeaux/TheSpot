@@ -33,7 +33,7 @@ type Props =  {
 const Map: React.FC<Props> = (props) => {
   const { loggedIn } = props;
 
-  const [ renders, setRenders ] = useState(0)
+  // const [ renders, setRenders ] = useState(0)
   const [ users, setUsers ] = useState([]);
   const [ events, setEvents ] = useState([])
   const [ friendList, setFriendList ] = useState([]);
@@ -221,7 +221,7 @@ const Map: React.FC<Props> = (props) => {
         <div id='map'>
           <GoogleMapReact
             bootstrapURLKeys={{ key: "AIzaSyAYtb7y6JZ2DxgdIESWJky8NyhWuu_YFVg" }}
-            defaultZoom={15}
+            zoom={zoom}
             center={center}
             options={options}
             // onDrag={noop}
@@ -300,7 +300,12 @@ const Map: React.FC<Props> = (props) => {
           }
           </GoogleMapReact>
         </div>
-        <div className='legend'>
+        <div className='legend' onClick={ () => {
+            const [lat, lng] = splitCoords(loggedIn.geolocation);
+            const center = {lat: +lat, lng: +lng}
+            setCenter(center)
+            setZoom(15);
+        } }>
           <div className='userKey'> user </div>
           <div className='businessKey'> business </div>
           <div className='eventKey'> event </div>
