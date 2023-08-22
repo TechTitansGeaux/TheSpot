@@ -124,7 +124,8 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   const [likesArr, setLikesArr] = useState([]); // user's own reels that have been liked FROM likes table
 
   // event info to display on info icon hover: name, date, time
-  const eventInfo = `${reel.Event.name} on ${dayjs(reel.Event.date + reel.Event.time).format('ddd, MMM D, h:mm A')}`;
+  const eventName = reel.Event.name;
+  const eventDate = dayjs(reel.Event.date + reel.Event.time).format('ddd, MMM D, h:mm A');
 
   // Alert Dialog 'are you sure you want to delete this reel?'
   const [open, setOpen] = React.useState(false);
@@ -250,7 +251,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
               <p className='video-text'>{reel.text}</p>
               <>
                 <Tooltip
-                  title={eventInfo}
+                  title={<div>{eventName}<br/>{eventDate}</div>}
                   placement='left'
                   PopperProps={{
                     sx: {

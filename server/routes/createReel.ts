@@ -9,11 +9,12 @@ const uploadReelToCloudinary = async (file: string) => {
   try {
     const result = await cloudinary.uploader.upload(file, {
       resource_type: "video",
-      format: 'webm',
+      format: 'mp4',
       transformation: [
         {aspect_ratio: '3:4', crop: 'fill', width: 465}
       ],
-      q_auto: 'best'
+      q_auto: 'eco',
+      quality: "70:qmax_20"
     });
     return result.secure_url;
   } catch (err) {
