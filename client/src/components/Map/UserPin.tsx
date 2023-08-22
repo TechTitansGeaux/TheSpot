@@ -31,9 +31,7 @@ type Props = {
   lat: number
   lng: number
   friendList: number[]
-  getFriendList: () => void
   pendingFriendList: number[]
-  getPendingFriendList: () => void
   loggedIn: {
     id: number;
     username: string;
@@ -48,7 +46,10 @@ type Props = {
     picture: string;
     googleId: string;
   }
-
+  getPendingFriendList: () => void
+  getFriendList: () => void
+  setZoom: (zoom: number) => void
+  setCenter: (center: object) => void
 };
 
 const addFriendTheme = createTheme({
@@ -127,7 +128,11 @@ const UserPin: React.FC<Props> = (props) => {
 
   return (
     <div>
-      <div className='userDot' id={props.user.username + props.user.id} onClick={togglePopUp} >
+      <div className='userDot' id={props.user.username + props.user.id} onClick={ () => {
+        togglePopUp();
+        props.setCenter({lat: props.lat - 0.005, lng: props.lng});
+        props.setZoom(15);
+      } } >
         <img
           src={props.user.mapIcon}
           alt={props.user.username}
