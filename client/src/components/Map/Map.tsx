@@ -41,13 +41,29 @@ const Map: React.FC<Props> = (props) => {
   const [ friendList, setFriendList ] = useState([]);
   const [ pendingFriendList, setPendingFriendList ] = useState([]);
   const [ businesses, setBusinesses ] = useState([]);
-  const location = useLocation();
 
+
+
+ // sets the coords to op map to
+  const location = useLocation();
   let eventLocation;
   if (location.state) {
     eventLocation = location.state.reelEvent;
   }
 
+  let defaultCenter;
+  if (eventLocation) {
+    const [lat, lng] = splitCoords(eventLocation);
+    defaultCenter = {lat: +lat, lng: +lng}
+  } else {
+    const [lat, lng] = splitCoords(loggedIn.geolocation);
+    defaultCenter = {lat: +lat, lng: +lng}
+  }
+
+  const [ center, setCenter ] = useState(defaultCenter);
+
+
+  // gets users friends
   const getFriendList = () => {
     axios.get('/feed/friendlist')
       .then(({ data }) => {
@@ -63,16 +79,7 @@ const Map: React.FC<Props> = (props) => {
       });
   }
 
-  const getEvents = () => {
-    axios.get('/events/all')
-      .then(({ data }) => {
-        setEvents(data)
-      })
-      .catch((err) => {
-        console.error('Failed to get Events:', err);
-      });
-  }
-
+  // gets users pending friend requests
   const getPendingFriendList = () => {
     axios.get('/friends/pending')
       .then(({ data }) => {
@@ -99,6 +106,19 @@ const Map: React.FC<Props> = (props) => {
       });
   }
 
+
+  // gets all events
+  const getEvents = () => {
+    axios.get('/events/all')
+      .then(({ data }) => {
+        setEvents(data)
+      })
+      .catch((err) => {
+        console.error('Failed to get Events:', err);
+      });
+  }
+
+  // gets all businesses
   const getBusinesses = () => {
     axios.get('/users/businesses')
       .then((res) => {
@@ -129,6 +149,7 @@ const Map: React.FC<Props> = (props) => {
   const [ zoom, setZoom ] = useState(15); // <== must match default zoom
   const [ bounds, setBounds ] = useState(null);
 
+  // clustering points for user pins
   const userPoints = users.filter((user) => {
     if (user.id === loggedIn.id) {
     return true;
@@ -164,6 +185,8 @@ const Map: React.FC<Props> = (props) => {
     }
   })
 
+
+  // clustering points for events pins
   const eventPoints = events.map((event) => {
     const [lat, lng] = splitCoords(event.geolocation);
     return {
@@ -176,7 +199,6 @@ const Map: React.FC<Props> = (props) => {
     }
   })
 
-
   const { clusters: eventClusters } = useSupercluster({
     points: eventPoints,
     bounds,
@@ -187,6 +209,8 @@ const Map: React.FC<Props> = (props) => {
     }
   })
 
+
+    // clustering points for business pins
   const businessPoints = businesses.map((business) => {
     const [lat, lng] = splitCoords(business.geolocation);
     return {
@@ -214,17 +238,7 @@ const Map: React.FC<Props> = (props) => {
     maxZoom: 19,
   }
 
-  let defaultCenter;
-  if (reelEvent) {
-    const [lat, lng] = splitCoords(eventLocation);
-    defaultCenter = {lat: +lat, lng: +lng}
-  } else {
-    const [lat, lng] = splitCoords(loggedIn.geolocation);
-    defaultCenter = {lat: +lat, lng: +lng}
-  }
-  console.log('eventLocation:', eventLocation);
 
-  const [ center, setCenter ] = useState(defaultCenter);
   // const noop = () => {
   //   setRenders(renders + 1);
   //   console.log(renders);
@@ -318,10 +332,10 @@ const Map: React.FC<Props> = (props) => {
           </GoogleMapReact>
         </div>
         <div className='legend'>
-          <div className='userKey'> user </div>
-          <div className='businessKey'> business </div>
-          <div className='eventKey'> event </div>
-          <div className='recenterButton'> recenter </div>
+          <div className='userKey'></div><div className='userKeyText'> USERS </div>
+          <div className='eventKey'></div><div className='eventKeyText'> EVENTS </div>
+          <div className='businessKey'></div><div className='businessKeyText'> BUSINESSES </div>
+          <div className='recenterButton'> RECENTER </div>
         </div>
       </div>
     </div>
