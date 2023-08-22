@@ -4,7 +4,6 @@ import GoogleMapReact from 'google-map-react';
 import useSupercluster from 'use-supercluster';
 import axios from 'axios';
 import UserPin from './UserPin';
-
 import UserClusterPin from './UserClusterPin';
 import EventPin from './EventPin';
 import EventClusterPin from './EventClusterPin';
@@ -236,10 +235,24 @@ const Map: React.FC<Props> = (props) => {
   }
 
 
-  // const noop = () => {
-  //   setRenders(renders + 1);
-  //   console.log(renders);
-  // };
+ const closeAllPopUps = () => {
+  const userPopUps = document.getElementsByClassName('userPopUp');
+  const eventPopUps = document.getElementsByClassName('eventPopUp');
+  const busPopUps = document.getElementsByClassName('businessPopUp');
+
+  Array.prototype.forEach.call( userPopUps, (popUp: any) => {
+    popUp.style.display = 'none';
+  })
+
+  Array.prototype.forEach.call( eventPopUps, (popUp: any) => {
+    popUp.style.display = 'none';
+  })
+
+  Array.prototype.forEach.call( busPopUps, (popUp: any) => {
+    popUp.style.display = 'none';
+  })
+
+ }
 
   return (
     <div className='mapParent'>
@@ -247,10 +260,10 @@ const Map: React.FC<Props> = (props) => {
         <div id='map'>
           <GoogleMapReact
             bootstrapURLKeys={{ key: "AIzaSyAYtb7y6JZ2DxgdIESWJky8NyhWuu_YFVg" }}
-            defaultZoom={15}
+            zoom={zoom}
             center={center}
             options={options}
-            // onDrag={noop}
+            onDrag={closeAllPopUps}
             yesIWantToUseGoogleMapApiInternals
             onGoogleApiLoaded={({ map }) => {
               mapRef.current = map;
@@ -286,6 +299,7 @@ const Map: React.FC<Props> = (props) => {
                 loggedIn={loggedIn}
                 setZoom={setZoom}
                 setCenter={setCenter}
+                closeAllPopUps={closeAllPopUps}
               />;
               }
             })
@@ -303,6 +317,9 @@ const Map: React.FC<Props> = (props) => {
                 key={'business' + i}
                 lat={lat}
                 lng={lng}
+                setZoom={setZoom}
+                setCenter={setCenter}
+                closeAllPopUps={closeAllPopUps}
               />;
               }
             })
@@ -322,6 +339,9 @@ const Map: React.FC<Props> = (props) => {
                   lat={+lat}
                   lng={+lng}
                   key={'event' + i}
+                  setZoom={setZoom}
+                  setCenter={setCenter}
+                  closeAllPopUps={closeAllPopUps}
                 />
               }
             })
@@ -346,7 +366,3 @@ const Map: React.FC<Props> = (props) => {
 };
 
 export default Map;
-
-
-
-

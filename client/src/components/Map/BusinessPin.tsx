@@ -22,22 +22,29 @@ type Props = {
   }
   lat: number
   lng: number
-
+  setZoom: (zoom: number) => void
+  setCenter: (center: object) => void
+  closeAllPopUps: () => void
 }
 
-const BusinessPin: React.FC<Props> = ({ business }) => {
+const BusinessPin: React.FC<Props> = ({ business, setCenter, setZoom, lat, lng, closeAllPopUps}) => {
   const togglePopUp = () => {
     const box = document.getElementById('popUp' + business.username + business.id)
     if (box.style.display === 'block') {
       box.style.display = 'none';
     } else {
+      closeAllPopUps();
       box.style.display = 'block';
     }
   }
 
   return (
     <div>
-      <div className='businessDot' id={business.username + business.id} onClick={togglePopUp} >
+      <div className='businessDot' id={business.username + business.id} onClick={ () => {
+        setCenter({lat: lat - 0.005, lng: lng});
+        setZoom(15);
+        togglePopUp();
+      }} >
         <img
           src={business.mapIcon}
           alt={business.username}
