@@ -42,7 +42,11 @@ const Map: React.FC<Props> = (props) => {
   const [ pendingFriendList, setPendingFriendList ] = useState([]);
   const [ businesses, setBusinesses ] = useState([]);
 
-
+  // function to split coordinates into array so lat and lng can easily be destructured
+  const splitCoords = (coords: string) => {
+    const arr = coords.split(',');
+    return arr;
+  }
 
  // sets the coords to op map to
   const location = useLocation();
@@ -137,13 +141,6 @@ const Map: React.FC<Props> = (props) => {
     getBusinesses();
   }, [])
 
-
-  // function to split coordinates into array so lat and lng can easily be destructured
-  const splitCoords = (coords: string) => {
-    const arr = coords.split(',');
-    return arr;
-  }
-
   // track map boundaries and zoom level
   const mapRef = useRef();
   const [ zoom, setZoom ] = useState(15); // <== must match default zoom
@@ -210,7 +207,7 @@ const Map: React.FC<Props> = (props) => {
   })
 
 
-    // clustering points for business pins
+  // clustering points for business pins
   const businessPoints = businesses.map((business) => {
     const [lat, lng] = splitCoords(business.geolocation);
     return {
@@ -335,7 +332,12 @@ const Map: React.FC<Props> = (props) => {
           <div className='userKey'></div><div className='userKeyText'> USERS </div>
           <div className='eventKey'></div><div className='eventKeyText'> EVENTS </div>
           <div className='businessKey'></div><div className='businessKeyText'> BUSINESSES </div>
-          <div className='recenterButton'> RECENTER </div>
+          <div className='recenterButton' onClick={ () => {
+            const [lat, lng] = splitCoords(loggedIn.geolocation);
+            setZoom(15);
+            setCenter({ lat: +lat, lng: +lng});
+            }
+          } > RECENTER </div>
         </div>
       </div>
     </div>
