@@ -1,4 +1,9 @@
 import * as React from 'react';
+import dayjs from 'dayjs';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
+dayjs.extend(localizedFormat)
+
+dayjs().format('L LT')
 
 type Props = {
   event: {
@@ -17,6 +22,14 @@ type Props = {
   }
 }
 const PastEvent: React.FC<Props> = ({event}) => {
+
+  let eventDate = dayjs(event.date + event.time).format('MM/DD/YYYY, h:mm A');
+  const eventTime = eventDate.slice(eventDate.indexOf(' '))
+  eventDate = eventDate.slice(0, eventDate.indexOf(','));
+
+  const endDate = dayjs(event.date + event.endTime).format('MM/DD/YYYY, h:mm A');
+  const eventEndTime = endDate.slice(endDate.indexOf(' '))
+
   return (
     <div className='column-md-2'>
       <div className='eventCard'>
@@ -25,11 +38,11 @@ const PastEvent: React.FC<Props> = ({event}) => {
             {event.name}
           </h3>
           <br></br>
-          Date: {event.date}
+          Date: {eventDate}
           <br></br>
-          Began: {event.time}
+          Began: {eventTime}
           <br></br>
-          Ended: {event.endTime}
+          Ended: {eventEndTime}
           <br></br>
           RSVPs: {event.rsvp_count}
           <br></br>
