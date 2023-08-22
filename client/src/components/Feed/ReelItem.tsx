@@ -22,6 +22,8 @@ import Likes from './Likes';
 import './feed.css';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
+import { Link } from 'react-router-dom';
+import IconButton from '@mui/material/IconButton';
 
 dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat)
@@ -381,7 +383,17 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                           },
                         }}
                       >
-                        <LocationOnIcon color='primary' />
+                       <IconButton
+                        sx={{
+                            minHeight: '1rem',
+                            minWidth: '1rem',
+                            }}
+                            component={Link}
+                            to={'/Map'}
+                            state={{reelEvent: reel.Event.geolocation, loggedIn: user}}
+                            >
+                            <LocationOnIcon color='primary' />
+                        </IconButton>
                       </Tooltip>
                     }
                     showLabel={false}

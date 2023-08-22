@@ -217,15 +217,23 @@ const Friendships = sequelize.define(
 // Friendships.belongsTo(Users, { as: 'accepter' });
 
 // FOREIGN Keys UserId AND EventId to Reels
-Users.hasMany(Reels);
+Users.hasMany(Reels, {
+  onDelete: 'CASCADE'
+});
 Reels.belongsTo(Users);
-Events.hasMany(Reels);
+Events.hasMany(Reels, {
+  onDelete: 'CASCADE'
+});
 Reels.belongsTo(Events);
 
 // FOREIGN Keys PlaceId AND UserId to Events
-Places.hasMany(Events);
+Places.hasMany(Events, {
+  onDelete: 'CASCADE'
+});
 Events.belongsTo(Places);
-Users.hasMany(Events);
+Users.hasMany(Events, {
+  onDelete: 'CASCADE'
+});
 Events.belongsTo(Users);
 
 // FOREIGN Keys ReelId AND UserId to Likes
@@ -233,13 +241,19 @@ Reels.hasMany(Likes, {
   onDelete: 'CASCADE'
 });
 Likes.belongsTo(Reels);
-Users.hasMany(Likes);
+Users.hasMany(Likes, {
+  onDelete: 'CASCADE'
+});
 Likes.belongsTo(Users);
 
 // FOREIGN Keys UserId AND EventId to RSVPs
-Users.hasMany(RSVPs);
+Users.hasMany(RSVPs, {
+  onDelete: 'CASCADE'
+});
 RSVPs.belongsTo(Users);
-Events.hasMany(RSVPs);
+Events.hasMany(RSVPs, {
+  onDelete: 'CASCADE'
+});
 RSVPs.belongsTo(Events);
 
 module.exports = {

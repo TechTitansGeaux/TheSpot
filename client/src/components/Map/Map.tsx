@@ -11,6 +11,7 @@ import EventClusterPin from './EventClusterPin';
 import BusinessPin from './BusinessPin';
 import BusinessClusterPin from './BusinessClusterPin'
 import EventRadialMarker from './EventRadialMarker'
+import { useLocation } from "react-router-dom";
 
 type Props =  {
   loggedIn: {
@@ -27,11 +28,12 @@ type Props =  {
     picture: string;
     googleId: string;
   }
+  reelEvent: any;
 }
 
 
 const Map: React.FC<Props> = (props) => {
-  const { loggedIn } = props;
+  const { loggedIn, reelEvent } = props;
 
   const [ renders, setRenders ] = useState(0)
   const [ users, setUsers ] = useState([]);
@@ -39,6 +41,8 @@ const Map: React.FC<Props> = (props) => {
   const [ friendList, setFriendList ] = useState([]);
   const [ pendingFriendList, setPendingFriendList ] = useState([]);
   const [ businesses, setBusinesses ] = useState([]);
+  const location = useLocation();
+  const reelItemState = location.state;
 
   const getFriendList = () => {
     axios.get('/feed/friendlist')
@@ -214,7 +218,8 @@ const Map: React.FC<Props> = (props) => {
   //   setRenders(renders + 1);
   //   console.log(renders);
   // };
-
+  // console.log('props:', props);
+  // console.log('reelItemState:', reelItemState);
   return (
     <div className='mapParent'>
       <div className='mapChild'>

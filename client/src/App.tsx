@@ -132,7 +132,7 @@ const App = () => {
             path='/CreateReel'
             element={<CreateReel user={user} />}
           ></Route>
-          <Route path='/Map' element={<Map loggedIn={user} />}></Route>
+          <Route path='/Map' element={<Map reelEvent={null} loggedIn={user} />}></Route>
         </Route>
       </Routes>
     </BrowserRouter>
