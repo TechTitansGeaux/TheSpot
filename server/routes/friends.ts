@@ -1,6 +1,6 @@
 const express = require('express');
 const friendRouter = express.Router();
-const { Friendships, Reels, Users, Events } = require('../db/index');
+const { Friendships } = require('../db/index');
 
 // GET request for all friendships
 friendRouter.get('/', (req: any, res: any) => {
