@@ -249,6 +249,8 @@ const Map: React.FC<Props> = (props) => {
                 return <UserClusterPin amount={pointCount} key={'userCluster' + i} lat={lat} lng={lng}/>;
               } else {
                 return <UserPin
+                setZoom={setZoom}
+                setCenter={setCenter}
                 getPendingFriendList={getPendingFriendList}
                 pendingFriendList={pendingFriendList}
                 getFriendList={getFriendList}
@@ -306,9 +308,9 @@ const Map: React.FC<Props> = (props) => {
             setCenter(center)
             setZoom(15);
         } }>
-          <div className='userKey'> user </div>
-          <div className='businessKey'> business </div>
-          <div className='eventKey'> event </div>
+          <div className='userKey'></div><div className='userKeyText'>{' user  '}</div>
+          <div className='eventKey'></div><div className='eventKeyText'>{' event '}</div>
+          <div className='businessKey'></div><div className='businessKeyText'> business </div>
           <div className='recenterButton'> recenter </div>
         </div>
       </div>
