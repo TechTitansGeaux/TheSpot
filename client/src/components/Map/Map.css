@@ -37,7 +37,8 @@
   cursor: pointer;
   font-size: 30px;
   text-align: center;
-  overflow-y: auto;
+  overflow-y: hidden; /* Hide vertical scrollbar */
+  overflow-x: hidden; /* Hide horizontal scrollbar */
 }
 
 .UserClusterPin {
@@ -157,7 +158,8 @@
   cursor: pointer;
   font-size: 30px;
   text-align: center;
-  overflow-y: auto;
+  overflow-y: hidden; /* Hide vertical scrollbar */
+  overflow-x: hidden; /* Hide horizontal scrollbar */
 }
 
 .businessPopUp {
