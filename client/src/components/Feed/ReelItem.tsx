@@ -307,6 +307,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                   )}
                 {reel.UserId === user.id && (
                   <div className='friend-request'>
+                      <div>
                     <Tooltip
                       title='Delete Reel'
                       TransitionComponent={Zoom}
@@ -321,13 +322,13 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                         },
                       }}
                     >
-                      <div>
                         <button
                           className='delete-btn'
                           onClick={handleClickOpen}
                         >
                           🗑️
                         </button>
+                        </Tooltip>
                         <Dialog
                           open={open}
                           onClose={handleClose}
@@ -350,7 +351,6 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                           </DialogActions>
                         </Dialog>
                       </div>
-                    </Tooltip>
                   </div>
                 )}
               </>
