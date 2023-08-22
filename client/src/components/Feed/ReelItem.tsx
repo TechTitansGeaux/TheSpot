@@ -119,6 +119,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
 
  const getLikes = () => {
    const likes: any = []; // user's reels that have been liked
+
    if (user) {
      axios
        .get('/likes/likes')
@@ -127,14 +128,13 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
          for (let i = 0; i < response.data.length; i++) {
            for (let j = 0; j < reels.length; j++) {
              if (response.data[i].ReelId === reels[j].id) {
-               likes.push(
-                 response.data[i].ReelId,
-               );
+               likes.push( response.data[i].ReelId );
              }
            }
          }
          setLikesArr(likes);
         //  console.log('likes array:', likesArr);
+
 
        })
        .catch((err) => {
@@ -145,7 +145,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
 
  useEffect(() => {
    getLikes();
- }, [user]);
+ }, []);
 
   // GET request get friendList from Friendship table in DB // set to state variable
   useEffect(() => {
@@ -196,7 +196,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   }, []);
 
   // console.log('(now likes) above return ==>', likes)
-  // console.log('likesArr (now likes) above return ==>', likesArr)
+  console.log('likesArr (now likes) above return ==>', likesArr)
 
   return (
     <div>
@@ -350,10 +350,15 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                           reel={reel}
                           user={user}
                           likes={likes}
+                          likesBool={likesArr}
                         />
-                        {reel.like_count >= 0 && (
+                        {reel.like_count >= 0 ? (
                           <p className='like-counter'>
                             {reel.like_count + likeTotal}
+                          </p>
+                        ) : (
+                            <p className='like-counter'>
+                            {reel.like_count}
                           </p>
                         )}
                       </div>

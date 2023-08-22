@@ -1,5 +1,11 @@
 .like-entry {
   font-family: var(--title-font);
-  font-size: var(--lg-font);
+  font-size: var(--md-font);
   color: var(--yellow);
+  margin: .5em 0;
+  align-items: center;
+}
+
+.like-name {
+  color: var(--white);
 }

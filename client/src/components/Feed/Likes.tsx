@@ -26,6 +26,7 @@ type Props = {
   handleRemoveLike: any;
   user: User;
   likes: any[];
+  likesBool: number[];
 };
 
 const Likes: React.FC<Props> = ({
@@ -33,32 +34,44 @@ const Likes: React.FC<Props> = ({
   handleAddLike,
   reel,
   likes,
+  likesBool,
   user
 }) => {
-  const [clicked, setClicked] = useState(false);
+  const [clicked, setClicked] = useState(false); // how to make this conditional?
 
+  // likesBool.includes(reel.id) was default in useState line 40 // likes.length === 0
+  // Likes is [UserId, ReelId] Tuple from getLikes() axios request
 
   const handleLikeClick = (reelId: number) => {
     if (!clicked) {
-      setClicked(true);
+      setClicked(!clicked);
       handleAddLike(reelId);
     } else {
-      setClicked(false);
+      setClicked(!clicked);
       handleRemoveLike(reelId);
     }
   };
 
-  console.log('likes from likes.tsx', likes);
-  console.log('reel from likes.tsx', reel);
+    const handlePersistClick = (reelId: number) => {
+      if (!clicked) {
+        setClicked(!clicked);
+        handleAddLike(reelId);
+      } else {
+        setClicked(!clicked);
+        handleRemoveLike(reelId);
+      }
+    };
+
   return (
     <React.Fragment>
-      { (likes.includes(reel.id) || clicked) ? (
+      {!clicked && (
+        <FavoriteIcon onClick={() => handleLikeClick(reel.id)} />
+      )}
+      {clicked && (
         <FavoriteIcon
           color='secondary'
           onClick={() => handleLikeClick(reel.id)}
         />
-      ) : (
-        <FavoriteIcon onClick={() => handleLikeClick(reel.id)} />
       )}
     </React.Fragment>
   );

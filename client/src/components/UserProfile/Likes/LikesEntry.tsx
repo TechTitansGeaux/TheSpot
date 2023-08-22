@@ -45,9 +45,12 @@ const LikesEntry: React.FC<Props> = ({user, allUsers, like}) => {
   }, '');
 
   return (
+    <>
     <li className='like-entry'>
-      {`${likeName} liked your reel`}
-    </li>
+      <span className='like-name'>{likeName}</span>{` liked your reel`}
+      </li>
+      <hr></hr>
+    </>
   );
 };
 

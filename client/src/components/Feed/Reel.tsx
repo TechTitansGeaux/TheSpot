@@ -161,7 +161,7 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
       .then((data) => {
         // console.log('Likes Updated AXIOS', data);
         setLikes((prev) => [...prev, reelId]);
-        setLikeTotal(likeTotal + 1);
+        setLikeTotal(prev => prev + 1);
       })
       .catch((err) => console.error('Like AXIOS route Error', err));
   };
@@ -177,7 +177,7 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
           setLikes((prev) => prev.splice(foundLike, 1));
         }
         setLikes((prev) => prev.splice(foundLike, 1));
-        setLikeTotal(likeTotal - 1);
+        setLikeTotal(prev => prev - 1);
       })
       .catch((err) => console.error('Like AXIOS route Error', err));
   };
@@ -195,7 +195,7 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
               }
             }
           }
-          setLikesPersist(likes);
+          setLikes(likes);
           // for (let i = 0; i < response.data.length; i++) {
           //   if (user?.id === response.data[i].UserId) {
           //     setLikes((prev) => [...prev, response.data[i].ReelId]);
@@ -210,7 +210,7 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
 
   useEffect(() => {
     getLikes();
-  }, [user]);
+  }, [likeTotal]);
 
   // console.log('likes from reel.tsx', likes);
   // console.log('likes persist from reel.tsx', likesPersist);
