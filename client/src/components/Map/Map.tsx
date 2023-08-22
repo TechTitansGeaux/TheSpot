@@ -35,14 +35,18 @@ type Props =  {
 const Map: React.FC<Props> = (props) => {
   const { loggedIn, reelEvent } = props;
 
-  // const [ renders, setRenders ] = useState(0)
+  const [ renders, setRenders ] = useState(0)
   const [ users, setUsers ] = useState([]);
   const [ events, setEvents ] = useState([])
   const [ friendList, setFriendList ] = useState([]);
   const [ pendingFriendList, setPendingFriendList ] = useState([]);
   const [ businesses, setBusinesses ] = useState([]);
   const location = useLocation();
-  const reelItemState = location.state;
+
+  let eventLocation;
+  if (location.state) {
+    eventLocation = location.state.reelEvent;
+  }
 
   const getFriendList = () => {
     axios.get('/feed/friendlist')
@@ -210,23 +214,29 @@ const Map: React.FC<Props> = (props) => {
     maxZoom: 19,
   }
 
-  const [lat, lng] = splitCoords(loggedIn.geolocation);
-  const defaultCenter = {lat: +lat, lng: +lng}
-  const [ center, setCenter ] = useState(defaultCenter);
+  let defaultCenter;
+  if (reelEvent) {
+    const [lat, lng] = splitCoords(eventLocation);
+    defaultCenter = {lat: +lat, lng: +lng}
+  } else {
+    const [lat, lng] = splitCoords(loggedIn.geolocation);
+    defaultCenter = {lat: +lat, lng: +lng}
+  }
+  console.log('eventLocation:', eventLocation);
 
+  const [ center, setCenter ] = useState(defaultCenter);
   // const noop = () => {
   //   setRenders(renders + 1);
   //   console.log(renders);
   // };
-  // console.log('props:', props);
-  // console.log('reelItemState:', reelItemState);
+
   return (
     <div className='mapParent'>
       <div className='mapChild'>
         <div id='map'>
           <GoogleMapReact
             bootstrapURLKeys={{ key: "AIzaSyAYtb7y6JZ2DxgdIESWJky8NyhWuu_YFVg" }}
-            zoom={zoom}
+            defaultZoom={15}
             center={center}
             options={options}
             // onDrag={noop}
@@ -254,8 +264,6 @@ const Map: React.FC<Props> = (props) => {
                 return <UserClusterPin amount={pointCount} key={'userCluster' + i} lat={lat} lng={lng}/>;
               } else {
                 return <UserPin
-                setZoom={setZoom}
-                setCenter={setCenter}
                 getPendingFriendList={getPendingFriendList}
                 pendingFriendList={pendingFriendList}
                 getFriendList={getFriendList}
@@ -265,6 +273,8 @@ const Map: React.FC<Props> = (props) => {
                 lat={lat}
                 lng={lng}
                 loggedIn={loggedIn}
+                setZoom={setZoom}
+                setCenter={setCenter}
               />;
               }
             })
@@ -307,15 +317,10 @@ const Map: React.FC<Props> = (props) => {
           }
           </GoogleMapReact>
         </div>
-        <div className='legend' onClick={ () => {
-            const [lat, lng] = splitCoords(loggedIn.geolocation);
-            const center = {lat: +lat, lng: +lng}
-            setCenter(center)
-            setZoom(15);
-        } }>
-          <div className='userKey'></div><div className='userKeyText'>{' user  '}</div>
-          <div className='eventKey'></div><div className='eventKeyText'>{' event '}</div>
-          <div className='businessKey'></div><div className='businessKeyText'> business </div>
+        <div className='legend'>
+          <div className='userKey'> user </div>
+          <div className='businessKey'> business </div>
+          <div className='eventKey'> event </div>
           <div className='recenterButton'> recenter </div>
         </div>
       </div>
