@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 type Props = {
   event: {
     id: number,
@@ -12,24 +11,29 @@ type Props = {
   }
   lat: number
   lng: number
+  setZoom: (zoom: number) => void
+  setCenter: (center: object) => void
+  closeAllPopUps: () => void
 }
 
-
-const Event: React.FC<Props> = ({ event }) => {
+const Event: React.FC<Props> = ({ event, setCenter, setZoom, lat, lng, closeAllPopUps }) => {
   const togglePopUp = () => {
     const box = document.getElementById('popUp' + event.name + event.id)
     if (box.style.display === 'block') {
       box.style.display = 'none';
     } else {
+      closeAllPopUps();
       box.style.display = 'block';
     }
   }
 
-
-
   return (
     <div>
-      <div className='eventDot' id={event.name + event.id} onClick={togglePopUp}>
+      <div className='eventDot' id={event.name + event.id} onClick={ () => {
+        setZoom(15);
+        setCenter({lat: lat - 0.005, lng: lng});
+        togglePopUp();
+      }}>
         <div style={{ marginTop: '12.5px', fontSize: '20px', color: 'black' }}>
           {event.rsvp_count}
         </div>

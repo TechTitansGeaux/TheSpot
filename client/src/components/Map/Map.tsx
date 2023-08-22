@@ -4,7 +4,6 @@ import GoogleMapReact from 'google-map-react';
 import useSupercluster from 'use-supercluster';
 import axios from 'axios';
 import UserPin from './UserPin';
-
 import UserClusterPin from './UserClusterPin';
 import EventPin from './EventPin';
 import EventClusterPin from './EventClusterPin';
@@ -42,7 +41,11 @@ const Map: React.FC<Props> = (props) => {
   const [ pendingFriendList, setPendingFriendList ] = useState([]);
   const [ businesses, setBusinesses ] = useState([]);
 
-
+  // function to split coordinates into array so lat and lng can easily be destructured
+  const splitCoords = (coords: string) => {
+    const arr = coords.split(',');
+    return arr;
+  }
 
  // sets the coords to op map to
   const location = useLocation();
@@ -137,13 +140,6 @@ const Map: React.FC<Props> = (props) => {
     getBusinesses();
   }, [])
 
-
-  // function to split coordinates into array so lat and lng can easily be destructured
-  const splitCoords = (coords: string) => {
-    const arr = coords.split(',');
-    return arr;
-  }
-
   // track map boundaries and zoom level
   const mapRef = useRef();
   const [ zoom, setZoom ] = useState(15); // <== must match default zoom
@@ -210,7 +206,7 @@ const Map: React.FC<Props> = (props) => {
   })
 
 
-    // clustering points for business pins
+  // clustering points for business pins
   const businessPoints = businesses.map((business) => {
     const [lat, lng] = splitCoords(business.geolocation);
     return {
@@ -239,10 +235,24 @@ const Map: React.FC<Props> = (props) => {
   }
 
 
-  // const noop = () => {
-  //   setRenders(renders + 1);
-  //   console.log(renders);
-  // };
+ const closeAllPopUps = () => {
+  const userPopUps = document.getElementsByClassName('userPopUp');
+  const eventPopUps = document.getElementsByClassName('eventPopUp');
+  const busPopUps = document.getElementsByClassName('businessPopUp');
+
+  Array.prototype.forEach.call( userPopUps, (popUp: any) => {
+    popUp.style.display = 'none';
+  })
+
+  Array.prototype.forEach.call( eventPopUps, (popUp: any) => {
+    popUp.style.display = 'none';
+  })
+
+  Array.prototype.forEach.call( busPopUps, (popUp: any) => {
+    popUp.style.display = 'none';
+  })
+
+ }
 
   return (
     <div className='mapParent'>
@@ -250,10 +260,10 @@ const Map: React.FC<Props> = (props) => {
         <div id='map'>
           <GoogleMapReact
             bootstrapURLKeys={{ key: "AIzaSyAYtb7y6JZ2DxgdIESWJky8NyhWuu_YFVg" }}
-            defaultZoom={15}
+            zoom={zoom}
             center={center}
             options={options}
-            // onDrag={noop}
+            onDrag={closeAllPopUps}
             yesIWantToUseGoogleMapApiInternals
             onGoogleApiLoaded={({ map }) => {
               mapRef.current = map;
@@ -289,6 +299,7 @@ const Map: React.FC<Props> = (props) => {
                 loggedIn={loggedIn}
                 setZoom={setZoom}
                 setCenter={setCenter}
+                closeAllPopUps={closeAllPopUps}
               />;
               }
             })
@@ -306,6 +317,9 @@ const Map: React.FC<Props> = (props) => {
                 key={'business' + i}
                 lat={lat}
                 lng={lng}
+                setZoom={setZoom}
+                setCenter={setCenter}
+                closeAllPopUps={closeAllPopUps}
               />;
               }
             })
@@ -325,6 +339,9 @@ const Map: React.FC<Props> = (props) => {
                   lat={+lat}
                   lng={+lng}
                   key={'event' + i}
+                  setZoom={setZoom}
+                  setCenter={setCenter}
+                  closeAllPopUps={closeAllPopUps}
                 />
               }
             })
@@ -335,7 +352,12 @@ const Map: React.FC<Props> = (props) => {
           <div className='userKey'></div><div className='userKeyText'> USERS </div>
           <div className='eventKey'></div><div className='eventKeyText'> EVENTS </div>
           <div className='businessKey'></div><div className='businessKeyText'> BUSINESSES </div>
-          <div className='recenterButton'> RECENTER </div>
+          <div className='recenterButton' onClick={ () => {
+            const [lat, lng] = splitCoords(loggedIn.geolocation);
+            setZoom(15);
+            setCenter({ lat: +lat, lng: +lng});
+            }
+          } > RECENTER </div>
         </div>
       </div>
     </div>
@@ -344,7 +366,3 @@ const Map: React.FC<Props> = (props) => {
 };
 
 export default Map;
-
-
-
-
