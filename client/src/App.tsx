@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -23,6 +24,7 @@ import { setAuthUser, setIsAuthenticated, setFontSize } from './store/appSlice';
 import { RootState } from './store/store';
 import { useTheme } from '@mui/material/styles';
 import { AnyARecord } from 'dns';
+import socketIOClient from 'socket.io-client';
 
 type User = {
   id: number;
@@ -85,6 +87,24 @@ const App = () => {
       console.error('error in getAllUsers App.jsx', error);
     }
   }
+
+    // watch for geolocation updates
+    useEffect(() => {
+      const socket = socketIOClient(`${process.env.HOST}`); // Connect to your server
+
+      socket.on('userGeolocationUpdate', (userId, newGeolocation) => {
+        // Update the user's geolocation in the users array based on userId
+        setAllUsers((prevUsers: any) => {
+          return prevUsers.map((user: any) =>
+            user.id === userId ? { ...user, geolocation: newGeolocation } : user
+          );
+        });
+      });
+
+      return () => {
+        socket.disconnect(); // Disconnect when the component unmounts
+      };
+    }, []);
 
 
   return (
