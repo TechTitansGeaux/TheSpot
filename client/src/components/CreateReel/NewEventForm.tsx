@@ -92,48 +92,37 @@ const createEvent = () => {
        id='event-form'
        className='popUpEventForm'
        >
-         <label
-         htmlFor='eventName'>
-         Event name:
-         </label>
-         <br></br>
          <input
+         className='eventNameInput'
+         placeholder='Event Name'
          id='eventName'
          value={eventName}
          onChange={handleEventName}
          type='text'>
          </input>
          <br></br>
-         <label
-         htmlFor='eventDate'>
-           Date and time:
-         </label>
          <br></br>
+          Date: &#160;
          <input
+         className='eventDetailInput'
          id='eventDate'
          value={eventDate}
          onChange={handleEventDate}
          type="date">
          </input>
          <br></br>
-         <label
-         htmlFor='eventTime'>
-           Time:
-         </label>
-         <br></br>
+          Begins: &#160;
          <input
+         className='eventDetailInput'
          id='eventTime'
          value={eventTime}
          onChange={handleEventTime}
          type='time'>
          </input>
          <br></br>
-         <label
-         htmlFor='endTime'>
-           Time:
-         </label>
-         <br></br>
+         Ends: &#160;
          <input
+         className='eventDetailInput'
          id='endTime'
          value={endTime}
          onChange={handleEndTime}
@@ -144,7 +133,7 @@ const createEvent = () => {
          htmlFor='twentyOne'>
          21+
          </label>
-         <br></br>
+         &#160;
          <input
          id='twentyOne'
          type='checkbox'
@@ -152,11 +141,15 @@ const createEvent = () => {
          onChange={handleTwentyOne}>
          </input>
          <br></br>
+         <br></br>
+         <div style={{alignItems: 'center'}}>
          <button
+         className='save-event-detail-button'
          type='submit'
          onClick={createEvent}>
            Save
          </button>
+         </div>
      </div>
    )
  };

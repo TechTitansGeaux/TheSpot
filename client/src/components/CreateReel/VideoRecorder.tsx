@@ -318,7 +318,7 @@ console.log(user.geolocation, '<-----geolo')
             className='webcam'
             height={700}
             width={700}
-            audio={true}
+            // audio={true}
             mirrored={false}
             ref={webcamRef}
             videoConstraints={videoConstraints}
