@@ -42,7 +42,11 @@ const Map: React.FC<Props> = (props) => {
   const [ pendingFriendList, setPendingFriendList ] = useState([]);
   const [ businesses, setBusinesses ] = useState([]);
   const location = useLocation();
-  const eventLocation = location.state.reelEvent;
+
+  let eventLocation;
+  if (location.state) {
+    eventLocation = location.state.reelEvent;
+  }
 
   const getFriendList = () => {
     axios.get('/feed/friendlist')
@@ -211,20 +215,21 @@ const Map: React.FC<Props> = (props) => {
   }
 
   let defaultCenter;
-  if (eventLocation) {
+  if (reelEvent) {
     const [lat, lng] = splitCoords(eventLocation);
     defaultCenter = {lat: +lat, lng: +lng}
   } else {
     const [lat, lng] = splitCoords(loggedIn.geolocation);
     defaultCenter = {lat: +lat, lng: +lng}
   }
+  console.log('eventLocation:', eventLocation);
 
   const [ center, setCenter ] = useState(defaultCenter);
   // const noop = () => {
   //   setRenders(renders + 1);
   //   console.log(renders);
   // };
-  console.log('eventLocation:', eventLocation);
+
   return (
     <div className='mapParent'>
       <div className='mapChild'>
