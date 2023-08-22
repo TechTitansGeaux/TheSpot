@@ -231,6 +231,13 @@ const Followers = sequelize.define(
         key: 'id',
       },
     },
+    followedUser_id: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: Users,
+        key: 'id',
+      },
+    },
   },
   { timestamps: true }
 );
