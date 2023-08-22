@@ -9,6 +9,7 @@ const {
   Likes,
   Notifications,
   Friendships,
+  Followers
 } = require('./index.ts');
 // import { db, Users } from './index.ts'
 db.options.logging = false;
@@ -79,6 +80,13 @@ const seedSqlize = () => {
       console.log(
         '\x1b[36m',
         "\nDatabase (MySQL): 'Friendships' table successfully created!"
+      )
+    )
+    .then(() => Followers.sync({ force: true }))
+    .then(() =>
+      console.log(
+        '\x1b[36m',
+        "\nDatabase (MySQL): 'Followers' table successfully created!"
       )
     )
     .then(() =>
