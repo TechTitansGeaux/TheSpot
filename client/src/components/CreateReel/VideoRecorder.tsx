@@ -11,6 +11,7 @@ import { motion } from 'framer-motion';
 import { useNavigate  } from 'react-router-dom';
 import Tooltip from '@mui/material/Tooltip';
 import EventNoteIcon from '@mui/icons-material/EventNote';
+import Fab from '@mui/material/Fab';
 
 type Props = {
   currentEvent: {
@@ -318,12 +319,11 @@ console.log(user.geolocation, '<-----geolo')
             className='webcam'
             height={700}
             width={700}
-            // audio={true}
+            audio={true}
             mirrored={false}
             ref={webcamRef}
             videoConstraints={videoConstraints}
             muted={true}
-            //
           />
         </div>
       )}
