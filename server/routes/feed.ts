@@ -123,7 +123,7 @@ feedRouter.get('/friendlist/pending', (req: any, res: any) => {
     });
 });
 
-// delete a reel REMEMBER TO DESTROY THE LIKES ENTRIES TOO
+// delete a reel. also cascades and deletes likes rows with same ReelId
 feedRouter.delete('/delete/:id', (req: any, res: any) => {
   const { id } = req.params; // id is ReelId in Likes table
 
@@ -132,13 +132,6 @@ feedRouter.delete('/delete/:id', (req: any, res: any) => {
       id: id
     }
   })
-    // .then((response: any) => {
-    //   Likes.destroy({
-    //     where: {
-    //       ReelId: null,
-    //     },
-    //   })
-    // })
     .then((response: any) => {
       if (response) {
         // console.log('Reels deleted:', response);
