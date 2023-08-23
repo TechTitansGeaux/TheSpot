@@ -87,6 +87,8 @@ type Props = {
   handleRemoveLike: any;
   likes: any;
   likeTotal: number;
+  muted: boolean;
+  handleToggleMute: () => void;
 };
 
 const theme = createTheme({
@@ -117,6 +119,8 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   handleRemoveLike,
   likes,
   likeTotal,
+  muted,
+  handleToggleMute
 }) {
   const theme = useTheme();
   // REFERENCE VIDEO HTML element in JSX element // Uses a ref to hold an array of generated refs, and assign them when mapping.
@@ -131,11 +135,6 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
 
   // Alert Dialog 'are you sure you want to delete this reel?'
   const [open, setOpen] = React.useState(false);
-  // state of audio on reels
-  const [muted, setMuted] = useState(true);
-
-  // toggle reel audio
-  const handleToggleMute = () => setMuted(current => !current);
 
 
   const handleClickOpen = () => {
@@ -216,6 +215,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
           // else video is out of view PAUSE video and don't Loop
           myRef.current.play();
           setLoop(true);
+          // setMuted(muted)
         }
       });
     });
