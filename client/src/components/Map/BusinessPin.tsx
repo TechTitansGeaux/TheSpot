@@ -27,13 +27,12 @@ type Props = {
   closeAllPopUps: () => void
 }
 
-const BusinessPin: React.FC<Props> = ({ business, setCenter, setZoom, lat, lng, closeAllPopUps}) => {
+const BusinessPin: React.FC<Props> = ({ business, setCenter, setZoom, lat, lng }) => {
   const togglePopUp = () => {
     const box = document.getElementById('popUp' + business.username + business.id)
     if (box.style.display === 'block') {
       box.style.display = 'none';
     } else {
-      closeAllPopUps();
       box.style.display = 'block';
     }
   }

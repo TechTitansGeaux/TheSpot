@@ -22,7 +22,6 @@ const Event: React.FC<Props> = ({ event, setCenter, setZoom, lat, lng, closeAllP
     if (box.style.display === 'block') {
       box.style.display = 'none';
     } else {
-      closeAllPopUps();
       box.style.display = 'block';
     }
   }

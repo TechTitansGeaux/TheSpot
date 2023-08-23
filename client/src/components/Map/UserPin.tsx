@@ -90,7 +90,6 @@ const UserPin: React.FC<Props> = (props) => {
     if (box.style.display === 'block') {
       box.style.display = 'none';
     } else {
-      props.closeAllPopUps();
       box.style.display = 'block';
     }
   }
