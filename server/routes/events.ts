@@ -121,7 +121,7 @@ eventRouter.delete('/delete/:id', async (req: any, res: any) => {
     where: { id }
   })
     .then((resObj: any) => {
-      console.log(resObj, '<----res from delete event')
+      // console.log(resObj, '<----res from delete event')
       res.sendStatus(200);
     })
     .catch((err: any) => {

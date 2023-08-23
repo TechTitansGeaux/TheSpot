@@ -57,6 +57,8 @@ type Event = {
   name: string;
   rsvp_count: number;
   date: string;
+  time: string;
+  endTime: string;
   geolocation: string;
   twenty_one: boolean;
   createdAt: string;
@@ -128,14 +130,58 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   const [loop, setLoop] = useState(false);
   const [stayDisabled, setStayDisabled] = useState([]);
   const [likesArr, setLikesArr] = useState([]); // user's own reels that have been liked FROM likes table
+  // Alert Dialog 'are you sure you want to delete this reel?'
+  const [open, setOpen] = React.useState(false);
+  // state of whether event is already over
+  const [pastEvent, setPastEvent] = useState('');
 
   // event info to display on info icon hover: name, date, time
   const eventName = reel.Event.name;
   const eventDate = dayjs(reel.Event.date + reel.Event.time).format('ddd, MMM D, h:mm A');
 
-  // Alert Dialog 'are you sure you want to delete this reel?'
-  const [open, setOpen] = React.useState(false);
+  // check if event is over
+  const checkEventTime = () => {
 
+    // declare raw event time
+    const rawEventTime = reel.Event.date + ' ' + reel.Event.endTime;
+    console.log(rawEventTime, '<-----raw event time')
+    // const formattedTime = rawEventTime.replaceAll(' ', ', ').replaceAll('-', ', ').replaceAll(':', ', ');
+    // console.log(formattedTime, '<----formatted time')
+    // convert current date information to prepare for comparison
+    const todayRaw = new Date().toDateString();
+    const today = Date.parse(todayRaw);
+
+    // convert event date information to prepare for comparison
+    const eventDateRaw = new Date(reel.Event.date).toDateString();
+    const eventDateForComparing = Date.parse(eventDateRaw);
+
+    // get current time
+    const currTime = new Date();
+    // console.log(currTime, '<----currTime')
+    // must format 2:19:19 PM --> 02:19:19
+    const compareTime = dayjs(currTime).format('HH:MM:ss');
+    // console.log(compareTime, '<---time for comparing')
+    // console.log(typeof compareTime, '<---- data type of time for comparing')
+
+    // console.log(new Date(2022-12-25), '<---test')
+    // console.log(typeof now, '<---- datatype of now')
+    // must compare date and time separately
+    // first compare date
+    if (eventDateForComparing < today) {
+      // console.log('event date is either today or earlier')
+      // determine if end time has passed
+      if (reel.Event.endTime < compareTime) {
+        // console.log('event end time has passed')
+        // setPastEvent('(Event is over!)')
+      }
+    }
+  }
+
+  console.log(pastEvent, '<---- past event status')
+  // call check event time once on first render
+  useEffect(() => {
+    checkEventTime();
+  }, [])
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -258,7 +304,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
               <p className='video-text'>{reel.text}</p>
               <>
                 <Tooltip
-                  title={<div>{eventName}<br/>{eventDate}</div>}
+                  title={<div>{eventName}<br/>{eventDate}<br/>{pastEvent}</div>}
                   placement='left'
                   PopperProps={{
                     sx: {

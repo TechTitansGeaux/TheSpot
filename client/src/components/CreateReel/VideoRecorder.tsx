@@ -131,9 +131,9 @@ const urltoFile = (url: any, filename: any, mimeType: any) => {
   // upload whenever they are done recording and setJustRecorded is called
   useEffect(() => {
     const upload = async () => {
-      console.log('hit outside of conditional')
+      // console.log('hit outside of conditional')
       if (recordedChunks.length) {
-        console.log('hit inside conditional')
+        // console.log('hit inside conditional')
         const blob = new Blob(recordedChunks, {
           type: "video/webm",
         });
@@ -197,7 +197,7 @@ const urltoFile = (url: any, filename: any, mimeType: any) => {
   }
   };
 
-  console.log(eventId, '<---- eventId in state')
+  // console.log(eventId, '<---- eventId in state')
 
   // POST THE REEL to the db, but only AFTER eventId has been GOT
   const postReelToDb = async () => {
@@ -209,7 +209,7 @@ const urltoFile = (url: any, filename: any, mimeType: any) => {
       EventId: eventId
   })
   .then((resObj) => {
-    console.log(resObj, '<--- response from axios post reel')
+    // console.log(resObj, '<--- response from axios post reel')
         // no longer just recorded
   setJustRecorded(false)
   // reset url
