@@ -215,7 +215,6 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
           // else video is out of view PAUSE video and don't Loop
           myRef.current.play();
           setLoop(true);
-          // setMuted(muted)
         }
       });
     });

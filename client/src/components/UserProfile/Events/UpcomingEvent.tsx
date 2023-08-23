@@ -24,9 +24,10 @@ type Props = {
     time: string,
     twenty_one: boolean,
     updatedAt: string
-  }
+  },
+  getMyEvents: () => void
 }
-const UpcomingEvent: React.FC<Props> = ({event}) => {
+const UpcomingEvent: React.FC<Props> = ({event, getMyEvents}) => {
 
   const [name, setName] = useState(event.name);
   const [date, setDate] = useState(event.date);
@@ -88,6 +89,10 @@ const UpcomingEvent: React.FC<Props> = ({event}) => {
   // delete event
   const deleteEvent = () => {
     axios.delete(`/events/delete/${event.id}`)
+      .then(() => {
+        setOpen(false);
+        getMyEvents();
+      })
       .catch((err) => {
         console.error('Failed to axios delete event: ', err);
       })
