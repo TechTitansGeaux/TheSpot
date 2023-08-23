@@ -30,6 +30,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { time } from 'console';
 
 
 dayjs.extend(relativeTime);
@@ -57,6 +58,8 @@ type Event = {
   name: string;
   rsvp_count: number;
   date: string;
+  time: string;
+  endTime: string;
   geolocation: string;
   twenty_one: boolean;
   createdAt: string;
@@ -87,6 +90,8 @@ type Props = {
   handleRemoveLike: any;
   likes: any;
   likeTotal: number;
+  muted: boolean;
+  handleToggleMute: () => void;
 };
 
 const theme = createTheme({
@@ -117,6 +122,8 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   handleRemoveLike,
   likes,
   likeTotal,
+  muted,
+  handleToggleMute
 }) {
   const theme = useTheme();
   // REFERENCE VIDEO HTML element in JSX element // Uses a ref to hold an array of generated refs, and assign them when mapping.
@@ -124,13 +131,37 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   const [loop, setLoop] = useState(false);
   const [stayDisabled, setStayDisabled] = useState([]);
   const [likesArr, setLikesArr] = useState([]); // user's own reels that have been liked FROM likes table
+  // Alert Dialog 'are you sure you want to delete this reel?'
+  const [open, setOpen] = React.useState(false);
+  // state of whether event is already over
+  const [pastEvent, setPastEvent] = useState('');
 
   // event info to display on info icon hover: name, date, time
   const eventName = reel.Event.name;
   const eventDate = dayjs(reel.Event.date + reel.Event.time).format('ddd, MMM D, h:mm A');
 
-  // Alert Dialog 'are you sure you want to delete this reel?'
-  const [open, setOpen] = React.useState(false);
+  // check if event is over
+  const checkEventTime = () => {
+
+    // declare raw event time
+    const rawEventTime = reel.Event.date + 'T' + reel.Event.endTime;
+    const formattedEventTime = new Date(rawEventTime);
+    const timeForComparing = Date.parse(formattedEventTime.toString())
+
+    const nowRaw = new Date();
+    const now = Date.parse(nowRaw.toString());
+
+      if (timeForComparing < now) {
+        // console.log('event end time has passed')
+        setPastEvent('(Event is over!)')
+      }
+    // }
+  }
+
+  // call check event time once on first render
+  useEffect(() => {
+    checkEventTime();
+  }, [])
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -242,8 +273,9 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                   id={`video${reel.id}`}
                   src={reel.url}
                   loop={loop}
-                  muted
+                  muted={muted}
                   preload='none'
+                  onClick={handleToggleMute}
                 ></video>
               )}
               <h5 className='video-timestamp'>
@@ -252,7 +284,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
               <p className='video-text'>{reel.text}</p>
               <>
                 <Tooltip
-                  title={<div>{eventName}<br/>{eventDate}</div>}
+                  title={<div>{eventName}<br/>{eventDate}<br/>{pastEvent}</div>}
                   placement='left'
                   PopperProps={{
                     sx: {
@@ -264,7 +296,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                     },
                   }}
                 >
-                  <InfoIcon aria-label={eventInfo} className='info-icon' />
+                  <InfoIcon aria-label={eventName + eventDate} className='info-icon' />
                 </Tooltip>
                 {/**Removes addFriend button if already approved friend*/}
                 {!friendList.includes(reel.User.id) &&

@@ -112,4 +112,22 @@ eventRouter.patch('/:id', async (req: any, res) => {
   }
 })
 
+// delete an event
+eventRouter.delete('/delete/:id', async (req: any, res: any) => {
+  // access event id from request parameters
+  const { id } = req.params;
+
+  await Events.destroy({
+    where: { id }
+  })
+    .then((resObj: any) => {
+      // console.log(resObj, '<----res from delete event')
+      res.sendStatus(200);
+    })
+    .catch((err: any) => {
+      console.error('Failed to DELETE event: ', err);
+      res.sendStatus(500);
+    })
+})
+
 export default eventRouter;

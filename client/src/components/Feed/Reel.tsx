@@ -52,6 +52,8 @@ type Event = {
   name: string;
   rsvp_count: number;
   date: string;
+  time: string;
+  endTime: string;
   geolocation: string;
   twenty_one: boolean;
   createdAt: string;
@@ -71,6 +73,10 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
   const [likeTotal, setLikeTotal] = useState(0);
   const [likes, setLikes] = useState([]); // user's reels that have been liked
   // const [likesPersist, setLikesPersist] = useState([]);
+    // state of audio on reels
+    const [muted, setMuted] = useState(true);
+      // toggle reel audio
+  const handleToggleMute = () => setMuted(current => !current);
 
   const fetchAuthUser = async () => {
     try {
@@ -263,6 +269,8 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
                 handleRemoveLike={handleRemoveLike}
                 likeTotal={likeTotal}
                 likes={likes}
+                muted={muted}
+                handleToggleMute={handleToggleMute}
               />
             </motion.div>
           );
