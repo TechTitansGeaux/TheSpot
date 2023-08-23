@@ -67,9 +67,10 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
   const [user, setUser] = useState<User>(null);
   const [friendList, setFriendList] = useState([]);
   const [disabled, setDisabled] = useState([]);
+  const [followed, setFollowed] = useState([]);
   const [likeTotal, setLikeTotal] = useState(0);
   const [likes, setLikes] = useState([]); // user's reels that have been liked
-  const [likesPersist, setLikesPersist] = useState([]);
+  // const [likesPersist, setLikesPersist] = useState([]);
 
   const fetchAuthUser = async () => {
     try {
@@ -107,6 +108,22 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
     // aborts axios request when component unmounts
     return () => controller?.abort();
   }, []);
+
+  // POST request to follow a business user
+  const requestFollow = (followedUser: number) => {
+    console.log('request to followedUser_id=>', followedUser)
+    setFollowed([...followed, followedUser]);
+    axios.post('/followers', {
+      followedUser_id: followedUser
+    })
+      .then((data) => {
+        console.log('Now following followedUser_id: ', followedUser);
+      })
+      .catch((err) => {
+        console.error('Follow request axios FAILED: ', err);
+    })
+  }
+
 
   // POST request friendship 'pending' status to db
   const requestFriendship = (friend: number) => {
@@ -239,6 +256,7 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
                 reels={reels}
                 friendList={friendList}
                 requestFriendship={requestFriendship}
+                requestFollow={requestFollow}
                 disabledNow={disabled}
                 deleteReel={deleteReel}
                 handleAddLike={handleAddLike}

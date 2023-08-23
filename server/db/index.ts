@@ -212,9 +212,35 @@ const Friendships = sequelize.define(
   { timestamps: true }
 );
 
-// FOREIGN Keys UserId AS {} to Friendships // THIS BREAKS W/O RE-SEED // accepterUserId
-// Users.hasMany(Friendships);
-// Friendships.belongsTo(Users, { as: 'accepter' });
+const Followers = sequelize.define(
+  'Followers',
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    status: {
+      type: DataTypes.STRING(100),
+    },
+    follower_id: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: Users,
+        key: 'id',
+      },
+    },
+    followedUser_id: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: Users,
+        key: 'id',
+      },
+    },
+  },
+  { timestamps: true }
+);
 
 // FOREIGN Keys UserId AND EventId to Reels
 Users.hasMany(Reels, {
@@ -266,4 +292,5 @@ module.exports = {
   Likes,
   Notifications,
   Friendships,
+  Followers
 };

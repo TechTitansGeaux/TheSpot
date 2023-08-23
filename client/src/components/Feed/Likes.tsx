@@ -65,10 +65,16 @@ const Likes: React.FC<Props> = ({
   return (
     <React.Fragment>
       {!clicked && (
-        <FavoriteIcon onClick={() => handleLikeClick(reel.id)} />
+        <FavoriteIcon
+          name='Like Button'
+          aria-label='Like Button'
+          onClick={() => handleLikeClick(reel.id)}
+        />
       )}
       {clicked && (
         <FavoriteIcon
+          name='Like Button'
+          aria-label='Like Button'
           color='secondary'
           onClick={() => handleLikeClick(reel.id)}
         />

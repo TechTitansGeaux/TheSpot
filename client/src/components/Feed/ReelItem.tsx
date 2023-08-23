@@ -79,6 +79,7 @@ type Props = {
   }[];
   friendList?: any;
   requestFriendship: any;
+  requestFollow: any;
   user: User;
   deleteReel: any;
   disabledNow: any;
@@ -108,6 +109,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   reels,
   friendList,
   requestFriendship,
+  requestFollow,
   user,
   deleteReel,
   disabledNow,
@@ -217,8 +219,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   }, []);
 
   // console.log('(now likes) above return ==>', likes)
-  console.log('likesArr (now likes) above return ==>', likesArr)
-
+  // console.log('likesArr (now likes) above return ==>', likesArr)
   return (
     <div>
       {true && (
@@ -263,7 +264,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                     },
                   }}
                 >
-                  <InfoIcon className='info-icon' />
+                  <InfoIcon aria-label={eventInfo} className='info-icon' />
                 </Tooltip>
                 {/**Removes addFriend button if already approved friend*/}
                 {!friendList.includes(reel.User.id) &&
@@ -283,7 +284,11 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                             }
                           >
                             <Tooltip
-                              title='Add Friend'
+                              title={
+                                reel?.User.type === 'personal'
+                                  ? 'Add Friend'
+                                  : `Follow ${reel?.User.displayName}`
+                              }
                               TransitionComponent={Zoom}
                               placement='left'
                               PopperProps={{
@@ -297,8 +302,13 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                               }}
                             >
                               <AddIcon
+                                aria-label='Add Friend Button'
                                 sx={{ width: 20, height: 20 }}
-                                onClick={() => requestFriendship(reel.User.id)}
+                                onClick={
+                                  reel?.User.type === 'personal'
+                                    ? () => requestFriendship(reel.User.id)
+                                    : () => requestFollow(reel.User.id)
+                                }
                               />
                             </Tooltip>
                           </Fab>
@@ -325,6 +335,8 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                     >
                         <button
                           className='delete-btn'
+                          name='Delete Button'
+                          aria-label='Delete Button'
                           onClick={handleClickOpen}
                         >
                           🗑️
@@ -372,6 +384,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                 >
                   <Avatar
                     className='friend-avatar'
+                    aria-label={`Profile Avatar of ${reel.User.displayName}`}
                     sx={{ width: 48, height: 48 }}
                     alt={reel.User.displayName}
                     src={reel.User.picture}
@@ -401,9 +414,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                             {reel.like_count + likeTotal}
                           </p>
                         ) : (
-                            <p className='like-counter'>
-                            {reel.like_count}
-                          </p>
+                          <p className='like-counter'>{reel.like_count}</p>
                         )}
                       </div>
                     }
@@ -434,7 +445,10 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                             to={'/Map'}
                             state={{reelEvent: reel.Event.geolocation, loggedIn: user}}
                             >
-                            <LocationOnIcon color='primary' />
+                            <LocationOnIcon 
+                              name='Event Location Button'
+                              aria-label='Event Location Button'
+                              color='primary' />
                         </IconButton>
                       </Tooltip>
                     }
@@ -447,6 +461,8 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                       <React.Fragment>
                         <div className='count-container'>
                           <RsvpSharpIcon
+                            name='RSVP Button'
+                            aria-label='RSVP Button'
                             style={{ transform: 'scale(2)' }}
                             color='secondary'
                           />

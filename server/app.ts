@@ -12,6 +12,7 @@ import feedRouter from './routes/feed';
 import friendRouter from './routes/friends';
 import eventRouter  from './routes/events';
 import likesRouter  from './routes/likes';
+import followersRouter from './routes/followers'
 
 
 
@@ -60,8 +61,10 @@ app.use('/feed', feedRouter);
 app.use('/friends', friendRouter);
 // events route
 app.use('/events', eventRouter)
-// events route
+// likes route
 app.use('/likes', likesRouter)
+// followers route
+app.use('/followers', followersRouter)
 
 // Emit user geolocation updates to connected clients
 io.on('connection', (socket) => {
