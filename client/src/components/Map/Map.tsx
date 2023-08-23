@@ -232,7 +232,7 @@ const Map: React.FC<Props> = (props) => {
   const options = {
     minZoom: 11,
     maxZoom: 19,
-    fullscreenControl: false,
+    disableDefaultUI: true,
     styles: [{ stylers: [{ 'saturation': 1 }, { 'gamma': 0.5 }, { 'lightness': 4 }, { 'visibility': 'on' }] }]
   }
 
@@ -302,6 +302,7 @@ const Map: React.FC<Props> = (props) => {
                 setZoom={setZoom}
                 setCenter={setCenter}
                 closeAllPopUps={closeAllPopUps}
+                zoom={zoom}
               />;
               }
             })
@@ -322,6 +323,7 @@ const Map: React.FC<Props> = (props) => {
                 setZoom={setZoom}
                 setCenter={setCenter}
                 closeAllPopUps={closeAllPopUps}
+                zoom={zoom}
               />;
               }
             })
@@ -344,6 +346,7 @@ const Map: React.FC<Props> = (props) => {
                   setZoom={setZoom}
                   setCenter={setCenter}
                   closeAllPopUps={closeAllPopUps}
+                  zoom={zoom}
                 />
               }
             })
