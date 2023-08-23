@@ -241,6 +241,11 @@ button.delete-btn:hover {
   z-index: 2;
 }
 
+.friend-follow-icon-parent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 .friend-request {
   position: relative;
