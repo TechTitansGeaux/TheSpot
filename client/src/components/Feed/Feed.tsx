@@ -25,8 +25,8 @@ type Props = {
 
 const Feed: React.FC<Props> = ({user}) => {
   const [reels, setReels] = useState([]);
-  const [filter, setFilter] = useState('recent'); // filter feed state
-  const [geoF, setGeoF] = useState(5);
+  const [filter, setFilter] = useState('location'); // filter feed state
+  const [geoF, setGeoF] = useState(15);
   const [friends, setFriends] = useState([]); // friend list for current user
   const [userLat, setUserLat] = useState(0);
   const [userLong, setUserLong] = useState(0);
