@@ -252,7 +252,13 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
               <p className='video-text'>{reel.text}</p>
               <>
                 <Tooltip
-                  title={<div>{eventName}<br/>{eventDate}</div>}
+                  title={
+                    <div>
+                      {eventName}
+                      <br />
+                      {eventDate}
+                    </div>
+                  }
                   placement='left'
                   PopperProps={{
                     sx: {
@@ -264,7 +270,10 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                     },
                   }}
                 >
-                  <InfoIcon aria-label={eventInfo} className='info-icon' />
+                  <InfoIcon
+                    aria-label={eventName + eventDate}
+                    className='info-icon'
+                  />
                 </Tooltip>
                 {/**Removes addFriend button if already approved friend*/}
                 {!friendList.includes(reel.User.id) &&
@@ -318,21 +327,21 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                   )}
                 {reel.UserId === user.id && (
                   <div className='friend-request'>
-                      <div>
-                    <Tooltip
-                      title='Delete Reel'
-                      TransitionComponent={Zoom}
-                      placement='right'
-                      PopperProps={{
-                        sx: {
-                          '& .MuiTooltip-tooltip': {
-                            backgroundColor: 'transparent',
-                            border: 'solid #F5FCFA 1px',
-                            color: '#F5FCFA',
+                    <div>
+                      <Tooltip
+                        title='Delete Reel'
+                        TransitionComponent={Zoom}
+                        placement='right'
+                        PopperProps={{
+                          sx: {
+                            '& .MuiTooltip-tooltip': {
+                              backgroundColor: 'transparent',
+                              border: 'solid #F5FCFA 1px',
+                              color: '#F5FCFA',
+                            },
                           },
-                        },
-                      }}
-                    >
+                        }}
+                      >
                         <button
                           className='delete-btn'
                           name='Delete Button'
@@ -341,29 +350,29 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                         >
                           🗑️
                         </button>
-                        </Tooltip>
-                        <Dialog
-                          open={open}
-                          onClose={handleClose}
-                          aria-labelledby="alert-dialog-title"
-                          aria-describedby="alert-dialog-description"
-                        >
-                          <DialogTitle id="alert-dialog-title">
-                            {"Delete this reel?"}
-                          </DialogTitle>
-                          <DialogContent>
-                            <DialogContentText id="alert-dialog-description">
-                              Are you sure you want to delete this reel?
-                            </DialogContentText>
-                          </DialogContent>
-                          <DialogActions>
-                            <Button onClick={handleClose}>No</Button>
-                            <Button onClick={() => deleteReel(reel.id)} autoFocus>
-                              Yes
-                            </Button>
-                          </DialogActions>
-                        </Dialog>
-                      </div>
+                      </Tooltip>
+                      <Dialog
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby='alert-dialog-title'
+                        aria-describedby='alert-dialog-description'
+                      >
+                        <DialogTitle id='alert-dialog-title'>
+                          {'Delete this reel?'}
+                        </DialogTitle>
+                        <DialogContent>
+                          <DialogContentText id='alert-dialog-description'>
+                            Are you sure you want to delete this reel?
+                          </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                          <Button onClick={handleClose}>No</Button>
+                          <Button onClick={() => deleteReel(reel.id)} autoFocus>
+                            Yes
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
+                    </div>
                   </div>
                 )}
               </>
@@ -436,19 +445,23 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                           },
                         }}
                       >
-                       <IconButton
-                        sx={{
+                        <IconButton
+                          sx={{
                             minHeight: '1rem',
                             minWidth: '1rem',
-                            }}
-                            component={Link}
-                            to={'/Map'}
-                            state={{reelEvent: reel.Event.geolocation, loggedIn: user}}
-                            >
-                            <LocationOnIcon 
-                              name='Event Location Button'
-                              aria-label='Event Location Button'
-                              color='primary' />
+                          }}
+                          component={Link}
+                          to={'/Map'}
+                          state={{
+                            reelEvent: reel.Event.geolocation,
+                            loggedIn: user,
+                          }}
+                        >
+                          <LocationOnIcon
+                            name='Event Location Button'
+                            aria-label='Event Location Button'
+                            color='primary'
+                          />
                         </IconButton>
                       </Tooltip>
                     }
