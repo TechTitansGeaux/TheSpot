@@ -91,42 +91,13 @@ const Feed: React.FC<Props> = ({user}) => {
       const eventLong = Number(eventGeo[1]);
       const dist = distance(userLat, otherLat, userLong, otherLong);
       const eventDist = distance(userLat, eventLat, userLong, eventLong);
-      console.log('distance:', dist);
+      // console.log('distance:', dist);
       // console.log('geoF:', geoF);
       if (dist <= geoF || eventDist <= geoF) {
         geoReels.push(arr[i]);
       }
     }
   };
-
-  // const getReelsByLoc = () => {
-  //   axios
-  //     .get('feed/recent')
-  //     .then((response) => {
-  //       for (let i = 0; i < response.data.length; i++) {
-  //         let geo = response.data[i].User.geolocation.split(','); // User geo
-  //         // console.log('user lat, user long:', userLat, userLong);
-  //         // console.log('other user geo:', geo);
-  //         let eventGeo = response.data[i].Event.geolocation.split(',');
-  //         // console.log('eventGeo:', eventGeo);
-  //         const otherLat = Number(geo[0]);
-  //         const otherLong = Number(geo[1]);
-  //         const eventLat = Number(eventGeo[0]);
-  //         const eventLong = Number(eventGeo[1]);
-  //         let dist = distance(userLat, otherLat, userLong, otherLong);
-  //         let eventDist = distance(userLat, eventLat, userLong, eventLong);
-  //         console.log('distance:', dist);
-  //         // console.log('geoF:', geoF);
-  //         if (dist <= geoF || eventDist <= geoF) {
-  //           geoReels.push(response.data[i]);
-  //         }
-  //       }
-  //       setReels(geoReels);
-  //     })
-  //     .catch((err) => {
-  //       console.error('Could not GET all geo reels:', err);
-  //     })
-  // };
 
   const getAllReelsRecent = () => {
     axios
