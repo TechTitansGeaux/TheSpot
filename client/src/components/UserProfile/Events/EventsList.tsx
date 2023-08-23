@@ -26,8 +26,8 @@ const EventsList: React.FC<Props> = ({user}) => {
   const [pastEvents, setPastEvents] = useState([]);
   const [showPast, setShowPast] = useState(false);
 
-  const todayRaw = new Date().toDateString();
-  const today = Date.parse(todayRaw);
+  const nowRaw = new Date().toString();
+  const now = Date.parse(nowRaw);
 
   // function to get all of user's events
   const getMyEvents = () => {
@@ -39,8 +39,11 @@ const EventsList: React.FC<Props> = ({user}) => {
         let pastArr = [];
         // iterate through events
         for (let i = 0; i < res.data.length; i++) {
-          // determine if THEIR date is before ot after today
-          if (Date.parse(res.data[i].date) >= today) {
+          const rawEventTime = res.data[i].date + 'T' + res.data[i].time;
+          const formattedEventTime = new Date(rawEventTime);
+          const timeForComparing = Date.parse(formattedEventTime.toString())
+          // determine if THEIR start time is before or after now
+          if (timeForComparing >= now) {
             // push into upcoming array
             upcomingArr.push(res.data[i])
           } else {
