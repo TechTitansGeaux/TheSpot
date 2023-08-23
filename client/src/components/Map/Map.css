@@ -123,6 +123,12 @@
   z-index: 11;
 }
 
+.zoomToEvent {
+  position: relative;
+  top: 110px;
+  left: -25px;
+}
+
 .EventClusterPin {
   box-shadow: 0 0 5px 1px rgb(120, 120, 120);
   align-items: center;
