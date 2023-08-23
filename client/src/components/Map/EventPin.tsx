@@ -104,6 +104,7 @@ const Event: React.FC<Props> = ({ event, setCenter, setZoom, lat, lng, zoom }) =
         </div>
         <div className='zoomToEvent'>
           <div>
+            <div style={{ position: 'relative', top: '27.5px', left: '60px' }}>zoom to event</div>
             <ThemeProvider theme={zoomToEventTheme}>
               <div>
                 <Box>
