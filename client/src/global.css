@@ -536,3 +536,9 @@ button.rejectFriend-btn:hover {
   border-radius: 5px;
 }
 
+.delete-event-button {
+  position: absolute;
+  top: 5%;
+  right: 5%;
+}
+

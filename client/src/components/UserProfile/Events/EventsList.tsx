@@ -63,9 +63,6 @@ const EventsList: React.FC<Props> = ({user}) => {
     getMyEvents();
   }, [])
 
-  console.log(upcomingEvents, '<-----upcoming events');
-  console.log(pastEvents, '<------past events')
-
   const showPastView = () => {
     setShowPast(true);
   }
