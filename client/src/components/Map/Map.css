@@ -2,8 +2,6 @@
   display: flex;
   justify-content: center;
   flex-direction: column;
-
-
 }
 
 .mapChild {
@@ -15,7 +13,6 @@
 #map {
   height: 100%;
   width: 100%;
-
 }
 
 .legend {
@@ -40,7 +37,8 @@
   cursor: pointer;
   font-size: 30px;
   text-align: center;
-  overflow-y: auto;
+  overflow-y: hidden; /* Hide vertical scrollbar */
+  overflow-x: hidden; /* Hide horizontal scrollbar */
 }
 
 .UserClusterPin {
@@ -160,7 +158,8 @@
   cursor: pointer;
   font-size: 30px;
   text-align: center;
-  overflow-y: auto;
+  overflow-y: hidden; /* Hide vertical scrollbar */
+  overflow-x: hidden; /* Hide horizontal scrollbar */
 }
 
 .businessPopUp {
@@ -217,24 +216,24 @@
 .userKey {
   display: inline-block;
   height: 35px;
-  margin-left: 10px;
+  margin-right: 10px;
   background-color: var(--pink);
   vertical-align: middle;
-  border-radius: 15px;
+  border-radius: 50%;
   border: 3px solid black;
-  width: 125px;
+  width: 35px;
   text-align: center;
 }
 
 .businessKey {
   display: inline-block;
   height: 35px;
-  margin-left: 10px;
+  margin-right: 10px;
   background-color: var(--purple);
   vertical-align: middle;
-  border-radius: 15px;
+  border-radius: 50%;
   border: 3px solid black;
-  width: 125px;
+  width: 35px;
   text-align: center;
 
 }
@@ -243,24 +242,43 @@
   color: black;
   display: inline-block;
   height: 35px;
-  margin-left: 10px;
+  margin-right: 10px;
   background-color: var(--yellow);
   vertical-align: middle;
-  border-radius: 15px;
+  border-radius: 50%;
   border: 3px solid black;
-  width: 125px;
+  width: 35px;
   text-align: center;
 
 }
 
-.recenterButton {
-  float: right;
+
+.userKeyText {
+  display: inline-block;
+  height: 35px;
+  margin-right: 25px;
+}
+
+.eventKeyText {
+  display: inline-block;
+  height: 35px;
   margin-right: 20px;
+}
+
+.businessKeyText {
+  display: inline-block;
+  height: 35px;
+}
+
+.recenterButton {
+  color: black;
+  cursor: pointer;
+  float: right;
   top: 50%;
   height: 35px;
-  border-radius: 15px;
+  border-radius: 17.5px;
   border: 3px solid black;
   width: 125px;
-  background-color: var(--purple);
+  background-color: var(--grey);
   text-align: center;
 }

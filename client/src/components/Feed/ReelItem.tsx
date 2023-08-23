@@ -22,6 +22,15 @@ import Likes from './Likes';
 import './feed.css';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
+import { Link } from 'react-router-dom';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
 
 dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat)
@@ -117,7 +126,19 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   const [likesArr, setLikesArr] = useState([]); // user's own reels that have been liked FROM likes table
 
   // event info to display on info icon hover: name, date, time
-  const eventInfo = `${reel.Event.name} on ${dayjs(reel.Event.date + reel.Event.time).format('ddd, MMM D, h:mm A')}`;
+  const eventName = reel.Event.name;
+  const eventDate = dayjs(reel.Event.date + reel.Event.time).format('ddd, MMM D, h:mm A');
+
+  // Alert Dialog 'are you sure you want to delete this reel?'
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
  const getLikes = () => {
    const likes: any = []; // user's reels that have been liked
@@ -231,7 +252,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
               <p className='video-text'>{reel.text}</p>
               <>
                 <Tooltip
-                  title={eventInfo}
+                  title={<div>{eventName}<br/>{eventDate}</div>}
                   placement='left'
                   PopperProps={{
                     sx: {
@@ -297,6 +318,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                   )}
                 {reel.UserId === user.id && (
                   <div className='friend-request'>
+                      <div>
                     <Tooltip
                       title='Delete Reel'
                       TransitionComponent={Zoom}
@@ -311,15 +333,37 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                         },
                       }}
                     >
-                      <button
-                        className='delete-btn'
-                        name='Delete Button'
-                        aria-label='Delete Button'
-                        onClick={() => deleteReel(reel.id)}
-                      >
-                        🗑️
-                      </button>
-                    </Tooltip>
+                        <button
+                          className='delete-btn'
+                          name='Delete Button'
+                          aria-label='Delete Button'
+                          onClick={handleClickOpen}
+                        >
+                          🗑️
+                        </button>
+                        </Tooltip>
+                        <Dialog
+                          open={open}
+                          onClose={handleClose}
+                          aria-labelledby="alert-dialog-title"
+                          aria-describedby="alert-dialog-description"
+                        >
+                          <DialogTitle id="alert-dialog-title">
+                            {"Delete this reel?"}
+                          </DialogTitle>
+                          <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                              Are you sure you want to delete this reel?
+                            </DialogContentText>
+                          </DialogContent>
+                          <DialogActions>
+                            <Button onClick={handleClose}>No</Button>
+                            <Button onClick={() => deleteReel(reel.id)} autoFocus>
+                              Yes
+                            </Button>
+                          </DialogActions>
+                        </Dialog>
+                      </div>
                   </div>
                 )}
               </>
@@ -392,11 +436,20 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                           },
                         }}
                       >
-                        <LocationOnIcon
-                          name='Event Location Button'
-                          aria-label='Event Location Button'
-                          color='primary'
-                        />
+                       <IconButton
+                        sx={{
+                            minHeight: '1rem',
+                            minWidth: '1rem',
+                            }}
+                            component={Link}
+                            to={'/Map'}
+                            state={{reelEvent: reel.Event.geolocation, loggedIn: user}}
+                            >
+                            <LocationOnIcon 
+                              name='Event Location Button'
+                              aria-label='Event Location Button'
+                              color='primary' />
+                        </IconButton>
                       </Tooltip>
                     }
                     showLabel={false}

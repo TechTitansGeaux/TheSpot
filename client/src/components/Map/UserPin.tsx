@@ -31,9 +31,7 @@ type Props = {
   lat: number
   lng: number
   friendList: number[]
-  getFriendList: () => void
   pendingFriendList: number[]
-  getPendingFriendList: () => void
   loggedIn: {
     id: number;
     username: string;
@@ -48,7 +46,11 @@ type Props = {
     picture: string;
     googleId: string;
   }
-
+  getPendingFriendList: () => void
+  getFriendList: () => void
+  setZoom: (zoom: number) => void
+  setCenter: (center: object) => void
+  closeAllPopUps: () => void
 };
 
 const addFriendTheme = createTheme({
@@ -85,10 +87,10 @@ const UserPin: React.FC<Props> = (props) => {
 
   const togglePopUp = () => {
     const box = document.getElementById('popUp' + props.user.username + props.user.id)
-
     if (box.style.display === 'block') {
       box.style.display = 'none';
     } else {
+      props.closeAllPopUps();
       box.style.display = 'block';
     }
   }
@@ -127,10 +129,13 @@ const UserPin: React.FC<Props> = (props) => {
 
   return (
     <div>
-      <div className='userDot' id={props.user.username + props.user.id} onClick={togglePopUp} >
+      <div className='userDot' id={props.user.username + props.user.id} onClick={ () => {
+        props.setCenter({lat: props.lat - 0.005, lng: props.lng});
+        props.setZoom(15);
+        togglePopUp();
+      } } >
         <img
           src={props.user.mapIcon}
-          alt={props.user.username}
           style={{ width: '40px', height: '40px', marginLeft: '1.5px', marginTop: '2.5px'}}
         />
       </div>
