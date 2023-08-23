@@ -232,6 +232,8 @@ const Map: React.FC<Props> = (props) => {
   const options = {
     minZoom: 10,
     maxZoom: 19,
+    fullscreenControl: false,
+    styles: [{ stylers: [{ 'saturation': 1 }, { 'gamma': 0.5 }, { 'lightness': 4 }, { 'visibility': 'on' }] }]
   }
 
 
