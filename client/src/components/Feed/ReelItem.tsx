@@ -147,7 +147,6 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
     const rawEventTime = reel.Event.date + 'T' + reel.Event.endTime;
     const formattedEventTime = new Date(rawEventTime);
     const timeForComparing = Date.parse(formattedEventTime.toString())
-    console.log(timeForComparing, '<-----time for comparing')
 
     const nowRaw = new Date();
     const now = Date.parse(nowRaw.toString());
@@ -159,7 +158,6 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
     // }
   }
 
-  console.log(pastEvent, '<---- past event status')
   // call check event time once on first render
   useEffect(() => {
     checkEventTime();
