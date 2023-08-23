@@ -250,6 +250,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                   loop={loop}
                   muted={muted}
                   preload='none'
+                  onClick={handleToggleMute}
                 ></video>
               )}
               <h5 className='video-timestamp'>
@@ -325,9 +326,6 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                 {reel.UserId === user.id && (
                   <div className='friend-request'>
                       <div>
-                      <button
-                        onClick={handleToggleMute}
-                        >UNMUTE</button>
                     <Tooltip
                       title='Delete Reel'
                       TransitionComponent={Zoom}
