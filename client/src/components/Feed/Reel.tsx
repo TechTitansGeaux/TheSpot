@@ -7,6 +7,8 @@ import { setAuthUser, setIsAuthenticated } from '../../store/appSlice';
 import ReelItem from './ReelItem';
 import { useTheme } from '@mui/material/styles';
 import { AnimatePresence, motion } from 'framer-motion';
+import io from 'socket.io-client';
+const socket = io();
 
 // const ReelItem = React.lazy(() => import('./ReelItem'));
 
@@ -169,6 +171,7 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
       .delete(`/feed/delete/${reelId}`)
       .then((data) => {
         console.log('Reel deleted', data);
+        socket.emit('likesNotif', 'like');
         getAllReels();
       })
       .catch((err) => {
