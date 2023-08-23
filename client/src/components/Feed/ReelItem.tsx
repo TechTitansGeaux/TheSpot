@@ -131,6 +131,12 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
 
   // Alert Dialog 'are you sure you want to delete this reel?'
   const [open, setOpen] = React.useState(false);
+  // state of audio on reels
+  const [muted, setMuted] = useState(true);
+
+  // toggle reel audio
+  const handleToggleMute = () => setMuted(current => !current);
+
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -242,7 +248,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                   id={`video${reel.id}`}
                   src={reel.url}
                   loop={loop}
-                  muted
+                  muted={muted}
                   preload='none'
                 ></video>
               )}
@@ -264,7 +270,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                     },
                   }}
                 >
-                  <InfoIcon aria-label={eventInfo} className='info-icon' />
+                  <InfoIcon aria-label={eventName + eventDate} className='info-icon' />
                 </Tooltip>
                 {/**Removes addFriend button if already approved friend*/}
                 {!friendList.includes(reel.User.id) &&
@@ -319,6 +325,9 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                 {reel.UserId === user.id && (
                   <div className='friend-request'>
                       <div>
+                      <button
+                        onClick={handleToggleMute}
+                        >UNMUTE</button>
                     <Tooltip
                       title='Delete Reel'
                       TransitionComponent={Zoom}
