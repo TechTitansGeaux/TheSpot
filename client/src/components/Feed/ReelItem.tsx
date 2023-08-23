@@ -264,7 +264,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                     },
                   }}
                 >
-                  <InfoIcon aria-label={eventInfo} className='info-icon' />
+                  <InfoIcon aria-label={eventName + eventDate} className='info-icon' />
                 </Tooltip>
                 {/**Removes addFriend button if already approved friend*/}
                 {!friendList.includes(reel.User.id) &&
@@ -445,7 +445,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                             to={'/Map'}
                             state={{reelEvent: reel.Event.geolocation, loggedIn: user}}
                             >
-                            <LocationOnIcon 
+                            <LocationOnIcon
                               name='Event Location Button'
                               aria-label='Event Location Button'
                               color='primary' />

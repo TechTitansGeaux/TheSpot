@@ -68,7 +68,7 @@ app.use('/followers', followersRouter)
 
 // Emit user geolocation updates to connected clients
 io.on('connection', (socket) => {
-  console.log('A user connected');
+  console.log(`A user connected ${socket.id}`);
 
   // Listen for geolocation updates from clients
   socket.on('updateGeolocation', (userId, geolocation) => {
