@@ -30,6 +30,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { time } from 'console';
 
 
 dayjs.extend(relativeTime);
@@ -143,38 +144,19 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   const checkEventTime = () => {
 
     // declare raw event time
-    const rawEventTime = reel.Event.date + ' ' + reel.Event.endTime;
-    console.log(rawEventTime, '<-----raw event time')
-    // const formattedTime = rawEventTime.replaceAll(' ', ', ').replaceAll('-', ', ').replaceAll(':', ', ');
-    // console.log(formattedTime, '<----formatted time')
-    // convert current date information to prepare for comparison
-    const todayRaw = new Date().toDateString();
-    const today = Date.parse(todayRaw);
+    const rawEventTime = reel.Event.date + 'T' + reel.Event.endTime;
+    const formattedEventTime = new Date(rawEventTime);
+    const timeForComparing = Date.parse(formattedEventTime.toString())
+    console.log(timeForComparing, '<-----time for comparing')
 
-    // convert event date information to prepare for comparison
-    const eventDateRaw = new Date(reel.Event.date).toDateString();
-    const eventDateForComparing = Date.parse(eventDateRaw);
+    const nowRaw = new Date();
+    const now = Date.parse(nowRaw.toString());
 
-    // get current time
-    const currTime = new Date();
-    // console.log(currTime, '<----currTime')
-    // must format 2:19:19 PM --> 02:19:19
-    const compareTime = dayjs(currTime).format('HH:MM:ss');
-    // console.log(compareTime, '<---time for comparing')
-    // console.log(typeof compareTime, '<---- data type of time for comparing')
-
-    // console.log(new Date(2022-12-25), '<---test')
-    // console.log(typeof now, '<---- datatype of now')
-    // must compare date and time separately
-    // first compare date
-    if (eventDateForComparing < today) {
-      // console.log('event date is either today or earlier')
-      // determine if end time has passed
-      if (reel.Event.endTime < compareTime) {
+      if (timeForComparing < now) {
         // console.log('event end time has passed')
-        // setPastEvent('(Event is over!)')
+        setPastEvent('(Event is over!)')
       }
-    }
+    // }
   }
 
   console.log(pastEvent, '<---- past event status')
