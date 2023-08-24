@@ -1,6 +1,6 @@
 const express = require('express');
 const feedRouter = express.Router();
-const { Reels, Users, Events, Friendships, Likes } = require('../db/index');
+const { Reels, Users, Events, Friendships, Followers } = require('../db/index');
 // import Reels from '../db/index';
 
 feedRouter.get('/reel', (req: any, res: any) => {
@@ -190,6 +190,29 @@ feedRouter.get('/frens', (req: any, res: any) => {
     })
     .catch((err: any) => {
       console.error('Cannot GET friends', err);
+      res.sendStatus(500);
+    })
+});
+
+// following list for personal accounts
+feedRouter.get('/following', (req: any, res: any) => {
+  const { id } = req.user;
+  Followers.findAll({
+    where: {
+      status: 'follower',
+      follower_id: id
+    }
+  })
+    .then((response: any) => {
+      if (response === null) {
+        console.log('followers do not exist');
+        res.sendStatus(404);
+      } else {
+        res.status(200).send(response);
+      }
+    })
+    .catch((err: any) => {
+      console.error('Cannot GET following', err);
       res.sendStatus(500);
     })
 });

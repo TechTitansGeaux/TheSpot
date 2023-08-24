@@ -4,6 +4,7 @@ import Reel from './Reel';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import './feed.css';
+import { response } from 'express';
 
 type Props = {
   user: {
@@ -28,6 +29,7 @@ const Feed: React.FC<Props> = ({user}) => {
   const [filter, setFilter] = useState('recent'); // filter feed state
   const [geoF, setGeoF] = useState(15); //geo filter by miles
   const [friends, setFriends] = useState([]); // friend list for current user
+  const [following, setFollowing] = useState([]); // following list for current user (personal)
   const [userLat, setUserLat] = useState(0);
   const [userLong, setUserLong] = useState(0);
 
@@ -144,16 +146,6 @@ const Feed: React.FC<Props> = ({user}) => {
       })
   };
 
-  const getAllReels = () => {
-    if (filter === 'recent') {
-      getAllReelsRecent();
-    } else if (filter === 'friends') {
-      getAllFriendReels();
-    } else if (filter === 'likes') {
-      getAllReelsLikes();
-    }
-  };
-
   const getFriendList = () => {
     axios
       .get(`/feed/frens`)
@@ -166,6 +158,29 @@ const Feed: React.FC<Props> = ({user}) => {
       })
   };
 
+  const getFollowingList = () => {
+    axios
+      .get('/feed/following')
+      .then((response) => {
+        console.log('following:', response.data);
+        setFollowing(response.data);
+      })
+      .catch((err) => {
+        console.error('Could not GET followings:', err);
+      })
+  };
+
+  const getAllReels = () => {
+    if (filter === 'recent') {
+      getAllReelsRecent();
+    } else if (filter === 'friends') {
+      getAllFriendReels();
+    } else if (filter === 'likes') {
+      getAllReelsLikes();
+    }
+  };
+
+
   useEffect(() => {
     userCoord(user);
   }, [user, reels]);
@@ -177,6 +192,10 @@ const Feed: React.FC<Props> = ({user}) => {
   useEffect(() => {
     getFriendList();
   }, []);
+
+  useEffect(() => {
+    getFollowingList();
+  }, [])
 
 
   return (
