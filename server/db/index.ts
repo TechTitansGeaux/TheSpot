@@ -281,6 +281,8 @@ Events.hasMany(RSVPs, {
   onDelete: 'CASCADE'
 });
 RSVPs.belongsTo(Events);
+// Users.belongsToMany(Events, {through: RSVPs})
+// Events.belongsToMany(Users, {through: RSVPs})
 
 module.exports = {
   db: sequelize,

@@ -30,17 +30,48 @@ eventRouter.get('/userEvents', async (req: any, res: any) => {
     })
 })
 
+  // find distance (miles) with 2 points
+  const distance = (lat1: number, lat2: number, lon1: number, lon2: number) => {
+
+    lon1 = lon1 * Math.PI / 180;
+    lon2 = lon2 * Math.PI / 180;
+    lat1 = lat1 * Math.PI / 180;
+    lat2 = lat2 * Math.PI / 180;
+    // Haversine formula
+    const dlon = lon2 - lon1;
+    const dlat = lat2 - lat1;
+    const a = Math.pow(Math.sin(dlat / 2), 2)
+              + Math.cos(lat1) * Math.cos(lat2)
+              * Math.pow(Math.sin(dlon / 2),2);
+
+    const c = 2 * Math.asin(Math.sqrt(a));
+
+    const r = 3956;
+
+    return (c * r * 5280);
+  };
+
 // get event by location AND date
 eventRouter.get('/:geolocation/:date', async (req: any, res: any) => {
   // access geolocation from request parameters
   const { geolocation, date } = req.params;
-  // find event by geolocation
-    await Events.findAll({where: {geolocation: geolocation, date: date}})
-    .then((events: any) => {
-      if (events.length !== 0) {
-        res.status(200).json({
-          events
-      })
+  // find all events on date
+  await Events.findAll({where: {date: date}})
+  .then((events: any) => {
+    console.log(events, '<-------events')
+    if (events.length !== 0) {
+        // filter for within range events
+        const filteredArr = events.filter((event: {geolocation: string}) => {
+          const [lat1, lng1] = event.geolocation.split(',');
+          const [lat2, lng2] = geolocation.split(',');
+          console.log(+lat2, +lng2, +lat1, +lng1, '<----- lats and lngs')
+          // if distance b/t user and center of event is less than 300ft
+          console.log(distance(+lat1, +lat2, +lng1, +lng2), '<----result of distance function')
+          return (distance(+lat1, +lat2, +lng1, +lng2) < 300)
+        })
+        res.status(200).send(
+          filteredArr
+      )
       } else {
         res.status(404).send('No events found at this location');
       }

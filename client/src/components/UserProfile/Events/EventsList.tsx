@@ -25,6 +25,21 @@ const EventsList: React.FC<Props> = ({user}) => {
   const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [pastEvents, setPastEvents] = useState([]);
   const [showPast, setShowPast] = useState(false);
+  const [businessAccount, setBusinessAccount] = useState(false);
+
+  // determine user type
+  const checkUserType = () => {
+    if (user.type === 'business') {
+      setBusinessAccount(true);
+    }
+    }
+
+  useEffect(() => {
+  checkUserType();
+  }, [])
+
+  // for personal accounts, get all events RSVPed to
+
 
   const nowRaw = new Date().toString();
   const now = Date.parse(nowRaw);
@@ -61,9 +76,49 @@ const EventsList: React.FC<Props> = ({user}) => {
         console.error('Failed to axios GET user events: ', err);
       })
   }
-  // call my my events once when page is rendered
+
+  const getMyRSVPs = () => {
+    axios.get('/RSVPs/forUser')
+      .then((res) => {
+        // upcoming event container
+        let upcomingArr = [];
+        // past event container
+        let pastArr = [];
+        // iterate through events
+        for (let i = 0; i < res.data.length; i++) {
+          console.log(res.data[i], '<----each event')
+          const rawEventTime = res.data[i].date + 'T' + res.data[i].time;
+          const formattedEventTime = new Date(rawEventTime);
+          const timeForComparing = Date.parse(formattedEventTime.toString())
+          // determine if THEIR start time is before or after now
+          if (timeForComparing >= now) {
+            // push into upcoming array
+            upcomingArr.push(res.data[i])
+          } else {
+            pastArr.push(res.data[i])
+          }
+        }
+        // sort upcoming events by soonest coming up
+        upcomingArr = upcomingArr.sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
+        // set upcoming events
+        setUpcomingEvents(upcomingArr);
+        pastArr = pastArr.sort((a, b) => Date.parse(a.date) - Date.parse(b.date))
+        setPastEvents(pastArr);
+      })
+      .catch((err) => {
+        console.error('Failed to axios GET user\'s RSVPs: ', err);
+      })
+  }
+  // call get my events once when page is rendered
   useEffect(() => {
-    getMyEvents();
+    // determine if business
+    if (businessAccount) {
+      // get user created events
+      getMyEvents();
+    } else {
+      // function to get personal RSVPed events
+      getMyRSVPs();
+    }
   }, [])
 
   const showPastView = () => {
@@ -87,7 +142,7 @@ const EventsList: React.FC<Props> = ({user}) => {
            Past</h3>
       </div>
       <div className="event-cards-row">
-        {!showPast && upcomingEvents.map((event) => {
+        {!showPast && businessAccount && upcomingEvents.map((event) => {
           return (
             <UpcomingEvent
             event={event}
