@@ -25,6 +25,21 @@ const EventsList: React.FC<Props> = ({user}) => {
   const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [pastEvents, setPastEvents] = useState([]);
   const [showPast, setShowPast] = useState(false);
+  const [businessAccount, setBusinessAccount] = useState(false);
+
+  // determine user type
+  const checkUserType = () => {
+    if (user.type === 'business') {
+      setBusinessAccount(true);
+    }
+    }
+
+  useEffect(() => {
+  checkUserType();
+  }, [])
+
+  // for personal accounts, get all events RSVPed to
+  
 
   const nowRaw = new Date().toString();
   const now = Date.parse(nowRaw);
@@ -87,7 +102,7 @@ const EventsList: React.FC<Props> = ({user}) => {
            Past</h3>
       </div>
       <div className="event-cards-row">
-        {!showPast && upcomingEvents.map((event) => {
+        {!showPast && businessAccount && upcomingEvents.map((event) => {
           return (
             <UpcomingEvent
             event={event}
@@ -95,7 +110,7 @@ const EventsList: React.FC<Props> = ({user}) => {
             getMyEvents={getMyEvents}/>
           )
         })}
-        {showPast && pastEvents.map((event) => {
+        {showPast && businessAccount && pastEvents.map((event) => {
           return (
             <PastEvent
             event={event}

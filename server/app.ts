@@ -13,6 +13,7 @@ import friendRouter from './routes/friends';
 import eventRouter  from './routes/events';
 import likesRouter  from './routes/likes';
 import followersRouter from './routes/followers'
+import rsvpRouter from './routes/RSVPs';
 
 
 
@@ -65,10 +66,12 @@ app.use('/events', eventRouter)
 app.use('/likes', likesRouter)
 // followers route
 app.use('/followers', followersRouter)
+// RSVPs route
+app.use('/RSVPs', rsvpRouter)
 
 // Emit user geolocation updates to connected clients
 io.on('connection', (socket) => {
-  console.log(`A user connected ${socket.id}`);
+  // console.log(`A user connected ${socket.id}`);
 
   // Listen for geolocation updates from clients
   socket.on('updateGeolocation', (userId, geolocation) => {
@@ -77,7 +80,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    console.log('User disconnected');
+    // console.log('User disconnected');
   });
 
   // likes notifications
