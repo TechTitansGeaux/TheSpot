@@ -10,7 +10,7 @@ rsvpRouter.get('/forUser', (req: any, res: any) => {
   // sequelize find all where method
   RSVPs.findAll({
     where: {
-      id
+      UserId: id
     }
   })
   .then((resObj: any) => {
