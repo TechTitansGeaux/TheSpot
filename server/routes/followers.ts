@@ -43,17 +43,21 @@ followersRouter.post('/', (req: any, res: any) => {
 })
 
 // DELETE request to unfollow a user
-followersRouter.delete('/', (req: any, res: any) => {
-  const { followedUser_id } = req.body;
+followersRouter.delete('/:followedUser_id', (req: any, res: any) => {
+  const { followedUser_id } = req.params;
+  const { id } = req.user; // needs to be current user i.e. req.user // req.body in postman
   Followers.destroy({
-    where: { followedUser_id }
+    where: {
+      follower_id: id,
+      followedUser_id
+    },
   })
     .then((data: any) => {
       res.sendStatus(200);
     })
     .catch((err: any) => {
       console.error('followersRouter DELETE to database Error:', err);
-  })
+    });
 })
 
 

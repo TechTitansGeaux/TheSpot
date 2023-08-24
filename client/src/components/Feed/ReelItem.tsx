@@ -20,7 +20,6 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Likes from './Likes';
 import './feed.css';
-import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import { Link } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
@@ -30,12 +29,13 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 
 
 dayjs.extend(relativeTime);
-dayjs.extend(localizedFormat)
+dayjs.extend(localizedFormat);
 
-dayjs().format('L LT')
+dayjs().format('L LT');
 
 type User = {
   id: number;
@@ -57,6 +57,8 @@ type Event = {
   name: string;
   rsvp_count: number;
   date: string;
+  time: string;
+  endTime: string;
   geolocation: string;
   twenty_one: boolean;
   createdAt: string;
@@ -80,6 +82,7 @@ type Props = {
   friendList?: any;
   requestFriendship: any;
   requestFollow: any;
+  requestUnfollow: any;
   user: User;
   deleteReel: any;
   disabledNow: any;
@@ -87,6 +90,9 @@ type Props = {
   handleRemoveLike: any;
   likes: any;
   likeTotal: number;
+  followed: number[];
+  muted: boolean;
+  handleToggleMute: () => void;
 };
 
 const theme = createTheme({
@@ -110,6 +116,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   friendList,
   requestFriendship,
   requestFollow,
+  requestUnfollow,
   user,
   deleteReel,
   disabledNow,
@@ -117,6 +124,9 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   handleRemoveLike,
   likes,
   likeTotal,
+  followed,
+  muted,
+  handleToggleMute
 }) {
   const theme = useTheme();
   // REFERENCE VIDEO HTML element in JSX element // Uses a ref to hold an array of generated refs, and assign them when mapping.
@@ -124,13 +134,39 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   const [loop, setLoop] = useState(false);
   const [stayDisabled, setStayDisabled] = useState([]);
   const [likesArr, setLikesArr] = useState([]); // user's own reels that have been liked FROM likes table
+  // Alert Dialog 'are you sure you want to delete this reel?'
+  const [open, setOpen] = React.useState(false);
+  // state of whether event is already over
+  const [pastEvent, setPastEvent] = useState('');
 
   // event info to display on info icon hover: name, date, time
   const eventName = reel.Event.name;
-  const eventDate = dayjs(reel.Event.date + reel.Event.time).format('ddd, MMM D, h:mm A');
+  const eventDate = dayjs(reel.Event.date + reel.Event.time).format(
+    'ddd, MMM D, h:mm A'
+  );
 
-  // Alert Dialog 'are you sure you want to delete this reel?'
-  const [open, setOpen] = React.useState(false);
+  // check if event is over
+  const checkEventTime = () => {
+
+    // declare raw event time
+    const rawEventTime = reel.Event.date + 'T' + reel.Event.endTime;
+    const formattedEventTime = new Date(rawEventTime);
+    const timeForComparing = Date.parse(formattedEventTime.toString())
+
+    const nowRaw = new Date();
+    const now = Date.parse(nowRaw.toString());
+
+      if (timeForComparing < now) {
+        // console.log('event end time has passed')
+        setPastEvent('(Event is over!)')
+      }
+    // }
+  }
+
+  // call check event time once on first render
+  useEffect(() => {
+    checkEventTime();
+  }, [])
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -140,35 +176,33 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
     setOpen(false);
   };
 
- const getLikes = () => {
-   const likes: any = []; // user's reels that have been liked
+  const getLikes = () => {
+    const likes: any = []; // user's reels that have been liked
 
-   if (user) {
-     axios
-       .get('/likes/likes')
-       .then((response) => {
-         //console.log('likes:', response.data);
-         for (let i = 0; i < response.data.length; i++) {
-           for (let j = 0; j < reels.length; j++) {
-             if (response.data[i].ReelId === reels[j].id) {
-               likes.push( response.data[i].ReelId );
-             }
-           }
-         }
-         setLikesArr(likes);
-        //  console.log('likes array:', likesArr);
+    if (user) {
+      axios
+        .get('/likes/likes')
+        .then((response) => {
+          //console.log('likes:', response.data);
+          for (let i = 0; i < response.data.length; i++) {
+            for (let j = 0; j < reels.length; j++) {
+              if (response.data[i].ReelId === reels[j].id) {
+                likes.push(response.data[i].ReelId);
+              }
+            }
+          }
+          setLikesArr(likes);
+          //  console.log('likes array:', likesArr);
+        })
+        .catch((err) => {
+          console.error('Could not GET all likes:', err);
+        });
+    }
+  };
 
-
-       })
-       .catch((err) => {
-         console.error('Could not GET all likes:', err);
-       });
-   }
- };
-
- useEffect(() => {
-   getLikes();
- }, []);
+  useEffect(() => {
+    getLikes();
+  }, []);
 
   // GET request get friendList from Friendship table in DB // set to state variable
   useEffect(() => {
@@ -218,8 +252,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
     return () => observer.disconnect();
   }, []);
 
-  // console.log('(now likes) above return ==>', likes)
-  // console.log('likesArr (now likes) above return ==>', likesArr)
+
   return (
     <div>
       {true && (
@@ -242,8 +275,9 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                   id={`video${reel.id}`}
                   src={reel.url}
                   loop={loop}
-                  muted
+                  muted={muted}
                   preload='none'
+                  onClick={handleToggleMute}
                 ></video>
               )}
               <h5 className='video-timestamp'>
@@ -252,7 +286,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
               <p className='video-text'>{reel.text}</p>
               <>
                 <Tooltip
-                  title={<div>{eventName}<br/>{eventDate}</div>}
+                  title={<div>{eventName}<br/>{eventDate}<br/>{pastEvent}</div>}
                   placement='left'
                   PopperProps={{
                     sx: {
@@ -264,7 +298,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                     },
                   }}
                 >
-                  <InfoIcon aria-label={eventName + eventDate} className='info-icon' />
+                <InfoIcon aria-label={eventName + eventDate} className='info-icon' />
                 </Tooltip>
                 {/**Removes addFriend button if already approved friend*/}
                 {!friendList.includes(reel.User.id) &&
@@ -283,34 +317,79 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                               stayDisabled.includes(reel.User.id)
                             }
                           >
-                            <Tooltip
-                              title={
-                                reel?.User.type === 'personal'
-                                  ? 'Add Friend'
-                                  : `Follow ${reel?.User.displayName}`
-                              }
-                              TransitionComponent={Zoom}
-                              placement='left'
-                              PopperProps={{
-                                sx: {
-                                  '& .MuiTooltip-tooltip': {
-                                    backgroundColor: 'transparent',
-                                    border: 'solid #F5FCFA 1px',
-                                    color: '#F5FCFA',
+                            {reel?.User.type === 'personal' && (
+                              <Tooltip
+                                title='Add Friend'
+                                TransitionComponent={Zoom}
+                                placement='left'
+                                PopperProps={{
+                                  sx: {
+                                    '& .MuiTooltip-tooltip': {
+                                      backgroundColor: 'transparent',
+                                      border: 'solid #F5FCFA 1px',
+                                      color: '#F5FCFA',
+                                    },
                                   },
-                                },
-                              }}
-                            >
-                              <AddIcon
-                                aria-label='Add Friend Button'
-                                sx={{ width: 20, height: 20 }}
-                                onClick={
-                                  reel?.User.type === 'personal'
-                                    ? () => requestFriendship(reel.User.id)
-                                    : () => requestFollow(reel.User.id)
-                                }
-                              />
-                            </Tooltip>
+                                }}
+                              >
+                                <AddIcon
+                                  aria-label='Add Friend Button'
+                                  sx={{ width: 25, height: 25 }}
+                                  onClick={() =>
+                                    requestFriendship(reel.User.id)
+                                  }
+                                />
+                              </Tooltip>
+                            )}
+                            {/**Replaces addFriend button with Follow button reel.User.type is a business*/}
+                            {reel?.User.type === 'business' &&
+                            !followed.includes(reel.User.id) ?
+                              <Tooltip
+                                title={`Follow ${reel?.User.displayName}`}
+                                TransitionComponent={Zoom}
+                                placement='left'
+                                PopperProps={{
+                                  sx: {
+                                    '& .MuiTooltip-tooltip': {
+                                      backgroundColor: 'transparent',
+                                      border: 'solid #F5FCFA 1px',
+                                      color: '#F5FCFA',
+                                    },
+                                  },
+                                }}
+                              >
+                                <AddIcon
+                                  aria-label={`Follow ${reel?.User.displayName}`}
+                                  sx={{ width: 25, height: 25 }}
+                                  onClick={() => requestFollow(reel.User.id)}
+                                />
+                              </Tooltip>
+                            : (
+                              (reel?.User.type === 'business' && followed.includes(reel.User.id)) &&
+                                <Tooltip
+                                  title={`Unfollow ${reel?.User.displayName}`}
+                                  TransitionComponent={Zoom}
+                                  placement='left'
+                                  PopperProps={{
+                                    sx: {
+                                      '& .MuiTooltip-tooltip': {
+                                        backgroundColor: 'transparent',
+                                        border: 'solid #F5FCFA 1px',
+                                        color: '#F5FCFA',
+                                      },
+                                    },
+                                  }}
+                                >
+                                  <ClearOutlinedIcon
+                                    aria-label={`Unfollow ${reel?.User.displayName}`}
+                                    sx={{ width: 25, height: 25 }}
+                                    onClick={() =>
+                                      requestUnfollow(reel.User.id)
+                                    }
+                                  />
+                                </Tooltip>
+
+                            )}
                           </Fab>
                         </Box>
                       </div>
@@ -318,21 +397,21 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                   )}
                 {reel.UserId === user.id && (
                   <div className='friend-request'>
-                      <div>
-                    <Tooltip
-                      title='Delete Reel'
-                      TransitionComponent={Zoom}
-                      placement='right'
-                      PopperProps={{
-                        sx: {
-                          '& .MuiTooltip-tooltip': {
-                            backgroundColor: 'transparent',
-                            border: 'solid #F5FCFA 1px',
-                            color: '#F5FCFA',
+                    <div>
+                      <Tooltip
+                        title='Delete Reel'
+                        TransitionComponent={Zoom}
+                        placement='right'
+                        PopperProps={{
+                          sx: {
+                            '& .MuiTooltip-tooltip': {
+                              backgroundColor: 'transparent',
+                              border: 'solid #F5FCFA 1px',
+                              color: '#F5FCFA',
+                            },
                           },
-                        },
-                      }}
-                    >
+                        }}
+                      >
                         <button
                           className='delete-btn'
                           name='Delete Button'
@@ -341,29 +420,29 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                         >
                           🗑️
                         </button>
-                        </Tooltip>
-                        <Dialog
-                          open={open}
-                          onClose={handleClose}
-                          aria-labelledby="alert-dialog-title"
-                          aria-describedby="alert-dialog-description"
-                        >
-                          <DialogTitle id="alert-dialog-title">
-                            {"Delete this reel?"}
-                          </DialogTitle>
-                          <DialogContent>
-                            <DialogContentText id="alert-dialog-description">
-                              Are you sure you want to delete this reel?
-                            </DialogContentText>
-                          </DialogContent>
-                          <DialogActions>
-                            <Button onClick={handleClose}>No</Button>
-                            <Button onClick={() => deleteReel(reel.id)} autoFocus>
-                              Yes
-                            </Button>
-                          </DialogActions>
-                        </Dialog>
-                      </div>
+                      </Tooltip>
+                      <Dialog
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby='alert-dialog-title'
+                        aria-describedby='alert-dialog-description'
+                      >
+                        <DialogTitle id='alert-dialog-title'>
+                          {'Delete this reel?'}
+                        </DialogTitle>
+                        <DialogContent>
+                          <DialogContentText id='alert-dialog-description'>
+                            Are you sure you want to delete this reel?
+                          </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                          <Button onClick={handleClose}>No</Button>
+                          <Button onClick={() => deleteReel(reel.id)} autoFocus>
+                            Yes
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
+                    </div>
                   </div>
                 )}
               </>
@@ -436,8 +515,8 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                           },
                         }}
                       >
-                       <IconButton
-                        sx={{
+                        <IconButton
+                          sx={{
                             minHeight: '1rem',
                             minWidth: '1rem',
                             }}

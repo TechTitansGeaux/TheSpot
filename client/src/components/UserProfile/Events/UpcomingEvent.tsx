@@ -3,6 +3,12 @@ import * as React from 'react';
 import { useState } from 'react';
 import axios from 'axios';
 import Tooltip from '@mui/material/Tooltip';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContentText from '@mui/material/DialogContentText';
 
 type Props = {
   event: {
@@ -18,9 +24,10 @@ type Props = {
     time: string,
     twenty_one: boolean,
     updatedAt: string
-  }
+  },
+  getMyEvents: () => void
 }
-const UpcomingEvent: React.FC<Props> = ({event}) => {
+const UpcomingEvent: React.FC<Props> = ({event, getMyEvents}) => {
 
   const [name, setName] = useState(event.name);
   const [date, setDate] = useState(event.date);
@@ -28,6 +35,17 @@ const UpcomingEvent: React.FC<Props> = ({event}) => {
   const [endTime, setEndTime] = useState(event.endTime);
   const [twentyOne, setTwentyOne] = useState(event.twenty_one)
   const [justSaved, setJustSaved] = useState(false);
+  // Alert Dialog 'are you sure you want to delete this EVENT?'
+  const [open, setOpen] = useState(false);
+
+  // handle opening delete alert dialog
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  // handle closing delete alert dialog
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleNameChange = (e: any) => {
     setName(e.target.value);
@@ -66,6 +84,18 @@ const UpcomingEvent: React.FC<Props> = ({event}) => {
     .catch((err) => {
       console.error('Failed to axios PATCH event: ', err);
     })
+  }
+
+  // delete event
+  const deleteEvent = () => {
+    axios.delete(`/events/delete/${event.id}`)
+      .then(() => {
+        setOpen(false);
+        getMyEvents();
+      })
+      .catch((err) => {
+        console.error('Failed to axios delete event: ', err);
+      })
   }
   return (
     <div className='column-md-2'>
@@ -122,6 +152,34 @@ const UpcomingEvent: React.FC<Props> = ({event}) => {
             {justSaved && <button
             className='save-event-success-button'>
               Saved!</button>}
+              <button
+              className='delete-event-button'
+              onClick={handleClickOpen}>
+                X
+              </button>
+              <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogTitle id="alert-dialog-title">
+                  {"Are you sure you want to delete this event?"}
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    Only delete events that are fully cancelled. Deleting an event will
+                    delete all related reels. Keep your hype for a rescheduled event by
+                    editing the date or time.
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={deleteEvent} autoFocus>
+                    Yes, event is cancelled
+                  </Button>
+                  <Button onClick={handleClose}>I&#39;ll reschedule</Button>
+                </DialogActions>
+              </Dialog>
         </div>
       </div>
     </div>

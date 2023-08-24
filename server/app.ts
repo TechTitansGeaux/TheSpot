@@ -79,6 +79,12 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('User disconnected');
   });
+
+  // likes notifications
+  socket.on('likesNotif', (data) => {
+    // console.log('received');
+    socket.broadcast.emit('likeSent', data);
+  })
 });
 
 

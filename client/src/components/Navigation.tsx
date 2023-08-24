@@ -11,7 +11,6 @@ import Drawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import List from '@mui/material/List';
 import Avatar from '@mui/material/Avatar';
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
@@ -22,7 +21,8 @@ import './navigation.css';
 import Snackbar from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-
+import io from 'socket.io-client';
+const socket = io();
 
 type Anchor = 'left';
 type Props = {
@@ -121,14 +121,10 @@ const Navigation: React.FC<Props> = ({ user }) => {
   useEffect(() => {
     getOwnReels();
 
-    const interval = setInterval(() => {
+    socket.on('likeSent', (data) => {
       getOwnReels();
-    }, 5000);
-
-    return () => {
-      clearInterval(interval);
-    }
-  }, [location.pathname]);
+    });
+  }, [socket, location.pathname]);
 
   // get reels that have been liked AND checked
   const getLikes = () => {
@@ -154,13 +150,9 @@ const Navigation: React.FC<Props> = ({ user }) => {
   useEffect(() => {
     getLikes();
 
-    const interval = setInterval(() => {
+    socket.on('likeSent', (data) => {
       getLikes();
-    }, 5000);
-
-    return () => {
-      clearInterval(interval);
-    }
+    });
   }, [location.pathname, user]);
 
   // once you click on likes sidebar, set likes checked column to true
@@ -281,7 +273,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List sx={{ paddingTop: '3em' }}>
-        <ListItem className='drawer-btn' disablePadding >
+        <ListItem className='drawer-btn' disablePadding>
           <ListItemButton
             className='sidebar-btn'
             component={Link}
@@ -291,24 +283,46 @@ const Navigation: React.FC<Props> = ({ user }) => {
             MY REELS
           </ListItemButton>
         </ListItem>
-        <ListItem className='drawer-btn' disablePadding>
-          <ListItemButton
-            className='sidebar-btn'
-            component={Link}
-            to={'/FriendRequests'}
-            sx={{ minHeight: '4em', paddingLeft: '1.5em' }}
-          >
-            FRIENDS
-            <span>
-              {pFriends.length !== 0 && (
-                <CircleNotificationsIcon
-                  className='circle'
-                  sx={{ marginLeft: 1 }}
-                />
-              )}
-            </span>
-          </ListItemButton>
-        </ListItem>
+        {user?.type === 'personal' && (
+          <ListItem className='drawer-btn' disablePadding>
+            <ListItemButton
+              className='sidebar-btn'
+              component={Link}
+              to={'/FriendRequests'}
+              sx={{ minHeight: '4em', paddingLeft: '1.5em' }}
+            >
+              FRIENDS
+              <span>
+                {pFriends.length !== 0 && (
+                  <CircleNotificationsIcon
+                    className='circle'
+                    sx={{ marginLeft: 1 }}
+                  />
+                )}
+              </span>
+            </ListItemButton>
+          </ListItem>
+        )}
+        {user?.type === 'business' && (
+          <ListItem className='drawer-btn' disablePadding>
+            <ListItemButton
+              className='sidebar-btn'
+              component={Link}
+              to={'/Follows'}
+              sx={{ minHeight: '4em', paddingLeft: '1.5em' }}
+            >
+              FOLLOWERS
+              <span>
+                {pFriends.length !== 0 && (
+                  <CircleNotificationsIcon
+                    className='circle'
+                    sx={{ marginLeft: 1 }}
+                  />
+                )}
+              </span>
+            </ListItemButton>
+          </ListItem>
+        )}
         <ListItem className='drawer-btn' disablePadding>
           <ListItemButton
             className='sidebar-btn'

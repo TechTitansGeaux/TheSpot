@@ -51,6 +51,7 @@ type Props = {
   setZoom: (zoom: number) => void
   setCenter: (center: object) => void
   closeAllPopUps: () => void
+  zoom: number
 };
 
 const addFriendTheme = createTheme({
@@ -83,14 +84,13 @@ const rmFriendTheme = createTheme({
   },
 });
 
-const UserPin: React.FC<Props> = (props) => {
+const UserPin: React.FC<Props> = ({ user, loggedIn, lat, lng, zoom, friendList, pendingFriendList, getFriendList, getPendingFriendList, setZoom, setCenter }) => {
 
   const togglePopUp = () => {
-    const box = document.getElementById('popUp' + props.user.username + props.user.id)
+    const box = document.getElementById('popUp' + user.username + user.id)
     if (box.style.display === 'block') {
       box.style.display = 'none';
     } else {
-      props.closeAllPopUps();
       box.style.display = 'block';
     }
   }
@@ -100,11 +100,11 @@ const UserPin: React.FC<Props> = (props) => {
     axios
       .post('/friends', {
         // accepter_id is user on reel
-        accepter_id: props.user.id
+        accepter_id: user.id
       })
       .then(() => {
-        props.getFriendList();
-        props.getPendingFriendList();
+        getFriendList();
+        getPendingFriendList();
       })
       .catch((err) => {
         console.error('Friend request axios FAILED', err);
@@ -113,46 +113,50 @@ const UserPin: React.FC<Props> = (props) => {
 
   const removeFriend = () => {
     axios
-      .delete(`/friends/removeFriend/${props.user.id}`, { data: { updatedAt: props.user.updatedAt }})
+      .delete(`/friends/removeFriend/${user.id}`, { data: { updatedAt: user.updatedAt }})
       .then(() => {
-        props.getFriendList()
-        props.getPendingFriendList();
+        getFriendList()
+        getPendingFriendList();
       })
       .catch((err) => {
         console.error('Remove friend request axios FAILED', err);
       });
   }
 
-  const isNotLoggedInUser = (props.user.id !== props.loggedIn.id) || null;
+  const isNotLoggedInUser = (user.id !== loggedIn.id) || null;
 
 
 
   return (
     <div>
-      <div className='userDot' id={props.user.username + props.user.id} onClick={ () => {
-        props.setCenter({lat: props.lat - 0.005, lng: props.lng});
-        props.setZoom(15);
+      <div className='userDot' id={user.username + user.id} onClick={ () => {
+        if (zoom < 15) {
+          setZoom(15);
+          setCenter({lat: lat - 0.005, lng: lng});
+        } else {
+          setCenter({lat: lat - (0.005 / ( 2 ** (zoom - 15))), lng: lng});
+        }
         togglePopUp();
       } } >
         <img
-          src={props.user.mapIcon}
+          src={user.mapIcon}
           style={{ width: '40px', height: '40px', marginLeft: '1.5px', marginTop: '2.5px'}}
         />
       </div>
-      <div className='userPopUp' id={'popUp' + props.user.username + props.user.id}>
+      <div className='userPopUp' id={'popUp' + user.username + user.id}>
         <div style={{ textAlign: 'center', fontSize: '20px' }}>
-          {props.user.displayName}
+          {user.displayName}
         </div>
         <div style={{ textAlign: 'center', fontSize: '14px' }}>
-          @{props.user.username}
+          @{user.username}
         </div>
         <div style={{ textAlign: 'center', fontSize: '15px' }}>
           <p>
-            {`Member Since: ${dayjs(props.user.createdAt).format('ll')}`}
+            {`Member Since: ${dayjs(user.createdAt).format('ll')}`}
           </p>
         </div>
         <div className='addOrRmFriend'>
-          {!props.pendingFriendList.includes(props.user.id) && !props.friendList.includes(props.user.id) && isNotLoggedInUser && (
+          {!pendingFriendList.includes(user.id) && !friendList.includes(user.id) && isNotLoggedInUser && (
             <div>
               <div style={{ position: 'relative', top: '18px', left: '80px' }}>add friend</div>
               <div style={{ position: 'relative', top: '-7.5px' }}>
@@ -175,7 +179,7 @@ const UserPin: React.FC<Props> = (props) => {
           )}
         </div>
         <div className='addOrRmFriend'>
-          {props.friendList.includes(props.user.id) && (
+          {friendList.includes(user.id) && (
             <div>
               <div style={{ position: 'relative', top: '18px', left: '60px' }}>remove friend</div>
               <ThemeProvider theme={rmFriendTheme}>
@@ -196,7 +200,7 @@ const UserPin: React.FC<Props> = (props) => {
           )}
         </div>
         <div className='addOrRmFriend'>
-          {props.pendingFriendList.includes(props.user.id) && (
+          {pendingFriendList.includes(user.id) && (
             <div>
               <div style={{ position: 'relative', top: '18px', left: '60px' }}>request pending</div>
             </div>

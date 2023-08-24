@@ -7,8 +7,8 @@ import { setAuthUser, setIsAuthenticated } from '../../store/appSlice';
 import ReelItem from './ReelItem';
 import { useTheme } from '@mui/material/styles';
 import { AnimatePresence, motion } from 'framer-motion';
-
-// const ReelItem = React.lazy(() => import('./ReelItem'));
+import io from 'socket.io-client';
+const socket = io();
 
 type Props = {
   reels: {
@@ -52,6 +52,8 @@ type Event = {
   name: string;
   rsvp_count: number;
   date: string;
+  time: string;
+  endTime: string;
   geolocation: string;
   twenty_one: boolean;
   createdAt: string;
@@ -71,6 +73,10 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
   const [likeTotal, setLikeTotal] = useState(0);
   const [likes, setLikes] = useState([]); // user's reels that have been liked
   // const [likesPersist, setLikesPersist] = useState([]);
+    // state of audio on reels
+    const [muted, setMuted] = useState(true);
+      // toggle reel audio
+  const handleToggleMute = () => setMuted(current => !current);
 
   const fetchAuthUser = async () => {
     try {
@@ -109,21 +115,59 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
     return () => controller?.abort();
   }, []);
 
+  //GET request to retreive all followed users
+  const getAllFollowed = () => {
+    axios
+      .get('/followers')
+      .then(({ data }) => {
+        data.map((row: any) => {
+          if (!followed.includes(row.followedUser_id)) {
+            setFollowed((prev) => [...prev, row.followedUser_id]);
+          }
+        });
+        // console.log('All followed users retrieved AXIOS GET', data);
+      })
+      .catch((err) => {
+        console.error('AXIO get all followed users FAILED', err);
+      });
+  };
+
   // POST request to follow a business user
   const requestFollow = (followedUser: number) => {
-    console.log('request to followedUser_id=>', followedUser)
-    setFollowed([...followed, followedUser]);
-    axios.post('/followers', {
-      followedUser_id: followedUser
-    })
+    console.log('request to followedUser_id=>', followedUser);
+    axios
+      .post('/followers', {
+        followedUser_id: followedUser,
+      })
       .then((data) => {
+        // setFollowed((prev) => [...prev, followedUser]);
+        setDisabled([...disabled, followedUser]);
         console.log('Now following followedUser_id: ', followedUser);
       })
       .catch((err) => {
         console.error('Follow request axios FAILED: ', err);
-    })
-  }
+      });
+  };
 
+  // DELETE request to unfollow a business user
+  const requestUnfollow = (followedUser: number) => {
+    console.log('request to followedUser_id=>', followedUser);
+    // update below to remove from array like friends
+    axios
+      .delete(`/followers/${followedUser}`, {
+        data: { followedUser_id: followedUser },
+      })
+      .then((data) => {
+        const foundFollower = followed.indexOf(followedUser);
+        console.log('found follower ===>', foundFollower)
+        setDisabled([...disabled, followedUser]);
+        setFollowed((prev) => prev.splice(foundFollower, 1));
+        console.log('Now unfollowing | delete followedUser_id: ', followedUser);
+      })
+      .catch((err) => {
+        console.error('unfollow request axios FAILED: ', err);
+      });
+  };
 
   // POST request friendship 'pending' status to db
   const requestFriendship = (friend: number) => {
@@ -163,6 +207,7 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
       .delete(`/feed/delete/${reelId}`)
       .then((data) => {
         console.log('Reel deleted', data);
+        socket.emit('likesNotif', 'like');
         getAllReels();
       })
       .catch((err) => {
@@ -178,7 +223,7 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
       .then((data) => {
         // console.log('Likes Updated AXIOS', data);
         setLikes((prev) => [...prev, reelId]);
-        setLikeTotal(prev => prev + 1);
+        setLikeTotal((prev) => prev + 1);
       })
       .catch((err) => console.error('Like AXIOS route Error', err));
   };
@@ -194,7 +239,7 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
           setLikes((prev) => prev.splice(foundLike, 1));
         }
         setLikes((prev) => prev.splice(foundLike, 1));
-        setLikeTotal(prev => prev - 1);
+        setLikeTotal((prev) => prev - 1);
       })
       .catch((err) => console.error('Like AXIOS route Error', err));
   };
@@ -202,8 +247,8 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
   // get reels that have been liked
   const getLikes = () => {
     if (user) {
-     axios
-       .get('/likes/likes')
+      axios
+        .get('/likes/likes')
         .then((response) => {
           for (let i = 0; i < response.data.length; i++) {
             for (let j = 0; j < reels.length; j++) {
@@ -227,10 +272,12 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
 
   useEffect(() => {
     getLikes();
-  }, [likeTotal]);
+  }, []);
 
-  // console.log('likes from reel.tsx', likes);
-  // console.log('likes persist from reel.tsx', likesPersist);
+  useEffect(() => {
+    getAllFollowed();
+  }, []);
+
   return (
     <main
       className='reel-container'
@@ -251,18 +298,23 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
               }}
             >
               <ReelItem
+                key={reel.id + 'reelItem'}
                 user={user}
                 reel={reel}
                 reels={reels}
                 friendList={friendList}
                 requestFriendship={requestFriendship}
+                requestUnfollow={requestUnfollow}
                 requestFollow={requestFollow}
+                followed={followed}
                 disabledNow={disabled}
                 deleteReel={deleteReel}
                 handleAddLike={handleAddLike}
                 handleRemoveLike={handleRemoveLike}
                 likeTotal={likeTotal}
                 likes={likes}
+                muted={muted}
+                handleToggleMute={handleToggleMute}
               />
             </motion.div>
           );

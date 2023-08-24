@@ -22,20 +22,7 @@ type User = {
 
 
 type Props = {
-  user: {
-    id: number;
-    username: string;
-    displayName: string;
-    type: string;
-    geolocation: string;
-    mapIcon: string;
-    birthday: string;
-    privacy: string;
-    accessibility: string;
-    email: string;
-    picture: string;
-    googleId: string;
-  };
+  user: User;
   allUsers: [User];
 };
 
@@ -100,7 +87,7 @@ const FriendRequestList: React.FC<Props> = ({ user, allUsers }) => {
     console.log('friendship approved');
     axios
       .put('/friends', {
-        requester_id: friend, 
+        requester_id: friend,
       })
       .then((data) => {
         // console.log('Friend request approved PUT', data);
