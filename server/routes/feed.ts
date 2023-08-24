@@ -217,5 +217,7 @@ feedRouter.get('/following', (req: any, res: any) => {
     })
 });
 
+// followers list for business accounts
+
 export default feedRouter;
 

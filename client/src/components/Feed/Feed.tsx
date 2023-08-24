@@ -33,9 +33,10 @@ const Feed: React.FC<Props> = ({user}) => {
   const [userLat, setUserLat] = useState(0);
   const [userLong, setUserLong] = useState(0);
 
-  const filters = ['recent', 'likes', 'friends']; // filter options
+  const filters = ['recent', 'likes', 'friends', 'following']; // filter options
   const geoFilters = [15, 10 ,5]; // geolocation filters by miles
   const friendsReels: any = [];
+  const followingReels: any = [];
   const geoReels: any = [];
 
   const filterChangeHandler = (event: any) => {
@@ -158,6 +159,7 @@ const Feed: React.FC<Props> = ({user}) => {
       })
   };
 
+  // for personal accounts
   const getFollowingList = () => {
     axios
       .get('/feed/following')
@@ -170,11 +172,32 @@ const Feed: React.FC<Props> = ({user}) => {
       })
   };
 
+  const getAllFollowingReels = () => {
+    axios
+      .get('/feed/recent')
+      .then((response) => {
+        for (let i = 0; i < following.length; i++) {
+          for (let j = 0; j < response.data.length; j++) {
+            if (following[i].followedUser_id === response.data[j].UserId) {
+              followingReels.push(response.data[j]);
+            }
+          }
+        }
+        locFilter(followingReels);
+        setReels(geoReels);
+      })
+      .catch((err) => {
+        console.error('Could not GET all following reels:', err);
+      })
+  };
+
   const getAllReels = () => {
     if (filter === 'recent') {
       getAllReelsRecent();
     } else if (filter === 'friends') {
       getAllFriendReels();
+    } else if (filter === 'following') {
+      getAllFollowingReels();
     } else if (filter === 'likes') {
       getAllReelsLikes();
     }
@@ -191,11 +214,11 @@ const Feed: React.FC<Props> = ({user}) => {
 
   useEffect(() => {
     getFriendList();
-  }, []);
+  }, [filter]);
 
   useEffect(() => {
     getFollowingList();
-  }, [])
+  }, [filter])
 
 
   return (
