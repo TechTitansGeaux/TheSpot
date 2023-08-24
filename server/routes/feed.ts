@@ -205,7 +205,7 @@ feedRouter.get('/following', (req: any, res: any) => {
   })
     .then((response: any) => {
       if (response === null) {
-        console.log('followers do not exist');
+        console.log('followings do not exist');
         res.sendStatus(404);
       } else {
         res.status(200).send(response);
@@ -218,6 +218,26 @@ feedRouter.get('/following', (req: any, res: any) => {
 });
 
 // followers list for business accounts
+feedRouter.get('/followers', (req: any, res: any) => {
+  const { id } = req.user;
+  Followers.findAll({
+    where: {
+      followedUser_id: id
+    }
+  })
+    .then((response: any) => {
+      if (response === null) {
+        console.log('followers do not exist');
+        res.sendStatus(404);
+      } else {
+        res.status(200).send(response);
+      }
+    })
+    .catch((err: any) => {
+      console.error('Cannot GET followers', err);
+      res.sendStatus(500);
+    })
+});
 
 export default feedRouter;
 

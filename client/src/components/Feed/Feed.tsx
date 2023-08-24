@@ -5,6 +5,12 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import './feed.css';
 import { response } from 'express';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 type Props = {
   user: {
@@ -32,16 +38,37 @@ const Feed: React.FC<Props> = ({user}) => {
   const [following, setFollowing] = useState([]); // following list for current user (personal)
   const [userLat, setUserLat] = useState(0);
   const [userLong, setUserLong] = useState(0);
+  const [followers, setFollowers] = useState([]); // followers list for current user (business)
+  const [userType, setUserType] = useState(''); // personal or business
+    // filter dialog
+  const [open, setOpen] = React.useState(false);
 
-  const filters = ['recent', 'likes', 'friends', 'following']; // filter options
+  const filters: any = [];
+
+  const findUserType = () => {
+    if (user) {
+      // console.log('user type:', user.type);
+      if (user.type === 'business') {
+        setUserType('business');
+      } else if (user.type === 'personal') {
+        setUserType('personal');
+      }
+    }
+  };
+
+  useEffect(() => {
+    findUserType();
+  }, [user, reels]);
+
   const geoFilters = [15, 10 ,5]; // geolocation filters by miles
   const friendsReels: any = [];
   const followingReels: any = [];
+  const followerReels: any = [];
   const geoReels: any = [];
 
-  const filterChangeHandler = (event: any) => {
-    setFilter(event.target.value);
-  };
+  // const filterChangeHandler = (event: any) => {
+  //   setFilter(event.target.value);
+  // };
 
   const geoFilterHandler = (event: any) => {
     setGeoF(event.target.value);
@@ -108,6 +135,8 @@ const Feed: React.FC<Props> = ({user}) => {
       .then((response) => {
         locFilter(response.data);
         setReels(geoReels);
+        setFilter('recent');
+        setOpen(false);
       })
       .catch((err) => {
         console.error('Could not GET all recent reels:', err);
@@ -120,6 +149,8 @@ const Feed: React.FC<Props> = ({user}) => {
       .then((response) => {
         locFilter(response.data);
         setReels(geoReels);
+        setFilter('likes');
+        setOpen(false);
       })
       .catch((err) => {
         console.error('Could not GET all recent reels:', err);
@@ -141,6 +172,8 @@ const Feed: React.FC<Props> = ({user}) => {
         }
         locFilter(friendsReels);
         setReels(geoReels);
+        setFilter('friends');
+        setOpen(false);
       })
       .catch((err) => {
         console.error('Could not GET all frens reels:', err);
@@ -164,7 +197,7 @@ const Feed: React.FC<Props> = ({user}) => {
     axios
       .get('/feed/following')
       .then((response) => {
-        console.log('following:', response.data);
+        // console.log('following:', response.data);
         setFollowing(response.data);
       })
       .catch((err) => {
@@ -185,10 +218,46 @@ const Feed: React.FC<Props> = ({user}) => {
         }
         locFilter(followingReels);
         setReels(geoReels);
+        setFilter('following');
+        setOpen(false);
       })
       .catch((err) => {
         console.error('Could not GET all following reels:', err);
       })
+  };
+
+  const getFollowersList = () => {
+    axios
+      .get('/feed/followers')
+      .then((response) => {
+        console.log('followers:', response.data);
+        setFollowers(response.data);
+      })
+      .catch((err) => {
+        console.error('Could not GET followers', err);
+      })
+  };
+
+  // business accounts
+  const getAllFollowersReels = () => {
+    axios
+    .get('/feed/recent')
+    .then((response) => {
+      for (let i = 0; i < followers.length; i++) {
+        for (let j = 0; j < response.data.length; j++) {
+          if (followers[i].follower_id === response.data[j].UserId) {
+            followerReels.push(response.data[j]);
+          }
+        }
+      }
+      locFilter(followerReels);
+      setReels(geoReels);
+      setFilter('followers');
+      setOpen(false);
+    })
+    .catch((err) => {
+      console.error('Could not GET all following reels:', err);
+    })
   };
 
   const getAllReels = () => {
@@ -200,7 +269,18 @@ const Feed: React.FC<Props> = ({user}) => {
       getAllFollowingReels();
     } else if (filter === 'likes') {
       getAllReelsLikes();
+    } else if (filter === 'followers') {
+      getAllFollowersReels();
     }
+  };
+
+  // filter dialog
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
 
@@ -218,33 +298,99 @@ const Feed: React.FC<Props> = ({user}) => {
 
   useEffect(() => {
     getFollowingList();
-  }, [filter])
+  }, [filter]);
 
+  useEffect(() => {
+    getFollowersList();
+  }, [filter]);
 
   return (
     <>
+    {userType === 'personal' && (
       <div className='filter-container'>
-        <div className='label'>
-        <label>
-          Filter by:
-          <select onChange={filterChangeHandler}>
-            {filters.map((filter, i) => {
-              return <option key={i}>{filter}</option>;
-            })}
-          </select>
-        </label>
-        </div>
-        <div className='label'>
-        <label>
-          Radius (miles):
-          <select onChange={geoFilterHandler}>
-            {geoFilters.map((geofilter, i) => {
-              return <option key={i}>{geofilter}</option>;
-            })}
-          </select>
-        </label>
-        </div>
+      <div className='label'>
+      <button
+        className='filter-btn'
+        name='Filter Button'
+        onClick={handleClickOpen}
+      >
+        Filters
+      </button>
+    <Dialog
+      open={open}
+      onClose={handleClose}
+    >
+      <DialogTitle id='filter-dialog-title'>
+        {'Filters'}
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText id='alert-dialog-description'>
+          Filter By
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={getAllReelsRecent} autoFocus>Recent</Button>
+        <Button onClick={getAllFriendReels} autoFocus>Friends</Button>
+        <Button onClick={getAllFollowingReels} autoFocus>Following</Button>
+        <Button onClick={getAllReelsLikes} autoFocus>Likes</Button>
+      </DialogActions>
+    </Dialog>
       </div>
+      <div className='label'>
+      <label>
+        Radius (miles):
+        <select onChange={geoFilterHandler}>
+          {geoFilters.map((geofilter, i) => {
+            return <option key={i}>{geofilter}</option>;
+          })}
+        </select>
+      </label>
+      </div>
+    </div>
+    )}
+
+    {userType === 'business' && (
+      <div className='filter-container'>
+      <div className='label'>
+      <button
+        className='filter-btn'
+        name='Filter Button'
+        onClick={handleClickOpen}
+      >
+        Filters
+      </button>
+    <Dialog
+      open={open}
+      onClose={handleClose}
+    >
+      <DialogTitle id='filter-dialog-title'>
+        {'Filters'}
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText id='alert-dialog-description'>
+          Filter By
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={getAllReelsRecent} autoFocus>Recent</Button>
+        <Button onClick={getAllFollowersReels} autoFocus>Followers</Button>
+        <Button onClick={getAllReelsLikes} autoFocus>Likes</Button>
+      </DialogActions>
+    </Dialog>
+      </div>
+      <div className='label'>
+      <label>
+        Radius (miles):
+        <select onChange={geoFilterHandler}>
+          {geoFilters.map((geofilter, i) => {
+            return <option key={i}>{geofilter}</option>;
+          })}
+        </select>
+      </label>
+      </div>
+    </div>
+    )}
+
       <div className='container-full-w'>
         <Reel
           reels={reels}
