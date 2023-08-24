@@ -17,6 +17,7 @@ import axios from 'axios';
 import Settings from './components/ProfileSetUp/Settings';
 import BusinessSettings from './components/ProfileSetUp/BusinessSettings';
 import FriendRequestList from './components/UserProfile/FriendRequests/FriendRequestList';
+import FollowersList from './components/UserProfile/Followers/FollowersList';
 import LikesList from './components/UserProfile/Likes/LikesList';
 import EventsList from './components/UserProfile/Events/EventsList';
 import { useDispatch, useSelector } from 'react-redux';
@@ -121,6 +122,10 @@ const App = () => {
           <Route
             path='/FriendRequests'
               element={<FriendRequestList allUsers={allUsers}  user={user} />}
+          ></Route>
+          <Route
+            path='/Follows'
+              element={<FollowersList allUsers={allUsers}  user={user} />}
           ></Route>
           <Route path='/Likes' element={<LikesList allUsers={allUsers} user={user} />}></Route>
           <Route

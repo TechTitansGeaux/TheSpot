@@ -120,7 +120,7 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
             setFollowed((prev) => [...prev, row.followedUser_id]);
           }
         });
-        console.log('All followed users retrieved AXIOS GET', data);
+        // console.log('All followed users retrieved AXIOS GET', data);
       })
       .catch((err) => {
         console.error('AXIO get all followed users FAILED', err);
