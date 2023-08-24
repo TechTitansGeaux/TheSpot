@@ -11,6 +11,7 @@ import BusinessPin from './BusinessPin';
 import BusinessClusterPin from './BusinessClusterPin'
 import EventRadialMarker from './EventRadialMarker'
 import { useLocation } from "react-router-dom";
+import socketIOClient from 'socket.io-client';
 
 type Props =  {
   loggedIn: {
@@ -30,6 +31,11 @@ type Props =  {
   reelEvent: any;
 }
 
+type User = {
+  id: number;
+  geolocation: string;
+}
+
 
 const Map: React.FC<Props> = (props) => {
   const { loggedIn, reelEvent } = props;
@@ -40,6 +46,47 @@ const Map: React.FC<Props> = (props) => {
   const [ friendList, setFriendList ] = useState([]);
   const [ pendingFriendList, setPendingFriendList ] = useState([]);
   const [ businesses, setBusinesses ] = useState([]);
+
+
+  // set up Socket.io connection
+  const [socket, setSocket] = useState(null);
+  const [isSocketConnected, setIsSocketConnected] = useState(false);
+
+  useEffect(() => {
+    const socket = socketIOClient(`${process.env.HOST}`);
+    setSocket(socket);
+
+    socket.on('connect', () => {
+      setIsSocketConnected(true);
+    });
+
+    socket.on('disconnect', () => {
+      setIsSocketConnected(false);
+    });
+
+    return () => {
+      socket.disconnect(); // clean up the socket connection on unmount
+    };
+  }, []);
+
+  // listen for geolocation updates and update pins in real time
+  useEffect(() => {
+    if (isSocketConnected && socket) {
+      socket.on('userGeolocationUpdate', (updatedUser: User) => {
+        setUsers((prevUsers) =>
+          prevUsers.map((user) => {
+            if (user.id === updatedUser.id) {
+              return {
+                ...user,
+                geolocation: updatedUser.geolocation,
+              };
+            }
+            return user;
+          })
+        );
+      });
+    }
+  }, [socket, isSocketConnected, users]);
 
   // function to split coordinates into array so lat and lng can easily be destructured
   const splitCoords = (coords: string) => {
@@ -253,8 +300,12 @@ const Map: React.FC<Props> = (props) => {
   Array.prototype.forEach.call( busPopUps, (popUp: any) => {
     popUp.style.display = 'none';
   })
-
  }
+
+ if (!users.length || !events.length || !businesses.length) {
+  // Data is not yet available, render loading or placeholder content
+  return <div>Loading...</div>;
+}
 
   return (
     <div className='mapParent' onWheel={closeAllPopUps}>

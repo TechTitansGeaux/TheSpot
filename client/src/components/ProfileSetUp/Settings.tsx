@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -16,9 +17,13 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Location from './Location';
 import SpeechToText from '../ProfileSetUp/SpeechToText'
 
+
+
 type Props = {
 fontSize: string;
+startWatch: () => void;
 }
+
 
 const fontSizes = {
   'sm-font': 8,
@@ -28,22 +33,29 @@ const fontSizes = {
 };
 
 
-const Settings: React.FC<Props> = ({fontSize}) => {
+const Settings: React.FC<Props> = ({fontSize, startWatch}) => {
   const dispatch = useDispatch();
   const authUser = useSelector((state: RootState) => state.app.authUser);
+  const [selectedImage, setSelectedImage] = React.useState(null);
+  const [isImageSelected, setIsImageSelected] = useState(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [selectedFont, setSelectedFont] = useState(fontSize);
+
+  useEffect(() => {
+    if (authUser) {
+      setPicture(authUser.picture);
+      setGeolocation(authUser.geolocation);
+    }
+  }, [authUser]);
+
   // Initialize state variables with existing user data
   const [username, setUsername] = React.useState(authUser.username);
   const [displayName, setDisplayName] = React.useState(authUser.displayName);
   const [picture, setPicture] = React.useState(authUser.picture);
-  const [selectedImage, setSelectedImage] = React.useState(null);
-  const [isImageSelected, setIsImageSelected] = useState(false);
   const [selectedMapIcon, setSelectedMapIcon] = React.useState(authUser.mapIcon);
   const [geolocation, setGeolocation] = React.useState(authUser.geolocation);
   const [privacy, setPrivacy] = React.useState(authUser.privacy);
-  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-  const [selectedFont, setSelectedFont] = useState(fontSize);
   const [type, setType] = React.useState(authUser.type);
-
 
   const theme = createTheme({
     palette: {
@@ -77,63 +89,41 @@ const Settings: React.FC<Props> = ({fontSize}) => {
 
 
   const handleDeleteConfirm = async () => {
-      setShowDeleteConfirmation(false);
-      setUsername(`user${Math.floor(Math.random())}`);
-      setDisplayName(`user${Math.floor(Math.random())}`);
-      setGeolocation('-24.4879217, -46.6741555');
-      setPrivacy('private');
-      setPicture('no pic');
-      setSelectedMapIcon('no icon');
-      setType('');
+      // setShowDeleteConfirmation(false);
+      // setUsername(`user${Math.floor(Math.random())}`);
+      // setDisplayName(`user${Math.floor(Math.random())}`);
+      // setGeolocation('-24.4879217, -46.6741555');
+      // setPrivacy('private');
+      // setPicture('no pic');
+      // setSelectedMapIcon('no icon');
+      // setType('');
 
-      const profileData = {
-        username: username,
-        displayName: displayName,
-        picture: picture,
-        mapIcon: selectedMapIcon,
-        geolocation: geolocation,
-        privacy: privacy,
-        type: type
-      };
-
-      axios
-      .patch(`/users/${authUser.id}`, profileData)
-      .then(response => {
-      // Dispatch the updated user object to the Redux store
-      dispatch(setAuthUser(response.data));
-      // success message
-      alert("Account deleted successfully!");
-      // redirect the user to the signup
-      window.location.href = `${process.env.HOST}/`;
-      })
-      .catch(error => {
-        console.error(error);
-      });
-};
-
-
-  useEffect(() => {
-    if (authUser) {
-      setPicture(authUser.picture);
-      setGeolocation(authUser.geolocation);
+      // const profileData = {
+      //   username: username,
+      //   displayName: displayName,
+      //   picture: picture,
+      //   mapIcon: selectedMapIcon,
+      //   geolocation: geolocation,
+      //   privacy: privacy,
+      //   type: type
+      // };
+    try {
+        // logout the user by clearing the authUser state
+        dispatch(setAuthUser(null));
+      const response = await axios.delete(`/users/${authUser.id}`);
+      if (response && response.data) {
+        // redirect the user to the homepage
+        window.location.href = process.env.HOST;
+      }
+    } catch (error) {
+      console.error(error);
     }
-  }, [authUser]);
+};
 
   const handleSettings = () => {
 
-  // if (size === 'var(--sm-font)') {
-  //   document.body.style.fontSize = 'var(--sm-font)';
-  // } else if (size === 'var(--md-font)') {
-  //   document.body.style.fontSize = 'var(--md-font)';
-  // } else if (size === 'var(--lg-font)') {
-  //   document.body.style.fontSize = 'var(--lg-font)';
-  // }
-
   // Update font size in Redux state
   dispatch(setFontSize(selectedFont));
-
-  //  // Update font size in CSS
-  //  document.documentElement.style.fontSize = selectedFont;
 
     if (geolocation === '') {
       throw new Error("Geolocation is required.");
@@ -190,9 +180,14 @@ const Settings: React.FC<Props> = ({fontSize}) => {
     window.location.href = `${process.env.HOST}/`;
   };
 
+  if (!authUser) {
+    // Handle the case when authUser is null, e.g., show a loading spinner
+    return <div>Loading...</div>;
+  }
+
   return (
     <ThemeProvider theme={theme}>
-      <Container className={`container-full-w center`}>
+      <Container className="container-full-w center">
       <h1>Settings</h1>
       <p>Click Avatar To Edit Image</p>
         <Card style={{ backgroundColor: 'var(--yellow)', marginTop: '1rem' }}>
@@ -218,7 +213,7 @@ const Settings: React.FC<Props> = ({fontSize}) => {
             </Button>
           )}
         </div>
-        <Location />
+        <Location startWatch={startWatch} />
 
         <div>
             <SpeechToText onTranscriptChange={setDisplayName} />

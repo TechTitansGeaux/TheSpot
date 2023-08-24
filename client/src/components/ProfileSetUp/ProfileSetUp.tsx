@@ -18,6 +18,11 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import SpeechToText from '../ProfileSetUp/SpeechToText'
 
+type ProfileSetUpProps = {
+  startWatch: () => void;
+};
+
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -33,7 +38,8 @@ const theme = createTheme({
   },
 });
 
-const ProfileSetUp = () => {
+
+const ProfileSetUp: React.FC<ProfileSetUpProps> = ({ startWatch }) => {
   const dispatch = useDispatch();
   const authUser = useSelector((state: RootState) => state.app.authUser);
 
@@ -204,7 +210,7 @@ const ProfileSetUp = () => {
               </Alert>
             )}
 
-            <Location />
+            <Location startWatch={startWatch} />
             {errors.geolocation && (
               <Alert severity="error">
               {errors.geolocation}
