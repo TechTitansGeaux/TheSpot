@@ -2,6 +2,8 @@ import * as React from 'react';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import io from 'socket.io-client';
+const socket = io();
 
 
 type User = {
@@ -46,6 +48,7 @@ const Likes: React.FC<Props> = ({
     if (!clicked) {
       setClicked(!clicked);
       handleAddLike(reelId);
+      socket.emit('likesNotif', 'like');
     } else {
       setClicked(!clicked);
       handleRemoveLike(reelId);

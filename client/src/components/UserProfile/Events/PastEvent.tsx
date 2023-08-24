@@ -20,6 +20,7 @@ type Props = {
     twenty_one: boolean,
     updatedAt: string
   }
+
 }
 const PastEvent: React.FC<Props> = ({event}) => {
 

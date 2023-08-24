@@ -7,9 +7,8 @@ import { setAuthUser, setIsAuthenticated } from '../../store/appSlice';
 import ReelItem from './ReelItem';
 import { useTheme } from '@mui/material/styles';
 import { AnimatePresence, motion } from 'framer-motion';
-import { TableRow } from '@mui/material';
-
-// const ReelItem = React.lazy(() => import('./ReelItem'));
+import io from 'socket.io-client';
+const socket = io();
 
 type Props = {
   reels: {
@@ -53,6 +52,8 @@ type Event = {
   name: string;
   rsvp_count: number;
   date: string;
+  time: string;
+  endTime: string;
   geolocation: string;
   twenty_one: boolean;
   createdAt: string;
@@ -72,6 +73,10 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
   const [likeTotal, setLikeTotal] = useState(0);
   const [likes, setLikes] = useState([]); // user's reels that have been liked
   // const [likesPersist, setLikesPersist] = useState([]);
+    // state of audio on reels
+    const [muted, setMuted] = useState(true);
+      // toggle reel audio
+  const handleToggleMute = () => setMuted(current => !current);
 
   const fetchAuthUser = async () => {
     try {
@@ -202,6 +207,7 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
       .delete(`/feed/delete/${reelId}`)
       .then((data) => {
         console.log('Reel deleted', data);
+        socket.emit('likesNotif', 'like');
         getAllReels();
       })
       .catch((err) => {
@@ -307,6 +313,8 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
                 handleRemoveLike={handleRemoveLike}
                 likeTotal={likeTotal}
                 likes={likes}
+                muted={muted}
+                handleToggleMute={handleToggleMute}
               />
             </motion.div>
           );
