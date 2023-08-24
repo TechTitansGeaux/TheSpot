@@ -11,7 +11,6 @@ import Drawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import List from '@mui/material/List';
 import Avatar from '@mui/material/Avatar';
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
@@ -274,7 +273,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List sx={{ paddingTop: '3em' }}>
-        <ListItem className='drawer-btn' disablePadding >
+        <ListItem className='drawer-btn' disablePadding>
           <ListItemButton
             className='sidebar-btn'
             component={Link}
@@ -284,24 +283,46 @@ const Navigation: React.FC<Props> = ({ user }) => {
             MY REELS
           </ListItemButton>
         </ListItem>
-        <ListItem className='drawer-btn' disablePadding>
-          <ListItemButton
-            className='sidebar-btn'
-            component={Link}
-            to={'/FriendRequests'}
-            sx={{ minHeight: '4em', paddingLeft: '1.5em' }}
-          >
-            FRIENDS
-            <span>
-              {pFriends.length !== 0 && (
-                <CircleNotificationsIcon
-                  className='circle'
-                  sx={{ marginLeft: 1 }}
-                />
-              )}
-            </span>
-          </ListItemButton>
-        </ListItem>
+        {user?.type === 'personal' && (
+          <ListItem className='drawer-btn' disablePadding>
+            <ListItemButton
+              className='sidebar-btn'
+              component={Link}
+              to={'/FriendRequests'}
+              sx={{ minHeight: '4em', paddingLeft: '1.5em' }}
+            >
+              FRIENDS
+              <span>
+                {pFriends.length !== 0 && (
+                  <CircleNotificationsIcon
+                    className='circle'
+                    sx={{ marginLeft: 1 }}
+                  />
+                )}
+              </span>
+            </ListItemButton>
+          </ListItem>
+        )}
+        {user?.type === 'business' && (
+          <ListItem className='drawer-btn' disablePadding>
+            <ListItemButton
+              className='sidebar-btn'
+              component={Link}
+              to={'/Follows'}
+              sx={{ minHeight: '4em', paddingLeft: '1.5em' }}
+            >
+              FOLLOWERS
+              <span>
+                {pFriends.length !== 0 && (
+                  <CircleNotificationsIcon
+                    className='circle'
+                    sx={{ marginLeft: 1 }}
+                  />
+                )}
+              </span>
+            </ListItemButton>
+          </ListItem>
+        )}
         <ListItem className='drawer-btn' disablePadding>
           <ListItemButton
             className='sidebar-btn'

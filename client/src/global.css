@@ -191,7 +191,17 @@ button.navLink {
   transition: background-color .2s ease-out;
 }
 
+.ListItem {
+  transition: color .2s ease-out;
+  transition: background-color .2s ease-out;
+}
+
 .drawer-btn:hover, .drawer-btn:focus, .drawer-btn:focus-visible {
+  background-color: var(--yellow);
+  color: var(--light-violet);
+}
+
+.ListItem.Mui-focusVisible {
   background-color: var(--yellow);
   color: var(--light-violet);
 }
@@ -241,6 +251,11 @@ button.delete-btn:hover {
   z-index: 2;
 }
 
+.friend-follow-icon-parent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 .friend-request {
   position: relative;
