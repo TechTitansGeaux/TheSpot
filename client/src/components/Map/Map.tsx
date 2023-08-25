@@ -40,7 +40,6 @@ type User = {
 const Map: React.FC<Props> = (props) => {
   const { loggedIn, reelEvent } = props;
 
-  const [ renders, setRenders ] = useState(0)
   const [ users, setUsers ] = useState([]);
   const [ events, setEvents ] = useState([])
   const [ friendList, setFriendList ] = useState([]);
@@ -395,7 +394,7 @@ const Map: React.FC<Props> = (props) => {
                   setZoom(expansionZoom);
                   setCenter({lat: lat, lng: lng});
                 }} />;
-              } else if (!isCluster && zoom >= 16) {
+              } else if (!isCluster && zoom >= 17) {
                 return <EventRadialMarker zoom={zoom} key={'eventRadialMarker' + i} lat={lat} lng={lng} />
               } else {
                 return <EventPin

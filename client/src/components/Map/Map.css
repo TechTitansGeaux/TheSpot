@@ -100,9 +100,13 @@
   transform: translate(-50%, -50%);
   z-index: 10;
   cursor: pointer;
-  font-size: 30px;
   text-align: center;
   overflow-y: auto;
+  margin-top: 12.5px;
+  font-size: 20px;
+  color: black;
+  overflow-y: hidden; /* Hide vertical scrollbar */
+  overflow-x: hidden; /* Hide horizontal scrollbar */
 }
 
 .eventPopUp {
