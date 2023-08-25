@@ -56,6 +56,7 @@ type Event = {
   endTime: string;
   geolocation: string;
   twenty_one: boolean;
+  private: boolean;
   createdAt: string;
   updatedAt: string;
   PlaceId: 1;

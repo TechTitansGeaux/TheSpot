@@ -1,6 +1,6 @@
  /* eslint-disable @typescript-eslint/no-explicit-any */
  import * as React from 'react';
- import { useState } from "react";
+ import { useState, useEffect } from "react";
  import axios from 'axios';
 
  type Props = {
@@ -32,8 +32,21 @@
  const [eventTime, setEventTime] = useState('');
  const [endTime, setEndTime] = useState('');
  const [twentyOne, setTwentyOne] = useState(false);
+ const [privateEvent, setPrivateEvent] = useState(false);
 
- //weeeeee
+// determine user type personal or business
+// determine user type
+const checkUserType = () => {
+  // if it is a personal account
+  if (user.type === 'personal') {
+    // automatically a private event
+    setPrivateEvent(true);
+  }
+  }
+
+  useEffect(() => {
+  checkUserType();
+  }, [])
 
 // handle input for new event name
 const handleEventName = (e: any) => {
@@ -74,6 +87,7 @@ const createEvent = () => {
    endTime: endTime,
    geolocation: user.geolocation,
    twenty_one: twentyOne,
+   private: privateEvent,
    UserId: user.id
  })
  .then((res) => {
