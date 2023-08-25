@@ -100,6 +100,10 @@ const Events = sequelize.define(
     twenty_one: {
       type: DataTypes.BOOLEAN,
     },
+    private: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
   },
   { timestamps: true }
 );

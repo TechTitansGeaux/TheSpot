@@ -55,10 +55,10 @@ const eventCheck = () => {
       console.log(resObj, '<----- axios response for get events by location and day')
       // response object is event happening at LOCATION; must check to see if theres one happening at NOW
       // iterate through HERE/ TODAY events
-      for (let i = 0; i < resObj.data.events.length; i++) {
+      for (let i = 0; i < resObj.data.length; i++) {
         //determine if any are happening right now
-        if (resObj.data.events[i].time <= timeNow && resObj.data.events[i].endTime >= timeNow) {
-          setCurrentEvent(resObj.data.events[i]);
+        if (resObj.data[i].time <= timeNow && resObj.data[i].endTime >= timeNow) {
+          setCurrentEvent(resObj.data[i]);
         }
       }
     })
@@ -67,6 +67,8 @@ const eventCheck = () => {
       console.error('Failed axios get event: ', err)
     })
 }
+
+console.log(currentEvent, '<------currentEvent')
 // console.log(user.geolocation, '<---- my location')
 // console.log(currentEvent, '<----currentEvent')
 
