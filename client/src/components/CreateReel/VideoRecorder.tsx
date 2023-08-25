@@ -182,13 +182,13 @@ const urltoFile = (url: any, filename: any, mimeType: any) => {
         time: currentEvent.time,
         endTime: defaultEndTime,
         geolocation: currentEvent.geolocation,
-        address: currentEvent.address,
+        address: currentAddress,
         twenty_one: currentEvent.twenty_one,
         isPublic: false,
         UserId: user.id
     })
     .then((res) => {
-      // console.log(res, '<----- response from axios post event')
+      console.log(res, '<----- response from axios post event')
       setEventId(res.data.event.id)
       setReelSaved(true);
     })
@@ -204,7 +204,7 @@ const urltoFile = (url: any, filename: any, mimeType: any) => {
   }
   };
 
-  // console.log(eventId, '<---- eventId in state')
+  console.log(eventId, '<---- eventId in state')
 
   // POST THE REEL to the db, but only AFTER eventId has been GOT
   const postReelToDb = async () => {
@@ -378,7 +378,7 @@ setBusinessEventCreated(true);
           </Tooltip>
           </div>
         )}
-        {justRecorded && businessAccount && (
+        {justRecorded && (
           <div>
             <div
             onClick={togglePopUp}>

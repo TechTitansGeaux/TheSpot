@@ -53,6 +53,7 @@ const CreateReel: React.FC<Props> = ({user}) => {
 
 // check to see if there are any events happening at users location today
 const eventCheck = () => {
+  console.log('checking for event')
   axios.get(`/events/${user.geolocation}/${today}`)
     .then((resObj) => {
       // response object is event happening at LOCATION; must check to see if theres one happening at NOW
@@ -61,7 +62,13 @@ const eventCheck = () => {
         //determine if any are happening right now
         if (resObj.data[i].time <= timeNow && resObj.data[i].endTime >= timeNow) {
           setCurrentEvent(resObj.data[i]);
+          console.log('found an event')
+        } else {
+          setMustCreateEvent(true)
         }
+      }
+      if (resObj.data.length === 0) {
+        setMustCreateEvent(true)
       }
     })
     .catch((err) => {
