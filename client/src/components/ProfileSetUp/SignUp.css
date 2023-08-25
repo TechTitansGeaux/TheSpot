@@ -27,10 +27,14 @@ body {
 }
 
 .swiper {
+  position: relative;
+  top: -675px;
   margin: 0 auto;
   width: 90%;
   height: 750px;
   transition-timing-function: ease;
+  align-items: center;
+  justify-content: center;
 }
 
 .swiper-slide {

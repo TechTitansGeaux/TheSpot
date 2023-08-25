@@ -62,7 +62,7 @@ const SignUp = () => {
                     </Typography>
           </Grid>
         </Grid>
-        <div className='body'>
+        <div>
     <Swiper
       spaceBetween={30}
       centeredSlides={true}
