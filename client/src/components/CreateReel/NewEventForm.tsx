@@ -1,7 +1,8 @@
  /* eslint-disable @typescript-eslint/no-explicit-any */
  import * as React from 'react';
- import { useState } from "react";
+ import { useState, useEffect } from "react";
  import axios from 'axios';
+ import EventLocationSearch from './EventLocationSearch'
 
  type Props = {
    user: {
@@ -22,18 +23,23 @@
    updateMustCreateEvent: () => void,
    updateEventId: (newId: number) => void,
    togglePopUp: () => void,
-   updateBusinessEventCreated: () => void
+   updateBusinessEventCreated: () => void,
+   currentAddress: string,
+   eventIsPublic: boolean
  }
 
- const NewEventForm: React.FC<Props> = ({user, mustCreateEvent, updateMustCreateEvent, updateEventId, togglePopUp, updateBusinessEventCreated}) => {
+ const NewEventForm: React.FC<Props> = ({
+  user, mustCreateEvent, updateMustCreateEvent, updateEventId, togglePopUp, updateBusinessEventCreated, currentAddress, eventIsPublic
+}) => {
 
  const [eventName, setEventName] = useState('');
+ // event location is users current location by default, until/ unless they select an address
+ const [eventLocation, setEventLocation] = useState(user.geolocation);
+ const [address, setAddress] = useState('')
  const [eventDate, setEventDate] = useState('');
  const [eventTime, setEventTime] = useState('');
  const [endTime, setEndTime] = useState('');
  const [twentyOne, setTwentyOne] = useState(false);
-
- //weeeeee
 
 // handle input for new event name
 const handleEventName = (e: any) => {
@@ -63,6 +69,15 @@ const handleTwentyOne = () => {
  }
 }
 
+// function to set event location
+const handleLocation = (geolocation: any) => {
+  setEventLocation(geolocation)
+};
+
+const handleAddress = (address: any) => {
+  setAddress(address)
+}
+
 // ADD LOGIC TO PREVENT POSTING IF EVENT IS ALREADY HERE
 // ADD WAY OF NOTIFYING USER THAT EVENT CREATION WAS SUCCESSFUL
 // patch request to update event in la database
@@ -72,8 +87,10 @@ const createEvent = () => {
    date: eventDate,
    time: eventTime,
    endTime: endTime,
-   geolocation: user.geolocation,
+   geolocation: eventLocation,
+   address: address,
    twenty_one: twentyOne,
+   isPublic: eventIsPublic,
    UserId: user.id
  })
  .then((res) => {
@@ -101,6 +118,11 @@ const createEvent = () => {
          type='text'>
          </input>
          <br></br>
+         <br></br>
+         Address &#160;<EventLocationSearch
+         handleLocation={handleLocation}
+         handleAddress={handleAddress}
+         currentAddress={currentAddress}/>
          <br></br>
           Date: &#160;
          <input

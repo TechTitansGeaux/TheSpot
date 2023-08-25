@@ -9,6 +9,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContentText from '@mui/material/DialogContentText';
+import EventLocationSearch from '../../CreateReel/EventLocationSearch';
 
 type Props = {
   event: {
@@ -18,6 +19,7 @@ type Props = {
     date: string,
     endTime: string,
     geolocation: string,
+    address: string,
     id: number,
     name: string,
     rsvp_count: number,
@@ -30,6 +32,8 @@ type Props = {
 const UpcomingEvent: React.FC<Props> = ({event, getMyEvents}) => {
 
   const [name, setName] = useState(event.name);
+  const [location, setLocation] = useState(event.geolocation);
+  const [address, setAddress] = useState(event.address);
   const [date, setDate] = useState(event.date);
   const [time, setTime] = useState(event.time);
   const [endTime, setEndTime] = useState(event.endTime);
@@ -52,6 +56,14 @@ const UpcomingEvent: React.FC<Props> = ({event, getMyEvents}) => {
     setJustSaved(false);
   }
 
+  // function to set event location
+  const handleLocation = (geolocation: any) => {
+    setLocation(geolocation)
+  };
+
+  const handleAddress = (address: any) => {
+    setAddress(address)
+  }
   const handleDateChange = (e: any) => {
     setDate(e.target.value);
     setJustSaved(false);
@@ -73,6 +85,8 @@ const UpcomingEvent: React.FC<Props> = ({event, getMyEvents}) => {
   // patch those changes in event in database
   const saveChanges = () => {
     axios.patch(`/events/${event.id}`, {
+      geolocation: location,
+      address: address,
       name: name,
       date: date,
       time: time,
@@ -109,6 +123,12 @@ const UpcomingEvent: React.FC<Props> = ({event, getMyEvents}) => {
           type='text'>
           </input>
           <div className='eventCardDetails'>
+            <br></br>
+            Address:
+            <EventLocationSearch 
+          handleLocation={handleLocation}
+          handleAddress={handleAddress}
+          currentAddress={address}/>
             <br></br>
             Date:
             <input

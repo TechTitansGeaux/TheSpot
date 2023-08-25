@@ -60,7 +60,9 @@ type Event = {
   time: string;
   endTime: string;
   geolocation: string;
+  address: string;
   twenty_one: boolean;
+  public: boolean;
   createdAt: string;
   updatedAt: string;
   PlaceId: 1;
@@ -138,7 +140,6 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   const [open, setOpen] = React.useState(false);
   // state of whether event is already over
   const [pastEvent, setPastEvent] = useState('');
-  console.log(reel, '<---------each reel')
   // event info to display on info icon hover: name, date, time
   const eventName = reel.Event.name;
   const eventDate = dayjs(reel.Event.date + reel.Event.time).format(

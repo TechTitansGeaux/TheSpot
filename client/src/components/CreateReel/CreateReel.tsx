@@ -4,7 +4,9 @@ import axios from 'axios';
 import { useState, useRef, useEffect } from "react";
 import VideoRecorder from './VideoRecorder';
 import dayjs from 'dayjs';
+// import * as dotenv from 'dotenv';
 
+// dotenv.config();
 
 type Props = {
   user: {
@@ -33,12 +35,15 @@ const CreateReel: React.FC<Props> = ({user}) => {
     time: dayjs(new Date()).format('HH:mm:ss'),
     endTime: '',
     geolocation: user.geolocation,
+    address: 'placeholder address',
     twenty_one: false,
+    isPublic: false,
     createdAt: '',
     updatedAt: '',
     PlaceId: 0
   });
   const [mustCreateEvent, setMustCreateEvent] = useState(false);
+  const [currentAddress, setCurrentAddress] = useState('');
 
 
   // today variable
@@ -46,20 +51,26 @@ const CreateReel: React.FC<Props> = ({user}) => {
   // current time variable
   const timeNow = dayjs(new Date()).format('HH:mm:ss');
 
-  console.log(today, '<-----today')
-
 // check to see if there are any events happening at users location today
-const eventCheck = () => {
-  axios.get(`/events/${user.geolocation}/${today}`)
+const eventCheck = (location: any, date: any, time: any) => {
+  console.log('checking for event')
+  axios.get(`/events/${location}/${date}`)
     .then((resObj) => {
-      console.log(resObj, '<----- axios response for get events by location and day')
-      // response object is event happening at LOCATION; must check to see if theres one happening at NOW
-      // iterate through HERE/ TODAY events
-      for (let i = 0; i < resObj.data.events.length; i++) {
-        //determine if any are happening right now
-        if (resObj.data.events[i].time <= timeNow && resObj.data.events[i].endTime >= timeNow) {
-          setCurrentEvent(resObj.data.events[i]);
+      // response object is event happening at LOCATION/ DATE; must check to see if theres one happening at TIME
+      // iterate through LOCATION/ DATE events
+      // ok, right now we have a list of ALL events, pub or priv
+      // we want: all public events AND private events IF the creator is our friend
+      for (let i = 0; i < resObj.data.length; i++) {
+        //determine if any are happening at time PUBLIC
+        if (resObj.data[i].time <= time && resObj.data[i].endTime >= time) {
+          setCurrentEvent(resObj.data[i]);
+          // else determine if there are any happening at time PRIVATE
+        } else {
+          setMustCreateEvent(true)
         }
+      }
+      if (resObj.data.length === 0) {
+        setMustCreateEvent(true)
       }
     })
     .catch((err) => {
@@ -67,11 +78,27 @@ const eventCheck = () => {
       console.error('Failed axios get event: ', err)
     })
 }
-// console.log(user.geolocation, '<---- my location')
-// console.log(currentEvent, '<----currentEvent')
+
+// turn user's current geolocation into an address so that correct
+// address for event saves to DB + displays in all needed places
+const getCurrentAddress = () => {
+  // grab users lat and lng
+  const [lat, lng] = user.geolocation.split(',');
+  axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&location_type=ROOFTOP&result_type=street_address&key=${process.env.REACT_APP_GEOCODING_API}`)
+    .then((response) => {
+      console.log(response.data.results[0].formatted_address, '<-----res from reverse geocoding fetch')
+      setCurrentAddress(response.data.results[0].formatted_address)
+    })
+    .catch((err) => {
+      console.error('Failed to fetch address: ', err);
+    })
+}
+
+
 
 useEffect(() => {
-  eventCheck();
+  eventCheck(user.geolocation, today, timeNow);
+  getCurrentAddress();
 }, [])
 
 const updateMustCreateEvent = () => {
@@ -85,7 +112,8 @@ const updateMustCreateEvent = () => {
       currentEventId={currentEvent.id}
       user={user}
       mustCreateEvent={mustCreateEvent}
-      updateMustCreateEvent={updateMustCreateEvent}/>
+      updateMustCreateEvent={updateMustCreateEvent}
+      currentAddress={currentAddress}/>
     </div>
   )
 };

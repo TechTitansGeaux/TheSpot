@@ -22,7 +22,9 @@ type Props = {
     time: string;
     endTime: string;
     geolocation: string; // i.e. "29.947126049254177, -90.18719199978266"
+    address: string,
     twenty_one: boolean;
+    isPublic: boolean,
     createdAt: string;
     updatedAt: string;
     PlaceId: number;
@@ -44,9 +46,12 @@ type Props = {
   mustCreateEvent: boolean,
   currentEventId: number,
   updateMustCreateEvent: () => void,
+  currentAddress: string,
 };
 
-const VideoRecorder: React.FC<Props> = ({currentEvent, user, mustCreateEvent, currentEventId, updateMustCreateEvent}) => {
+const VideoRecorder: React.FC<Props> = ({
+  currentEvent, user, mustCreateEvent, currentEventId, updateMustCreateEvent, currentAddress
+}) => {
   const webcamRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const [capturing, setCapturing] = useState(false);
@@ -70,6 +75,7 @@ const VideoRecorder: React.FC<Props> = ({currentEvent, user, mustCreateEvent, cu
   const [reelSaved, setReelSaved] = useState(false);
   const [businessAccount, setBusinessAccount] = useState(false);
   const [businessEventCreated, setBusinessEventCreated] = useState(false);
+  const [eventIsPublic, setEventIsPublic] = useState(true);
 
   type Blob = {
     data: {
@@ -177,7 +183,9 @@ const urltoFile = (url: any, filename: any, mimeType: any) => {
         time: currentEvent.time,
         endTime: defaultEndTime,
         geolocation: currentEvent.geolocation,
+        address: currentAddress,
         twenty_one: currentEvent.twenty_one,
+        isPublic: eventIsPublic,
         UserId: user.id
     })
     .then((res) => {
@@ -262,8 +270,8 @@ if (box.style.display === 'block') {
 
 // determine user type
 const checkUserType = () => {
-if (user.type === 'business') {
-  setBusinessAccount(true);
+if (user.type === 'personal') {
+  setEventIsPublic(false);
 }
 }
 
@@ -280,7 +288,6 @@ const updateBusinessEventCreated = () => {
 setBusinessEventCreated(true);
 }
 
-console.log(user.geolocation, '<-----geolo')
 // console.log(user.type, '<---- user type')
 // console.log(businessAccount, '<------business account')
 
@@ -293,7 +300,9 @@ console.log(user.geolocation, '<-----geolo')
       updateMustCreateEvent={updateMustCreateEvent}
       updateEventId={updateEventId}
       togglePopUp={togglePopUp}
-      updateBusinessEventCreated={updateBusinessEventCreated}/>
+      updateBusinessEventCreated={updateBusinessEventCreated}
+      currentAddress={currentAddress}
+      eventIsPublic={eventIsPublic}/>
         { justRecorded ? (
         <div className='preview-mask'>
           <div className='webcam'>
@@ -371,7 +380,7 @@ console.log(user.geolocation, '<-----geolo')
           </Tooltip>
           </div>
         )}
-        {justRecorded && businessAccount && (
+        {justRecorded && (
           <div>
             <div
             onClick={togglePopUp}>

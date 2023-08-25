@@ -77,7 +77,7 @@ const Feed: React.FC<Props> = ({user}) => {
   const userCoord = (user: any) => {
     // console.log('user:', user?.geolocation);
     if (user) {
-      console.log('user:', user);
+      // console.log('user:', user);
       const arr = user.geolocation.split(',');
       const lat = Number(arr[0]);
       const long = Number(arr[1]);

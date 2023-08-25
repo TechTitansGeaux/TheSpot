@@ -13,11 +13,13 @@ type Props = {
     date: string,
     endTime: string,
     geolocation: string,
+    address: string,
     id: number,
     name: string,
     rsvp_count: number,
     time: string,
     twenty_one: boolean,
+    isPublic: boolean,
     updatedAt: string
   }
 
@@ -38,6 +40,8 @@ const PastEvent: React.FC<Props> = ({event}) => {
           <h3 className='eventNameInput'>
             {event.name}
           </h3>
+          <br></br>
+          Address: {event.address}
           <br></br>
           Date: {eventDate}
           <br></br>

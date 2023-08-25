@@ -58,16 +58,13 @@ eventRouter.get('/:geolocation/:date', async (req: any, res: any) => {
   // find all events on date
   await Events.findAll({where: {date: date}})
   .then((events: any) => {
-    console.log(events, '<-------events')
     if (events.length !== 0) {
         // filter for within range events
         const filteredArr = events.filter((event: {geolocation: string}) => {
           const [lat1, lng1] = event.geolocation.split(',');
           const [lat2, lng2] = geolocation.split(',');
-          console.log(+lat2, +lng2, +lat1, +lng1, '<----- lats and lngs')
           // if distance b/t user and center of event is less than 300ft
-          console.log(distance(+lat1, +lat2, +lng1, +lng2), '<----result of distance function')
-          return (distance(+lat1, +lat2, +lng1, +lng2) < 300)
+          return (distance(+lat1, +lat2, +lng1, +lng2) < 150)
         })
         res.status(200).send(
           filteredArr
@@ -88,7 +85,7 @@ eventRouter.get('/:geolocation/:date', async (req: any, res: any) => {
 // create new event
 eventRouter.post('/create', async (req, res) => {
   // access event properties from request body
-  const { name, date, time, endTime, geolocation, twenty_one, UserId } = req.body;
+  const { name, date, time, endTime, geolocation, address, twenty_one, isPublic, UserId } = req.body;
   // sequelize create method
   await Events.create({
     name,
@@ -96,7 +93,9 @@ eventRouter.post('/create', async (req, res) => {
     time,
     endTime,
     geolocation,
+    address,
     twenty_one,
+    isPublic,
     UserId
   })
   .then((event: any) => {
@@ -113,7 +112,7 @@ eventRouter.post('/create', async (req, res) => {
 // patch event
 eventRouter.patch('/:id', async (req: any, res) => {
   const { id } = req.params;
-  const { name, date, time, endTime, twenty_one } = req.body;
+  const { name, geolocation, address, date, time, endTime, twenty_one } = req.body;
 
   try {
     // find event by id
@@ -129,7 +128,9 @@ eventRouter.patch('/:id', async (req: any, res) => {
     }
 
     // update event info
-    await event.update({name: name, date: date, time: time, endTime: endTime, twenty_one: twenty_one }, {
+    await event.update({
+      geolocation, address, name, date, time, endTime, twenty_one
+    }, {
       where: {
         id: id
       }
