@@ -115,6 +115,7 @@ const Event: React.FC<Props> = ({ event, setCenter, setZoom, lat, lng, zoom }) =
                     className='friend-add-btn'
                   >
                     <ZoomInIcon onClick={ () => {
+                      console.log(lat, lng);
                       setZoom(18);
                       setCenter({lat: lat, lng: lng});
                      } } />
