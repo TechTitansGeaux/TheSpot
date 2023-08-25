@@ -31,11 +31,12 @@
  const [eventName, setEventName] = useState('');
  // event location is users current location by default, until/ unless they select an address
  const [eventLocation, setEventLocation] = useState(user.geolocation);
+ const [address, setAddress] = useState('')
  const [eventDate, setEventDate] = useState('');
  const [eventTime, setEventTime] = useState('');
  const [endTime, setEndTime] = useState('');
  const [twentyOne, setTwentyOne] = useState(false);
- const [privateEvent, setPrivateEvent] = useState(false);
+ const [publicEvent, setPublicEvent] = useState(true);
 
 // determine user type personal or business
 // determine user type
@@ -43,7 +44,7 @@ const checkUserType = () => {
   // if it is a personal account
   if (user.type === 'personal') {
     // automatically a private event
-    setPrivateEvent(true);
+    setPublicEvent(false);
   }
   }
 
@@ -80,9 +81,15 @@ const handleTwentyOne = () => {
 }
 
 // function to set event location
-const handleLocation = (address: any) => {
-  setEventLocation(address)
+const handleLocation = (geolocation: any) => {
+  setEventLocation(geolocation)
 };
+
+const handleAddress = (address: any) => {
+  setAddress(address)
+}
+
+console.log(address, '<---- address from event form')
 
 // ADD LOGIC TO PREVENT POSTING IF EVENT IS ALREADY HERE
 // ADD WAY OF NOTIFYING USER THAT EVENT CREATION WAS SUCCESSFUL
@@ -94,8 +101,9 @@ const createEvent = () => {
    time: eventTime,
    endTime: endTime,
    geolocation: eventLocation,
+   address: address,
    twenty_one: twentyOne,
-   private: privateEvent,
+   isPublic: publicEvent,
    UserId: user.id
  })
  .then((res) => {
@@ -124,9 +132,9 @@ const createEvent = () => {
          </input>
          <br></br>
          <br></br>
-         Location: &#160;
-         <EventLocationSearch
-         handleLocation={handleLocation}/>
+         Location: &#160;<EventLocationSearch
+         handleLocation={handleLocation}
+         handleAddress={handleAddress}/>
          <br></br>
           Date: &#160;
          <input

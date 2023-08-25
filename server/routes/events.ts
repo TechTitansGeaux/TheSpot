@@ -88,7 +88,7 @@ eventRouter.get('/:geolocation/:date', async (req: any, res: any) => {
 // create new event
 eventRouter.post('/create', async (req, res) => {
   // access event properties from request body
-  const { name, date, time, endTime, geolocation, twenty_one, UserId } = req.body;
+  const { name, date, time, endTime, geolocation, address, twenty_one, isPublic, UserId } = req.body;
   // sequelize create method
   await Events.create({
     name,
@@ -96,7 +96,9 @@ eventRouter.post('/create', async (req, res) => {
     time,
     endTime,
     geolocation,
+    address,
     twenty_one,
+    isPublic,
     UserId
   })
   .then((event: any) => {
@@ -113,7 +115,7 @@ eventRouter.post('/create', async (req, res) => {
 // patch event
 eventRouter.patch('/:id', async (req: any, res) => {
   const { id } = req.params;
-  const { name, date, time, endTime, twenty_one } = req.body;
+  const { name, geolocation, address, date, time, endTime, twenty_one } = req.body;
 
   try {
     // find event by id
@@ -129,7 +131,9 @@ eventRouter.patch('/:id', async (req: any, res) => {
     }
 
     // update event info
-    await event.update({name: name, date: date, time: time, endTime: endTime, twenty_one: twenty_one }, {
+    await event.update({
+      geolocation, address, name, date, time, endTime, twenty_one
+    }, {
       where: {
         id: id
       }

@@ -18,6 +18,7 @@ type Props = {
     date: string,
     endTime: string,
     geolocation: string,
+    address: string,
     id: number,
     name: string,
     rsvp_count: number,
@@ -30,6 +31,8 @@ type Props = {
 const UpcomingEvent: React.FC<Props> = ({event, getMyEvents}) => {
 
   const [name, setName] = useState(event.name);
+  const [location, setLocation] = useState(event.geolocation);
+  const [address, setAddress] = useState(event.address);
   const [date, setDate] = useState(event.date);
   const [time, setTime] = useState(event.time);
   const [endTime, setEndTime] = useState(event.endTime);

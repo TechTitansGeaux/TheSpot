@@ -97,12 +97,15 @@ const Events = sequelize.define(
       type: DataTypes.STRING(100),
       allowNull: false,
     },
+    address: {
+      type: DataTypes.STRING(100)
+    },
     twenty_one: {
       type: DataTypes.BOOLEAN,
     },
-    private: {
+    isPublic: {
       type: DataTypes.BOOLEAN,
-      defaultValue: false
+      defaultValue: true
     },
   },
   { timestamps: true }

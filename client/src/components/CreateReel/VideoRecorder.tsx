@@ -22,7 +22,9 @@ type Props = {
     time: string;
     endTime: string;
     geolocation: string; // i.e. "29.947126049254177, -90.18719199978266"
+    address: string,
     twenty_one: boolean;
+    isPublic: boolean,
     createdAt: string;
     updatedAt: string;
     PlaceId: number;
@@ -177,7 +179,9 @@ const urltoFile = (url: any, filename: any, mimeType: any) => {
         time: currentEvent.time,
         endTime: defaultEndTime,
         geolocation: currentEvent.geolocation,
+        address: currentEvent.address,
         twenty_one: currentEvent.twenty_one,
+        isPublic: false,
         UserId: user.id
     })
     .then((res) => {

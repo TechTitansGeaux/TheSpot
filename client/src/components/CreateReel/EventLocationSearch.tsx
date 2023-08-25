@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+ /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
@@ -30,10 +31,11 @@ const theme = createTheme({
 });
 
 type Props = {
-  handleLocation: () => void
+  handleLocation: (geolocation: any) => void;
+  handleAddress: (address: string) => void;
 }
 
-const EventLocationSearch: React.FC = ({handleLocation}) => {
+const EventLocationSearch: React.FC<Props> = ({handleLocation, handleAddress}) => {
   const dispatch = useDispatch();
   const authUser = useSelector((state: RootState) => state.app.authUser);
   const [geolocationError, setGeolocationError] = useState<string>('');
@@ -70,11 +72,15 @@ const EventLocationSearch: React.FC = ({handleLocation}) => {
     const latLng = await getLatLng(results[0]);
 
     setAddress(selectedAddress);
+    console.log(selectedAddress, '<-----selected address')
+    console.log(address, '<-----address')
+    console.log(typeof address, '<----data type of address')
     const newGeolocation = `${latLng.lat},${latLng.lng}`;
     handleLocation(newGeolocation);
-
+    handleAddress(selectedAddress);
 }
 
+console.log(address, '<-----address outside function')
   return (
     // <ThemeProvider theme={theme}>
     <div>
@@ -98,6 +104,7 @@ const EventLocationSearch: React.FC = ({handleLocation}) => {
                 style={{ color: 'var(--setupBG)', marginBottom: '1rem', marginTop: '1rem' }}
               /> */}
               <input
+              className='eventDetailInput'
               {...getInputProps({ placeholder: 'Type address' })}
               // helperText={errors.address}
               // error={!!errors.address}

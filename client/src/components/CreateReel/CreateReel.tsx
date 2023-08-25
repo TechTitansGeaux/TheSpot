@@ -33,7 +33,9 @@ const CreateReel: React.FC<Props> = ({user}) => {
     time: dayjs(new Date()).format('HH:mm:ss'),
     endTime: '',
     geolocation: user.geolocation,
+    address: 'placeholder address',
     twenty_one: false,
+    isPublic: false,
     createdAt: '',
     updatedAt: '',
     PlaceId: 0
