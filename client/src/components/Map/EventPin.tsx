@@ -6,6 +6,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import dayjs = require('dayjs');
 dayjs.extend(localizedFormat);
+import RsvpSharpIcon from '@mui/icons-material/RsvpSharp';
 
 type Props = {
   event: {
@@ -42,8 +43,6 @@ const zoomToEventTheme = createTheme({
   },
 });
 
-
-
 const Event: React.FC<Props> = ({ event, setCenter, setZoom, lat, lng, zoom }) => {
   const togglePopUp = () => {
     const box = document.getElementById('popUp' + event.name + event.id)
@@ -74,9 +73,12 @@ const Event: React.FC<Props> = ({ event, setCenter, setZoom, lat, lng, zoom }) =
         }
         togglePopUp();
       }}>
-        <div style={{ marginTop: '12.5px', fontSize: '20px', color: 'black' }}>
-          {event.rsvp_count}
-        </div>
+      <div >
+        <RsvpSharpIcon style={{ transform: 'scale(1.25)' }} color='secondary' />
+      </div>
+      <div style={{ transform: 'translateY(-10px)' }}>
+        { event.rsvp_count }
+      </div>
       </div>
       <div className='eventPopUp' id={'popUp' + event.name + event.id} >
         <div style={{ textAlign: 'center', fontSize:'20px' }}>
@@ -115,6 +117,7 @@ const Event: React.FC<Props> = ({ event, setCenter, setZoom, lat, lng, zoom }) =
                     className='friend-add-btn'
                   >
                     <ZoomInIcon onClick={ () => {
+                      console.log(lat, lng);
                       setZoom(18);
                       setCenter({lat: lat, lng: lng});
                      } } />
