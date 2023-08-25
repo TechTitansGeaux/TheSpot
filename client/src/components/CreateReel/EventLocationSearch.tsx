@@ -33,9 +33,10 @@ const theme = createTheme({
 type Props = {
   handleLocation: (geolocation: any) => void;
   handleAddress: (address: string) => void;
+  currentAddress: string;
 }
 
-const EventLocationSearch: React.FC<Props> = ({handleLocation, handleAddress}) => {
+const EventLocationSearch: React.FC<Props> = ({handleLocation, handleAddress, currentAddress}) => {
   const dispatch = useDispatch();
   const authUser = useSelector((state: RootState) => state.app.authUser);
   const [geolocationError, setGeolocationError] = useState<string>('');
@@ -104,8 +105,9 @@ console.log(address, '<-----address outside function')
                 style={{ color: 'var(--setupBG)', marginBottom: '1rem', marginTop: '1rem' }}
               /> */}
               <input
+              placeholder={address}
               className='eventDetailInput'
-              {...getInputProps({ placeholder: 'Type address' })}
+              {...getInputProps({ placeholder: currentAddress })}
               // helperText={errors.address}
               // error={!!errors.address}
               ></input>

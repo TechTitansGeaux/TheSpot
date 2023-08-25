@@ -127,7 +127,8 @@ const UpcomingEvent: React.FC<Props> = ({event, getMyEvents}) => {
             Address:
             <EventLocationSearch 
           handleLocation={handleLocation}
-          handleAddress={handleAddress}/>
+          handleAddress={handleAddress}
+          currentAddress={address}/>
             <br></br>
             Date:
             <input

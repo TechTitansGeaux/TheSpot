@@ -46,9 +46,12 @@ type Props = {
   mustCreateEvent: boolean,
   currentEventId: number,
   updateMustCreateEvent: () => void,
+  currentAddress: string,
 };
 
-const VideoRecorder: React.FC<Props> = ({currentEvent, user, mustCreateEvent, currentEventId, updateMustCreateEvent}) => {
+const VideoRecorder: React.FC<Props> = ({
+  currentEvent, user, mustCreateEvent, currentEventId, updateMustCreateEvent, currentAddress
+}) => {
   const webcamRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const [capturing, setCapturing] = useState(false);
@@ -297,7 +300,8 @@ console.log(user.geolocation, '<-----geolo')
       updateMustCreateEvent={updateMustCreateEvent}
       updateEventId={updateEventId}
       togglePopUp={togglePopUp}
-      updateBusinessEventCreated={updateBusinessEventCreated}/>
+      updateBusinessEventCreated={updateBusinessEventCreated}
+      currentAddress={currentAddress}/>
         { justRecorded ? (
         <div className='preview-mask'>
           <div className='webcam'>

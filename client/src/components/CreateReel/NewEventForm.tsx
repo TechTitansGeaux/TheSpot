@@ -23,10 +23,13 @@
    updateMustCreateEvent: () => void,
    updateEventId: (newId: number) => void,
    togglePopUp: () => void,
-   updateBusinessEventCreated: () => void
+   updateBusinessEventCreated: () => void,
+   currentAddress: string,
  }
 
- const NewEventForm: React.FC<Props> = ({user, mustCreateEvent, updateMustCreateEvent, updateEventId, togglePopUp, updateBusinessEventCreated}) => {
+ const NewEventForm: React.FC<Props> = ({
+  user, mustCreateEvent, updateMustCreateEvent, updateEventId, togglePopUp, updateBusinessEventCreated, currentAddress
+}) => {
 
  const [eventName, setEventName] = useState('');
  // event location is users current location by default, until/ unless they select an address
@@ -134,7 +137,8 @@ const createEvent = () => {
          <br></br>
          Address &#160;<EventLocationSearch
          handleLocation={handleLocation}
-         handleAddress={handleAddress}/>
+         handleAddress={handleAddress}
+         currentAddress={currentAddress}/>
          <br></br>
           Date: &#160;
          <input

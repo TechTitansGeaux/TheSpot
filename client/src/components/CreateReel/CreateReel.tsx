@@ -89,7 +89,8 @@ const updateMustCreateEvent = () => {
       currentEventId={currentEvent.id}
       user={user}
       mustCreateEvent={mustCreateEvent}
-      updateMustCreateEvent={updateMustCreateEvent}/>
+      updateMustCreateEvent={updateMustCreateEvent}
+      currentAddress={currentEvent.address}/>
     </div>
   )
 };
