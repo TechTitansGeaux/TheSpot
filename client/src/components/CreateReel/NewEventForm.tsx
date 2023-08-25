@@ -2,6 +2,7 @@
  import * as React from 'react';
  import { useState, useEffect } from "react";
  import axios from 'axios';
+ import EventLocationSearch from './EventLocationSearch'
 
  type Props = {
    user: {
@@ -28,6 +29,8 @@
  const NewEventForm: React.FC<Props> = ({user, mustCreateEvent, updateMustCreateEvent, updateEventId, togglePopUp, updateBusinessEventCreated}) => {
 
  const [eventName, setEventName] = useState('');
+ // event location is users current location by default, until/ unless they select an address
+ const [eventLocation, setEventLocation] = useState(user.geolocation);
  const [eventDate, setEventDate] = useState('');
  const [eventTime, setEventTime] = useState('');
  const [endTime, setEndTime] = useState('');
@@ -76,6 +79,11 @@ const handleTwentyOne = () => {
  }
 }
 
+// function to set event location
+const handleLocation = (address: any) => {
+  setEventLocation(address)
+};
+
 // ADD LOGIC TO PREVENT POSTING IF EVENT IS ALREADY HERE
 // ADD WAY OF NOTIFYING USER THAT EVENT CREATION WAS SUCCESSFUL
 // patch request to update event in la database
@@ -85,7 +93,7 @@ const createEvent = () => {
    date: eventDate,
    time: eventTime,
    endTime: endTime,
-   geolocation: user.geolocation,
+   geolocation: eventLocation,
    twenty_one: twentyOne,
    private: privateEvent,
    UserId: user.id
@@ -115,6 +123,10 @@ const createEvent = () => {
          type='text'>
          </input>
          <br></br>
+         <br></br>
+         Location: &#160;
+         <EventLocationSearch
+         handleLocation={handleLocation}/>
          <br></br>
           Date: &#160;
          <input
