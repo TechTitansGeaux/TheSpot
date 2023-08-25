@@ -132,7 +132,7 @@ const createEvent = () => {
          </input>
          <br></br>
          <br></br>
-         Location: &#160;<EventLocationSearch
+         Address &#160;<EventLocationSearch
          handleLocation={handleLocation}
          handleAddress={handleAddress}/>
          <br></br>

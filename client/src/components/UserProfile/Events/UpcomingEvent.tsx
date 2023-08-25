@@ -9,6 +9,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContentText from '@mui/material/DialogContentText';
+import EventLocationSearch from '../../CreateReel/EventLocationSearch';
 
 type Props = {
   event: {
@@ -55,6 +56,14 @@ const UpcomingEvent: React.FC<Props> = ({event, getMyEvents}) => {
     setJustSaved(false);
   }
 
+  // function to set event location
+  const handleLocation = (geolocation: any) => {
+    setLocation(geolocation)
+  };
+
+  const handleAddress = (address: any) => {
+    setAddress(address)
+  }
   const handleDateChange = (e: any) => {
     setDate(e.target.value);
     setJustSaved(false);
@@ -76,6 +85,8 @@ const UpcomingEvent: React.FC<Props> = ({event, getMyEvents}) => {
   // patch those changes in event in database
   const saveChanges = () => {
     axios.patch(`/events/${event.id}`, {
+      geolocation: location,
+      address: address,
       name: name,
       date: date,
       time: time,
@@ -112,6 +123,11 @@ const UpcomingEvent: React.FC<Props> = ({event, getMyEvents}) => {
           type='text'>
           </input>
           <div className='eventCardDetails'>
+            <br></br>
+            Address:
+            <EventLocationSearch 
+          handleLocation={handleLocation}
+          handleAddress={handleAddress}/>
             <br></br>
             Date:
             <input
