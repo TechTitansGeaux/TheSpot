@@ -4,7 +4,7 @@ import Reel from './Reel';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import './feed.css';
-import { response } from 'express';
+// import { response } from 'express';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -43,8 +43,6 @@ const Feed: React.FC<Props> = ({user}) => {
     // filter dialog
   const [open, setOpen] = React.useState(false);
 
-  const filters: any = [];
-
   const findUserType = () => {
     if (user) {
       // console.log('user type:', user.type);
@@ -58,17 +56,13 @@ const Feed: React.FC<Props> = ({user}) => {
 
   useEffect(() => {
     findUserType();
-  }, [user, reels]);
+  }, [user]);
 
   const geoFilters = [15, 10 ,5]; // geolocation filters by miles
   const friendsReels: any = [];
   const followingReels: any = [];
   const followerReels: any = [];
   const geoReels: any = [];
-
-  // const filterChangeHandler = (event: any) => {
-  //   setFilter(event.target.value);
-  // };
 
   const geoFilterHandler = (event: any) => {
     setGeoF(event.target.value);
@@ -94,15 +88,15 @@ const Feed: React.FC<Props> = ({user}) => {
     lat1 = lat1 * Math.PI / 180;
     lat2 = lat2 * Math.PI / 180;
     // Haversine formula
-    let dlon = lon2 - lon1;
-    let dlat = lat2 - lat1;
-    let a = Math.pow(Math.sin(dlat / 2), 2)
+    const dlon = lon2 - lon1;
+    const dlat = lat2 - lat1;
+    const a = Math.pow(Math.sin(dlat / 2), 2)
               + Math.cos(lat1) * Math.cos(lat2)
               * Math.pow(Math.sin(dlon / 2),2);
 
-    let c = 2 * Math.asin(Math.sqrt(a));
+    const c = 2 * Math.asin(Math.sqrt(a));
 
-    let r = 3956;
+    const r = 3956;
 
     return(c * r);
   };
@@ -181,28 +175,36 @@ const Feed: React.FC<Props> = ({user}) => {
   };
 
   const getFriendList = () => {
-    axios
-      .get(`/feed/frens`)
-      .then((response) => {
-        //console.log('friends response.data:', response.data);
-        setFriends(response.data);
-      })
-      .catch((err) => {
-        console.error('Could not GET friends:', err);
-      })
+    if (user) {
+      if (user.type === 'personal') {
+        axios
+          .get(`/feed/frens`)
+          .then((response) => {
+            //console.log('friends response.data:', response.data);
+            setFriends(response.data);
+          })
+          .catch((err) => {
+            console.error('Could not GET friends:', err);
+          })
+      }
+    }
   };
 
   // for personal accounts
   const getFollowingList = () => {
-    axios
-      .get('/feed/following')
-      .then((response) => {
-        // console.log('following:', response.data);
-        setFollowing(response.data);
-      })
-      .catch((err) => {
-        console.error('Could not GET followings:', err);
-      })
+    if (user) {
+      if (user.type === 'personal') {
+        axios
+          .get('/feed/following')
+          .then((response) => {
+            // console.log('following:', response.data);
+            setFollowing(response.data);
+          })
+          .catch((err) => {
+            console.error('Could not GET followings:', err);
+          })
+      }
+    }
   };
 
   const getAllFollowingReels = () => {
@@ -226,19 +228,23 @@ const Feed: React.FC<Props> = ({user}) => {
       })
   };
 
+  // business accounts
   const getFollowersList = () => {
-    axios
-      .get('/feed/followers')
-      .then((response) => {
-        console.log('followers:', response.data);
-        setFollowers(response.data);
-      })
-      .catch((err) => {
-        console.error('Could not GET followers', err);
-      })
+    if (user) {
+      if (user.type === 'business') {
+        axios
+          .get('/feed/followers')
+          .then((response) => {
+            console.log('followers:', response.data);
+            setFollowers(response.data);
+          })
+          .catch((err) => {
+            console.error('Could not GET followers', err);
+          })
+      }
+    }
   };
 
-  // business accounts
   const getAllFollowersReels = () => {
     axios
     .get('/feed/recent')
@@ -293,41 +299,49 @@ const Feed: React.FC<Props> = ({user}) => {
   }, [filter, geoF, user, userLat]);
 
   useEffect(() => {
-    getFriendList();
-  }, [filter]);
+    if (user) {
+      if (user.type === 'personal') {
+        getFriendList();
+      }
+    }
+  }, [user, filter]);
 
   useEffect(() => {
-    getFollowingList();
-  }, [filter]);
+    if (user) {
+      if (user.type === 'personal') {
+        getFollowingList();
+      }
+    }
+  }, [user, filter]);
 
   useEffect(() => {
-    getFollowersList();
-  }, [filter]);
+    if (user) {
+      if (user.type === 'business') {
+        getFollowersList();
+      }
+    }
+  }, [user, filter]);
 
   return (
     <>
     {userType === 'personal' && (
       <div className='filter-container'>
       <div className='label'>
+        Filter By
       <button
         className='filter-btn'
         name='Filter Button'
         onClick={handleClickOpen}
       >
-        Filters
+        {filter}
       </button>
     <Dialog
       open={open}
       onClose={handleClose}
     >
       <DialogTitle id='filter-dialog-title'>
-        {'Filters'}
+        {'Filter By'}
       </DialogTitle>
-      <DialogContent>
-        <DialogContentText id='alert-dialog-description'>
-          Filter By
-        </DialogContentText>
-      </DialogContent>
       <DialogActions>
         <Button onClick={getAllReelsRecent} autoFocus>Recent</Button>
         <Button onClick={getAllFriendReels} autoFocus>Friends</Button>
@@ -352,25 +366,21 @@ const Feed: React.FC<Props> = ({user}) => {
     {userType === 'business' && (
       <div className='filter-container'>
       <div className='label'>
+        Filter By
       <button
         className='filter-btn'
         name='Filter Button'
         onClick={handleClickOpen}
       >
-        Filters
+        {filter}
       </button>
     <Dialog
       open={open}
       onClose={handleClose}
     >
       <DialogTitle id='filter-dialog-title'>
-        {'Filters'}
+        {'Filter By'}
       </DialogTitle>
-      <DialogContent>
-        <DialogContentText id='alert-dialog-description'>
-          Filter By
-        </DialogContentText>
-      </DialogContent>
       <DialogActions>
         <Button onClick={getAllReelsRecent} autoFocus>Recent</Button>
         <Button onClick={getAllFollowersReels} autoFocus>Followers</Button>
@@ -390,7 +400,6 @@ const Feed: React.FC<Props> = ({user}) => {
       </div>
     </div>
     )}
-
       <div className='container-full-w'>
         <Reel
           reels={reels}

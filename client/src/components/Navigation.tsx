@@ -97,7 +97,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
 
     const interval = setInterval(() => {
       getAllPFriends();
-    }, 5000);
+    }, 7000);
 
     return () => {
       clearInterval(interval);
