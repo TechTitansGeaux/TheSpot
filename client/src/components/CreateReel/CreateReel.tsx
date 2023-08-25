@@ -52,16 +52,19 @@ const CreateReel: React.FC<Props> = ({user}) => {
   const timeNow = dayjs(new Date()).format('HH:mm:ss');
 
 // check to see if there are any events happening at users location today
-const eventCheck = () => {
+const eventCheck = (location: any, date: any, time: any) => {
   console.log('checking for event')
-  axios.get(`/events/${user.geolocation}/${today}`)
+  axios.get(`/events/${location}/${date}`)
     .then((resObj) => {
-      // response object is event happening at LOCATION; must check to see if theres one happening at NOW
-      // iterate through HERE/ TODAY events
+      // response object is event happening at LOCATION/ DATE; must check to see if theres one happening at TIME
+      // iterate through LOCATION/ DATE events
+      // ok, right now we have a list of ALL events, pub or priv
+      // we want: all public events AND private events IF the creator is our friend
       for (let i = 0; i < resObj.data.length; i++) {
-        //determine if any are happening right now
-        if (resObj.data[i].time <= timeNow && resObj.data[i].endTime >= timeNow) {
+        //determine if any are happening at time PUBLIC
+        if (resObj.data[i].time <= time && resObj.data[i].endTime >= time) {
           setCurrentEvent(resObj.data[i]);
+          // else determine if there are any happening at time PRIVATE
         } else {
           setMustCreateEvent(true)
         }
@@ -94,7 +97,7 @@ const getCurrentAddress = () => {
 
 
 useEffect(() => {
-  eventCheck();
+  eventCheck(user.geolocation, today, timeNow);
   getCurrentAddress();
 }, [])
 
