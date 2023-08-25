@@ -81,7 +81,6 @@ const EventLocationSearch: React.FC<Props> = ({handleLocation, handleAddress, cu
     handleAddress(selectedAddress);
 }
 
-console.log(address, '<-----address outside function')
   return (
     // <ThemeProvider theme={theme}>
     <div>

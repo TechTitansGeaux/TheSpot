@@ -92,8 +92,6 @@ const handleAddress = (address: any) => {
   setAddress(address)
 }
 
-console.log(address, '<---- address from event form')
-
 // ADD LOGIC TO PREVENT POSTING IF EVENT IS ALREADY HERE
 // ADD WAY OF NOTIFYING USER THAT EVENT CREATION WAS SUCCESSFUL
 // patch request to update event in la database

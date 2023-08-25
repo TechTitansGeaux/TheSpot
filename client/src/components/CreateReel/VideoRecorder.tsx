@@ -287,7 +287,6 @@ const updateBusinessEventCreated = () => {
 setBusinessEventCreated(true);
 }
 
-console.log(user.geolocation, '<-----geolo')
 // console.log(user.type, '<---- user type')
 // console.log(businessAccount, '<------business account')
 
