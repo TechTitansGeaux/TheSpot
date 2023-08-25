@@ -17,21 +17,52 @@
   --swiper-preloader-color: var(--swiper-theme-color);
   --swiper-virtual-size: 80px;
 }
-
-
 body {
+  padding: 2em 0;
+}
+
+.container-sign-up {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 900px;
+  margin: auto;
+}
+
+span.google-btn:hover {
+  box-shadow: 0 0 3px 3px rgba(244, 51, 171, 0.95) !important;
+}
+
+.flex-col {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 1em;
+}
+
+.swiper-parent {
   position: relative;
+  display: flex;
+  justify-content: center;
   height: 100%;
   margin: 0;
+}
 
+h1 {
+  margin: 1em .25em;
+  color: var(--white);
+  letter-spacing: .01rem;
+}
+
+span.welcome {
+  display: block !important;
+  color: var(--yellow);
 }
 
 .swiper {
   position: relative;
-  top: -580px;
-  margin: 0 auto;
+  margin: 2em auto;
   width: 90%;
-  height: 750px;
+  height: 600px;
   transition-timing-function: ease;
   align-items: center;
   justify-content: center;

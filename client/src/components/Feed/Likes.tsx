@@ -55,15 +55,15 @@ const Likes: React.FC<Props> = ({
     }
   };
 
-    const handlePersistClick = (reelId: number) => {
-      if (!clicked) {
-        setClicked(!clicked);
-        handleAddLike(reelId);
-      } else {
-        setClicked(!clicked);
-        handleRemoveLike(reelId);
-      }
-    };
+    // const handlePersistClick = (reelId: number) => {
+    //   if (!clicked) {
+    //     setClicked(!clicked);
+    //     handleAddLike(reelId);
+    //   } else {
+    //     setClicked(!clicked);
+    //     handleRemoveLike(reelId);
+    //   }
+    // };
 
   return (
     <React.Fragment>
