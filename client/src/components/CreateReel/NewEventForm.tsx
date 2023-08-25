@@ -25,10 +25,11 @@
    togglePopUp: () => void,
    updateBusinessEventCreated: () => void,
    currentAddress: string,
+   eventIsPublic: boolean
  }
 
  const NewEventForm: React.FC<Props> = ({
-  user, mustCreateEvent, updateMustCreateEvent, updateEventId, togglePopUp, updateBusinessEventCreated, currentAddress
+  user, mustCreateEvent, updateMustCreateEvent, updateEventId, togglePopUp, updateBusinessEventCreated, currentAddress, eventIsPublic
 }) => {
 
  const [eventName, setEventName] = useState('');
@@ -39,21 +40,6 @@
  const [eventTime, setEventTime] = useState('');
  const [endTime, setEndTime] = useState('');
  const [twentyOne, setTwentyOne] = useState(false);
- const [publicEvent, setPublicEvent] = useState(true);
-
-// determine user type personal or business
-// determine user type
-const checkUserType = () => {
-  // if it is a personal account
-  if (user.type === 'personal') {
-    // automatically a private event
-    setPublicEvent(false);
-  }
-  }
-
-  useEffect(() => {
-  checkUserType();
-  }, [])
 
 // handle input for new event name
 const handleEventName = (e: any) => {
@@ -104,7 +90,7 @@ const createEvent = () => {
    geolocation: eventLocation,
    address: address,
    twenty_one: twentyOne,
-   isPublic: publicEvent,
+   isPublic: eventIsPublic,
    UserId: user.id
  })
  .then((res) => {

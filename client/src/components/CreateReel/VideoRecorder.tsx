@@ -75,6 +75,7 @@ const VideoRecorder: React.FC<Props> = ({
   const [reelSaved, setReelSaved] = useState(false);
   const [businessAccount, setBusinessAccount] = useState(false);
   const [businessEventCreated, setBusinessEventCreated] = useState(false);
+  const [eventIsPublic, setEventIsPublic] = useState(true);
 
   type Blob = {
     data: {
@@ -184,11 +185,11 @@ const urltoFile = (url: any, filename: any, mimeType: any) => {
         geolocation: currentEvent.geolocation,
         address: currentAddress,
         twenty_one: currentEvent.twenty_one,
-        isPublic: false,
+        isPublic: eventIsPublic,
         UserId: user.id
     })
     .then((res) => {
-      console.log(res, '<----- response from axios post event')
+      // console.log(res, '<----- response from axios post event')
       setEventId(res.data.event.id)
       setReelSaved(true);
     })
@@ -204,7 +205,7 @@ const urltoFile = (url: any, filename: any, mimeType: any) => {
   }
   };
 
-  console.log(eventId, '<---- eventId in state')
+  // console.log(eventId, '<---- eventId in state')
 
   // POST THE REEL to the db, but only AFTER eventId has been GOT
   const postReelToDb = async () => {
@@ -269,8 +270,8 @@ if (box.style.display === 'block') {
 
 // determine user type
 const checkUserType = () => {
-if (user.type === 'business') {
-  setBusinessAccount(true);
+if (user.type === 'personal') {
+  setEventIsPublic(false);
 }
 }
 
@@ -300,7 +301,8 @@ setBusinessEventCreated(true);
       updateEventId={updateEventId}
       togglePopUp={togglePopUp}
       updateBusinessEventCreated={updateBusinessEventCreated}
-      currentAddress={currentAddress}/>
+      currentAddress={currentAddress}
+      eventIsPublic={eventIsPublic}/>
         { justRecorded ? (
         <div className='preview-mask'>
           <div className='webcam'>

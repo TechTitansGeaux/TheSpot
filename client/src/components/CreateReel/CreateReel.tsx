@@ -62,7 +62,6 @@ const eventCheck = () => {
         //determine if any are happening right now
         if (resObj.data[i].time <= timeNow && resObj.data[i].endTime >= timeNow) {
           setCurrentEvent(resObj.data[i]);
-          console.log('found an event')
         } else {
           setMustCreateEvent(true)
         }
