@@ -115,6 +115,7 @@ footer {
   z-index: 9999;
 }
 
+
 /* ////// NAVIGATION */
 
 .navbar-container {
@@ -371,6 +372,13 @@ video.reel {
 
 h1.profile-title {
   margin-top: 1em;
+  margin-left: .25em;
+}
+
+img.follow-icon {
+  min-width: none;
+  min-height: none;
+  border: none;
 }
 
 .friendName {
@@ -402,6 +410,12 @@ button.rejectFriend-btn:hover {
 }
 
 /* ////// CREATE REEL */
+
+.create-reel-btn-container{
+  border-radius: 50%;
+  width: auto;
+  height: auto;
+}
 
 .webContainer {
   position: relative;
@@ -557,3 +571,14 @@ button.rejectFriend-btn:hover {
   right: 5%;
 }
 
+
+/* MEDIA QUERIES */
+
+/* Followers & Friends */
+
+@media screen and (max-width: 425px) {
+  h1.profile-title {
+    text-align: center;
+    margin-left: 0;
+  }
+}

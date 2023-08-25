@@ -429,9 +429,11 @@ const Navigation: React.FC<Props> = ({ user }) => {
           </Drawer>
         </div>
         <footer>
-          <Link to='/CreateReel'>
-            <AddCircleIcon color='secondary' sx={{ width: 52, height: 52 }} />
-          </Link>
+          <div className='create-reel-btn-container'>
+            <Link to='/CreateReel'>
+              <AddCircleIcon color='secondary' sx={{ width: 52, height: 52 }} />
+            </Link>
+          </div>
           <div>
               {(pFriends.length !== 0) &&
               <div>
