@@ -327,25 +327,21 @@ const Feed: React.FC<Props> = ({user}) => {
     {userType === 'personal' && (
       <div className='filter-container'>
       <div className='label'>
+        Filter By
       <button
         className='filter-btn'
         name='Filter Button'
         onClick={handleClickOpen}
       >
-        Filters
+        {filter}
       </button>
     <Dialog
       open={open}
       onClose={handleClose}
     >
       <DialogTitle id='filter-dialog-title'>
-        {'Filters'}
+        {'Filter By'}
       </DialogTitle>
-      <DialogContent>
-        <DialogContentText id='alert-dialog-description'>
-          Filter By
-        </DialogContentText>
-      </DialogContent>
       <DialogActions>
         <Button onClick={getAllReelsRecent} autoFocus>Recent</Button>
         <Button onClick={getAllFriendReels} autoFocus>Friends</Button>
@@ -370,25 +366,21 @@ const Feed: React.FC<Props> = ({user}) => {
     {userType === 'business' && (
       <div className='filter-container'>
       <div className='label'>
+        Filter By
       <button
         className='filter-btn'
         name='Filter Button'
         onClick={handleClickOpen}
       >
-        Filters
+        {filter}
       </button>
     <Dialog
       open={open}
       onClose={handleClose}
     >
       <DialogTitle id='filter-dialog-title'>
-        {'Filters'}
+        {'Filter By'}
       </DialogTitle>
-      <DialogContent>
-        <DialogContentText id='alert-dialog-description'>
-          Filter By
-        </DialogContentText>
-      </DialogContent>
       <DialogActions>
         <Button onClick={getAllReelsRecent} autoFocus>Recent</Button>
         <Button onClick={getAllFollowersReels} autoFocus>Followers</Button>
