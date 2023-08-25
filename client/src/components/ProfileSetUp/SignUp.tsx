@@ -6,8 +6,6 @@ import 'swiper/css/navigation';
 import 'swiper/css/autoplay';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import './SignUp.css';
-
-import { Container, Grid, Card, CardContent, Typography } from '@mui/material';
 import GoogleButton from 'react-google-button';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 const logoGradient = require('/client/src/img/logo-gradient.jpg');
@@ -30,67 +28,64 @@ const SignUp = () => {
 
   const progressCircle = useRef(null);
   const progressContent = useRef(null);
-  const onAutoplayTimeLeft = (s, time, progress) => {
+  const onAutoplayTimeLeft = (s: never, time: number, progress: number) => {
     progressCircle.current.style.setProperty('--progress', 1 - progress);
     progressContent.current.textContent = `${Math.ceil(time / 1000)}s`;
   };
 
   return (
     <ThemeProvider theme={theme}>
-      <Container maxWidth="sm">
-        <Grid
-          container
-          spacing={3}
-          direction="column"
-          alignItems="center"
-          justifyContent="top"
-          style={{ minHeight: '100vh' }}
+      <div className='container-sign-up'>
+        <div className='flex-col'>
+          <img
+            src={logoGradient}
+            alt='app logo'
+            style={{ width: '200px', height: 'auto' }}
+          />
+        </div>
+        <div className='flex-col'>
+          <GoogleButton className="google-btn" onClick={redirectToGoogleSSO} />
+        </div>
+      <div className='swiper-parent'>
+        <Swiper
+          spaceBetween={30}
+          centeredSlides={true}
+          autoplay={{
+            delay: 3500,
+            disableOnInteraction: false,
+          }}
+          pagination={{
+            clickable: true,
+          }}
+          navigation={true}
+          modules={[Autoplay, Pagination, Navigation]}
+          onAutoplayTimeLeft={onAutoplayTimeLeft}
+          className='mySwiper'
         >
-          <Grid item>
-            <img
-              src={logoGradient}
-              alt="app logo"
-              style={{ width: '200px', height: 'auto' }}
-            />
-          </Grid>
-          <Grid item>
-            <GoogleButton onClick={redirectToGoogleSSO} />
-          </Grid>
-          <Grid item>
-          <Typography variant="h1" fontSize={'32px'} gutterBottom>
-                      Welcome to The Spot!
-                    </Typography>
-          </Grid>
-        </Grid>
-        <div>
-    <Swiper
-      spaceBetween={30}
-      centeredSlides={true}
-      autoplay={{
-        delay: 3500,
-        disableOnInteraction: false,
-      }}
-      pagination={{
-        clickable: true,
-      }}
-      navigation={true}
-      modules={[Autoplay, Pagination, Navigation]}
-      onAutoplayTimeLeft={onAutoplayTimeLeft}
-      className="mySwiper"
-    >
-      <SwiperSlide id="slide-1"><h1>Discover and Connect:</h1></SwiperSlide>
-      <SwiperSlide id="slide-2"><h1>Personalized Reels:</h1></SwiperSlide>
-      <SwiperSlide id="slide-3"><h1>Plan Your Night:</h1></SwiperSlide>
-      <SwiperSlide id="slide-4"><h1>Businesses and Event Organizers:</h1></SwiperSlide>
-      <div className="autoplay-progress" slot="container-end">
-        <svg viewBox="0 0 48 48" ref={progressCircle}>
-          <circle cx="24" cy="24" r="20"></circle>
-        </svg>
-        <span ref={progressContent}></span>
-      </div>
-    </Swiper>
-  </div>
-      </Container>
+          <SwiperSlide id='slide-1'>
+            <h1>
+              <span className='welcome'>WELCOME TO THE SPOT.</span> Discover
+              Local Events. Connect with Friends.
+            </h1>
+          </SwiperSlide>
+          <SwiperSlide id='slide-2'>
+            <h1>CREATE REELS</h1>
+          </SwiperSlide>
+          <SwiperSlide id='slide-3'>
+            <h1>MAP OUT YOUR EVENING</h1>
+          </SwiperSlide>
+          <SwiperSlide id='slide-4'>
+            <h1>PROMOTE LOCAL EVENTS</h1>
+          </SwiperSlide>
+          <div className='autoplay-progress' slot='container-end'>
+            <svg viewBox='0 0 48 48' ref={progressCircle}>
+              <circle cx='24' cy='24' r='20'></circle>
+            </svg>
+            <span ref={progressContent}></span>
+          </div>
+        </Swiper>
+        </div>
+         </div>
     </ThemeProvider>
   );
 };
