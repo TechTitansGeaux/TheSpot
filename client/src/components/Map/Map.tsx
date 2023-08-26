@@ -36,7 +36,8 @@ type User = {
 
 
 const Map: React.FC<Props> = (props) => {
-  const { loggedIn, reelEvent } = props;
+  const { loggedIn } = props;
+  console.log('rendered')
 
   const [ users, setUsers ] = useState([]);
   const [ events, setEvents ] = useState([])

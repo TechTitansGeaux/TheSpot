@@ -182,7 +182,6 @@
   width: 200px;
   border: solid var(--purple);
   border-width: 4px;
-
   border-radius: 15px;
   background-color: var(--violet);
   font-family: var(--title-font);
@@ -192,6 +191,9 @@
   left: -100px;
   text-transform: uppercase;
   z-index: 11;
+  animation-name: popOut;
+  animation-timing-function: ease-in;
+  animation-duration: .5s;
 }
 
 .BusinessClusterPin {
@@ -292,4 +294,19 @@
   width: 125px;
   background-color: var(--grey);
   text-align: center;
+}
+
+@keyframes popOut {
+  0% {
+    transform: rotateX(-90deg) translateY(-50%);
+    opacity: 0%;
+  }
+  50% {
+    transform: rotateX(-45deg) translateY(-0.7071);
+    opacity: 75%;
+  }
+  100% {
+    transform: rotateX(0deg) translateY(0);
+    opacity: 100%;
+  }
 }
