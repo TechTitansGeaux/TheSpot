@@ -73,9 +73,6 @@ const EventLocationSearch: React.FC<Props> = ({handleLocation, handleAddress, cu
     const latLng = await getLatLng(results[0]);
 
     setAddress(selectedAddress);
-    console.log(selectedAddress, '<-----selected address')
-    console.log(address, '<-----address')
-    console.log(typeof address, '<----data type of address')
     const newGeolocation = `${latLng.lat},${latLng.lng}`;
     handleLocation(newGeolocation);
     handleAddress(selectedAddress);

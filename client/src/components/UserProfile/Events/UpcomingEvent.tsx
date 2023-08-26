@@ -1,6 +1,6 @@
   /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Tooltip from '@mui/material/Tooltip';
 import Button from '@mui/material/Button';
@@ -10,6 +10,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContentText from '@mui/material/DialogContentText';
 import EventLocationSearch from '../../CreateReel/EventLocationSearch';
+import ConflictingEvent from '../../CreateReel/ConflictingEvent';
 
 type Props = {
   event: {
@@ -27,9 +28,23 @@ type Props = {
     twenty_one: boolean,
     updatedAt: string
   },
-  getMyEvents: () => void
+  getMyEvents: () => void,
+  user: {
+    id: number;
+    username: string;
+    displayName: string;
+    type: string;
+    geolocation: string;
+    mapIcon: string;
+    birthday: string;
+    privacy: string;
+    accessibility: string;
+    email: string;
+    picture: string;
+    googleId: string;
+  };
 }
-const UpcomingEvent: React.FC<Props> = ({event, getMyEvents}) => {
+const UpcomingEvent: React.FC<Props> = ({event, getMyEvents, user}) => {
 
   const [name, setName] = useState(event.name);
   const [location, setLocation] = useState(event.geolocation);
@@ -41,6 +56,23 @@ const UpcomingEvent: React.FC<Props> = ({event, getMyEvents}) => {
   const [justSaved, setJustSaved] = useState(false);
   // Alert Dialog 'are you sure you want to delete this EVENT?'
   const [open, setOpen] = useState(false);
+  const [friends, setFriends] = useState([]);
+  const [noConflicts, setNoConflicts] = useState(true);
+  const [conflictingEvent, setConflictingEvent] = useState({
+   id: 0,
+   name: 'Conflict',
+   rsvp_count: 0,
+   date: '',
+   time: '',
+   endTime: '',
+   geolocation: '',
+   address: '',
+   twenty_one: false,
+   isPublic: false,
+   createdAt: '',
+   updatedAt: '',
+   PlaceId: 0
+ });
 
   // handle opening delete alert dialog
   const handleClickOpen = () => {
@@ -59,10 +91,12 @@ const UpcomingEvent: React.FC<Props> = ({event, getMyEvents}) => {
   // function to set event location
   const handleLocation = (geolocation: any) => {
     setLocation(geolocation)
+    setJustSaved(false);
   };
 
   const handleAddress = (address: any) => {
     setAddress(address)
+    setJustSaved(false);
   }
   const handleDateChange = (e: any) => {
     setDate(e.target.value);
@@ -81,23 +115,98 @@ const UpcomingEvent: React.FC<Props> = ({event, getMyEvents}) => {
     setJustSaved(false);
   }
 
+  // get all frens
+  const getFriendList = () => {
+    if (user) {
+      if (user.type === 'personal') {
+        axios
+          .get(`/feed/frens`)
+          .then((response) => {
+            setFriends(response.data);
+          })
+          .catch((err) => {
+            console.error('Could not GET friends:', err);
+          })
+      }
+    }
+  };
+
+// check to see if there are any events happening at users location right now
+const eventCheck = (location: any, date: any) => {
+  axios.get(`/events/${location}/${date}`)
+    .then((resObj) => {
+      // response object is event happening at LOCATION/ DATE; must check to see if theres one happening at TIME
+      // iterate through LOCATION/ DATE events
+      // ok, right now we have a list of ALL events, pub or priv
+      // we want: all public events AND private events IF the creator is our friend
+      for (let i = 0; i < resObj.data.length; i++) {
+        // rule out the current event that we are editing
+        if (resObj.data[i].id !== event.id) {
+          //determine if any are happening at time PUBLIC
+          // if inputed events START TIME is BETWEEN found events START & END times => conflict
+          // or
+          // if inputed events END TIME is BETWEEN found events START & END times => conflict
+          if (time > resObj.data[i].time && time < resObj.data[i].endTime ||
+            endTime > resObj.data[i].time && endTime < resObj.data[i].endTime) {
+              // determine if public
+              if (resObj.data[i].isPublic) {
+                setConflictingEvent(resObj.data[i]);
+                setNoConflicts(false)
+              } else {
+                // iterate through friends
+                for (let j = 0; j < friends.length; j++) {
+                  // determine if found event is that of friends
+                  if (friends[j].accepter_id === resObj.data[i].UserId) {
+                    setConflictingEvent(resObj.data[i]);
+                    setNoConflicts(false)
+                  }
+                } // or if it is their own event
+                if (user.id === resObj.data[i].UserId) {
+                  setConflictingEvent(resObj.data[i]);
+                  setNoConflicts(false)
+                }
+              }
+          } else {
+            setNoConflicts(true)
+          }
+        }
+      }
+      if (resObj.data.length === 0) {
+        setNoConflicts(true)
+      }
+    })
+    .catch((err) => {
+      setNoConflicts(true);
+      console.log('No events for this day/location found: ', err)
+    })
+}
+
+// check for conflicting events when eventDate or location is entered
+useEffect(() => {
+  getFriendList();
+  if (time !== '' && endTime !== '' && date !== '' && location !== '') {
+    eventCheck(location, date);
+  }
+}, [time, endTime, date, location])
 
   // patch those changes in event in database
   const saveChanges = () => {
-    axios.patch(`/events/${event.id}`, {
-      geolocation: location,
-      address: address,
-      name: name,
-      date: date,
-      time: time,
-      endTime: endTime
-    })
-    .then(() => {
-      setJustSaved(true);
-    })
-    .catch((err) => {
-      console.error('Failed to axios PATCH event: ', err);
-    })
+    if (noConflicts) {
+      axios.patch(`/events/${event.id}`, {
+        geolocation: location,
+        address: address,
+        name: name,
+        date: date,
+        time: time,
+        endTime: endTime
+      })
+      .then(() => {
+        setJustSaved(true);
+      })
+      .catch((err) => {
+        console.error('Failed to axios PATCH event: ', err);
+      })
+    }
   }
 
   // delete event
@@ -125,7 +234,7 @@ const UpcomingEvent: React.FC<Props> = ({event, getMyEvents}) => {
           <div className='eventCardDetails'>
             <br></br>
             Address:
-            <EventLocationSearch 
+            <EventLocationSearch
           handleLocation={handleLocation}
           handleAddress={handleAddress}
           currentAddress={address}/>
@@ -160,16 +269,18 @@ const UpcomingEvent: React.FC<Props> = ({event, getMyEvents}) => {
             RSVPs: {event.rsvp_count}
             <br></br>
             {event.twenty_one && '21+'}
-            <br></br>
-            <br></br>
           </div>
-          {!justSaved && <button
+          {!noConflicts && (<ConflictingEvent
+          conflictingEvent={conflictingEvent}/>)}
+          <br></br>
+          <br></br>
+          {!justSaved && noConflicts && <button
             className='save-event-detail-button'
              style={{ cursor: 'pointer'}}
             onClick={saveChanges}>
               Save
             </button>}
-            {justSaved && <button
+            {justSaved &&<button
             className='save-event-success-button'>
               Saved!</button>}
               <button

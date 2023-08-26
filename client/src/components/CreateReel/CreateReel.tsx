@@ -44,6 +44,7 @@ const CreateReel: React.FC<Props> = ({user}) => {
   });
   const [mustCreateEvent, setMustCreateEvent] = useState(false);
   const [currentAddress, setCurrentAddress] = useState('');
+  const [friends, setFriends] = useState([]);
 
 
   // today variable
@@ -51,9 +52,25 @@ const CreateReel: React.FC<Props> = ({user}) => {
   // current time variable
   const timeNow = dayjs(new Date()).format('HH:mm:ss');
 
-// check to see if there are any events happening at users location today
-const eventCheck = (location: any, date: any, time: any) => {
-  console.log('checking for event')
+  // get all frens
+  const getFriendList = () => {
+    if (user) {
+      if (user.type === 'personal') {
+        axios
+          .get(`/feed/frens`)
+          .then((response) => {
+            // console.log('friends response.data:', response.data);
+            setFriends(response.data);
+          })
+          .catch((err) => {
+            console.error('Could not GET friends:', err);
+          })
+      }
+    }
+  };
+
+// check to see if there are any PUBLIC events happening at users location right now
+const publicEventCheck = (location: any, date: any, time: any) => {
   axios.get(`/events/${location}/${date}`)
     .then((resObj) => {
       // response object is event happening at LOCATION/ DATE; must check to see if theres one happening at TIME
@@ -62,9 +79,9 @@ const eventCheck = (location: any, date: any, time: any) => {
       // we want: all public events AND private events IF the creator is our friend
       for (let i = 0; i < resObj.data.length; i++) {
         //determine if any are happening at time PUBLIC
-        if (resObj.data[i].time <= time && resObj.data[i].endTime >= time) {
+        if (resObj.data[i].time <= time && resObj.data[i].endTime >= time && resObj.data[i].isPublic) {
           setCurrentEvent(resObj.data[i]);
-          // else determine if there are any happening at time PRIVATE
+          setMustCreateEvent(false);
         } else {
           setMustCreateEvent(true)
         }
@@ -79,6 +96,35 @@ const eventCheck = (location: any, date: any, time: any) => {
     })
 }
 
+const privateEventCheck = (location: any, date: any, time: any) => {
+
+  axios.get(`/events/${location}/${date}`)
+  .then((resObj) => {
+    // response object is event happening at LOCATION/ DATE; must check to see if theres one happening at TIME
+    for (let i = 0; i < resObj.data.length; i++) {
+      // iterate through friends
+      for (let j = 0; j < friends.length; j++) {
+        //determine if any are happening at time AND created by friend
+        if (resObj.data[i].time <= time && resObj.data[i].endTime >= time
+          && friends[j].accepter_id === resObj.data[i].UserId) {
+          setCurrentEvent(resObj.data[i]);
+          setMustCreateEvent(false);
+          // else determine if there are any happening at time PRIVATE
+        } else {
+          setMustCreateEvent(true)
+        }
+      }
+    }
+    if (resObj.data.length === 0) {
+      setMustCreateEvent(true)
+    }
+  })
+  .catch((err) => {
+    setMustCreateEvent(true);
+    console.error('Failed axios get event: ', err)
+  })
+}
+
 // turn user's current geolocation into an address so that correct
 // address for event saves to DB + displays in all needed places
 const getCurrentAddress = () => {
@@ -86,7 +132,7 @@ const getCurrentAddress = () => {
   const [lat, lng] = user.geolocation.split(',');
   axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&location_type=ROOFTOP&result_type=street_address&key=${process.env.REACT_APP_GEOCODING_API}`)
     .then((response) => {
-      console.log(response.data.results[0].formatted_address, '<-----res from reverse geocoding fetch')
+      // console.log(response.data.results[0].formatted_address, '<-----res from reverse geocoding fetch')
       setCurrentAddress(response.data.results[0].formatted_address)
     })
     .catch((err) => {
@@ -97,9 +143,15 @@ const getCurrentAddress = () => {
 
 
 useEffect(() => {
-  eventCheck(user.geolocation, today, timeNow);
+  getFriendList();
+  publicEventCheck(user.geolocation, today, timeNow);
   getCurrentAddress();
 }, [])
+
+useEffect(() => {
+  // check for private events once friends list has been gotten
+  privateEventCheck(user.geolocation, today, timeNow)
+}, [friends])
 
 const updateMustCreateEvent = () => {
   setMustCreateEvent(false)
@@ -113,7 +165,8 @@ const updateMustCreateEvent = () => {
       user={user}
       mustCreateEvent={mustCreateEvent}
       updateMustCreateEvent={updateMustCreateEvent}
-      currentAddress={currentAddress}/>
+      currentAddress={currentAddress}
+      friends={friends}/>
     </div>
   )
 };
