@@ -71,7 +71,6 @@ const CreateReel: React.FC<Props> = ({user}) => {
 
 // check to see if there are any PUBLIC events happening at users location right now
 const publicEventCheck = (location: any, date: any, time: any) => {
-  console.log('checking for event')
   axios.get(`/events/${location}/${date}`)
     .then((resObj) => {
       // response object is event happening at LOCATION/ DATE; must check to see if theres one happening at TIME
@@ -82,15 +81,13 @@ const publicEventCheck = (location: any, date: any, time: any) => {
         //determine if any are happening at time PUBLIC
         if (resObj.data[i].time <= time && resObj.data[i].endTime >= time && resObj.data[i].isPublic) {
           setCurrentEvent(resObj.data[i]);
-          // else determine if there are any happening at time PRIVATE
+          setMustCreateEvent(false);
         } else {
           setMustCreateEvent(true)
         }
       }
       if (resObj.data.length === 0) {
         setMustCreateEvent(true)
-        console.log('must create event from public check')
-
       }
     })
     .catch((err) => {
@@ -99,7 +96,6 @@ const publicEventCheck = (location: any, date: any, time: any) => {
     })
 }
 
-console.log(user.geolocation, '<-----my lo')
 const privateEventCheck = (location: any, date: any, time: any) => {
 
   axios.get(`/events/${location}/${date}`)
@@ -169,7 +165,8 @@ const updateMustCreateEvent = () => {
       user={user}
       mustCreateEvent={mustCreateEvent}
       updateMustCreateEvent={updateMustCreateEvent}
-      currentAddress={currentAddress}/>
+      currentAddress={currentAddress}
+      friends={friends}/>
     </div>
   )
 };

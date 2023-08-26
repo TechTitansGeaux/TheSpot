@@ -3,6 +3,11 @@
  import { useState, useEffect } from "react";
  import axios from 'axios';
  import EventLocationSearch from './EventLocationSearch'
+ import dayjs from 'dayjs';
+ import localizedFormat from 'dayjs/plugin/localizedFormat';
+  dayjs.extend(localizedFormat)
+
+  dayjs().format('L LT')
 
  type Props = {
    user: {
@@ -25,11 +30,18 @@
    togglePopUp: () => void,
    updateBusinessEventCreated: () => void,
    currentAddress: string,
-   eventIsPublic: boolean
+   eventIsPublic: boolean,
+   friends: {
+    id: number;
+    status: string;
+    requester_id: number;
+    accepter_id: number;
+  }[];
  }
 
  const NewEventForm: React.FC<Props> = ({
-  user, mustCreateEvent, updateMustCreateEvent, updateEventId, togglePopUp, updateBusinessEventCreated, currentAddress, eventIsPublic
+  user, mustCreateEvent, updateMustCreateEvent, updateEventId, togglePopUp,
+  updateBusinessEventCreated, currentAddress, eventIsPublic, friends
 }) => {
 
  const [eventName, setEventName] = useState('');
@@ -40,6 +52,22 @@
  const [eventTime, setEventTime] = useState('');
  const [endTime, setEndTime] = useState('');
  const [twentyOne, setTwentyOne] = useState(false);
+ const [noConflicts, setNoConflicts] = useState(true);
+ const [conflictingEvent, setConflictingEvent] = useState({
+  id: 0,
+  name: 'Conflict',
+  rsvp_count: 0,
+  date: '',
+  time: '',
+  endTime: '',
+  geolocation: '',
+  address: '',
+  twenty_one: false,
+  isPublic: false,
+  createdAt: '',
+  updatedAt: '',
+  PlaceId: 0
+});
 
 // handle input for new event name
 const handleEventName = (e: any) => {
@@ -78,30 +106,90 @@ const handleAddress = (address: any) => {
   setAddress(address)
 }
 
+// date and location are already in correct format to use in checkEvent functions
+// check to see if there are any PUBLIC events happening at users location right now
+const eventCheck = (location: any, date: any) => {
+  console.log('checking for event')
+  axios.get(`/events/${location}/${date}`)
+    .then((resObj) => {
+      // response object is event happening at LOCATION/ DATE; must check to see if theres one happening at TIME
+      // iterate through LOCATION/ DATE events
+      // ok, right now we have a list of ALL events, pub or priv
+      // we want: all public events AND private events IF the creator is our friend
+      for (let i = 0; i < resObj.data.length; i++) {
+        //determine if any are happening at time PUBLIC
+        // if inputed events START TIME is BETWEEN found events START & END times => conflict
+        // or
+        // if inputed events END TIME is BETWEEN found events START & END times => conflict
+        if (eventTime >= resObj.data[i].time && eventTime <= resObj.data[i].endTime ||
+          endTime >= resObj.data[i].time && endTime <= resObj.data[i].endTime) {
+            // determine if public
+            if (resObj.data[i].isPublic) {
+              setConflictingEvent(resObj.data[i]);
+              setNoConflicts(false)
+            } else {
+              // iterate through friends
+              for (let j = 0; j < friends.length; j++) {
+                // determine if found event is that of friends
+                if (friends[j].accepter_id === resObj.data[i].UserId) {
+                  setConflictingEvent(resObj.data[i]);
+                  setNoConflicts(false)
+                }
+              }
+            }
+        } else {
+          setNoConflicts(true)
+        }
+      }
+      if (resObj.data.length === 0) {
+        setNoConflicts(true)
+      }
+    })
+    .catch((err) => {
+      setNoConflicts(true);
+      console.error('Failed axios get event: ', err)
+    })
+}
+
+// check for conflicting events when eventDate or location is entered
+useEffect(() => {
+  if (eventTime !== '' && endTime !== '' && eventDate !== '' && eventLocation !== '') {
+    console.log('event checked')
+    eventCheck(eventLocation, eventDate);
+  }
+}, [endTime])
+
+console.log(eventTime, "<--------eventTime")
+
 // ADD LOGIC TO PREVENT POSTING IF EVENT IS ALREADY HERE
 // ADD WAY OF NOTIFYING USER THAT EVENT CREATION WAS SUCCESSFUL
 // patch request to update event in la database
-const createEvent = () => {
- axios.post('/events/create', {
-   name: eventName,
-   date: eventDate,
-   time: eventTime,
-   endTime: endTime,
-   geolocation: eventLocation,
-   address: address,
-   twenty_one: twentyOne,
-   isPublic: eventIsPublic,
-   UserId: user.id
- })
- .then((res) => {
-   updateEventId(res.data.event.id)
-   updateMustCreateEvent();
-   updateBusinessEventCreated();
-   togglePopUp();
- })
- .catch((err) => {
-   console.error('Failed to axios POST event: ', err)
- })
+const createEvent = async () => {
+
+  if (noConflicts) {
+    axios.post('/events/create', {
+      name: eventName,
+      date: eventDate,
+      time: eventTime,
+      endTime: endTime,
+      geolocation: eventLocation,
+      address: address,
+      twenty_one: twentyOne,
+      isPublic: eventIsPublic,
+      UserId: user.id
+    })
+    .then((res) => {
+      updateEventId(res.data.event.id)
+      updateMustCreateEvent();
+      updateBusinessEventCreated();
+      togglePopUp();
+    })
+    .catch((err) => {
+      console.error('Failed to axios POST event: ', err)
+    })
+  } else {
+    console.log('conflicting event!: ', conflictingEvent)
+  }
 }
 
    return (

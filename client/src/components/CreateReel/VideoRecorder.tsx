@@ -47,10 +47,16 @@ type Props = {
   currentEventId: number,
   updateMustCreateEvent: () => void,
   currentAddress: string,
+  friends: {
+    id: number;
+    status: string;
+    requester_id: number;
+    accepter_id: number;
+  }[];
 };
 
 const VideoRecorder: React.FC<Props> = ({
-  currentEvent, user, mustCreateEvent, currentEventId, updateMustCreateEvent, currentAddress
+  currentEvent, user, mustCreateEvent, currentEventId, updateMustCreateEvent, currentAddress, friends
 }) => {
   const webcamRef = useRef(null);
   const mediaRecorderRef = useRef(null);
@@ -302,7 +308,8 @@ setBusinessEventCreated(true);
       togglePopUp={togglePopUp}
       updateBusinessEventCreated={updateBusinessEventCreated}
       currentAddress={currentAddress}
-      eventIsPublic={eventIsPublic}/>
+      eventIsPublic={eventIsPublic}
+      friends={friends}/>
         { justRecorded ? (
         <div className='preview-mask'>
           <div className='webcam'>
