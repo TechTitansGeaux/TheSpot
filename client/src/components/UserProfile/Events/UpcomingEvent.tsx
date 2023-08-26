@@ -122,7 +122,6 @@ const UpcomingEvent: React.FC<Props> = ({event, getMyEvents, user}) => {
         axios
           .get(`/feed/frens`)
           .then((response) => {
-            // console.log('friends response.data:', response.data);
             setFriends(response.data);
           })
           .catch((err) => {
@@ -134,10 +133,8 @@ const UpcomingEvent: React.FC<Props> = ({event, getMyEvents, user}) => {
 
 // check to see if there are any events happening at users location right now
 const eventCheck = (location: any, date: any) => {
-  console.log('checking for event')
   axios.get(`/events/${location}/${date}`)
     .then((resObj) => {
-      console.log(resObj, '<---- res from get events location date')
       // response object is event happening at LOCATION/ DATE; must check to see if theres one happening at TIME
       // iterate through LOCATION/ DATE events
       // ok, right now we have a list of ALL events, pub or priv
@@ -145,7 +142,6 @@ const eventCheck = (location: any, date: any) => {
       for (let i = 0; i < resObj.data.length; i++) {
         // rule out the current event that we are editing
         if (resObj.data[i].id !== event.id) {
-          console.log(resObj.data[i], '<------ not this event')
           //determine if any are happening at time PUBLIC
           // if inputed events START TIME is BETWEEN found events START & END times => conflict
           // or
@@ -157,7 +153,6 @@ const eventCheck = (location: any, date: any) => {
                 setConflictingEvent(resObj.data[i]);
                 setNoConflicts(false)
               } else {
-                console.log('non public event hit')
                 // iterate through friends
                 for (let j = 0; j < friends.length; j++) {
                   // determine if found event is that of friends
@@ -185,12 +180,10 @@ const eventCheck = (location: any, date: any) => {
       console.log('No events for this day/location found: ', err)
     })
 }
-console.log(noConflicts, '<------ no conflicts')
 
 // check for conflicting events when eventDate or location is entered
 useEffect(() => {
   getFriendList();
-  console.log('useEffect to check event hit')
   if (time !== '' && endTime !== '' && date !== '' && location !== '') {
     eventCheck(location, date);
   }
