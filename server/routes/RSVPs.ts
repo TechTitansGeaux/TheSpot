@@ -41,10 +41,33 @@ rsvpRouter.get('/all', (req: any, res: any) => {
   })
 })
 
-// post to increment rsvp_count on Event AND create RSVP in table
-rsvpRouter.post('/addRsvp/:EventId', (req: any, res: any) => {
+// put to increment rsvp_count on Event AND create RSVP in table
+rsvpRouter.put('/addRsvp/:EventId', (req: any, res: any) => {
   // increment the Events rsvp_count where the EventId from params
+  const { EventId } = req.params;
   // then create RSVPs row of UserId as req.user = id AND EventId from from params
+  const { id } = req.user // must be req.user // USE req.body for postman
+
+  Events.increment({
+    rsvp_count: 1,
+  },
+    {
+      where: {
+        id: EventId
+    }
+    })
+    .then((response: any) => {
+      console.log('RSVP response', response)
+      RSVPs.create({
+        UserId: id,
+        EventId: EventId
+       })
+      res.sendStatus(201);
+    })
+    .catch((err: any) => {
+      console.error('RSVP error in post', err);
+      res.sendStatus(500);
+  })
 })
 
 export default rsvpRouter;
