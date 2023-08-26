@@ -70,11 +70,11 @@ eventRouter.get('/:geolocation/:date', async (req: any, res: any) => {
           filteredArr
       )
       } else {
-        res.status(404).send('No events found at this location');
+        res.status(200).send('No events found at this location');
       }
     })
     .catch((err: any) => {
-      console.error('Failed to GET event: ', err)
+      console.error('Failed to GET events: ', err)
       res.sendStatus(500);
     })
 

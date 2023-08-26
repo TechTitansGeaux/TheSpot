@@ -109,7 +109,6 @@ const handleAddress = (address: any) => {
 // date and location are already in correct format to use in checkEvent functions
 // check to see if there are any PUBLIC events happening at users location right now
 const eventCheck = (location: any, date: any) => {
-  console.log('checking for event')
   axios.get(`/events/${location}/${date}`)
     .then((resObj) => {
       // response object is event happening at LOCATION/ DATE; must check to see if theres one happening at TIME
@@ -147,19 +146,16 @@ const eventCheck = (location: any, date: any) => {
     })
     .catch((err) => {
       setNoConflicts(true);
-      console.error('Failed axios get event: ', err)
+      console.log('No events for this day/location found: ', err)
     })
 }
 
 // check for conflicting events when eventDate or location is entered
 useEffect(() => {
   if (eventTime !== '' && endTime !== '' && eventDate !== '' && eventLocation !== '') {
-    console.log('event checked')
     eventCheck(eventLocation, eventDate);
   }
-}, [endTime])
-
-console.log(eventTime, "<--------eventTime")
+}, [eventTime, endTime, eventDate, eventLocation])
 
 // ADD LOGIC TO PREVENT POSTING IF EVENT IS ALREADY HERE
 // ADD WAY OF NOTIFYING USER THAT EVENT CREATION WAS SUCCESSFUL
