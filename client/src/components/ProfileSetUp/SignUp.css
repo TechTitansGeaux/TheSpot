@@ -17,9 +17,9 @@
   --swiper-preloader-color: var(--swiper-theme-color);
   --swiper-virtual-size: 80px;
 }
-body {
+/* body {
   padding: 2.25em 0;
-}
+} */
 
 .container-sign-up {
   display: flex;
