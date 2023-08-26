@@ -42,7 +42,8 @@ const Likes: React.FC<Props> = ({
   user,
 }) => {
 
-  const [clicked, setClicked] = useLocalStorageState('clicked', false); // how to make this conditional - PER REEL?
+  const [clicked, setClicked] = useState(false); // how to make this conditional - PER REEL?
+  // const [clicked, setClicked] = useLocalStorageState('clicked', false); // how to make this conditional - PER REEL?
 
   const handleLikeClick = (reelId: number) => {
     if (clicked === false) {

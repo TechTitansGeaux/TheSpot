@@ -253,7 +253,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
     return () => observer.disconnect();
   }, []);
 
-
+  console.log('reels ---------->', reels)
   return (
     <div>
       {true && (
