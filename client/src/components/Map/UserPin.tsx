@@ -144,7 +144,7 @@ const UserPin: React.FC<Props> = ({ user, loggedIn, lat, lng, zoom, friendList, 
         />
       </div>
       <div className='userPopUp' id={'popUp' + user.username + user.id}>
-        <div style={{ textAlign: 'center', fontSize: '20px' }}>
+        <div style={{ textAlign: 'center', fontSize:'20px', marginTop: '5px' }}>
           {user.displayName}
         </div>
         <div style={{ textAlign: 'center', fontSize: '14px' }}>
@@ -158,8 +158,8 @@ const UserPin: React.FC<Props> = ({ user, loggedIn, lat, lng, zoom, friendList, 
         <div className='addOrRmFriend'>
           {!pendingFriendList.includes(user.id) && !friendList.includes(user.id) && isNotLoggedInUser && (
             <div>
-              <div style={{ position: 'relative', top: '18px', left: '80px' }}>add friend</div>
-              <div style={{ position: 'relative', top: '-7.5px' }}>
+              <div style={{ position: 'relative', top: '16.5px', left: '80px' }}>add friend</div>
+              <div style={{ position: 'relative', top: '-11.5px' }}>
                 <ThemeProvider theme={addFriendTheme}>
                   <div>
                     <Box>
@@ -202,7 +202,7 @@ const UserPin: React.FC<Props> = ({ user, loggedIn, lat, lng, zoom, friendList, 
         <div className='addOrRmFriend'>
           {pendingFriendList.includes(user.id) && (
             <div>
-              <div style={{ position: 'relative', top: '18px', left: '60px' }}>request pending</div>
+              <div style={{ position: 'relative', top: '18px', left: '70px' }}>request pending</div>
             </div>
           )}
         </div>

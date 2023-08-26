@@ -73,15 +73,15 @@ const Event: React.FC<Props> = ({ event, setCenter, setZoom, lat, lng, zoom }) =
         }
         togglePopUp();
       }}>
-      <div >
-        <RsvpSharpIcon style={{ transform: 'scale(1.25)' }} color='secondary' />
-      </div>
-      <div style={{ transform: 'translateY(-10px)' }}>
-        { event.rsvp_count }
-      </div>
+        <div >
+          <RsvpSharpIcon style={{ transform: 'scale(1.25)' }} color='secondary' />
+        </div>
+        <div style={{ transform: 'translateY(-10px)' }}>
+          { event.rsvp_count }
+        </div>
       </div>
       <div className='eventPopUp' id={'popUp' + event.name + event.id} >
-        <div style={{ textAlign: 'center', fontSize:'20px' }}>
+        <div style={{ textAlign: 'center', fontSize:'20px', marginTop: '5px' }}>
           {event.name}
         </div>
         <div style={{ textAlign: 'center', fontSize:'20px' }}>
@@ -104,6 +104,9 @@ const Event: React.FC<Props> = ({ event, setCenter, setZoom, lat, lng, zoom }) =
             {`ends: ${format(event.endTime)}`}
           </p>
         </div>
+        {
+          event.twenty_one && <div style={{ textAlign: 'center', fontSize:'20px', marginBottom: '-22.5px' }}>21+</div>
+        }
         <div className='zoomToEvent'>
           <div>
             <div style={{ position: 'relative', top: '27.5px', left: '60px' }}>zoom to event</div>
