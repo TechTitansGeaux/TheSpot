@@ -140,7 +140,8 @@ const EventsList: React.FC<Props> = ({user}) => {
             <UpcomingEvent
             event={event}
             key={'event' + event.id}
-            getMyEvents={getMyEvents}/>
+            getMyEvents={getMyEvents}
+            user={user}/>
           )
         })}
         {showPast && pastEvents.map((event) => {

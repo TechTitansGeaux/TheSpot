@@ -108,8 +108,7 @@ const handleAddress = (address: any) => {
   setAddress(address)
 }
 
-// date and location are already in correct format to use in checkEvent functions
-// check to see if there are any PUBLIC events happening at users location right now
+// check to see if there are any PUBLIC events happening at location date and time
 const eventCheck = (location: any, date: any) => {
   axios.get(`/events/${location}/${date}`)
     .then((resObj) => {
@@ -119,9 +118,9 @@ const eventCheck = (location: any, date: any) => {
       // we want: all public events AND private events IF the creator is our friend
       for (let i = 0; i < resObj.data.length; i++) {
         //determine if any are happening at time PUBLIC
-        // if inputed events START TIME is BETWEEN found events START & END times => conflict
+        // if inputted events START TIME is BETWEEN found events START & END times => conflict
         // or
-        // if inputed events END TIME is BETWEEN found events START & END times => conflict
+        // if inputted events END TIME is BETWEEN found events START & END times => conflict
         if (eventTime >= resObj.data[i].time && eventTime <= resObj.data[i].endTime ||
           endTime >= resObj.data[i].time && endTime <= resObj.data[i].endTime) {
             // determine if public
