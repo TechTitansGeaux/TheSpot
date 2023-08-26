@@ -2,9 +2,11 @@
  import * as React from 'react';
  import { useState, useEffect } from "react";
  import axios from 'axios';
- import EventLocationSearch from './EventLocationSearch'
+ import EventLocationSearch from './EventLocationSearch';
+ import ConflictingEvent from './ConflictingEvent';
  import dayjs from 'dayjs';
  import localizedFormat from 'dayjs/plugin/localizedFormat';
+import { noConflict } from 'jquery';
   dayjs.extend(localizedFormat)
 
   dayjs().format('L LT')
@@ -134,6 +136,10 @@ const eventCheck = (location: any, date: any) => {
                   setConflictingEvent(resObj.data[i]);
                   setNoConflicts(false)
                 }
+              } // or if it is their own event
+              if (user.id === resObj.data[i].UserId) {
+                setConflictingEvent(resObj.data[i]);
+                setNoConflicts(false)
               }
             }
         } else {
@@ -248,6 +254,9 @@ const createEvent = async () => {
          </input>
          <br></br>
          <br></br>
+         {!noConflicts && <ConflictingEvent
+     conflictingEvent={conflictingEvent} />
+     && <br></br>}
          <div style={{alignItems: 'center'}}>
          <button
          className='save-event-detail-button'
