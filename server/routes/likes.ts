@@ -1,6 +1,6 @@
 const express = require('express');
 const likesRouter = express.Router();
-const { Likes, Reels } = require('../db/index');
+const { Likes, Reels, Users } = require('../db/index');
 
 
 
@@ -69,7 +69,10 @@ likesRouter.put('/removeLike/:ReelId', (req: any, res: any) => {
 // GET likes from likes table in most recent order
 likesRouter.get('/likes', (req: any, res: any) => {
 
-  Likes.findAll({order: [['createdAt', 'DESC']]})
+  Likes.findAll({
+    order: [['createdAt', 'DESC']],
+    include: [{ model: Users }, { model: Reels }],
+  })
     .then((response: any) => {
       if (response === null) {
         console.log('likes do not exist');
@@ -81,7 +84,7 @@ likesRouter.get('/likes', (req: any, res: any) => {
     .catch((err: any) => {
       console.error('Cannot GET likes:', err);
       res.sendStatus(500);
-    })
+    });
 });
 
 // UPDATE checked column to true
