@@ -150,8 +150,8 @@ const eventCheck = (location: any, date: any) => {
           // if inputed events START TIME is BETWEEN found events START & END times => conflict
           // or
           // if inputed events END TIME is BETWEEN found events START & END times => conflict
-          if (time >= resObj.data[i].time && time <= resObj.data[i].endTime ||
-            endTime >= resObj.data[i].time && endTime <= resObj.data[i].endTime) {
+          if (time > resObj.data[i].time && time < resObj.data[i].endTime ||
+            endTime > resObj.data[i].time && endTime < resObj.data[i].endTime) {
               // determine if public
               if (resObj.data[i].isPublic) {
                 setConflictingEvent(resObj.data[i]);
@@ -276,18 +276,18 @@ useEffect(() => {
             RSVPs: {event.rsvp_count}
             <br></br>
             {event.twenty_one && '21+'}
-            <br></br>
-            <br></br>
           </div>
           {!noConflicts && (<ConflictingEvent
           conflictingEvent={conflictingEvent}/>)}
-          {!justSaved && <button
+          <br></br>
+          <br></br>
+          {!justSaved && noConflicts && <button
             className='save-event-detail-button'
              style={{ cursor: 'pointer'}}
             onClick={saveChanges}>
               Save
             </button>}
-            {justSaved && <button
+            {justSaved &&<button
             className='save-event-success-button'>
               Saved!</button>}
               <button
