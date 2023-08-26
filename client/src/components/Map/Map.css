@@ -97,7 +97,7 @@
   border-radius: 50%;
   display: inline-block;
   position: relative;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -75%);
   z-index: 10;
   cursor: pointer;
   text-align: center;
@@ -122,7 +122,7 @@
   font-family: var(--title-font);
   color: white;
   position: relative;
-  top: -28.5px;
+  top: -41.75px;
   left: -100px;
   text-transform: uppercase;
   z-index: 11;
@@ -144,7 +144,8 @@
   border-radius: 50%;
   display: inline-block;
   position: relative;
-  transform: translate(-50%, -50%);
+  top: -38.5px;
+  left: -25px;
   z-index: 10;
   cursor: pointer;
   text-align: center;

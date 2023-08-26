@@ -56,7 +56,7 @@ const BusinessPin: React.FC<Props> = ({ business, setCenter, setZoom, lat, lng, 
         />
       </div>
       <div className='businessPopUp' id={'popUp' + business.username + business.id} >
-        <div style={{ textAlign: 'center', fontSize: '20px' }}>
+        <div style={{ textAlign: 'center', fontSize:'20px', marginTop: '5px' }}>
             {business.displayName}
           </div>
           <div style={{ textAlign: 'center', fontSize: '14px' }}>
