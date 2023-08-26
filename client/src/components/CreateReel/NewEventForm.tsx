@@ -254,9 +254,9 @@ const createEvent = async () => {
          </input>
          <br></br>
          <br></br>
-         {!noConflicts && <ConflictingEvent
-     conflictingEvent={conflictingEvent} />
-     && <br></br>}
+         {!noConflicts && (<ConflictingEvent
+     conflictingEvent={conflictingEvent} />)
+        }
          <div style={{alignItems: 'center'}}>
          <button
          className='save-event-detail-button'

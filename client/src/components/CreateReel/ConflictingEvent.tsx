@@ -1,7 +1,11 @@
  /* eslint-disable @typescript-eslint/no-explicit-any */
  import * as React from 'react';
  import ErrorIcon from '@mui/icons-material/Error';
- import { useState, useEffect } from "react";
+ import dayjs from 'dayjs';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
+dayjs.extend(localizedFormat)
+
+dayjs().format('L LT')
 
  type Props = {
   conflictingEvent: {
@@ -22,13 +26,19 @@
  }
 
  const ConflictingEvent: React.FC<Props> = ({conflictingEvent}) => {
+
+  const eventDate = dayjs(conflictingEvent.date + conflictingEvent.time).format('MM/DD/YYYY, h:mm A');
+  const eventTime = eventDate.slice(eventDate.indexOf(' '))
+
+  const endDate = dayjs(conflictingEvent.date + conflictingEvent.endTime).format('MM/DD/YYYY, h:mm A');
+  const eventEndTime = endDate.slice(endDate.indexOf(' '))
+
   return (
-    <div>
-      <ErrorIcon />&#160;There is already an event at this location on this date from
-      {conflictingEvent.time} to {conflictingEvent.endTime}
+    <div style={{fontSize: 'small'}}>
+      <ErrorIcon fontSize='small'/>&#160;There is already an event at this location on this date from&#160;
+      {eventTime} to {eventEndTime}
   </div>
   )
  }
 
  export default ConflictingEvent;
- 
