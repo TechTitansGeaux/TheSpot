@@ -1,11 +1,8 @@
 import * as React from 'react';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import Fab from '@mui/material/Fab';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import useLocalStorageState from './useLocalStorageState';
-import axios from 'axios';
 import io from 'socket.io-client';
-import { FormControlLabel } from '@mui/material';
 const socket = io();
 
 type User = {

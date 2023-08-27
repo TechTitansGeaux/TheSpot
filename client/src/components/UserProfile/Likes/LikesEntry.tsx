@@ -37,17 +37,10 @@ type Props = {
 
 const LikesEntry: React.FC<Props> = ({user, allUsers, like}) => {
 
-  const likeName = allUsers.reduce((name: String, otherUser: any) => {
-    if (otherUser?.id === like?.UserId) {
-      name = otherUser.displayName;
-    }
-    return name;
-  }, '');
-
   return (
     <>
     <li className='like-entry'>
-      <span className='like-name'>{likeName}</span>{` liked your reel '${like.Reel.text}'`}
+      <span className='like-name'>{like.User.displayName}</span>{` liked your reel '${like.Reel.text}'`}
       </li>
       <hr></hr>
     </>
