@@ -9,7 +9,7 @@ const {
   Likes,
   Notifications,
   Friendships,
-  Followers
+  Followers,
 } = require('./index.ts');
 // import { db, Users } from './index.ts'
 db.options.logging = false;
@@ -102,6 +102,11 @@ const seedSqlize = () => {
     .then(() =>
       Promise.all(
         require('./fakeEventData.json').map((txn) => Events.create(txn))
+      )
+    )
+    .then(() =>
+      Promise.all(
+        require('./fakeRsvpData.json').map((txn) => RSVPs.create(txn))
       )
     )
     .then(() =>

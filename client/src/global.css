@@ -298,6 +298,9 @@ button.accept-friend:hover {
 
 .bottom-nav-parent{
   position: relative;
+  display: flex;
+  flex-direction: row;
+  /* justify-content: space-around; */
 }
 
 .count-container{
@@ -307,15 +310,15 @@ button.accept-friend:hover {
   align-items: center;
   min-width: 25px;
   height: auto;
-}
+  }
 
 p.like-counter {
-  margin-left: 5px;
+  margin: 0 8px;
   color: var(--violet);
 }
 
 p.rsvp-counter {
-  margin-left: 15px;
+  margin: 0;
   color: var(--violet);
 }
 

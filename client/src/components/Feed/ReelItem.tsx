@@ -2,7 +2,6 @@ import * as React from 'react';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-// import AddFriend from '../AddFriend';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import Zoom from '@mui/material/Zoom';
@@ -10,7 +9,6 @@ import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import InfoIcon from '@mui/icons-material/Info';
-import RsvpSharpIcon from '@mui/icons-material/RsvpSharp';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState, useEffect, useRef } from 'react';
 import { memo } from 'react';
@@ -30,7 +28,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
-
+import Rsvp from './Rsvp';
 
 dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat);
@@ -145,6 +143,10 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   const eventDate = dayjs(reel.Event.date + reel.Event.time).format(
     'ddd, MMM D, h:mm A'
   );
+  // all rsvps array
+  const [rsvps, setRsvps] = useState([]);
+  const [rsvpTotal, setRsvpTotal] = useState(0);
+  const [disableRsvp, setDisableRsvp] = useState([]);
 
   // check if event is over
   const checkEventTime = () => {
@@ -205,8 +207,40 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
     getLikes();
   }, []);
 
+  // GET all the rsvps
+  const getRSVPs = () => {
+    axios.get('/RSVPs/all')
+      .then(({data}) => {
+        // console.log('Axios get request for all RSVPs', data);
+        setRsvps(data);
+        data.map((rsvp: any) => {
+          setDisableRsvp(prev => [...prev, [rsvp.EventId, rsvp.UserId]]);
+        })
+      })
+      .catch((err) => {
+        console.error('Error could not GET all RSVPs', err);
+    })
+  };
+
+    useEffect(() => {
+      getRSVPs();
+    }, []);
+
+  // POST new rsvps
+  const addRsvps = (EventId: number) => {
+    axios
+      .put(`/RSVPs/addRsvp/${EventId}`)
+      .then((data) => {
+        console.log('RSVP added and Updated via AXIOS', data);
+        setRsvpTotal((prev) => prev + 1);
+        setDisableRsvp((prev) => [...prev, [EventId, user?.id]])
+      })
+      .catch((err) => console.error('Like AXIOS route Error', err));
+  }
+
   // GET request get friendList from Friendship table in DB // set to state variable
   useEffect(() => {
+    // update abort clean-ups to end axios request for unmounting
     const controller = new AbortController();
     axios
       .get('/feed/friendlist/pending')
@@ -253,7 +287,9 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
     return () => observer.disconnect();
   }, []);
 
-
+  // console.log('reels ---------->', reels)
+  // console.log('reel ---------->', reel)
+  console.log('rsvpTotal', rsvpTotal)
   return (
     <div>
       {true && (
@@ -287,7 +323,15 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
               <p className='video-text'>{reel.text}</p>
               <>
                 <Tooltip
-                  title={<div>{eventName}<br/>{eventDate}<br/>{pastEvent}</div>}
+                  title={
+                    <div>
+                      {eventName}
+                      <br />
+                      {eventDate}
+                      <br />
+                      {pastEvent}
+                    </div>
+                  }
                   placement='left'
                   PopperProps={{
                     sx: {
@@ -299,7 +343,10 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                     },
                   }}
                 >
-                <InfoIcon aria-label={eventName + eventDate} className='info-icon' />
+                  <InfoIcon
+                    aria-label={eventName + eventDate}
+                    className='info-icon'
+                  />
                 </Tooltip>
                 {/**Removes addFriend button if already approved friend*/}
                 {!friendList.includes(reel.User.id) &&
@@ -344,7 +391,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                             )}
                             {/**Replaces addFriend button with Follow button reel.User.type is a business*/}
                             {reel?.User.type === 'business' &&
-                            !followed.includes(reel.User.id) ?
+                            !followed.includes(reel.User.id) ? (
                               <Tooltip
                                 title={`Follow ${reel?.User.displayName}`}
                                 TransitionComponent={Zoom}
@@ -365,8 +412,9 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                                   onClick={() => requestFollow(reel.User.id)}
                                 />
                               </Tooltip>
-                            : (
-                              (reel?.User.type === 'business' && followed.includes(reel.User.id)) &&
+                            ) : (
+                              reel?.User.type === 'business' &&
+                              followed.includes(reel.User.id) && (
                                 <Tooltip
                                   title={`Unfollow ${reel?.User.displayName}`}
                                   TransitionComponent={Zoom}
@@ -389,7 +437,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                                     }
                                   />
                                 </Tooltip>
-
+                              )
                             )}
                           </Fab>
                         </Box>
@@ -479,6 +527,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                     className='bottom-nav-parent'
                     label='Likes'
                     showLabel={false}
+                    component={'div'}
                     icon={
                       <div className='count-container'>
                         <Likes
@@ -501,6 +550,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                   />
                   <BottomNavigationAction
                     label='Event Location'
+                    component={'div'}
                     icon={
                       <Tooltip
                         title='See Event Location'
@@ -520,15 +570,19 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                           sx={{
                             minHeight: '1rem',
                             minWidth: '1rem',
-                            }}
-                            component={Link}
-                            to={'/Map'}
-                            state={{reelEvent: reel.Event.geolocation, loggedIn: user}}
-                            >
-                            <LocationOnIcon
-                              name='Event Location Button'
-                              aria-label='Event Location Button'
-                              color='primary' />
+                          }}
+                          component={Link}
+                          to={'/Map'}
+                          state={{
+                            reelEvent: reel.Event.geolocation,
+                            loggedIn: user,
+                          }}
+                        >
+                          <LocationOnIcon
+                            name='Event Location Button'
+                            aria-label='Event Location Button'
+                            color='primary'
+                          />
                         </IconButton>
                       </Tooltip>
                     }
@@ -536,19 +590,21 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                   />
                   <BottomNavigationAction
                     className='bottom-nav-parent'
+                    component={'div'}
                     label='Going'
                     icon={
                       <React.Fragment>
                         <div className='count-container'>
-                          <RsvpSharpIcon
-                            name='RSVP Button'
-                            aria-label='RSVP Button'
-                            style={{ transform: 'scale(2)' }}
-                            color='secondary'
+                          <Rsvp
+                            rsvps={rsvps}
+                            reel={reel}
+                            user={user}
+                            addRsvps={addRsvps}
+                            disableRsvp={disableRsvp}
                           />
                           {reel.Event.rsvp_count !== 0 && (
                             <p className='rsvp-counter'>
-                              {reel.Event.rsvp_count}
+                              {reel.Event.rsvp_count + rsvpTotal}
                             </p>
                           )}
                         </div>
