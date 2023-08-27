@@ -239,7 +239,6 @@ useEffect(() => {
           handleLocation={handleLocation}
           handleAddress={handleAddress}
           currentAddress={address}/>
-            <br></br>
             Date:
             <input
             className='eventDetailInput'
@@ -273,7 +272,6 @@ useEffect(() => {
           </div>
           {!noConflicts && (<ConflictingEvent
           conflictingEvent={conflictingEvent}/>)}
-          <br></br>
           <br></br>
           {!justSaved && noConflicts && <button
             className='save-event-detail-button'

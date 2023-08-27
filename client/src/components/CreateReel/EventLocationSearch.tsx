@@ -100,28 +100,28 @@ const EventLocationSearch: React.FC<Props> = ({handleLocation, handleAddress, cu
                 error={!!errors.address}
                 style={{ color: 'var(--setupBG)', marginBottom: '1rem', marginTop: '1rem' }}
               /> */}
-              <input
+              <textarea
               placeholder={address}
               className='eventDetailInput'
               {...getInputProps({ placeholder: currentAddress })}
               // helperText={errors.address}
               // error={!!errors.address}
-              ></input>
+              ></textarea>
             <div className="autocomplete-dropdown-container">
               {loading && <div>Loading...</div>}
               {suggestions.map((suggestion, index) => {
                   const className = suggestion.active
                   ? 'suggestion-item--active'
                   : 'suggestion-item';
-                  // const style = {
-                  //   backgroundColor: suggestion.active ? '#41b6e6' : '#fff',
-                  //   cursor: 'pointer',
-                  // };
+                  const style = {
+                    // backgroundColor: suggestion.active ? '#41b6e6' : '#fff',
+                    cursor: 'pointer',
+                  };
                   return (
                     <div
                       {...getSuggestionItemProps(suggestion, {
                         className,
-                        // style
+                        style
                       })}
                       key={index}
                     >
