@@ -208,11 +208,10 @@ const createEvent = async () => {
          </input>
          <br></br>
          <br></br>
-         Address &#160;<EventLocationSearch
+         Address: &#160;<EventLocationSearch
          handleLocation={handleLocation}
          handleAddress={handleAddress}
          currentAddress={currentAddress}/>
-         <br></br>
           Date: &#160;
          <input
          className='eventDetailInput'

@@ -533,6 +533,7 @@ button.rejectFriend-btn:hover {
   color: var(--white);
   background: transparent;
   border: none;
+  /* position: relative; */
 }
 
 .eventNameInput {
@@ -569,8 +570,12 @@ button.rejectFriend-btn:hover {
   position: absolute;
   top: 5%;
   right: 5%;
+  cursor: pointer;
 }
-
+/* IF ANYONE'S PLACEHOLDER GOT CHANGED IT WAS THIS!!! */
+::placeholder {
+  color: var(--white)
+}
 
 /* MEDIA QUERIES */
 

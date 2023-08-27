@@ -11,6 +11,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContentText from '@mui/material/DialogContentText';
 import EventLocationSearch from '../../CreateReel/EventLocationSearch';
 import ConflictingEvent from '../../CreateReel/ConflictingEvent';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 type Props = {
   event: {
@@ -238,7 +239,6 @@ useEffect(() => {
           handleLocation={handleLocation}
           handleAddress={handleAddress}
           currentAddress={address}/>
-            <br></br>
             Date:
             <input
             className='eventDetailInput'
@@ -273,7 +273,6 @@ useEffect(() => {
           {!noConflicts && (<ConflictingEvent
           conflictingEvent={conflictingEvent}/>)}
           <br></br>
-          <br></br>
           {!justSaved && noConflicts && <button
             className='save-event-detail-button'
              style={{ cursor: 'pointer'}}
@@ -283,11 +282,10 @@ useEffect(() => {
             {justSaved &&<button
             className='save-event-success-button'>
               Saved!</button>}
-              <button
+              <HighlightOffIcon
               className='delete-event-button'
-              onClick={handleClickOpen}>
-                X
-              </button>
+              onClick={handleClickOpen}
+              ></HighlightOffIcon>
               <Dialog
                 open={open}
                 onClose={handleClose}
