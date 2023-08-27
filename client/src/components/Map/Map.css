@@ -79,6 +79,9 @@
   left: -100px;
   text-transform: uppercase;
   z-index: 11;
+  animation-name: popOut;
+  animation-timing-function: ease-in;
+  animation-duration: .5s;
 }
 
 .addOrRmFriend {
@@ -126,6 +129,9 @@
   left: -100px;
   text-transform: uppercase;
   z-index: 11;
+  animation-name: popOut;
+  animation-timing-function: ease-in;
+  animation-duration: .5s;
 }
 
 .zoomToEvent {
