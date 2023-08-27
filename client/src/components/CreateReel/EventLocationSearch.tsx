@@ -114,7 +114,7 @@ const EventLocationSearch: React.FC<Props> = ({handleLocation, handleAddress, cu
                   ? 'suggestion-item--active'
                   : 'suggestion-item';
                   const style = {
-                    // backgroundColor: suggestion.active ? '#41b6e6' : '#fff',
+                    backgroundColor:'#0b0113',
                     cursor: 'pointer',
                   };
                   return (
