@@ -3,4 +3,4 @@ node_modules
 client/dist
 server/public/uploads
 built
-.DS_store
+.DS_Store
