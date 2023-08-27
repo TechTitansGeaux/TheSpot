@@ -11,6 +11,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContentText from '@mui/material/DialogContentText';
 import EventLocationSearch from '../../CreateReel/EventLocationSearch';
 import ConflictingEvent from '../../CreateReel/ConflictingEvent';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 type Props = {
   event: {
@@ -283,11 +284,10 @@ useEffect(() => {
             {justSaved &&<button
             className='save-event-success-button'>
               Saved!</button>}
-              <button
+              <HighlightOffIcon
               className='delete-event-button'
-              onClick={handleClickOpen}>
-                X
-              </button>
+              onClick={handleClickOpen}
+              ></HighlightOffIcon>
               <Dialog
                 open={open}
                 onClose={handleClose}

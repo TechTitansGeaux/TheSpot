@@ -569,6 +569,7 @@ button.rejectFriend-btn:hover {
   position: absolute;
   top: 5%;
   right: 5%;
+  cursor: pointer;
 }
 
 
