@@ -9,7 +9,8 @@ import ClusterPin from './ClusterPin';
 import BusinessPin from './BusinessPin';
 import EventRadialMarker from './EventRadialMarker'
 import { useLocation } from "react-router-dom";
-import socketIOClient from 'socket.io-client';
+import io from 'socket.io-client';
+const socket = io();
 
 type Props =  {
   loggedIn: {
@@ -47,13 +48,8 @@ const Map: React.FC<Props> = (props) => {
 
 
   // set up Socket.io connection
-  const [socket, setSocket] = useState(null);
   const [isSocketConnected, setIsSocketConnected] = useState(false);
-
   useEffect(() => {
-    const socket = socketIOClient(`${process.env.HOST}`);
-    setSocket(socket);
-
     socket.on('connect', () => {
       setIsSocketConnected(true);
     });
@@ -63,14 +59,14 @@ const Map: React.FC<Props> = (props) => {
     });
 
     return () => {
-      socket.disconnect(); // clean up the socket connection on unmount
+      socket.disconnect();
     };
   }, []);
 
-  // listen for geolocation updates and update pins in real time
+  // Listen for geolocation updates
   useEffect(() => {
     if (isSocketConnected && socket) {
-      socket.on('userGeolocationUpdate', (updatedUser: User) => {
+      socket.on('updateGeolocation', (updatedUser: User) => {
         setUsers((prevUsers) =>
           prevUsers.map((user) => {
             if (user.id === updatedUser.id) {
@@ -84,7 +80,8 @@ const Map: React.FC<Props> = (props) => {
         );
       });
     }
-  }, [socket, isSocketConnected, users]);
+  }, [socket, isSocketConnected]);
+
 
   // function to split coordinates into array so lat and lng can easily be destructured
   const splitCoords = (coords: string) => {
