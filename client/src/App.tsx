@@ -109,6 +109,7 @@ return () => {
 
 }, []);
 
+
 const startGeolocationWatch = () => {
   // Check if geolocation is supported by the browser
   if (!navigator.geolocation) {
