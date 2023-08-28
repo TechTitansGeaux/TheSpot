@@ -289,7 +289,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
 
   // console.log('reels ---------->', reels)
   // console.log('reel ---------->', reel)
-  console.log('rsvpTotal', rsvpTotal)
+  // console.log('rsvpTotal', rsvpTotal)
   return (
     <div>
       {true && (
@@ -349,8 +349,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                   />
                 </Tooltip>
                 {/**Removes addFriend button if already approved friend*/}
-                {!friendList.includes(reel.User.id) &&
-                  reel.User.id !== user?.id && (
+                {(user?.type === 'business') || (!friendList.includes(reel.User.id) && reel.User.id !== user?.id) && (
                     <ThemeProvider theme={theme}>
                       <div className='friend-request'>
                         <Box className='friend-box'>
@@ -391,7 +390,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                             )}
                             {/**Replaces addFriend button with Follow button reel.User.type is a business*/}
                             {reel?.User.type === 'business' &&
-                            !followed.includes(reel.User.id) ? (
+                            reel.User.id !== user?.id ? (
                               <Tooltip
                                 title={`Follow ${reel?.User.displayName}`}
                                 TransitionComponent={Zoom}

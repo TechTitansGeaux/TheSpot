@@ -71,18 +71,18 @@ const FollowersList: React.FC<Props> = ({ user, allUsers }) => {
     getAllFollowing();
   }, []);
 
-  console.log('followed ==>', followed);
-  console.log('following ==>', following);
-  console.log('allUsers ==>', allUsers);
+  // console.log('followed ==>', followed);
+  // console.log('following ==>', following);
+  // console.log('allUsers ==>', allUsers);
   return (
     <>
       <div className='container-full-w'>
         <h1 className='profile-title'>Followers</h1>
-        <FollowedEntry user={user} allUsers={allUsers} followed={followed} />
+        <FollowingEntry user={user} allUsers={allUsers} following={following} />
       </div>
       <div className='container-full-w'>
         <h1 className='profile-title'>Following</h1>
-        <FollowingEntry user={user} allUsers={allUsers} following={following} />
+        <FollowedEntry user={user} allUsers={allUsers} followed={followed} />
       </div>
     </>
   );

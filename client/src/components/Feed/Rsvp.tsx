@@ -80,7 +80,7 @@ const Rsvp: React.FC<Props> = ({
     }
   };
   // const rsvpFound = rsvps.map((rsvp) => [rsvp.EventId, rsvp.UserId]);
-  console.log('disableRsvp', disableRsvp);
+  // console.log('disableRsvp', disableRsvp);
   // console.log('rsvpFound ===>', rsvpFound);
   // disableRsvp.map(arr => arr[0] === reel.EventId && arr[1] === user.id ? true : false)
   return (

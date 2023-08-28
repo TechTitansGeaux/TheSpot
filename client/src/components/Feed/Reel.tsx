@@ -138,11 +138,11 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
   const requestFollow = (followedUser: number) => {
     console.log('request to followedUser_id=>', followedUser);
     axios
-      .post('/followers', {
+      .put('/followers', {
         followedUser_id: followedUser,
       })
       .then((data) => {
-        // setFollowed((prev) => [...prev, followedUser]);
+        setFollowed((prev) => [...prev, followedUser]);
         setDisabled([...disabled, followedUser]);
         console.log('Now following followedUser_id: ', followedUser);
       })
