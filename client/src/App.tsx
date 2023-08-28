@@ -92,14 +92,26 @@ const App = () => {
 
 // watch for user's geolocation update
 useEffect(() => {
-  // Listen for geolocation updates for the user
-  socket.on('userGeolocationUpdate', (userId, newGeolocation) => {
-    if (authUser && userId === authUser.id) {
-      // Update the user's geolocation in the state
-      dispatch(setAuthUser({ ...authUser, geolocation: newGeolocation }));
-    }
-  });
-}, []);
+  if (authUser){
+// Listen for geolocation updates from the server
+socket.on('userGeolocationUpdate', (data) => {
+  console.log(data.userId, '<------userID');
+  console.log(authUser.id, '<------ID');
+
+  // Update the user's geolocation in the state if the IDs match
+  if (data.userId === authUser.id) {
+    dispatch(setAuthUser({ ...authUser, geolocation: data.newGeolocation }));
+  }
+});
+
+// Clean up the socket connection when the component unmounts
+return () => {
+  socket.disconnect();
+};
+  }
+
+}, [authUser.id]);
+
 
 const startGeolocationWatch = () => {
   // Check if geolocation is supported by the browser
