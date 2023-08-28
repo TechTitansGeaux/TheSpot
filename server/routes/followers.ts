@@ -27,19 +27,26 @@ followersRouter.get('/', (req: any, res: any) => {
 })
 
 // POST request to get all followers per req.user
-followersRouter.post('/', (req: any, res: any) => {
+followersRouter.put('/', (req: any, res: any) => {
   // res.json('Post route connected');
   const { id } = req.user; // needs to be current user i.e. req.user // req.params w/ param for postman
   const { followedUser_id } = req.body;
-  Followers.create(
-    {status: 'follower', follower_id: id, followedUser_id}
-  )
+  Followers.create({
+    status: 'follower',
+    follower_id: followedUser_id,
+    followedUser_id: id,
+  })
     .then((data: any) => {
+      Followers.create({
+        status: 'follower',
+        follower_id: id,
+        followedUser_id: followedUser_id,
+      });
       res.sendStatus(201);
     })
     .catch((err: any) => {
-    console.error()
-  })
+      console.error();
+    });
 })
 
 // DELETE request to unfollow a user
@@ -48,8 +55,7 @@ followersRouter.delete('/:followedUser_id', (req: any, res: any) => {
   const { id } = req.user; // needs to be current user i.e. req.user // req.body in postman
   Followers.destroy({
     where: {
-      follower_id: id,
-      followedUser_id
+      follower_id: [id, followedUser_id],
     },
   })
     .then((data: any) => {
