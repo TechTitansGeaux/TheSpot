@@ -1,10 +1,9 @@
 import * as React from 'react';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useState } from 'react';
+import useLocalStorageState from './useLocalStorageState';
 import io from 'socket.io-client';
 const socket = io();
-
 
 type User = {
   id: number;
@@ -21,15 +20,15 @@ type User = {
   googleId: string;
 };
 
-
 type Props = {
   reel: any;
   handleAddLike: any;
   handleRemoveLike: any;
   user: User;
   likes: any[];
-  likesBool: number[];
+  likesBool: any;
 };
+
 
 const Likes: React.FC<Props> = ({
   handleRemoveLike,
@@ -37,53 +36,97 @@ const Likes: React.FC<Props> = ({
   reel,
   likes,
   likesBool,
-  user
+  user,
 }) => {
-  const [clicked, setClicked] = useState(false); // how to make this conditional?
 
-  // likesBool.includes(reel.id) was default in useState line 40 // likes.length === 0
-  // Likes is [UserId, ReelId] Tuple from getLikes() axios request
+  const [clicked, setClicked] = useState(false); // how to make this conditional - PER REEL?
+  // const [clicked, setClicked] = useLocalStorageState('clicked', false); // how to make this conditional - PER REEL?
 
   const handleLikeClick = (reelId: number) => {
-    if (!clicked) {
-      setClicked(!clicked);
+    if (clicked === false) {
+      setClicked(true);
       handleAddLike(reelId);
       socket.emit('likesNotif', 'like');
     } else {
-      setClicked(!clicked);
+      setClicked(false);
       handleRemoveLike(reelId);
     }
   };
 
-    // const handlePersistClick = (reelId: number) => {
-    //   if (!clicked) {
-    //     setClicked(!clicked);
-    //     handleAddLike(reelId);
-    //   } else {
-    //     setClicked(!clicked);
-    //     handleRemoveLike(reelId);
-    //   }
-    // };
-
   return (
     <React.Fragment>
-      {!clicked && (
-        <FavoriteIcon
-          name='Like Button'
-          aria-label='Like Button'
-          onClick={() => handleLikeClick(reel.id)}
-        />
-      )}
+      {(!clicked && (
+          <FavoriteIcon
+            name='Like Button'
+            aria-label='Like Button'
+            onClick={() => handleLikeClick(reel.id)}
+          />
+        ))}
       {clicked && (
-        <FavoriteIcon
-          name='Like Button'
-          aria-label='Like Button'
-          color='secondary'
-          onClick={() => handleLikeClick(reel.id)}
-        />
-      )}
+          <FavoriteIcon
+            name='Like Button'
+            aria-label='Like Button'
+            color='secondary'
+            onClick={() => handleLikeClick(reel.id)}
+          />
+        )}
     </React.Fragment>
   );
 };
+
+  // const [clicked, setClicked] = useState(false);
+  // const [disable, setDisable] = useState(false);
+  // const likeReelIdFinder = (currReel: number) => {
+  //   let bool = false;
+  //   likesBool.forEach((row: any) =>
+  //     row?.ReelId === currReel ? (bool = true) : (bool = false)
+  //   );
+  //   return bool;
+  // };
+
+  // const handleLikeClick = (reelId: number) => {
+  //   if (likeReelIdFinder(reelId)) {
+  //     setClicked(!clicked);
+  //     setDisable(true);
+  //     handleAddLike(reelId);
+  //     socket.emit('likesNotif', 'like');
+  //   } else {
+  //     setClicked(!clicked);
+  //     handleRemoveLike(reelId);
+  //     setDisable(true);
+  //   }
+  // };
+
+  // console.log('likeReelIdFinder()', likeReelIdFinder(13));
+  // console.log('likesBool', likesBool);
+
+  // return (
+  //   <div>
+  //     {!clicked && !likeReelIdFinder(reel.id) ? (
+  //       <Fab
+  //         disabled={disable}
+  //         onClick={() => handleLikeClick(reel.id)}
+  //         name='Like Button'
+  //         aria-label='Like Button'
+  //       >
+  //         <FavoriteIcon
+  //         />
+  //       </Fab>
+  //     ) : (
+  //       clicked && likeReelIdFinder(reel.id) && (
+  //         <Fab
+  //         disabled={disable}
+  //         onClick={() => handleLikeClick(reel.id)}
+  //         name='Like Button'
+  //         aria-label='Like Button'
+  //         >
+  //           <FavoriteIcon
+  //             color='secondary'
+  //           />
+  //         </Fab>
+  //       )
+  //     )}
+  //   </div>
+  // );
 
 export default Likes;

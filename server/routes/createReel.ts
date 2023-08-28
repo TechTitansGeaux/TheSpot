@@ -4,6 +4,8 @@ const reelRouter = Router();
 const { Reels } = require('../db/index');
 const cloudinary = require('../cloudinary');
 const multer = require('multer');
+import path from 'path';
+import fs from 'fs';
 
 const uploadReelToCloudinary = async (file: string) => {
   try {
@@ -58,6 +60,11 @@ reelRouter.post('/post', async (req: any, res: any) => {
     text,
     UserId: req.user.dataValues.id,
     EventId
+  }).then(() => {
+    // reel has been posted, clear public uploads directory
+    clearUploads();
+  }).catch((err: any) => {
+    console.log('Failed to post reel: ', err)
   });
   res.status(201).json({
     success: true,
@@ -70,6 +77,22 @@ reelRouter.post('/post', async (req: any, res: any) => {
   res.sendStatus(500);
 }
 })
+
+// DELETE ALL FILES FROM PUBLIC UPLOADS AFTER UPLOAD IS COMPLETE
+
+const clearUploads = () => {
+  const directory = 'server/public/uploads';
+  
+  fs.readdir(directory, (err: any, files: any) => {
+    if (err) throw err;
+  
+    for (const file of files) {
+      fs.unlink(path.join(directory, file), (err: any) => {
+        if (err) throw err;
+      });
+    }
+  });
+}
 
 
 export default reelRouter;

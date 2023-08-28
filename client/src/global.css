@@ -298,6 +298,9 @@ button.accept-friend:hover {
 
 .bottom-nav-parent{
   position: relative;
+  display: flex;
+  flex-direction: row;
+  /* justify-content: space-around; */
 }
 
 .count-container{
@@ -307,15 +310,15 @@ button.accept-friend:hover {
   align-items: center;
   min-width: 25px;
   height: auto;
-}
+  }
 
 p.like-counter {
-  margin-left: 5px;
+  margin: 0 8px;
   color: var(--violet);
 }
 
 p.rsvp-counter {
-  margin-left: 15px;
+  margin: 0;
   color: var(--violet);
 }
 
@@ -484,8 +487,8 @@ button.rejectFriend-btn:hover {
   display: none;
   padding: 1%;
   transition: all .5s ease;
-  height: 180px;
-  width: 200px;
+  height: 270px;
+  width: 230px;
   border-width: 10px;
   border-radius: 10px;
   background-color: var(--violet);
@@ -515,7 +518,7 @@ button.rejectFriend-btn:hover {
 
 .eventCard {
   position: relative;
-  height: 200px;
+  height: 250px;
   width: 200px;
   margin: 10px;
   padding: 10px;
@@ -533,6 +536,7 @@ button.rejectFriend-btn:hover {
   color: var(--white);
   background: transparent;
   border: none;
+  /* position: relative; */
 }
 
 .eventNameInput {
@@ -569,8 +573,12 @@ button.rejectFriend-btn:hover {
   position: absolute;
   top: 5%;
   right: 5%;
+  cursor: pointer;
 }
-
+/* IF ANYONE'S PLACEHOLDER GOT CHANGED IT WAS THIS!!! */
+::placeholder {
+  color: var(--white)
+}
 
 /* MEDIA QUERIES */
 

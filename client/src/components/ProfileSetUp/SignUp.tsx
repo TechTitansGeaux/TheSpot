@@ -48,7 +48,7 @@ const SignUp = () => {
           />
         </div>
         <div className='flex-col'>
-          <GoogleButton className="google-btn" onClick={redirectToGoogleSSO} />
+          <GoogleButton className='google-btn' onClick={redirectToGoogleSSO} />
         </div>
       <div className='swiper-parent'>
         <Swiper
@@ -114,15 +114,9 @@ const SignUp = () => {
           </div>
         </Swiper>
         </div>
-         </div>
+      </div>
     </ThemeProvider>
   );
 };
 
 export default SignUp;
-
-
-
-
-
-

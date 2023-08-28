@@ -4,11 +4,9 @@ import GoogleMapReact from 'google-map-react';
 import useSupercluster from 'use-supercluster';
 import axios from 'axios';
 import UserPin from './UserPin';
-import UserClusterPin from './UserClusterPin';
 import EventPin from './EventPin';
-import EventClusterPin from './EventClusterPin';
+import ClusterPin from './ClusterPin';
 import BusinessPin from './BusinessPin';
-import BusinessClusterPin from './BusinessClusterPin'
 import EventRadialMarker from './EventRadialMarker'
 import { useLocation } from "react-router-dom";
 import io from 'socket.io-client';
@@ -39,9 +37,9 @@ type User = {
 
 
 const Map: React.FC<Props> = (props) => {
-  const { loggedIn, reelEvent } = props;
+  const { loggedIn } = props;
+  console.log('rendered')
 
-  const [ renders, setRenders ] = useState(0)
   const [ users, setUsers ] = useState([]);
   const [ events, setEvents ] = useState([])
   const [ friendList, setFriendList ] = useState([]);
@@ -91,9 +89,9 @@ const Map: React.FC<Props> = (props) => {
     return arr;
   }
 
- // sets the coords to op map to
+ // sets the coords to open map to
   const location = useLocation();
-  let eventLocation;
+  let eventLocation: string;
   if (location.state) {
     eventLocation = location.state.reelEvent;
   }
@@ -102,13 +100,12 @@ const Map: React.FC<Props> = (props) => {
   if (eventLocation) {
     const [lat, lng] = splitCoords(eventLocation);
     defaultCenter = {lat: +lat, lng: +lng}
-  } else {
+  } else if (loggedIn) {
     const [lat, lng] = splitCoords(loggedIn.geolocation);
     defaultCenter = {lat: +lat, lng: +lng}
   }
 
   const [ center, setCenter ] = useState(defaultCenter);
-
 
   // gets users friends
   const getFriendList = () => {
@@ -118,7 +115,6 @@ const Map: React.FC<Props> = (props) => {
           acc.push(user.accepter_id);
           return acc;
         }, []);
-        console.log(friendsIds);
         setFriendList(friendsIds)
       })
       .catch((err) => {
@@ -177,12 +173,18 @@ const Map: React.FC<Props> = (props) => {
   }
 
   useEffect(() => {
-    getUsers();
-    getFriendList();
-    getPendingFriendList();
-    getEvents();
-    getBusinesses();
-  }, [])
+    if (loggedIn) {
+      getUsers();
+      getFriendList();
+      getPendingFriendList();
+      getEvents();
+      getBusinesses();
+      if (!eventLocation) {
+        const [lat, lng] = splitCoords(loggedIn.geolocation);
+        setCenter({lat: +lat, lng: +lng})
+      }
+    }
+  }, [loggedIn])
 
   // track map boundaries and zoom level
   const mapRef = useRef();
@@ -215,7 +217,7 @@ const Map: React.FC<Props> = (props) => {
     }
   })
 
-  const { clusters: userClusters } = useSupercluster({
+  const { clusters: userClusters, supercluster: userSupercluster } = useSupercluster({
     points: userPoints,
     bounds,
     zoom,
@@ -239,7 +241,7 @@ const Map: React.FC<Props> = (props) => {
     }
   })
 
-  const { clusters: eventClusters } = useSupercluster({
+  const { clusters: eventClusters, supercluster: eventSupercluster } = useSupercluster({
     points: eventPoints,
     bounds,
     zoom,
@@ -263,7 +265,7 @@ const Map: React.FC<Props> = (props) => {
     }
   })
 
-  const { clusters: businessClusters } = useSupercluster({
+  const { clusters: businessClusters, supercluster: businessSupercluster } = useSupercluster({
     points: businessPoints,
     bounds,
     zoom,
@@ -274,35 +276,40 @@ const Map: React.FC<Props> = (props) => {
   })
 
   const options = {
-    minZoom: 11,
-    maxZoom: 19,
+    // minZoom: 11,
+    // maxZoom: 19,
     disableDefaultUI: true,
-    styles: [{ stylers: [{ 'saturation': 1 }, { 'gamma': 0.5 }, { 'lightness': 4 }, { 'visibility': 'on' }] }]
+    styles: [
+      { stylers: [{ 'saturation': 1 }, { 'gamma': 0.5 }, { 'lightness': 4 }, { 'visibility': 'on' }] },
+      { featureType: "poi", stylers: [{ visibility: 'off' }] }
+    ]
   }
 
 
- const closeAllPopUps = () => {
-  const userPopUps = document.getElementsByClassName('userPopUp');
-  const eventPopUps = document.getElementsByClassName('eventPopUp');
-  const busPopUps = document.getElementsByClassName('businessPopUp');
+  const closeAllPopUps = () => {
+    const userPopUps = document.getElementsByClassName('userPopUp');
+    const eventPopUps = document.getElementsByClassName('eventPopUp');
+    const busPopUps = document.getElementsByClassName('businessPopUp');
 
-  Array.prototype.forEach.call( userPopUps, (popUp: any) => {
-    popUp.style.display = 'none';
-  })
+    Array.prototype.forEach.call( userPopUps, (popUp: any) => {
+      popUp.style.display = 'none';
+    })
 
-  Array.prototype.forEach.call( eventPopUps, (popUp: any) => {
-    popUp.style.display = 'none';
-  })
+    Array.prototype.forEach.call( eventPopUps, (popUp: any) => {
+      popUp.style.display = 'none';
+    })
 
-  Array.prototype.forEach.call( busPopUps, (popUp: any) => {
-    popUp.style.display = 'none';
-  })
- }
+    Array.prototype.forEach.call( busPopUps, (popUp: any) => {
+      popUp.style.display = 'none';
+    })
+  }
 
- if (!users.length || !events.length || !businesses.length) {
-  // Data is not yet available, render loading or placeholder content
-  return <div>Loading...</div>;
-}
+
+
+  if (!users.length || !events.length || !businesses.length || !loggedIn) {
+    // Data is not yet available, render loading or placeholder content
+    return <div style={{textAlign: 'center', transform: 'translateY(250px)', fontSize: '40px'}}>Loading...</div>;
+  }
 
   return (
     <div className='mapParent' onWheel={closeAllPopUps}>
@@ -335,23 +342,27 @@ const Map: React.FC<Props> = (props) => {
               const { cluster: isCluster, point_count: pointCount, user} = cluster.properties;
 
               if (isCluster) {
-                return <UserClusterPin amount={pointCount} key={'userCluster' + i} lat={lat} lng={lng}/>;
+                return <ClusterPin amount={pointCount} key={'userCluster' + i} lat={lat} lng={lng} className='UserClusterPin' onClick={() => {
+                  const expansionZoom = Math.min(userSupercluster.getClusterExpansionZoom(cluster.id), 20)
+                  setZoom(expansionZoom);
+                  setCenter({lat: lat, lng: lng});
+                }} />;
               } else {
                 return <UserPin
-                getPendingFriendList={getPendingFriendList}
-                pendingFriendList={pendingFriendList}
-                getFriendList={getFriendList}
-                friendList={friendList}
-                user={user}
-                key={'user' + i}
-                lat={lat}
-                lng={lng}
-                loggedIn={loggedIn}
-                setZoom={setZoom}
-                setCenter={setCenter}
-                closeAllPopUps={closeAllPopUps}
-                zoom={zoom}
-              />;
+                  getPendingFriendList={getPendingFriendList}
+                  pendingFriendList={pendingFriendList}
+                  getFriendList={getFriendList}
+                  friendList={friendList}
+                  user={user}
+                  key={user.id}
+                  lat={lat}
+                  lng={lng}
+                  loggedIn={loggedIn}
+                  setZoom={setZoom}
+                  setCenter={setCenter}
+                  closeAllPopUps={closeAllPopUps}
+                  zoom={zoom}
+                />;
               }
             })
           }
@@ -361,11 +372,15 @@ const Map: React.FC<Props> = (props) => {
               const { cluster: isCluster, point_count: pointCount, business} = cluster.properties;
 
               if (isCluster) {
-                return <BusinessClusterPin amount={pointCount} key={'eventCluster' + i} lat={lat} lng={lng} />;
+                return <ClusterPin amount={pointCount} key={'businessCluster' + i} lat={lat} lng={lng} className='BusinessClusterPin' onClick={() => {
+                  const expansionZoom = Math.min(businessSupercluster.getClusterExpansionZoom(cluster.id), 20)
+                  setZoom(expansionZoom);
+                  setCenter({lat: lat, lng: lng});
+                }} />;
               } else {
                 return <BusinessPin
                 business={business}
-                key={'business' + i}
+                key={business.id}
                 lat={lat}
                 lng={lng}
                 setZoom={setZoom}
@@ -382,15 +397,19 @@ const Map: React.FC<Props> = (props) => {
               const { cluster: isCluster, point_count: pointCount, event} = cluster.properties;
 
               if (isCluster) {
-                return <EventClusterPin amount={pointCount} key={'eventCluster' + i} lat={lat} lng={lng} />;
-              } else if (!isCluster && zoom >= 16) {
+                return <ClusterPin amount={pointCount} key={'eventCluster' + i} lat={lat} lng={lng} className='EventClusterPin' onClick={() => {
+                  const expansionZoom = Math.min(eventSupercluster.getClusterExpansionZoom(cluster.id), 20)
+                  setZoom(expansionZoom);
+                  setCenter({lat: lat, lng: lng});
+                }} />;
+              } else if (!isCluster && zoom >= 17) {
                 return <EventRadialMarker zoom={zoom} key={'eventRadialMarker' + i} lat={lat} lng={lng} />
               } else {
                 return <EventPin
                   event={event}
                   lat={+lat}
                   lng={+lng}
-                  key={'event' + i}
+                  key={event.id}
                   setZoom={setZoom}
                   setCenter={setCenter}
                   closeAllPopUps={closeAllPopUps}

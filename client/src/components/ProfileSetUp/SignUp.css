@@ -1,6 +1,6 @@
 /* //// ROOT VARIABLES  */
 :root {
-  --t15-violet: rgba(11, 1, 19, 0.15);
+  --t20-violet: rgba(11, 1, 19, 0.20);
   --swiper-theme-color: #f433ab;
   --swiper-navigation-size: 34px;
   --swiper-navigation-color: #f5fcfa;
@@ -17,9 +17,9 @@
   --swiper-preloader-color: var(--swiper-theme-color);
   --swiper-virtual-size: 80px;
 }
-body {
-  padding: 2em 0;
-}
+/* body {
+  padding: 2.25em 0;
+} */
 
 .container-sign-up {
   display: flex;
@@ -48,15 +48,29 @@ span.google-btn:hover {
 }
 
 h1 {
-  margin: 1em .25em;
+  margin: 1.5em .25em;
   color: var(--white);
   letter-spacing: .01rem;
+  line-height: 3rem;
 }
 
-span.welcome {
+.welcome {
+  font-size: 1.8rem;
   display: block !important;
   color: var(--yellow);
 }
+
+span.yellow {
+  display: block !important;
+  color: var(--yellow);
+  font-size: 3.5rem;
+}
+
+span.white {
+  display: block !important;
+  color: var(--white);
+}
+
 
 .swiper {
   position: relative;
@@ -71,7 +85,7 @@ span.welcome {
 .swiper-slide {
   text-align: center;
   font-size: 18px;
-  background: var(--t15-violet);
+  background: var(--t20-violet);
   /* Center slide text vertically */
   display: flex;
   justify-content: center;
