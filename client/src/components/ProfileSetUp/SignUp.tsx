@@ -9,6 +9,10 @@ import './SignUp.css';
 import GoogleButton from 'react-google-button';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 const logoGradient = require('/client/src/img/logo-gradient.jpg');
+const createReelImage = require('/client/src/components/ProfileSetUp/SignUpCont/CREATE_REEL.gif');
+const mapsImage = require('/client/src/components/ProfileSetUp/SignUpCont/MAPS.gif');
+const eventsImage = require('/client/src/components/ProfileSetUp/SignUpCont/EVENTS.gif');
+
 
 const theme = createTheme({
   palette: {
@@ -51,7 +55,7 @@ const SignUp = () => {
           spaceBetween={30}
           centeredSlides={true}
           autoplay={{
-            delay: 3500,
+            delay: 3750,
             disableOnInteraction: false,
           }}
           pagination={{
@@ -68,14 +72,39 @@ const SignUp = () => {
               Local Events. Connect with Friends.
             </h1>
           </SwiperSlide>
-          <SwiperSlide id='slide-2'>
+          <SwiperSlide id='slide-3'>
             <h1>CREATE REELS</h1>
+            <div className='phone-screen' style={{ width: '205px', height: 'auto', boxShadow: '0px 8px 12px rgba(240, 244, 101, 0.8)' }}>
+                <img
+                  src={createReelImage}
+                  alt='Create Reels'
+                  className='phone-image'
+                />
+              </div>
+          </SwiperSlide>
+          <SwiperSlide id='slide-2'>
           </SwiperSlide>
           <SwiperSlide id='slide-3'>
             <h1>MAP OUT YOUR EVENING</h1>
+            <div className='phone-screen' style={{ width: '205px', height: 'auto', boxShadow: '0px 8px 12px rgba(240, 244, 101, 0.8)' }}>
+                <img
+                  src={mapsImage}
+                  alt='MAPS'
+                  className='phone-image'
+                />
+              </div>
           </SwiperSlide>
           <SwiperSlide id='slide-4'>
+          </SwiperSlide>
+          <SwiperSlide id='slide-3'>
             <h1>PROMOTE LOCAL EVENTS</h1>
+            <div className='phone-screen' style={{ width: '205px', height: 'auto', boxShadow: '0px 8px 12px rgba(240, 244, 101, 0.8)' }}>
+                <img
+                  src={eventsImage}
+                  alt='EVENTS'
+                  className='phone-image'
+                />
+              </div>
           </SwiperSlide>
           <div className='autoplay-progress' slot='container-end'>
             <svg viewBox='0 0 48 48' ref={progressCircle}>

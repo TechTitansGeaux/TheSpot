@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-// import SignUp from './components/SignUp';
 import Map from './components/Map/Map';
 import Feed from './components/Feed/Feed';
 import CreateReel from './components/CreateReel/CreateReel';
@@ -25,7 +24,8 @@ import { setAuthUser, setIsAuthenticated, setFontSize } from './store/appSlice';
 import { RootState } from './store/store';
 import { useTheme } from '@mui/material/styles';
 import { AnyARecord } from 'dns';
-import socketIOClient from 'socket.io-client';
+import io from 'socket.io-client';
+const socket = io();
 import Location from './components/ProfileSetUp/Location';
 
 type User = {
@@ -92,9 +92,6 @@ const App = () => {
 
 // watch for user's geolocation update
 useEffect(() => {
-  // Establish socket connection when the component mounts
-  const socket = socketIOClient(`${process.env.HOST}`);
-
   // Listen for geolocation updates for the user
   socket.on('userGeolocationUpdate', (userId, newGeolocation) => {
     if (authUser && userId === authUser.id) {
