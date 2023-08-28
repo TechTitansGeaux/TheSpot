@@ -74,9 +74,9 @@ io.on('connection', (socket) => {
   // console.log(`A user connected ${socket.id}`);
 
   // Listen for geolocation updates from clients
-  socket.on('updateGeolocation', (userId, geolocation) => {
+  socket.on('updateGeolocation', (data) => {
     // Broadcast the updated geolocation to all other clients
-    socket.broadcast.emit('userGeolocationUpdate', userId, geolocation);
+    socket.broadcast.emit('userGeolocationUpdate', data);
   });
 
   socket.on('disconnect', () => {
