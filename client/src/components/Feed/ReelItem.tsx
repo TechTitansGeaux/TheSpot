@@ -16,8 +16,8 @@ import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import Likes from './Likes/Likes';
-import Unlikes from './Likes/Unlikes';
+import Likes from '../UserProfile/Likes/Likes';
+import Unlikes from '../UserProfile/Likes/Unlikes';
 import './feed.css';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import { Link } from 'react-router-dom';
@@ -29,8 +29,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
-import Rsvp from './Rsvps/Rsvp';
-import UnRsvp from './Rsvps/UnRsvp';
+import Rsvp from '../UserProfile/Rsvps/Rsvp';
+import UnRsvp from '../UserProfile/Rsvps/UnRsvp';
 
 dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat);
@@ -217,7 +217,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
         setRsvps(data);
         data.map((rsvp: any) => {
           if (rsvp.UserId === user?.id) {
-            setDisableRsvp(prev => [...prev, rsvp.EventId]);
+            setDisableRsvp((prev) => [...prev, rsvp.EventId]);
           }
         });
       })
