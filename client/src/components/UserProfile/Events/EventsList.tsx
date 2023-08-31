@@ -25,22 +25,8 @@ const EventsList: React.FC<Props> = ({user}) => {
   const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [pastEvents, setPastEvents] = useState([]);
   const [showPast, setShowPast] = useState(false);
-  // const [businessAccount, setBusinessAccount] = useState(false);
-
-  // // determine user type
-  // const checkUserType = () => {
-  //   if (user.type === 'business') {
-  //     setBusinessAccount(true);
-  //   }
-  //   }
-
-  // useEffect(() => {
-  // checkUserType();
-  // }, [])
-
-  // for personal accounts, get all events RSVPed to
-
-
+  const [noUpcoming, setNoUpcoming] = useState(false)
+  const [noPast, setNoPast] = useState(false)
   const nowRaw = new Date().toString();
   const now = Date.parse(nowRaw);
 
@@ -71,6 +57,13 @@ const EventsList: React.FC<Props> = ({user}) => {
         setUpcomingEvents(upcomingArr);
         pastArr = pastArr.sort((a, b) => Date.parse(a.date) - Date.parse(b.date))
         setPastEvents(pastArr);
+        // determine if there are either no past or upcoming events for user
+        if (upcomingArr.length === 0) {
+          setNoUpcoming(true)
+        }
+        if (pastArr.length === 0) {
+          setNoPast(true)
+        }
       })
       .catch((err) => {
         console.error('Failed to axios GET user events: ', err);
@@ -135,6 +128,9 @@ const EventsList: React.FC<Props> = ({user}) => {
            Past</h3>
       </div>
       <div className="event-cards-row">
+        {noUpcoming && !showPast && (<h2
+        style={{padding: '2em'}}
+        >You have no upcoming events yet!</h2>)}
         {!showPast && upcomingEvents.map((event) => {
           return (
             <UpcomingEvent
@@ -144,6 +140,9 @@ const EventsList: React.FC<Props> = ({user}) => {
             user={user}/>
           )
         })}
+        {noPast && showPast && (<h2
+        style={{padding: '2em'}}
+        >You have no past events yet!</h2>)}
         {showPast && pastEvents.map((event) => {
           return (
             <PastEvent

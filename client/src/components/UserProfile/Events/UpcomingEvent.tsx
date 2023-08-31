@@ -43,7 +43,7 @@ type Props = {
     email: string;
     picture: string;
     googleId: string;
-  };
+  }
 }
 const UpcomingEvent: React.FC<Props> = ({event, getMyEvents, user}) => {
 

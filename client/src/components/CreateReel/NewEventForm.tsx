@@ -197,9 +197,6 @@ const createEvent = async () => {
   }
 }
 
-console.log(address, '<-----address')
-console.log(currentAddress, '<------current address')
-
    return (
      <div
        id='event-form'
