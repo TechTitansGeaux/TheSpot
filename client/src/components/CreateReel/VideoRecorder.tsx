@@ -359,12 +359,13 @@ setBusinessEventCreated(true);
       </div>
       <div className='cam-buttons-container'>
       <div className='cameraButtons'>
-        {capturing ? (
+        {capturing && (
           <RadioButtonCheckedIcon
           onClick={handleStopCaptureClick}
           color='secondary'
           sx={{ width: 52, height: 52 }}/>
-        ) : (
+        )}
+        { !capturing && !justRecorded && (
           <motion.div
           whileHover={{ scale: 1.2 }}
           >
@@ -374,7 +375,7 @@ setBusinessEventCreated(true);
             sx={{ width: 52, height: 52 }}/>
           </motion.div>
         )}
-        {justRecorded && (
+        {justRecorded && urlRetrieved && (
           <div>
             <Tooltip
             title='Post reel'
@@ -400,7 +401,7 @@ setBusinessEventCreated(true);
           </Tooltip>
           </div>
         )}
-        {justRecorded && (
+        {justRecorded && urlRetrieved && (
           <div>
             <div
             onClick={togglePopUp}>
