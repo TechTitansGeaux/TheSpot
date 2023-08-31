@@ -3,22 +3,12 @@ import RsvpSharpIcon from '@mui/icons-material/RsvpSharp';
 import Fab from '@mui/material/Fab';
 import Tooltip from '@mui/material/Tooltip';
 import Zoom from '@mui/material/Zoom';
-import useLocalStorageState from './useLocalStorageState';
 import { useState } from 'react';
 
 type Props = {
-  rsvps: RSVPs;
   reel: Reel;
-  user: User;
-  addRsvps: any;
-  disableRsvp: any;
+  removeRsvps: any;
 };
-
-type RSVPs = {
-  id: number;
-  UserId: number;
-  EventId: number;
-}[];
 
 type Reel = {
   id: string;
@@ -63,26 +53,20 @@ type Event = {
   PlaceId: 1;
 };
 
-const Rsvp: React.FC<Props> = ({
-  rsvps,
+const UnRsvp: React.FC<Props> = ({
   reel,
-  user,
-  addRsvps,
-  disableRsvp,
+  removeRsvps
 }) => {
   const [click, setClick] = useState(false);
 
-  const handleRsvpClick = (EventId: number) => {
+  const handleRemoveRsvpClick = (EventId: number) => {
     if (!click) {
       console.log('RSVP click on Event id', EventId);
       setClick(!click);
-      addRsvps(EventId);
+      removeRsvps(EventId);
     }
   };
-  // const rsvpFound = rsvps.map((rsvp) => [rsvp.EventId, rsvp.UserId]);
-  // console.log('disableRsvp', disableRsvp);
-  // console.log('rsvpFound ===>', rsvpFound);
-  // disableRsvp.map(arr => arr[0] === reel.EventId && arr[1] === user.id ? true : false)
+
   return (
     <>
       <Fab
@@ -96,7 +80,7 @@ const Rsvp: React.FC<Props> = ({
         disabled={click}
       >
         <Tooltip
-          title='RSVP to Event'
+          title='Remove RSVP'
           TransitionComponent={Zoom}
           placement='top'
           PopperProps={{
@@ -113,8 +97,8 @@ const Rsvp: React.FC<Props> = ({
             name='RSVP Button'
             aria-label='RSVP Button'
             style={{ transform: 'scale(2)' }}
-            color={click ? 'secondary' : 'primary'}
-            onClick={() => handleRsvpClick(reel?.EventId)}
+            color={!click ? 'secondary' : 'primary'}
+            onClick={() => handleRemoveRsvpClick(reel?.EventId)}
           />
         </Tooltip>
       </Fab>
@@ -122,7 +106,7 @@ const Rsvp: React.FC<Props> = ({
   );
 };
 
-export default Rsvp;
+export default UnRsvp;
 
 /*
   NOTES:
