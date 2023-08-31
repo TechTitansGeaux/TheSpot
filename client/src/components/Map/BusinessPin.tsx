@@ -32,8 +32,12 @@ const BusinessPin: React.FC<Props> = ({ business, setCenter, setZoom, lat, lng, 
   const togglePopUp = () => {
     const box = document.getElementById('popUp' + business.username + business.id)
     if (box.style.display === 'block') {
-      box.style.display = 'none';
+      box.style.animationName = 'popOff';
+      setTimeout(() => {
+        box.style.display = 'none';
+      }, 500)
     } else {
+      box.style.animationName = 'popOut';
       box.style.display = 'block';
     }
   }
