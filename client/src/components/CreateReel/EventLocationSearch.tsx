@@ -101,7 +101,7 @@ const EventLocationSearch: React.FC<Props> = ({handleLocation, handleAddress, cu
                 style={{ color: 'var(--setupBG)', marginBottom: '1rem', marginTop: '1rem' }}
               /> */}
               <textarea
-              placeholder={address}
+              // placeholder={address}
               className='eventDetailInput'
               {...getInputProps({ placeholder: currentAddress })}
               // helperText={errors.address}

@@ -6,7 +6,7 @@
  import ConflictingEvent from './ConflictingEvent';
  import dayjs from 'dayjs';
  import localizedFormat from 'dayjs/plugin/localizedFormat';
-import { noConflict } from 'jquery';
+import { current } from '@reduxjs/toolkit';
   dayjs.extend(localizedFormat)
 
   dayjs().format('L LT')
@@ -49,7 +49,7 @@ import { noConflict } from 'jquery';
  const [eventName, setEventName] = useState('');
  // event location is users current location by default, until/ unless they select an address
  const [eventLocation, setEventLocation] = useState(user.geolocation);
- const [address, setAddress] = useState('')
+ const [address, setAddress] = useState(currentAddress)
  const [eventDate, setEventDate] = useState('');
  const [eventTime, setEventTime] = useState('');
  const [endTime, setEndTime] = useState('');
@@ -162,6 +162,10 @@ useEffect(() => {
   }
 }, [eventTime, endTime, eventDate, eventLocation])
 
+useEffect(() => {
+  setAddress(currentAddress)
+}, [currentAddress])
+
 // ADD LOGIC TO PREVENT POSTING IF EVENT IS ALREADY HERE
 // ADD WAY OF NOTIFYING USER THAT EVENT CREATION WAS SUCCESSFUL
 // patch request to update event in la database
@@ -192,6 +196,9 @@ const createEvent = async () => {
     console.log('conflicting event!: ', conflictingEvent)
   }
 }
+
+console.log(address, '<-----address')
+console.log(currentAddress, '<------current address')
 
    return (
      <div
