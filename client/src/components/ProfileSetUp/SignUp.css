@@ -119,6 +119,7 @@ BE AWARE Ideal-ish image upload / src size: 1024 x 768 OR 1200 x 800 (-ish) / ra
 /*CHANGE background-image: url AND
 BE AWARE Ideal-ish image upload / src size: 1024 x 768 OR 1200 x 800 (-ish) / ratio*/
 #slide-3 {
+  background-image: url("https://gonola.com/images/2017/11/NOTMC_48770.jpg");
   display: block;
   background-repeat: no-repeat;
   background-position-x: center;
@@ -137,6 +138,31 @@ BE AWARE Ideal-ish image upload / src size: 1024 x 768 OR 1200 x 800 (-ish) / ra
   background-blend-mode: multiply;
   background-size: auto;
   object-fit: cover;
+}
+
+/* Phone Image Below */
+.phone-slide {
+  display: flex;
+  padding-bottom: 1em;
+  width: 240px;
+  height: auto;
+}
+
+.phone-screen {
+  display: flex;
+  justify-content: center;
+  background-color: #ffffff; /* Phone screen background color */
+  width: 240; /* Phone screen width */
+  height: 520px; /* Phone screen height */
+  border-radius: 17px; /* Phone screen border radius */
+  box-shadow: 0 0 0 1px var(--yellow); /* Phone screen drop shadow */
+  margin: 0 auto; /* Center the phone screen */
+  overflow: hidden; /* Hide any overflowing content */
+}
+
+.phone-image {
+  max-width: 100%; /* Ensure the image fits within the phone screen */
+  height: auto;
 }
 
 .autoplay-progress {
@@ -167,22 +193,4 @@ BE AWARE Ideal-ish image upload / src size: 1024 x 768 OR 1200 x 800 (-ish) / ra
   stroke-dashoffset: calc(125.6 * (1 - var(--progress)));
   stroke-dasharray: 125.6;
   transform: rotate(-90deg);
-}
-
-.phone-screen {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #ffffff; /* Phone screen background color */
-  width: 300px; /* Phone screen width */
-  height: 520px; /* Phone screen height */
-  border-radius: 17px; /* Phone screen border radius */
-  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2); /* Phone screen drop shadow */
-  margin: 0 auto; /* Center the phone screen */
-  overflow: hidden; /* Hide any overflowing content */
-}
-
-.phone-image {
-  max-width: 100%; /* Ensure the image fits within the phone screen */
-  height: auto;
 }
