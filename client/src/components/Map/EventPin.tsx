@@ -47,8 +47,12 @@ const Event: React.FC<Props> = ({ event, setCenter, setZoom, lat, lng, zoom }) =
   const togglePopUp = () => {
     const box = document.getElementById('popUp' + event.name + event.id)
     if (box.style.display === 'block') {
-      box.style.display = 'none';
+      box.style.animationName = 'popOff';
+      setTimeout(() => {
+        box.style.display = 'none';
+      }, 500)
     } else {
+      box.style.animationName = 'popOut';
       box.style.display = 'block';
     }
   }

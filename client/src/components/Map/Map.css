@@ -304,15 +304,29 @@
 
 @keyframes popOut {
   0% {
-    transform: rotateX(-90deg) translateY(-50%);
+    transform: translateY(50%);
     opacity: 0%;
   }
   50% {
-    transform: rotateX(-45deg) translateY(-0.7071);
-    opacity: 75%;
+    opacity: 0%;
   }
   100% {
-    transform: rotateX(0deg) translateY(0);
+    transform: translateY(0);
     opacity: 100%;
   }
 }
+
+@keyframes popOff {
+  0% {
+    transform: translateX(0);
+    opacity: 100%;
+  }
+  50% {
+    opacity: 100%;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0%;
+  }
+}
+
