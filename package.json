@@ -72,7 +72,6 @@
     "sequelize-typescript": "^2.1.5",
     "socket.io": "^4.7.2",
     "socket.io-client": "^4.7.2",
-    "streamifier": "^0.1.1",
     "swiper": "^10.2.0",
     "use-places-autocomplete": "^4.0.1",
     "use-supercluster": "^0.4.0",
