@@ -29,7 +29,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
-import Rsvp from './Rsvp';
+import Rsvp from './Rsvps/Rsvp';
+import UnRsvp from './Rsvps/UnRsvp';
 
 dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat);
@@ -215,7 +216,9 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
         // console.log('Axios get request for all RSVPs', data);
         setRsvps(data);
         data.map((rsvp: any) => {
-          setDisableRsvp((prev) => [...prev, [rsvp.EventId, rsvp.UserId]]);
+          if (rsvp.UserId === user?.id) {
+            setDisableRsvp(prev => [...prev, rsvp.EventId]);
+          }
         });
       })
       .catch((err) => {
@@ -234,7 +237,19 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
       .then((data) => {
         console.log('RSVP added and Updated via AXIOS', data);
         setRsvpTotal((prev) => prev + 1);
-        setDisableRsvp((prev) => [...prev, [EventId, user?.id]]);
+        // setDisableRsvp((prev) => [...prev, [EventId, user?.id]]);
+      })
+      .catch((err) => console.error('Like AXIOS route Error', err));
+  };
+
+  // Delete new rsvps
+  const removeRsvps = (EventId: number) => {
+    axios
+      .delete(`/RSVPs/delete/${EventId}`)
+      .then((data) => {
+        console.log('RSVP added and Updated via AXIOS', data);
+        setRsvpTotal((prev) => prev - 1);
+        // setDisableRsvp((prev) => [...prev, [EventId, user?.id]]);
       })
       .catch((err) => console.error('Like AXIOS route Error', err));
   };
@@ -291,6 +306,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   // console.log('reels ---------->', reels)
   // console.log('reel ---------->', reel)
   // console.log('rsvpTotal', rsvpTotal)
+  console.log('disableRsvp', disableRsvp);
   return (
     <div>
       {true && (
@@ -532,15 +548,16 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                     component={'div'}
                     icon={
                       <div className='count-container'>
-                        {!likesArr.includes(reel.id) ?
-                        (<Likes
+                        {!likesArr.includes(reel.id) ? (
+                          <Likes
                             handleAddLike={handleAddLike}
                             handleRemoveLike={handleRemoveLike}
                             reel={reel}
                             user={user}
                             likes={likes}
                             likesBool={likesArr}
-                          />):(
+                          />
+                        ) : (
                           <Unlikes
                             handleAddLike={handleAddLike}
                             handleRemoveLike={handleRemoveLike}
@@ -548,8 +565,8 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                             user={user}
                             likes={likes}
                             likesBool={likesArr}
-                          />)
-                        }
+                          />
+                        )}
                         {reel.like_count >= 0 ? (
                           <p className='like-counter'>
                             {reel.like_count + likeTotal}
@@ -607,13 +624,11 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                     icon={
                       <React.Fragment>
                         <div className='count-container'>
-                          <Rsvp
-                            rsvps={rsvps}
-                            reel={reel}
-                            user={user}
-                            addRsvps={addRsvps}
-                            disableRsvp={disableRsvp}
-                          />
+                          {disableRsvp.includes(reel?.Event.id) ? (
+                            <UnRsvp reel={reel} removeRsvps={removeRsvps} />
+                          ) : (
+                            <Rsvp reel={reel} addRsvps={addRsvps} />
+                          )}
                           {reel.Event.rsvp_count !== 0 && (
                             <p className='rsvp-counter'>
                               {reel.Event.rsvp_count + rsvpTotal}
