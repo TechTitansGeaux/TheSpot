@@ -148,6 +148,7 @@ const EventsList: React.FC<Props> = ({user}) => {
           return (
             <PastEvent
             event={event}
+            getMyEvents={getMyEvents}
             key={'event' + event.id}/>
           )
         })}

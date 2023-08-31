@@ -110,7 +110,7 @@ return () => {
 };
   }
 
-}, [authUser.id]);
+}, []);
 
 
 const startGeolocationWatch = () => {
