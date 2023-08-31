@@ -31,10 +31,7 @@ type Props = {
 const Unlikes: React.FC<Props> = ({
   handleRemoveLike,
   handleAddLike,
-  reel,
-  likes,
-  likesBool,
-  user,
+  reel
 }) => {
   const [clicked, setClicked] = useState(true); // how to make this conditional - PER REEL?
 
@@ -69,6 +66,5 @@ const Unlikes: React.FC<Props> = ({
     </React.Fragment>
   );
 };
-
 
 export default Unlikes;

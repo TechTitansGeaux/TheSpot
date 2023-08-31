@@ -32,13 +32,9 @@ type Props = {
 const Likes: React.FC<Props> = ({
   handleRemoveLike,
   handleAddLike,
-  reel,
-  likes,
-  likesBool,
-  user,
+  reel
 }) => {
-  const [clicked, setClicked] = useState(false); // how to make this conditional - PER REEL?
-  // const [clicked, setClicked] = useLocalStorageState('clicked', false); // how to make this conditional - PER REEL?
+  const [clicked, setClicked] = useState(false);
 
   const handleLikeClick = (reelId: number) => {
     if (clicked === false) {
@@ -71,60 +67,5 @@ const Likes: React.FC<Props> = ({
     </React.Fragment>
   );
 };
-
-// const [clicked, setClicked] = useState(false);
-// const [disable, setDisable] = useState(false);
-// const likeReelIdFinder = (currReel: number) => {
-//   let bool = false;
-//   likesBool.forEach((row: any) =>
-//     row?.ReelId === currReel ? (bool = true) : (bool = false)
-//   );
-//   return bool;
-// };
-
-// const handleLikeClick = (reelId: number) => {
-//   if (likeReelIdFinder(reelId)) {
-//     setClicked(!clicked);
-//     setDisable(true);
-//     handleAddLike(reelId);
-//     socket.emit('likesNotif', 'like');
-//   } else {
-//     setClicked(!clicked);
-//     handleRemoveLike(reelId);
-//     setDisable(true);
-//   }
-// };
-
-// console.log('likeReelIdFinder()', likeReelIdFinder(13));
-// console.log('likesBool', likesBool);
-
-// return (
-//   <div>
-//     {!clicked && !likeReelIdFinder(reel.id) ? (
-//       <Fab
-//         disabled={disable}
-//         onClick={() => handleLikeClick(reel.id)}
-//         name='Like Button'
-//         aria-label='Like Button'
-//       >
-//         <FavoriteIcon
-//         />
-//       </Fab>
-//     ) : (
-//       clicked && likeReelIdFinder(reel.id) && (
-//         <Fab
-//         disabled={disable}
-//         onClick={() => handleLikeClick(reel.id)}
-//         name='Like Button'
-//         aria-label='Like Button'
-//         >
-//           <FavoriteIcon
-//             color='secondary'
-//           />
-//         </Fab>
-//       )
-//     )}
-//   </div>
-// );
 
 export default Likes;
