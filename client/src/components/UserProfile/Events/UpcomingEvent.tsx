@@ -111,10 +111,15 @@ const UpcomingEvent: React.FC<Props> = ({event, getMyEvents, user}) => {
     setEndTime(e.target.value);
     setJustSaved(false);
   }
-  const handleTwentyOneChange = (e: any) => {
-    setTwentyOne(e.target.value);
-    setJustSaved(false);
+// handle changing to 21 +
+const handleTwentyOneChange = () => {
+  if (!twentyOne) {
+    setTwentyOne(true)
+  } else {
+    setTwentyOne(false)
   }
+  setJustSaved(false);
+ }
 
   // get all frens
   const getFriendList = () => {
@@ -199,7 +204,8 @@ useEffect(() => {
         name: name,
         date: date,
         time: time,
-        endTime: endTime
+        endTime: endTime,
+        twenty_one: twentyOne
       })
       .then(() => {
         setJustSaved(true);
@@ -268,7 +274,12 @@ useEffect(() => {
             <br></br>
             RSVPs: {event.rsvp_count}
             <br></br>
-            {event.twenty_one && '21+'}
+            21+ : <input
+              id='twentyOne'
+              type='checkbox'
+              checked={twentyOne}
+              onChange={handleTwentyOneChange}>
+            </input>
           </div>
           {!noConflicts && (<ConflictingEvent
           conflictingEvent={conflictingEvent}/>)}
