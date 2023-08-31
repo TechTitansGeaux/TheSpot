@@ -56,7 +56,7 @@ rsvpRouter.put('/addRsvp/:EventId', (req: any, res: any) => {
         id: EventId
     }
     })
-    .then((response: any) => {
+    .then((response: Express.Response) => {
       console.log('RSVP response', response)
       RSVPs.create({
         UserId: id,
@@ -69,5 +69,36 @@ rsvpRouter.put('/addRsvp/:EventId', (req: any, res: any) => {
       res.sendStatus(500);
   })
 })
+
+// delete a user rsvp
+rsvpRouter.delete('/delete/:EventId', (req: any, res: any) => {
+    const { EventId } = req.params;
+    const { id } = req.user; // req.body needs to be req.user
+  Events.decrement(
+      {
+        rsvp_count: 1,
+      },
+      {
+        where: {
+          id: EventId,
+        },
+      }
+    )
+      .then((response: any) => {
+        console.log('RSVP deleted', response);
+         RSVPs.destroy({
+           where: {
+             UserId: id,
+             EventId: EventId,
+           },
+         })
+        res.sendStatus(200);
+      })
+      .catch((err: any) => {
+        console.error('RSVP delete request Database fa9l', err);
+        res.sendStatus(500);
+    })
+  }
+);
 
 export default rsvpRouter;
