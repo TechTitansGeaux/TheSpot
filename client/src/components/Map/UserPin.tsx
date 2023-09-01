@@ -9,8 +9,6 @@ import axios from 'axios';
 import dayjs = require('dayjs');
 dayjs.extend(localizedFormat);
 
-
-
 type Props = {
   user: {
     id: number
@@ -89,8 +87,12 @@ const UserPin: React.FC<Props> = ({ user, loggedIn, lat, lng, zoom, friendList, 
   const togglePopUp = () => {
     const box = document.getElementById('popUp' + user.username + user.id)
     if (box.style.display === 'block') {
-      box.style.display = 'none';
+      box.style.animationName = 'popOff';
+      setTimeout(() => {
+        box.style.display = 'none';
+      }, 500)
     } else {
+      box.style.animationName = 'popOut';
       box.style.display = 'block';
     }
   }
@@ -182,20 +184,22 @@ const UserPin: React.FC<Props> = ({ user, loggedIn, lat, lng, zoom, friendList, 
           {friendList.includes(user.id) && (
             <div>
               <div style={{ position: 'relative', top: '18px', left: '60px' }}>remove friend</div>
-              <ThemeProvider theme={rmFriendTheme}>
-                <div>
-                  <Box>
-                    <Fab
-                      size='small'
-                      color='primary'
-                      aria-label='add'
-                      className='friend-add-btn'
-                    >
-                      <RemoveIcon onClick={() => { removeFriend(); } } />
-                    </Fab>
-                  </Box>
-                </div>
-              </ThemeProvider>
+              <div style={{ position: 'relative', top: '-11.5px' }}>
+                <ThemeProvider theme={rmFriendTheme}>
+                  <div>
+                    <Box>
+                      <Fab
+                        size='small'
+                        color='primary'
+                        aria-label='add'
+                        className='friend-add-btn'
+                      >
+                        <RemoveIcon onClick={() => { removeFriend(); } } />
+                      </Fab>
+                    </Box>
+                  </div>
+                </ThemeProvider>
+              </div>
             </div>
           )}
         </div>

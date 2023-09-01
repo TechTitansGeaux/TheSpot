@@ -11,6 +11,7 @@ import { motion } from 'framer-motion';
 import { useNavigate  } from 'react-router-dom';
 import Tooltip from '@mui/material/Tooltip';
 import EventNoteIcon from '@mui/icons-material/EventNote';
+import CircularProgress from '@mui/material/CircularProgress';
 
 type Props = {
   currentEvent: {
@@ -81,6 +82,7 @@ const VideoRecorder: React.FC<Props> = ({
   const [businessAccount, setBusinessAccount] = useState(false);
   const [businessEventCreated, setBusinessEventCreated] = useState(false);
   const [eventIsPublic, setEventIsPublic] = useState(true);
+  const [urlRetrieved, setUrlRetrieved] = useState(false)
 
   type Blob = {
     data: {
@@ -163,6 +165,7 @@ const urltoFile = (url: any, filename: any, mimeType: any) => {
           // console.log(data, '<---data from axios upload')
           setPublic_id(data.cloudID);
           setUrl(data.cloudURL)
+          setUrlRetrieved(true)
           setRecordedChunks([]);
         })
         .catch((err) => {
@@ -309,7 +312,17 @@ setBusinessEventCreated(true);
       currentAddress={currentAddress}
       eventIsPublic={eventIsPublic}
       friends={friends}/>
-        { justRecorded ? (
+        {justRecorded &&
+        !urlRetrieved &&
+        (
+
+          <div className='webcam'>
+            <CircularProgress
+            size='8rem'
+            color='secondary'/>
+          </div>
+        )}
+        { justRecorded && urlRetrieved && (
         <div className='preview-mask'>
           <div className='webcam'>
             <video
@@ -328,7 +341,8 @@ setBusinessEventCreated(true);
             </input>
           </div>
         </div>
-      ) : (
+        )}
+        { !justRecorded && (
         <div className='cam-mask'>
           <Webcam
             className='webcam'
@@ -345,12 +359,13 @@ setBusinessEventCreated(true);
       </div>
       <div className='cam-buttons-container'>
       <div className='cameraButtons'>
-        {capturing ? (
+        {capturing && (
           <RadioButtonCheckedIcon
           onClick={handleStopCaptureClick}
           color='secondary'
           sx={{ width: 52, height: 52 }}/>
-        ) : (
+        )}
+        { !capturing && !justRecorded && (
           <motion.div
           whileHover={{ scale: 1.2 }}
           >
@@ -360,7 +375,7 @@ setBusinessEventCreated(true);
             sx={{ width: 52, height: 52 }}/>
           </motion.div>
         )}
-        {justRecorded && (
+        {justRecorded && urlRetrieved && (
           <div>
             <Tooltip
             title='Post reel'
@@ -386,7 +401,7 @@ setBusinessEventCreated(true);
           </Tooltip>
           </div>
         )}
-        {justRecorded && (
+        {justRecorded && urlRetrieved && (
           <div>
             <div
             onClick={togglePopUp}>

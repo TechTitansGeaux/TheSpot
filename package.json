@@ -14,7 +14,8 @@
     "serve": "webpack serve",
     "start:prod": "node built/server/index.js",
     "build:server": "tsc -p tsconfig-server.json",
-    "pm2": "pm2 start built/server/app.js"
+    "pm2": "pm2 start built/server/app.js",
+    "remove": "rimraf ./built"
   },
   "keywords": [],
   "author": "",
