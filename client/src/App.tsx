@@ -67,10 +67,10 @@ const App = () => {
   };
 
   useEffect(() => {
-    // dispatch(setFontSize(fontSize));
+    dispatch(setFontSize(fontSize));
 
     // Apply font size to the root element
-    // document.documentElement.style.fontSize = fontSize;
+    document.documentElement.style.fontSize = fontSize;
     fetchAuthUser();
     getAllUsers();
   }, [fontSize]);
