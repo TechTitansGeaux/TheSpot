@@ -1,3 +1,25 @@
+/* remove built-in form typography
+margin: remove default margin on text tags
+*/
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* remove all button and input native styling */
+button,
+input[type="submit"],
+input[type="reset"] {
+  /* color: inherit; */
+  border: none;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+  border-radius: 2px;
+}
+
 .filter-container {
   display: flex;
   flex-direction: row;
@@ -9,8 +31,21 @@
   font-size: var(--reg-font);
   color: var(--yellow);
   letter-spacing: .5px;
-};
+}
 
+;
 
+button.filter-btn {
+  color: var(--violet);
+  border-radius: 0%;
+  padding: 55px;
+  margin-left: 10px;
+  height: 45px;
+  letter-spacing: .02rem;
+}
 
-
+button.filter-btn:hover,
+button.filter-btn:focus {
+  background-color: var(--yellow);
+  transition: background-color .2s ease-out;
+}

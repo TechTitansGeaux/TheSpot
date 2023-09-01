@@ -23,7 +23,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setAuthUser, setIsAuthenticated, setFontSize } from './store/appSlice';
 import { RootState } from './store/store';
 import { useTheme } from '@mui/material/styles';
-import { AnyARecord } from 'dns';
 import io from 'socket.io-client';
 const socket = io();
 import Location from './components/ProfileSetUp/Location';
@@ -76,7 +75,6 @@ const App = () => {
     getAllUsers();
   }, [fontSize]);
 
-
   // get all other users
   const getAllUsers = async () => {
     try {
@@ -111,7 +109,6 @@ return () => {
   }
 
 }, []);
-
 
 const startGeolocationWatch = () => {
   // Check if geolocation is supported by the browser
@@ -149,7 +146,6 @@ const startGeolocationWatch = () => {
   return watchId; // Return the watchId
 };
 
-
   return (
     <div style={{ fontSize: theme.typography.fontSize }}>
     <BrowserRouter>
@@ -161,31 +157,18 @@ const startGeolocationWatch = () => {
           <Route path='/Events' element={<EventsList user={user} />}></Route>
           <Route path='/UserType' element={<UserType />}></Route>
           <Route path='/Feed' element={<Feed user={user} />}></Route>
-          <Route
-            path='/FriendRequests'
-              element={<FriendRequestList allUsers={allUsers}  user={user} />}
-          ></Route>
-          <Route
-            path='/Follows'
-              element={<FollowersList allUsers={allUsers}  user={user} />}
-          ></Route>
+          <Route path='/FriendRequests' element={<FriendRequestList allUsers={allUsers} user={user} />} ></Route>
+          <Route path='/Follows' element={<FollowersList allUsers={allUsers}  user={user} />}></Route>
           <Route path='/Likes' element={<LikesList allUsers={allUsers} user={user} />}></Route>
-          <Route
-            path='/Settings'
-            element={<Settings startWatch={startGeolocationWatch} fontSize={fontSize} />}
-          ></Route>
+          <Route path='/Settings' element={<Settings startWatch={startGeolocationWatch} fontSize={fontSize} />} ></Route>
           <Route path='/BusinessSettings' element={<BusinessSettings fontSize={fontSize}/>}></Route>
-          <Route
-            path='/CreateReel'
-            element={<CreateReel user={user} />}
-          ></Route>
+          <Route path='/CreateReel' element={<CreateReel user={user} />} ></Route>
           <Route path='/Map' element={<Map reelEvent={null} loggedIn={user} />}></Route>
         </Route>
         <Route path='/Location' element={<Location startWatch={startGeolocationWatch} />}></Route>
       </Routes>
     </BrowserRouter>
     </div>
-
   );
 };
 

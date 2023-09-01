@@ -325,7 +325,7 @@ const Feed: React.FC<Props> = ({user}) => {
     {userType === 'personal' && (
       <div className='filter-container'>
       <div className='label'>
-        Filter By
+        Filter By{' '}
       <button
         className='filter-btn'
         name='Filter Button'
