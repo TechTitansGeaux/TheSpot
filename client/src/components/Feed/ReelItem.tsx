@@ -137,7 +137,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   const [stayDisabled, setStayDisabled] = useState([]);
   const [likesArr, setLikesArr] = useState([]); // user's own reels that have been liked FROM likes table
   // Alert Dialog 'are you sure you want to delete this reel?'
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   // state of whether event is already over
   const [pastEvent, setPastEvent] = useState('');
   // event info to display on info icon hover: name, date, time
@@ -230,7 +230,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
     getRSVPs();
   }, []);
 
-  // POST new rsvps
+  // POST / add new rsvps
   const addRsvps = (EventId: number) => {
     axios
       .put(`/RSVPs/addRsvp/${EventId}`)
@@ -242,7 +242,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
       .catch((err) => console.error('Like AXIOS route Error', err));
   };
 
-  // Delete new rsvps
+  // Delete / remove an rsvp
   const removeRsvps = (EventId: number) => {
     axios
       .delete(`/RSVPs/delete/${EventId}`)
@@ -306,7 +306,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   // console.log('reels ---------->', reels)
   // console.log('reel ---------->', reel)
   // console.log('rsvpTotal', rsvpTotal)
-  console.log('disableRsvp', disableRsvp);
+  // console.log('disableRsvp', disableRsvp);
   return (
     <div>
       {true && (
