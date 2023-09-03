@@ -39,7 +39,7 @@ type Props = {
     email: string;
     picture: string;
     googleId: string;
-  }
+  },
 };
 
 const listStyles = {
@@ -78,6 +78,15 @@ const Navigation: React.FC<Props> = ({ user }) => {
   const feedPath = location.pathname;
   const [setting, setSetting] = useState('');
   const [userType, setUserType] = useState(null);
+  const [bottomNavHidden, setBottomNavHidden] = useState(false) // boolean state var to hide bottom nav
+
+  useEffect(() => {
+    if (feedPath === '/CreateReel') {
+      setBottomNavHidden(true)
+    } else {
+      setBottomNavHidden(false)
+    }
+  }, [feedPath])
 
 
   // get all pending friends for current user
@@ -430,11 +439,13 @@ const Navigation: React.FC<Props> = ({ user }) => {
           </Drawer>
         </div>
         <footer>
+          { !bottomNavHidden && (
           <div className='create-reel-btn-container'>
             <Link to='/CreateReel'>
               <AddCircleIcon color='secondary' sx={{ width: 52, height: 52 }} />
             </Link>
           </div>
+          )}
           <div>
               {(pFriends.length !== 0) &&
               <div>
