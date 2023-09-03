@@ -469,8 +469,8 @@ button.rejectFriend-btn:hover {
 
 .reel-input-caption {
   position: absolute;
-  left: 25%;
-  top: 25%;
+  left: 5%;
+  top: 5%;
   margin: 0 5rem;
   max-width: 350px;
   color: var(--white);
