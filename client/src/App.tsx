@@ -146,17 +146,14 @@ const startGeolocationWatch = () => {
   return watchId; // Return the watchId
 };
 
-// function that sets showNav to false
-const hideBottomNav = () => {
-  setShowNav(false);
-}
+
 
   return (
     <div style={{ fontSize: theme.typography.fontSize }}>
     <BrowserRouter>
       <Routes>
         <Route index element={<SignUp />}></Route>
-        <Route path='/' element={<Navigation user={user} showNav={showNav}/>}>
+        <Route path='/' element={<Navigation user={user}/>}>
           <Route path='/ProfileSetUp' element={<ProfileSetUp startWatch={startGeolocationWatch} />}></Route>
           <Route path='/BusinessProfile' element={<BusinessProfile />}></Route>
           <Route path='/Events' element={<EventsList user={user} />}></Route>
@@ -167,7 +164,7 @@ const hideBottomNav = () => {
           <Route path='/Likes' element={<LikesList allUsers={allUsers} user={user} />}></Route>
           <Route path='/Settings' element={<Settings startWatch={startGeolocationWatch} fontSize={fontSize} />} ></Route>
           <Route path='/BusinessSettings' element={<BusinessSettings fontSize={fontSize}/>}></Route>
-          <Route path='/CreateReel' element={<CreateReel user={user} hideBottomNav={hideBottomNav}/>} ></Route>
+          <Route path='/CreateReel' element={<CreateReel user={user}/>} ></Route>
           <Route path='/Map' element={<Map reelEvent={null} loggedIn={user} />}></Route>
         </Route>
         <Route path='/Location' element={<Location startWatch={startGeolocationWatch} />}></Route>

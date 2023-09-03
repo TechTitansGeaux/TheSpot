@@ -39,8 +39,7 @@ type Props = {
     email: string;
     picture: string;
     googleId: string;
-  },
-  showNav: boolean,
+  }
 };
 
 const listStyles = {
@@ -64,7 +63,7 @@ const theme = createTheme({
   },
 });
 
-const Navigation: React.FC<Props> = ({ user, showNav }) => {
+const Navigation: React.FC<Props> = ({ user }) => {
   const [pFriends, setPFriends] = useState([]); // pending friends list
   const [open, setOpen] = useState(false); // open and close snackbar
   const [likesArr, setLikesArr] = useState([]); // user's own reels that have been liked FROM likes table
@@ -79,8 +78,6 @@ const Navigation: React.FC<Props> = ({ user, showNav }) => {
   const feedPath = location.pathname;
   const [setting, setSetting] = useState('');
   const [userType, setUserType] = useState(null);
-
-  console.log(showNav, '<-------show nav')
 
 
   // get all pending friends for current user
@@ -433,13 +430,11 @@ const Navigation: React.FC<Props> = ({ user, showNav }) => {
           </Drawer>
         </div>
         <footer>
-          { showNav && (
           <div className='create-reel-btn-container'>
             <Link to='/CreateReel'>
               <AddCircleIcon color='secondary' sx={{ width: 52, height: 52 }} />
             </Link>
           </div>
-          )}
           <div>
               {(pFriends.length !== 0) &&
               <div>
