@@ -46,6 +46,12 @@ const CreateReel: React.FC<Props> = ({user}) => {
   const [currentAddress, setCurrentAddress] = useState('');
   const [friends, setFriends] = useState([]);
 
+  // invoke hide bottom nav to set showNav from app component to FALSE
+  useEffect(() => {
+    console.log('hello')
+    hideBottomNav()
+  }, [])
+
 
   // today variable
   const today = dayjs(new Date()).format('YYYY-MM-DD');

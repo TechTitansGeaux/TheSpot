@@ -50,8 +50,8 @@ const App = () => {
   const [user, setUser] = useState<User>(null);
   const fontSize = useSelector((state: RootState) => state.app.fontSize); // Default font size
   const [allUsers, setAllUsers] = useState<[User]>(null);
-
-
+  
+  
   const fetchAuthUser = async () => {
     try {
       const response = await axios.get(`/users/user`);
@@ -146,12 +146,17 @@ const startGeolocationWatch = () => {
   return watchId; // Return the watchId
 };
 
+// function that sets showNav to false
+const hideBottomNav = () => {
+  setShowNav(false);
+}
+
   return (
     <div style={{ fontSize: theme.typography.fontSize }}>
     <BrowserRouter>
       <Routes>
         <Route index element={<SignUp />}></Route>
-        <Route path='/' element={<Navigation user={user} />}>
+        <Route path='/' element={<Navigation user={user} showNav={showNav}/>}>
           <Route path='/ProfileSetUp' element={<ProfileSetUp startWatch={startGeolocationWatch} />}></Route>
           <Route path='/BusinessProfile' element={<BusinessProfile />}></Route>
           <Route path='/Events' element={<EventsList user={user} />}></Route>
@@ -162,7 +167,7 @@ const startGeolocationWatch = () => {
           <Route path='/Likes' element={<LikesList allUsers={allUsers} user={user} />}></Route>
           <Route path='/Settings' element={<Settings startWatch={startGeolocationWatch} fontSize={fontSize} />} ></Route>
           <Route path='/BusinessSettings' element={<BusinessSettings fontSize={fontSize}/>}></Route>
-          <Route path='/CreateReel' element={<CreateReel user={user} />} ></Route>
+          <Route path='/CreateReel' element={<CreateReel user={user} hideBottomNav={hideBottomNav}/>} ></Route>
           <Route path='/Map' element={<Map reelEvent={null} loggedIn={user} />}></Route>
         </Route>
         <Route path='/Location' element={<Location startWatch={startGeolocationWatch} />}></Route>
