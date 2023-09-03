@@ -41,8 +41,6 @@ const Feed: React.FC<Props> = ({user}) => {
     // filter dialog
   const [open, setOpen] = React.useState(false);
 
-  console.log('-----HELLO-----')
-
   const findUserType = () => {
     if (user) {
       // console.log('user type:', user.type);
