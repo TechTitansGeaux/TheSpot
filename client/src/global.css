@@ -495,6 +495,7 @@ button.rejectFriend-btn:hover {
   font-family: var(--title-font);
   color: white;
   z-index: 5;
+  font-weight: bold;
 }
 
 /* MY EVENTS PAGE */
@@ -529,6 +530,7 @@ button.rejectFriend-btn:hover {
 
 .eventCardDetails {
   text-align: left;
+  font-weight: bold;
 }
 
 .autocomplete-dropdown-container {
@@ -542,6 +544,7 @@ button.rejectFriend-btn:hover {
   background: transparent;
   border: none;
   position: relative;
+  font-weight: lighter;
   resize: none;
 }
 

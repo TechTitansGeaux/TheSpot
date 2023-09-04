@@ -182,7 +182,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
     checkEventTime();
   }, []);
 
-  const handleClickOpen = () => {
+  const handleOpen = () => {
     setOpen(true);
   };
 
@@ -501,7 +501,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                           className='delete-btn'
                           name='Delete Button'
                           aria-label='Delete Button'
-                          onClick={handleClickOpen}
+                          onClick={handleOpen}
                         >
                           🗑️
                         </button>

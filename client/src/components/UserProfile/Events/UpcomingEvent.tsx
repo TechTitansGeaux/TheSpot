@@ -270,7 +270,10 @@ useEffect(() => {
             type='time'
             ></input>
             <br></br>
-            RSVPs: {event.rsvp_count}
+            RSVPs: <div
+            className='eventDetailInput'>
+            {event.rsvp_count}
+              </div>
             <br></br>
             21+ : <input
               id='twentyOne'
