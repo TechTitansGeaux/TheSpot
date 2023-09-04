@@ -388,8 +388,9 @@ setBusinessEventCreated(true);
         {justRecorded && urlRetrieved && (
           <div>
             <Tooltip
-            title='Trash reel'
-            placement='top'
+            open={true}
+            title='Trash'
+            placement='bottom'
             PopperProps={{
               sx: {
                 '& .MuiTooltip-tooltip': {
@@ -416,8 +417,9 @@ setBusinessEventCreated(true);
             <div
             onClick={togglePopUp}>
                 <Tooltip
-                title='Add event details'
-                placement='top'
+                open={true}
+                title='Edit'
+                placement='bottom'
                 PopperProps={{
                   sx: {
                     '& .MuiTooltip-tooltip': {
@@ -442,8 +444,9 @@ setBusinessEventCreated(true);
         {justRecorded && urlRetrieved && (
           <div>
             <Tooltip
-            title='Post reel'
-            placement='top'
+            open={true}
+            title='Post'
+            placement='bottom'
             PopperProps={{
               sx: {
                 '& .MuiTooltip-tooltip': {
