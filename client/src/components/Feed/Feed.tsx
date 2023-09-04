@@ -42,6 +42,7 @@ const Feed: React.FC<Props> = ({user}) => {
   const [userType, setUserType] = useState(''); // personal or business
     // filter dialog
   const [open, setOpen] = React.useState(false);
+  const marks = [{value: 1, label: '1 mile'}, {value: 15, label: '15 miles'}, {value: 30, label: '30 miles'}];
 
   const findUserType = () => {
     if (user) {
@@ -58,7 +59,6 @@ const Feed: React.FC<Props> = ({user}) => {
     findUserType();
   }, [user]);
 
-  // const geoFilters = [15, 10 ,5]; // geolocation filters by miles
   const friendsReels: any = [];
   const followingReels: any = [];
   const followerReels: any = [];
@@ -322,7 +322,6 @@ const Feed: React.FC<Props> = ({user}) => {
     }
   }, [user, filter]);
 
-
   return (
     <>
     {userType === 'personal' && (
@@ -388,8 +387,10 @@ const Feed: React.FC<Props> = ({user}) => {
           min={1}
           max={30}
           onChange={geoFilterHandler}
+          marks={marks}
           valueLabelDisplay="auto"
           color="secondary"
+          classes={{ markLabel: 'white' }}
         />
       </Box>
     </div>
