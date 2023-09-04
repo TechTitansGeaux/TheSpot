@@ -1,10 +1,8 @@
 import * as React from 'react';
 import Reel from './Reel';
-// import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import './feed.css';
-// import { response } from 'express';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -16,7 +14,7 @@ type Props = {
     username: string;
     displayName: string;
     type: string;
-    geolocation: string; // i.e. "29.947126049254177, -90.18719199978266"
+    geolocation: string;
     mapIcon: string;
     birthday: string;
     privacy: string;

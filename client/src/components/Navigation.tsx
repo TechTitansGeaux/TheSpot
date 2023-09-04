@@ -77,7 +77,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
   const location = useLocation();
   const feedPath = location.pathname;
   const [setting, setSetting] = useState('');
-  const [userType, setUserType] = useState(null);
+  // const [userType, setUserType] = useState(null);
   const [bottomNavHidden, setBottomNavHidden] = useState(false) // boolean state var to hide bottom nav
 
   useEffect(() => {
@@ -184,7 +184,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
   // When the user clicks on the button, scroll to the top of the page
   const handleScrollTop = () => {
     document.body.scrollTop = 0; // For Safari
-    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox
   };
 
   // if location on feed then change logo button to scroll

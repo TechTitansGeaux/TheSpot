@@ -1,7 +1,7 @@
 import * as React from 'react';
 import FriendRequestEntry from './FriendRequestEntry';
 import FriendAcceptedEntry from './FriendAcceptedEntry';
-import { useState, useEffect, useMemo} from 'react';
+import { useState, useEffect} from 'react';
 import axios from 'axios';
 
 
@@ -32,10 +32,6 @@ const FriendRequestList: React.FC<Props> = ({ user, allUsers }) => {
   const [friends, setFriends] = useState([]); // approved friend list for current user
   const [friendsId, setFriendsId] = useState([])
 
-
-  // const userFriend = useMemo(() => {
-  //   userName: friends.name;
-  // })
 
   // create axios get request to get pending friends
   const getPendingFriendList = () => {
