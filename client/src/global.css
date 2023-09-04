@@ -470,7 +470,7 @@ button.rejectFriend-btn:hover {
 .reel-input-caption {
   position: absolute;
   left: 5%;
-  top: 5%;
+  top: 10%;
   margin: 0 5rem;
   max-width: 350px;
   color: var(--white);
@@ -532,11 +532,17 @@ button.rejectFriend-btn:hover {
   text-align: left;
 }
 
+.autocomplete-dropdown-container {
+  position:absolute;
+  z-index: 5;
+}
+
 .eventDetailInput {
+  display:inline-flex;
   color: var(--white);
   background: transparent;
   border: none;
-  /* position: relative; */
+  position: relative;
 }
 
 .eventNameInput {
