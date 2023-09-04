@@ -231,15 +231,13 @@ useEffect(() => {
     <div className='column-md-2'>
       <div className='eventCard'>
         <div>
-          <input
+          <textarea
           className='eventNameInput'
           placeholder={name}
           value={name}
-          onChange={handleNameChange}
-          type='text'>
-          </input>
+          onChange={handleNameChange}>
+          </textarea>
           <div className='eventCardDetails'>
-            <br></br>
             Address:
             <EventLocationSearch
           handleLocation={handleLocation}
