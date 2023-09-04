@@ -543,6 +543,7 @@ button.rejectFriend-btn:hover {
   background: transparent;
   border: none;
   position: relative;
+  resize: none;
 }
 
 .eventNameInput {
@@ -562,7 +563,7 @@ button.rejectFriend-btn:hover {
 }
 
 .save-event-detail-button {
-  color: var(--white);
+  color: var(--violet);
   background-color: var(--pink);
   border: solid var(--pink);
   border-radius: 5px;
@@ -577,7 +578,7 @@ button.rejectFriend-btn:hover {
 
 .delete-event-button {
   position: absolute;
-  top: 5%;
+  /* top: 5%; */
   right: 5%;
   cursor: pointer;
 }
