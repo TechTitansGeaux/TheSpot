@@ -20,8 +20,7 @@ const config = {
   mode: NODE_ENV,
   entry: path.resolve(__dirname, './client/src/index.tsx'),
   output: {
-    // path: path.resolve(__dirname, './built/client/dist'), <------ change back to this before pushing
-    path: path.resolve(__dirname, './client/dist'),
+    path: path.resolve(__dirname, './built/client/dist'),
     filename: 'bundle.js',
   },
   devServer: {
