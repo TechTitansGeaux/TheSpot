@@ -354,7 +354,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                 onClose={handleInfoClick}
                 open={openInfo}
                 disableFocusListener
-                // disableHoverListener
+                disableHoverListener
                 disableTouchListener
                   title={
                     <div>
