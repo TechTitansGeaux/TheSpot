@@ -22,7 +22,7 @@ type Props = {
     email: string;
     picture: string;
     googleId: string;
-  };
+  }
 };
 
 const CreateReel: React.FC<Props> = ({user}) => {

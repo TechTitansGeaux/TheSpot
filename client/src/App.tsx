@@ -51,7 +51,6 @@ const App = () => {
   const fontSize = useSelector((state: RootState) => state.app.fontSize); // Default font size
   const [allUsers, setAllUsers] = useState<[User]>(null);
 
-
   const fetchAuthUser = async () => {
     try {
       const response = await axios.get(`/users/user`);
@@ -145,6 +144,8 @@ const startGeolocationWatch = () => {
 
   return watchId; // Return the watchId
 };
+
+
 
   return (
     <div style={{ fontSize: theme.typography.fontSize }}>
