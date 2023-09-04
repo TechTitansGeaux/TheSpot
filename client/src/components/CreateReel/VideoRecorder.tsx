@@ -273,6 +273,9 @@ const clearReel = () => {
   setUrl('');
   setText('');
   setJustRecorded(false);
+  const box = document.getElementById('event-form');
+  box.style.display = 'none';
+
 }
 
 
