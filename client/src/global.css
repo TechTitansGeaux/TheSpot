@@ -509,8 +509,7 @@ button.rejectFriend-btn:hover {
 
 .event-cards-row {
   display: flex;
-  /* center? */
-  justify-content: left;
+  justify-content: center;
   flex-wrap: wrap;
   margin-right: 10%;
   margin-left: 10%;
