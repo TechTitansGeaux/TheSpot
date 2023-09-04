@@ -460,9 +460,9 @@ button.rejectFriend-btn:hover {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100vw;
-  width: 585px;
-  height: 655px;
+  width: 90vw;
+  /* width: 585px; */
+  height: 80vh;
   border-radius: 10px;
   overflow: hidden;
 }
