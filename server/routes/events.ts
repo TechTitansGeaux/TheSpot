@@ -15,6 +15,19 @@ eventRouter.get('/all', async (req, res) => {
     })
 })
 
+// get current events for map
+eventRouter.get('/allCurrent', async (req, res) => {
+  const date = new Date();
+  await Events.findAll()
+    .then((events: any) => {
+      events.filter(() => {})
+      res.status(200).send(events);
+    })
+    .catch((err: any) => {
+      console.error('Failed to GET all events: ', err);
+    })
+})
+
 // get all of one user's events
 eventRouter.get('/userEvents', async (req: any, res: any) => {
   // access user id from req.user
