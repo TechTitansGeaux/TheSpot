@@ -57,3 +57,16 @@ button.filter-btn:focus {
   height: 80vh;
   width: auto;
 }
+
+.slider {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding-bottom: 10px;
+  gap: 10px;
+  text-transform: uppercase;
+  font-family: var(--title-font);
+  font-size: var(--reg-font);
+}
+
+

@@ -31,6 +31,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import Rsvp from '../UserProfile/Rsvps/Rsvp';
 import UnRsvp from '../UserProfile/Rsvps/UnRsvp';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
 
 
 dayjs.extend(relativeTime);
@@ -150,6 +151,15 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   const [rsvps, setRsvps] = useState([]);
   const [rsvpTotal, setRsvpTotal] = useState(0);
   const [disableRsvp, setDisableRsvp] = useState([]);
+  const [openInfo, setOpenInfo] = useState(false);
+
+  const handleInfoClick = () => {
+    if (openInfo) {
+      setOpenInfo(false);
+    } else {
+      setOpenInfo(true)
+    }
+  };
 
   // check if event is over
   const checkEventTime = () => {
@@ -173,7 +183,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
     checkEventTime();
   }, []);
 
-  const handleClickOpen = () => {
+  const handleOpen = () => {
     setOpen(true);
   };
 
@@ -317,86 +327,119 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
       {true && (
         <div style={{ fontSize: theme.typography.fontSize }}>
           <>
-              <div
-                className={
-                  reel?.User.type === 'personal'
-                    ? 'video-container'
-                    : 'video-container video-business-container'
-                }
-              >
-                {reel.url.length > 15 && (
-                  <video
-                    className='reel'
-                    ref={myRef}
-                    id={`video${reel.id}`}
-                    src={reel.url}
-                    loop={loop}
-                    muted={muted}
-                    preload='none'
-                    onClick={handleToggleMute}
-                  ></video>
-                )}
-                <h5 className='video-timestamp'>
-                  ... {dayjs(`${reel.createdAt}`).fromNow()}
-                </h5>
-                <p className='video-text'>{reel.text}</p>
-                <>
-                  <Tooltip
-                    title={
-                      <div>
-                        {eventName}
-                        <br />
-                        {eventDate}
-                        <br />
-                        {pastEvent}
-                      </div>
-                    }
-                    placement='left'
-                    PopperProps={{
-                      sx: {
-                        '& .MuiTooltip-tooltip': {
-                          backgroundColor: 'transparent',
-                          border: 'solid #F5FCFA 1px',
-                          color: '#F5FCFA',
-                        },
+            <div
+              className={
+                reel?.User.type === 'personal'
+                  ? 'video-container'
+                  : 'video-container video-business-container'
+              }
+            >
+              {reel.url.length > 15 && (
+                <video
+                  className='reel'
+                  ref={myRef}
+                  id={`video${reel.id}`}
+                  src={reel.url}
+                  loop={loop}
+                  muted={muted}
+                  preload='none'
+                  onClick={handleToggleMute}
+                ></video>
+              )}
+              <h5 className='video-timestamp'>
+                ... {dayjs(`${reel.createdAt}`).fromNow()}
+              </h5>
+              <p className='video-text'>{reel.text}</p>
+              <>
+              <ClickAwayListener onClickAway={handleInfoClick}>
+                <Tooltip
+                onClose={handleInfoClick}
+                open={openInfo}
+                disableFocusListener
+                disableHoverListener
+                disableTouchListener
+                  title={
+                    <div>
+                      {eventName}
+                      <br />
+                      {eventDate}
+                      <br />
+                      {pastEvent}
+                    </div>
+                  }
+                  placement='left'
+                  PopperProps={{
+                    sx: {
+                      '& .MuiTooltip-tooltip': {
+                        backgroundColor: 'transparent',
+                        border: 'solid #F5FCFA 1px',
+                        color: '#F5FCFA',
                       },
-                    }}
-                  >
-                    <InfoIcon
-                      aria-label={eventName + eventDate}
-                      className='info-icon'
-                    />
-                  </Tooltip>
-                  {/**Removes addFriend button if already approved friend*/}
-                  {user?.type === 'business' ||
-                    (!friendList.includes(reel.User.id) &&
-                      reel.User.id !== user?.id && (
-                        <ThemeProvider theme={theme}>
-                          <div className='friend-request'>
-                            <Box className='friend-box'>
-                              <Fab
-                                style={{ transform: 'scale(0.6)' }}
-                                size='small'
-                                color='primary'
-                                aria-label='add'
-                                className='friend-add-btn'
-                                disabled={
-                                  disabledNow.includes(reel.User.id) ||
-                                  stayDisabled.includes(reel.User.id)
-                                }
-                              >
-                                {reel?.User.type === 'personal' && (
-                                  <Tooltip
-                                    title='Add Friend'
-                                    TransitionComponent={Zoom}
-                                    placement='left'
-                                    PopperProps={{
-                                      sx: {
-                                        '& .MuiTooltip-tooltip': {
-                                          backgroundColor: 'transparent',
-                                          border: 'solid #F5FCFA 1px',
-                                          color: '#F5FCFA',
-                                        },
+                    },
+                  }}
+                >
+                  <InfoIcon
+                    onClick={handleInfoClick}
+                    aria-label={eventName + eventDate}
+                    className='info-icon'
+                  />
+                </Tooltip>
+                </ClickAwayListener>
+                {/**Removes addFriend button if already approved friend*/}
+                {user?.type === 'business' ||
+                  (!friendList.includes(reel.User.id) &&
+                    reel.User.id !== user?.id && (
+                      <ThemeProvider theme={theme}>
+                        <div className='friend-request'>
+                          <Box className='friend-box'>
+                            <Fab
+                              style={{ transform: 'scale(0.6)' }}
+                              size='small'
+                              color='primary'
+                              aria-label='add'
+                              className='friend-add-btn'
+                              disabled={
+                                disabledNow.includes(reel.User.id) ||
+                                stayDisabled.includes(reel.User.id)
+                              }
+                            >
+                              {reel?.User.type === 'personal' && (
+                                <Tooltip
+                                  title='Add Friend'
+                                  TransitionComponent={Zoom}
+                                  placement='left'
+                                  PopperProps={{
+                                    sx: {
+                                      '& .MuiTooltip-tooltip': {
+                                        backgroundColor: 'transparent',
+                                        border: 'solid #F5FCFA 1px',
+                                        color: '#F5FCFA',
+                                      },
+                                    },
+                                  }}
+                                >
+                                  <AddIcon
+                                    aria-label='Add Friend Button'
+                                    sx={{ width: 25, height: 25 }}
+                                    onClick={() =>
+                                      requestFriendship(reel.User.id)
+                                    }
+                                  />
+                                </Tooltip>
+                              )}
+                              {/**Replaces addFriend button with Follow button reel.User.type is a business*/}
+                              {reel?.User.type === 'business' &&
+                              reel.User.id !== user?.id ? (
+                                <Tooltip
+                                  title={`Follow ${reel?.User.displayName}`}
+                                  TransitionComponent={Zoom}
+                                  placement='left'
+                                  PopperProps={{
+                                    sx: {
+                                      '& .MuiTooltip-tooltip': {
+                                        backgroundColor: 'transparent',
+                                        border: 'solid #F5FCFA 1px',
+                                        color: '#F5FCFA',
                                       },
                                     }}
                                   >
@@ -487,7 +530,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                             className='delete-btn'
                             name='Delete Button'
                             aria-label='Delete Button'
-                            onClick={handleClickOpen}
+                            onClick={handleOpen}
                           >
                             🗑️
                           </button>

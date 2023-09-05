@@ -129,7 +129,7 @@ const EventsList: React.FC<Props> = ({user}) => {
       </div>
       <div className="event-cards-row">
         {noUpcoming && !showPast && (<h2
-        style={{padding: '2em'}}
+        style={{paddingTop: '2em'}}
         >You have no upcoming events yet!</h2>)}
         {!showPast && upcomingEvents.map((event) => {
           return (
@@ -141,7 +141,7 @@ const EventsList: React.FC<Props> = ({user}) => {
           )
         })}
         {noPast && showPast && (<h2
-        style={{padding: '2em'}}
+        style={{paddingTop: '2em'}}
         >You have no past events yet!</h2>)}
         {showPast && pastEvents.map((event) => {
           return (

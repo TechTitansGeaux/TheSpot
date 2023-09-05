@@ -12,6 +12,7 @@ import { useNavigate  } from 'react-router-dom';
 import Tooltip from '@mui/material/Tooltip';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import CircularProgress from '@mui/material/CircularProgress';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 type Props = {
   currentEvent: {
@@ -266,6 +267,18 @@ const redirectToFeed = () => {
 navigate('/Feed');
 }
 
+const clearReel = () => {
+  setRecordedChunks([]);
+  setPublic_id('');
+  setUrl('');
+  setText('');
+  setJustRecorded(false);
+  const box = document.getElementById('event-form');
+  box.style.display = 'none';
+
+}
+
+
 // toggle pop up modal
 const togglePopUp = () => {
 const box = document.getElementById('event-form')
@@ -326,8 +339,8 @@ setBusinessEventCreated(true);
         <div className='preview-mask'>
           <div className='webcam'>
             <video
-            height={780}
-            width={730}
+            height='110%'
+            width='110%'
             src={url}
             controls autoPlay
             loop>
@@ -346,8 +359,8 @@ setBusinessEventCreated(true);
         <div className='cam-mask'>
           <Webcam
             className='webcam'
-            height={700}
-            width={700}
+            height='100%'
+            width='100%'
             audio={true}
             mirrored={false}
             ref={webcamRef}
@@ -378,8 +391,9 @@ setBusinessEventCreated(true);
         {justRecorded && urlRetrieved && (
           <div>
             <Tooltip
-            title='Post reel'
-            placement='top'
+            open={true}
+            title='Trash'
+            placement='bottom'
             PopperProps={{
               sx: {
                 '& .MuiTooltip-tooltip': {
@@ -393,21 +407,22 @@ setBusinessEventCreated(true);
           <motion.div
           whileHover={{ scale: 1.2 }}
           >
-            <ArrowCircleRightIcon
-            onClick={saveReel}
+            <DeleteIcon
+            onClick={clearReel}
             color='secondary'
             sx={{ width: 52, height: 52 }}/>
           </motion.div>
           </Tooltip>
           </div>
         )}
-        {justRecorded && urlRetrieved && (
+          {justRecorded && urlRetrieved && (
           <div>
             <div
             onClick={togglePopUp}>
                 <Tooltip
-                title='Add event details'
-                placement='top'
+                open={true}
+                title='Edit'
+                placement='bottom'
                 PopperProps={{
                   sx: {
                     '& .MuiTooltip-tooltip': {
@@ -427,6 +442,33 @@ setBusinessEventCreated(true);
                 </motion.div>
                 </Tooltip>
             </div>
+          </div>
+        )}
+        {justRecorded && urlRetrieved && (
+          <div>
+            <Tooltip
+            open={true}
+            title='Post'
+            placement='bottom'
+            PopperProps={{
+              sx: {
+                '& .MuiTooltip-tooltip': {
+                  backgroundColor: 'transparent',
+                  border: 'solid #F5FCFA 1px',
+                  color: '#F5FCFA',
+                },
+              },
+            }}
+          >
+          <motion.div
+          whileHover={{ scale: 1.2 }}
+          >
+            <ArrowCircleRightIcon
+            onClick={saveReel}
+            color='secondary'
+            sx={{ width: 52, height: 52 }}/>
+          </motion.div>
+          </Tooltip>
           </div>
         )}
       </div>

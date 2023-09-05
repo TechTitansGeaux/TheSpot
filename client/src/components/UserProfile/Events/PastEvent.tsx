@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
 import axios from 'axios';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
@@ -37,6 +37,13 @@ type Props = {
 const PastEvent: React.FC<Props> = ({event, getMyEvents}) => {
 
   const [open, setOpen] = useState(false);
+  const [was21, setWas21] = useState('Yes')
+
+  useEffect(() => {
+    if (!event.twenty_one) {
+      setWas21('No');
+    }
+  }, [])
 
 
   let eventDate = dayjs(event.date + event.time).format('MM/DD/YYYY, h:mm A');
@@ -75,17 +82,41 @@ const PastEvent: React.FC<Props> = ({event, getMyEvents}) => {
             {event.name}
           </h3>
           <br></br>
-          Address: {event.address}
+          Address:
+          <div
+          className='eventDetailInput'>
+          {event.address}
+          </div>
           <br></br>
-          Date: {eventDate}
+          Date:&#160;
+          <div
+          className='eventDetailInput'>
+          {eventDate}
+          </div>
           <br></br>
-          Began: {eventTime}
+          Began:&#160;
+          <div
+          className='eventDetailInput'>
+          {eventTime}
+          </div>
           <br></br>
-          Ended: {eventEndTime}
+          Ended:&#160;
+          <div
+          className='eventDetailInput'>
+          {eventEndTime}
+          </div>
           <br></br>
-          RSVPs: {event.rsvp_count}
+          RSVPs:&#160;
+          <div
+          className='eventDetailInput'>
+          {event.rsvp_count}
+          </div>
           <br></br>
-          21+ {event.twenty_one}
+          21+: &#160;
+          <div
+          className='eventDetailInput'>
+          {was21}
+          </div>
           <HighlightOffIcon
               className='delete-event-button'
               onClick={handleClickOpen}
