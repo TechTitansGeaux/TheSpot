@@ -83,7 +83,8 @@ const VideoRecorder: React.FC<Props> = ({
   const [businessAccount, setBusinessAccount] = useState(false);
   const [businessEventCreated, setBusinessEventCreated] = useState(false);
   const [eventIsPublic, setEventIsPublic] = useState(true);
-  const [urlRetrieved, setUrlRetrieved] = useState(false)
+  const [urlRetrieved, setUrlRetrieved] = useState(false);
+  const [clear, setClear] = useState(false);
 
   type Blob = {
     data: {
@@ -275,9 +276,12 @@ const clearReel = () => {
   setJustRecorded(false);
   const box = document.getElementById('event-form');
   box.style.display = 'none';
-
+  setClear(true);
 }
 
+const resetClear = () => {
+  setClear(false);
+}
 
 // toggle pop up modal
 const togglePopUp = () => {
@@ -324,7 +328,9 @@ setBusinessEventCreated(true);
       updateBusinessEventCreated={updateBusinessEventCreated}
       currentAddress={currentAddress}
       eventIsPublic={eventIsPublic}
-      friends={friends}/>
+      friends={friends}
+      clear={clear}
+      resetClear={resetClear}/>
         {justRecorded &&
         !urlRetrieved &&
         (
