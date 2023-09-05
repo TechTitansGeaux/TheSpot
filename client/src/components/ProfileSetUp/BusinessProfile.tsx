@@ -30,7 +30,7 @@ const theme = createTheme({
     secondary: {
       main: '#f433ab',
       light: '#f0f465',
-      contrastText: '#0b0113',
+      contrastText: '#e3f2fd',
     },
   },
 });

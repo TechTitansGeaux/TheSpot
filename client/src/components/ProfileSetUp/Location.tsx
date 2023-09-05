@@ -19,8 +19,8 @@ const Location: React.FC<{ startWatch: () => void }> = ({ startWatch }) => {
     if (!navigator.geolocation) {
       setStatus({ text: 'Geolocation is not supported by your browser', error: 'An error occurred' });
     } else {
-      setStatus({ text: 'Cool, see ya there!' });
       startWatch();
+      setStatus({ text: 'Cool, see ya there!' });
     }
   };
 
