@@ -160,6 +160,10 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
     }
   };
 
+  const closeInfo = () => {
+    setOpenInfo(false);
+  }
+
   // check if event is over
   const checkEventTime = () => {
     // declare raw event time
@@ -349,7 +353,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
               </h5>
               <p className='video-text'>{reel.text}</p>
               <>
-              <ClickAwayListener onClickAway={handleInfoClick}>
+              <ClickAwayListener onClickAway={closeInfo}>
                 <Tooltip
                 onClose={handleInfoClick}
                 open={openInfo}
