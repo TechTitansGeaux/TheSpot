@@ -81,7 +81,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
   const [bottomNavHidden, setBottomNavHidden] = useState(false) // boolean state var to hide bottom nav
 
   useEffect(() => {
-    if (feedPath === '/CreateReel') {
+    if (feedPath === '/CreateReel' || feedPath === '/UserType' || feedPath === '/ProfileSetUp' || feedPath === '/BusinessProfile') {
       setBottomNavHidden(true)
     } else {
       setBottomNavHidden(false)
@@ -168,7 +168,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
   // once you click on likes sidebar, set likes checked column to true
   const checkedLikes = () => {
     for (let i = 0; i < likesArr.length; i++) {
-      let id = likesArr[i].id;
+      const id = likesArr[i].id;
       axios
         .put(`/likes/checked/${id}`)
         .then((response) => {
