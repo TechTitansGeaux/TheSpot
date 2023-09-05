@@ -9,6 +9,8 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
+import Box from '@mui/material/Box';
+import Slider from '@mui/material/Slider';
 
 type Props = {
   user: {
@@ -40,6 +42,7 @@ const Feed: React.FC<Props> = ({user}) => {
   const [userType, setUserType] = useState(''); // personal or business
     // filter dialog
   const [open, setOpen] = React.useState(false);
+  const marks = [{value: 1, label: '1 mile'}, {value: 15, label: '15 miles'}, {value: 30, label: '30 miles'}];
 
   const findUserType = () => {
     if (user) {
@@ -56,14 +59,13 @@ const Feed: React.FC<Props> = ({user}) => {
     findUserType();
   }, [user]);
 
-  const geoFilters = [15, 10 ,5]; // geolocation filters by miles
   const friendsReels: any = [];
   const followingReels: any = [];
   const followerReels: any = [];
   const geoReels: any = [];
 
-  const geoFilterHandler = (event: any) => {
-    setGeoF(event.target.value);
+  const geoFilterHandler = (event: Event, newValue: number | number[]) => {
+    setGeoF(newValue as number);
   };
 
   const userCoord = (user: any) => {
@@ -348,16 +350,6 @@ const Feed: React.FC<Props> = ({user}) => {
       </DialogActions>
     </Dialog>
       </div>
-      <div className='label'>
-      <label>
-        Radius (miles):
-        <select onChange={geoFilterHandler}>
-          {geoFilters.map((geofilter, i) => {
-            return <option key={i}>{geofilter}</option>;
-          })}
-        </select>
-      </label>
-      </div>
     </div>
     )}
 
@@ -386,18 +378,22 @@ const Feed: React.FC<Props> = ({user}) => {
       </DialogActions>
     </Dialog>
       </div>
-      <div className='label'>
-      <label>
-        Radius (miles):
-        <select onChange={geoFilterHandler}>
-          {geoFilters.map((geofilter, i) => {
-            return <option key={i}>{geofilter}</option>;
-          })}
-        </select>
-      </label>
-      </div>
     </div>
     )}
+    <div className='slider'>
+      <Box sx={{ width: 300 }}>
+        <Slider
+          defaultValue={geoF}
+          min={1}
+          max={30}
+          onChange={geoFilterHandler}
+          marks={marks}
+          valueLabelDisplay="auto"
+          color="secondary"
+          classes={{ markLabel: 'white' }}
+        />
+      </Box>
+    </div>
       <div className='container-full-w'>
         <Reel
           reels={reels}
