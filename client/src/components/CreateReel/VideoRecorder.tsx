@@ -125,11 +125,13 @@ const urltoFile = (url: any, filename: any, mimeType: any) => {
 
   // when they click to end recording video
   const handleStopCaptureClick = useCallback(async () => {
+    console.log('stop capturing clicked')
     await mediaRecorderRef.current.stop();
-    // setTimeout(() => upload(), 5000);
     setCapturing(false);
     setJustRecorded(true);
   }, [mediaRecorderRef, setCapturing]);
+
+  console.log(capturing, '<---- capturing state var')
 
   // upload whenever they are done recording and setJustRecorded is called
   useEffect(() => {
