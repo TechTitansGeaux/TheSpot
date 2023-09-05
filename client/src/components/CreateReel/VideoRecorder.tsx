@@ -323,7 +323,8 @@ setBusinessEventCreated(true);
         !urlRetrieved &&
         (
 
-          <div className='webcam'>
+          <div className='webcam'
+          style={{paddingTop: '16em'}}>
             <CircularProgress
             size='8rem'
             color='secondary'/>
