@@ -31,6 +31,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import Rsvp from '../UserProfile/Rsvps/Rsvp';
 import UnRsvp from '../UserProfile/Rsvps/UnRsvp';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
 
 dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat);
@@ -149,6 +150,15 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   const [rsvps, setRsvps] = useState([]);
   const [rsvpTotal, setRsvpTotal] = useState(0);
   const [disableRsvp, setDisableRsvp] = useState([]);
+  const [openInfo, setOpenInfo] = useState(false);
+
+  const handleInfoClick = () => {
+    if (openInfo) {
+      setOpenInfo(false);
+    } else {
+      setOpenInfo(true)
+    }
+  };
 
   // check if event is over
   const checkEventTime = () => {
@@ -172,7 +182,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
     checkEventTime();
   }, []);
 
-  const handleClickOpen = () => {
+  const handleOpen = () => {
     setOpen(true);
   };
 
@@ -339,7 +349,13 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
               </h5>
               <p className='video-text'>{reel.text}</p>
               <>
+              <ClickAwayListener onClickAway={handleInfoClick}>
                 <Tooltip
+                onClose={handleInfoClick}
+                open={openInfo}
+                disableFocusListener
+                disableHoverListener
+                disableTouchListener
                   title={
                     <div>
                       {eventName}
@@ -361,10 +377,12 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                   }}
                 >
                   <InfoIcon
+                    onClick={handleInfoClick}
                     aria-label={eventName + eventDate}
                     className='info-icon'
                   />
                 </Tooltip>
+                </ClickAwayListener>
                 {/**Removes addFriend button if already approved friend*/}
                 {user?.type === 'business' ||
                   (!friendList.includes(reel.User.id) &&
@@ -483,7 +501,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                           className='delete-btn'
                           name='Delete Button'
                           aria-label='Delete Button'
-                          onClick={handleClickOpen}
+                          onClick={handleOpen}
                         >
                           🗑️
                         </button>

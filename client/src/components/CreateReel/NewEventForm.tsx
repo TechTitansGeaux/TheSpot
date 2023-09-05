@@ -202,16 +202,13 @@ const createEvent = async () => {
        id='event-form'
        className='popUpEventForm'
        >
-         <input
+         <textarea
          className='eventNameInput'
          placeholder='Event Name'
          id='eventName'
          value={eventName}
-         onChange={handleEventName}
-         type='text'>
-         </input>
-         <br></br>
-         <br></br>
+         onChange={handleEventName}>
+         </textarea>
          Address: &#160;<EventLocationSearch
          handleLocation={handleLocation}
          handleAddress={handleAddress}
