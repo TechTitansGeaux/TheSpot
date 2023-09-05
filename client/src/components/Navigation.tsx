@@ -274,7 +274,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
   // Need to Update My Reels // to={<my reels component>}
   const list = (anchor: Anchor) => (
     <Box
-      sx={{color: '#F5FCFA' }}
+      sx={{ color: '#F5FCFA' }}
       className='drawer-container'
       role='presentation'
       onClick={toggleDrawer(anchor, false)}

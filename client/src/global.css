@@ -128,16 +128,17 @@ footer {
 .drawer-container {
   height: 100vh;
   background-color: var(--light-violet);
-  width: 400px;
   z-index: 9998;
+  min-width: 400px;
   display: flex;
-  justify-content: flex-start;
+  justify-content: stretch;
 }
 
 .drawer-btn {
   transition: color .2s ease-out;
   transition: background-color .2s ease-out;
   z-index: 9999;
+  min-width: 400px;
 }
 
 .ListItem {
