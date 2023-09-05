@@ -3,7 +3,6 @@ import Fab from '@mui/material/Fab';
 import Tooltip from '@mui/material/Tooltip';
 import Zoom from '@mui/material/Zoom';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
-import { useState } from 'react';
 
 type User = {
   id: number;
@@ -45,7 +44,6 @@ type Props = {
   };
   rejectFriendship: any;
   allUsers: any;
-  // reject: number[];
 };
 
 const FriendAcceptedEntry: React.FC<Props> = ({

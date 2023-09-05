@@ -1,3 +1,68 @@
+nav.toolbar-container {
+  display: flex;
+  position: fixed;
+  background-color: var(--light-violet);
+  width: 100vw;
+  top: 0;
+  z-index: 996;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  padding-right: 40px;
+  padding-top: 3px;
+}
+
+.navbar-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: inherit;
+  padding: .5rem 0;
+  z-index: 997;
+}
+
+
+#nav-logo {
+  width: 100px;
+  height: 50px;
+  margin-right: 20px;
+  transition: transform .2s ease-out;
+}
+
+#nav-logo:hover {
+  transform: scale(1.06);
+}
+
+.navLink {
+  text-decoration: none;
+  text-transform: uppercase;
+  font-family: var(--title-font);
+  font-size: var(--md-font);
+  color: var(--yellow);
+  transition: color .2s ease-out;
+}
+
+.navLink:hover {
+  color: var(--pink);
+}
+
+button.navLink {
+  width: 100%;
+  height: 100%;
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+  align-self: center;
+}
+
+.mapLink {
+  margin-right: 100px;
+}
 
 .circle {
   color: var(--yellow);
