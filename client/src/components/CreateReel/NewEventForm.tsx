@@ -6,7 +6,7 @@
  import ConflictingEvent from './ConflictingEvent';
  import dayjs from 'dayjs';
  import localizedFormat from 'dayjs/plugin/localizedFormat';
-// import { current } from '@reduxjs/toolkit'; 
+
   dayjs.extend(localizedFormat)
 
   dayjs().format('L LT')
@@ -39,11 +39,14 @@
     requester_id: number;
     accepter_id: number;
   }[];
+  clear: boolean,
+  resetClear: () => void
  }
 
  const NewEventForm: React.FC<Props> = ({
   user, mustCreateEvent, updateMustCreateEvent, updateEventId, togglePopUp,
-  updateBusinessEventCreated, currentAddress, eventIsPublic, friends
+  updateBusinessEventCreated, currentAddress, eventIsPublic, friends,
+  clear, resetClear
 }) => {
 
  const [eventName, setEventName] = useState('');
@@ -196,6 +199,18 @@ const createEvent = async () => {
     console.log('conflicting event!: ', conflictingEvent)
   }
 }
+  // reset all event detail values if clear gets set to true
+  useEffect(() => {
+    setEventName('');
+    setEventLocation(user.geolocation);
+    setAddress(currentAddress);
+    setEventDate('');
+    setEventTime('');
+    setEndTime('');
+    setTwentyOne(false);
+    resetClear();
+    console.log('reset event details');
+  }, [clear])
 
    return (
      <div

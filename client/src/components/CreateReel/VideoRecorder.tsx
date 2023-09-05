@@ -67,23 +67,12 @@ const VideoRecorder: React.FC<Props> = ({
   const [url, setUrl] = useState('');
   const [text, setText] = useState('');
   const [eventId, setEventId] = useState(0)
-  // const [event, setEvent] = useState({
-  //   id: 0,
-  //   name: '',
-  //   rsvp_count: 0,
-  //   date: new Date,
-  //   geolocation: '',
-  //   twenty_one: false,
-  //   createdAt: '',
-  //   updatedAt: '',
-  //   PlaceId: 0,
-  // });
   const [justRecorded, setJustRecorded] = useState(false);
   const [reelSaved, setReelSaved] = useState(false);
-  const [businessAccount, setBusinessAccount] = useState(false);
   const [businessEventCreated, setBusinessEventCreated] = useState(false);
   const [eventIsPublic, setEventIsPublic] = useState(true);
-  const [urlRetrieved, setUrlRetrieved] = useState(false)
+  const [urlRetrieved, setUrlRetrieved] = useState(false);
+  const [clear, setClear] = useState(false);
 
   type Blob = {
     data: {
@@ -136,11 +125,13 @@ const urltoFile = (url: any, filename: any, mimeType: any) => {
 
   // when they click to end recording video
   const handleStopCaptureClick = useCallback(async () => {
+    console.log('stop capturing clicked')
     await mediaRecorderRef.current.stop();
-    // setTimeout(() => upload(), 5000);
     setCapturing(false);
     setJustRecorded(true);
   }, [mediaRecorderRef, setCapturing]);
+
+  console.log(capturing, '<---- capturing state var')
 
   // upload whenever they are done recording and setJustRecorded is called
   useEffect(() => {
@@ -275,9 +266,12 @@ const clearReel = () => {
   setJustRecorded(false);
   const box = document.getElementById('event-form');
   box.style.display = 'none';
-
+  setClear(true);
 }
 
+const resetClear = () => {
+  setClear(false);
+}
 
 // toggle pop up modal
 const togglePopUp = () => {
@@ -324,12 +318,15 @@ setBusinessEventCreated(true);
       updateBusinessEventCreated={updateBusinessEventCreated}
       currentAddress={currentAddress}
       eventIsPublic={eventIsPublic}
-      friends={friends}/>
+      friends={friends}
+      clear={clear}
+      resetClear={resetClear}/>
         {justRecorded &&
         !urlRetrieved &&
         (
 
-          <div className='webcam'>
+          <div className='webcam'
+          style={{paddingTop: '16em'}}>
             <CircularProgress
             size='8rem'
             color='secondary'/>

@@ -70,38 +70,7 @@ const EventsList: React.FC<Props> = ({user}) => {
       })
   }
 
-  // const getMyRSVPs = () => {
-  //   axios.get('/RSVPs/forUser')
-  //     .then((res) => {
-  //       // upcoming event container
-  //       let upcomingArr = [];
-  //       // past event container
-  //       let pastArr = [];
-  //       // iterate through events
-  //       for (let i = 0; i < res.data.length; i++) {
-  //         console.log(res.data[i], '<----each event')
-  //         const rawEventTime = res.data[i].date + 'T' + res.data[i].time;
-  //         const formattedEventTime = new Date(rawEventTime);
-  //         const timeForComparing = Date.parse(formattedEventTime.toString())
-  //         // determine if THEIR start time is before or after now
-  //         if (timeForComparing >= now) {
-  //           // push into upcoming array
-  //           upcomingArr.push(res.data[i])
-  //         } else {
-  //           pastArr.push(res.data[i])
-  //         }
-  //       }
-  //       // sort upcoming events by soonest coming up
-  //       upcomingArr = upcomingArr.sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
-  //       // set upcoming events
-  //       setUpcomingEvents(upcomingArr);
-  //       pastArr = pastArr.sort((a, b) => Date.parse(a.date) - Date.parse(b.date))
-  //       setPastEvents(pastArr);
-  //     })
-  //     .catch((err) => {
-  //       console.error('Failed to axios GET user\'s RSVPs: ', err);
-  //     })
-  // }
+
   // call get my events once when page is rendered
   useEffect(() => {
       getMyEvents();
