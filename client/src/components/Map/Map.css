@@ -66,7 +66,7 @@
   box-shadow: 0 0 5px 1px rgb(120, 120, 120);
   display: none;
   transition: all .5s ease;
-  height: 300px;
+  height: 100%;
   width: 200px;
   border: solid var(--pink);
   border-width: 4px;
@@ -77,7 +77,6 @@
   position: relative;
   top: -28.5px;
   left: -100px;
-  text-transform: uppercase;
   z-index: 11;
   animation-name: popOut;
   animation-timing-function: ease-in;
@@ -127,7 +126,6 @@
   position: relative;
   top: -41.75px;
   left: -100px;
-  text-transform: uppercase;
   z-index: 11;
   animation-name: popOut;
   animation-timing-function: ease-in;
@@ -184,7 +182,7 @@
   box-shadow: 0 0 5px 1px rgb(120, 120, 120);
   display: none;
   transition: all .5s ease;
-  height: 300px;
+  height: 100%;
   width: 200px;
   border: solid var(--purple);
   border-width: 4px;
@@ -195,7 +193,6 @@
   position: relative;
   top: -28.5px;
   left: -100px;
-  text-transform: uppercase;
   z-index: 11;
   animation-name: popOut;
   animation-timing-function: ease-in;

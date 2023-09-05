@@ -149,19 +149,19 @@ const UserPin: React.FC<Props> = ({ user, loggedIn, lat, lng, zoom, friendList, 
         <div style={{ textAlign: 'center', fontSize:'20px', marginTop: '5px' }}>
           {user.displayName}
         </div>
-        <div style={{ textAlign: 'center', fontSize: '14px' }}>
+        <div style={{ textAlign: 'center', fontSize: '15px' }}>
           @{user.username}
         </div>
-        <div style={{ textAlign: 'center', fontSize: '15px' }}>
+        <div style={{ textAlign: 'center', fontSize: '15px', marginBottom: '5px' }}>
           <p>
-            {`Member Since: ${dayjs(user.createdAt).format('ll')}`}
+            {`Joined: ${dayjs(user.createdAt).format('ll')}`}
           </p>
         </div>
         <div className='addOrRmFriend'>
           {!pendingFriendList.includes(user.id) && !friendList.includes(user.id) && isNotLoggedInUser && (
             <div>
-              <div style={{ position: 'relative', top: '16.5px', left: '80px' }}>add friend</div>
-              <div style={{ position: 'relative', top: '-11.5px' }}>
+              <div style={{ position: 'relative', top: '-140px', left: '80px', marginBottom: '5px' }}>add friend</div>
+              <div style={{ position: 'relative', top: '-171.5px' }}>
                 <ThemeProvider theme={addFriendTheme}>
                   <div>
                     <Box>
@@ -183,8 +183,8 @@ const UserPin: React.FC<Props> = ({ user, loggedIn, lat, lng, zoom, friendList, 
         <div className='addOrRmFriend'>
           {friendList.includes(user.id) && (
             <div>
-              <div style={{ position: 'relative', top: '18px', left: '60px' }}>remove friend</div>
-              <div style={{ position: 'relative', top: '-11.5px' }}>
+              <div style={{ position: 'relative', top: '-140px', left: '60px', marginBottom: '5px' }}>remove friend</div>
+              <div style={{ position: 'relative', top: '-171.5px' }}>
                 <ThemeProvider theme={rmFriendTheme}>
                   <div>
                     <Box>
@@ -206,7 +206,7 @@ const UserPin: React.FC<Props> = ({ user, loggedIn, lat, lng, zoom, friendList, 
         <div className='addOrRmFriend'>
           {pendingFriendList.includes(user.id) && (
             <div>
-              <div style={{ position: 'relative', top: '18px', left: '70px' }}>request pending</div>
+              <div style={{ position: 'relative', top: '-170px', marginBottom: '10px', left: '65px', fontSize: '15px' }}>request pending</div>
             </div>
           )}
         </div>

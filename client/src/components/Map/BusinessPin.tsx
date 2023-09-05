@@ -63,10 +63,10 @@ const BusinessPin: React.FC<Props> = ({ business, setCenter, setZoom, lat, lng, 
         <div style={{ textAlign: 'center', fontSize:'20px', marginTop: '5px' }}>
             {business.displayName}
           </div>
-          <div style={{ textAlign: 'center', fontSize: '14px' }}>
+          <div style={{ textAlign: 'center', fontSize: '15px' }}>
             @{business.username}
           </div>
-          <div style={{ textAlign: 'center', fontSize: '15px' }}>
+          <div style={{ textAlign: 'center', fontSize: '15px', marginBottom: '5px' }}>
             <p>
               {`Member Since: ${dayjs(business.createdAt).format('ll')}`}
             </p>
