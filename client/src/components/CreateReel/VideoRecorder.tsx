@@ -67,20 +67,8 @@ const VideoRecorder: React.FC<Props> = ({
   const [url, setUrl] = useState('');
   const [text, setText] = useState('');
   const [eventId, setEventId] = useState(0)
-  // const [event, setEvent] = useState({
-  //   id: 0,
-  //   name: '',
-  //   rsvp_count: 0,
-  //   date: new Date,
-  //   geolocation: '',
-  //   twenty_one: false,
-  //   createdAt: '',
-  //   updatedAt: '',
-  //   PlaceId: 0,
-  // });
   const [justRecorded, setJustRecorded] = useState(false);
   const [reelSaved, setReelSaved] = useState(false);
-  const [businessAccount, setBusinessAccount] = useState(false);
   const [businessEventCreated, setBusinessEventCreated] = useState(false);
   const [eventIsPublic, setEventIsPublic] = useState(true);
   const [urlRetrieved, setUrlRetrieved] = useState(false);

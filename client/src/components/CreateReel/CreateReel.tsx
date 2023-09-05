@@ -1,12 +1,9 @@
   /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from 'react';
 import axios from 'axios';
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import VideoRecorder from './VideoRecorder';
 import dayjs from 'dayjs';
-// import * as dotenv from 'dotenv';
-
-// dotenv.config();
 
 type Props = {
   user: {
