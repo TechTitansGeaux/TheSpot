@@ -9,6 +9,7 @@ import ClusterPin from './ClusterPin';
 import BusinessPin from './BusinessPin';
 import EventRadialMarker from './EventRadialMarker'
 import { useLocation } from "react-router-dom";
+import CircularProgress from '@mui/material/CircularProgress';
 import io from 'socket.io-client';
 const socket = io();
 
@@ -38,7 +39,7 @@ type User = {
 
 const Map: React.FC<Props> = (props) => {
   const { loggedIn } = props;
-  console.log('rendered')
+  // console.log('rendered')
 
   const [ users, setUsers ] = useState([]);
   const [ events, setEvents ] = useState([])
@@ -152,7 +153,7 @@ const Map: React.FC<Props> = (props) => {
 
   // gets all events
   const getEvents = () => {
-    axios.get('/events/all')
+    axios.get('/events/allCurrent')
       .then(({ data }) => {
         setEvents(data)
       })
@@ -306,9 +307,15 @@ const Map: React.FC<Props> = (props) => {
 
 
 
-  if (!users.length || !events.length || !businesses.length || !loggedIn) {
+  if (!users.length || !businesses.length || !loggedIn) {
     // Data is not yet available, render loading or placeholder content
-    return <div style={{textAlign: 'center', transform: 'translateY(250px)', fontSize: '40px'}}>Loading...</div>;
+    return (
+      <div style={{textAlign: 'center', transform: 'translateY(250px)', fontSize: '40px'}}>
+        <CircularProgress
+          size='8rem'
+          color='secondary'/>
+      </div>
+    )
   }
 
   return (

@@ -17,11 +17,17 @@ eventRouter.get('/all', async (req, res) => {
 
 // get current events for map
 eventRouter.get('/allCurrent', async (req, res) => {
-  const date = new Date();
   await Events.findAll()
     .then((events: any) => {
-      events.filter(() => {})
-      res.status(200).send(events);
+      const currentEvents = events.filter((event: {date: string, endTime: string}) => {
+        const rawEventTime = event.date + 'T' + event.endTime;
+        const formattedEventTime = new Date(rawEventTime);
+        const timeForComparing = Date.parse(formattedEventTime.toString());
+        const nowRaw = new Date();
+        const now = Date.parse(nowRaw.toString());
+        return timeForComparing >= now;
+      })
+      res.status(200).send(currentEvents);
     })
     .catch((err: any) => {
       console.error('Failed to GET all events: ', err);
