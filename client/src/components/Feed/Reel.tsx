@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { useState, useEffect, useRef, createRef } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-// import { useLocation } from 'react-router-dom';
 import { setAuthUser, setIsAuthenticated } from '../../store/appSlice';
-import ReelItem from './ReelItem';
+import { Suspense, lazy } from 'react';
+import Loading from './Loading'
+const ReelItem = lazy(() => import('./ReelItem'));
 import { useTheme } from '@mui/material/styles';
 import { AnimatePresence, motion } from 'framer-motion';
 import io from 'socket.io-client';
@@ -288,37 +289,40 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
       <AnimatePresence initial={false}>
         {reels.map((reel) => {
           return (
-            <motion.div
-              key={reel.id + 'reel'}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{
-                ease: 'anticipate',
-                duration: 0.2,
-                delay: 0.2,
-              }}
-            >
-              <ReelItem
-                key={reel.id + 'reelItem'}
-                user={user}
-                reel={reel}
-                reels={reels}
-                friendList={friendList}
-                requestFriendship={requestFriendship}
-                requestUnfollow={requestUnfollow}
-                requestFollow={requestFollow}
-                followed={followed}
-                disabledNow={disabled}
-                deleteReel={deleteReel}
-                handleAddLike={handleAddLike}
-                handleRemoveLike={handleRemoveLike}
-                likeTotal={likeTotal}
-                likes={likes}
-                muted={muted}
-                handleToggleMute={handleToggleMute}
-              />
-            </motion.div>
+            <Suspense fallback={<Loading />}>
+              <motion.div
+                className='reel-child'
+                key={reel.id + 'reel'}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{
+                  ease: 'anticipate',
+                  duration: 0.2,
+                  delay: 0.2,
+                }}
+              >
+                <ReelItem
+                  key={reel.id + 'reelItem'}
+                  user={user}
+                  reel={reel}
+                  reels={reels}
+                  friendList={friendList}
+                  requestFriendship={requestFriendship}
+                  requestUnfollow={requestUnfollow}
+                  requestFollow={requestFollow}
+                  followed={followed}
+                  disabledNow={disabled}
+                  deleteReel={deleteReel}
+                  handleAddLike={handleAddLike}
+                  handleRemoveLike={handleRemoveLike}
+                  likeTotal={likeTotal}
+                  likes={likes}
+                  muted={muted}
+                  handleToggleMute={handleToggleMute}
+                />
+              </motion.div>
+            </Suspense>
           );
         })}
       </AnimatePresence>

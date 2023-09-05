@@ -107,9 +107,3 @@ const UnRsvp: React.FC<Props> = ({
 };
 
 export default UnRsvp;
-
-/*
-  NOTES:
-  1. if Fab property disabled: true CHANGE : RsvpSharpIcon color property to from primary to secondary
-  2. if
-  */

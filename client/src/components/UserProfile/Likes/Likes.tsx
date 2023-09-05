@@ -1,7 +1,6 @@
 import * as React from 'react';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useState } from 'react';
-import useLocalStorageState from '../../Feed/useLocalStorageState';
 import io from 'socket.io-client';
 const socket = io();
 

@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from 'react';
 import { Outlet, NavLink, Link } from 'react-router-dom';
-import AppBar from '@mui/material/AppBar';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Toolbar from '@mui/material/Toolbar';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
@@ -77,7 +75,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
   const location = useLocation();
   const feedPath = location.pathname;
   const [setting, setSetting] = useState('');
-  const [userType, setUserType] = useState(null);
+  // const [userType, setUserType] = useState(null);
   const [bottomNavHidden, setBottomNavHidden] = useState(false) // boolean state var to hide bottom nav
 
   useEffect(() => {
@@ -184,7 +182,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
   // When the user clicks on the button, scroll to the top of the page
   const handleScrollTop = () => {
     document.body.scrollTop = 0; // For Safari
-    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox
   };
 
   // if location on feed then change logo button to scroll
@@ -192,13 +190,13 @@ const Navigation: React.FC<Props> = ({ user }) => {
     if (feedPath === '/Feed') {
       getAllPFriends();
       setOnPage(
-        <button className='navLink' onClick={handleScrollTop}>
+        <NavLink className='navLink' to={null} onClick={handleScrollTop}>
           <img
             id='nav-logo'
             src={logoGradient}
             alt='app logo'
           />
-        </button>
+        </NavLink>
       );
     } else {
       getAllPFriends();
@@ -276,13 +274,13 @@ const Navigation: React.FC<Props> = ({ user }) => {
   // Need to Update My Reels // to={<my reels component>}
   const list = (anchor: Anchor) => (
     <Box
-      sx={{ width: 400, color: '#F5FCFA' }}
+      sx={{color: '#F5FCFA' }}
       className='drawer-container'
       role='presentation'
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
-      <List sx={{ paddingTop: '3em' }}>
+      <List sx={{ paddingTop: '4em' }}>
         <ListItem className='drawer-btn' disablePadding>
           <ListItemButton
             className='sidebar-btn'
@@ -376,30 +374,26 @@ const Navigation: React.FC<Props> = ({ user }) => {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <nav>
-          <AppBar position='fixed'>
-            <div className='toolbar-container'>
-              <Toolbar
-                sx={{
-                  display: 'flex',
-                  backgroundColor: 'rgba(11, 1, 19, .75)',
-                }}
-              >
+        <nav className='toolbar-container'>
                 <div className='navbar-container'>
-                  <div>{onPage}</div>
-                  <div>
-                    <NavLink className='navLink mapLink' to='/Map'>
+                {onPage}
+                  <NavLink className='navLink mapLink' to='/Map'>
                       Map
-                    </NavLink>
-                  </div>
-                    <div>
-                      {(likesArr.length !== 0 || pFriends.length !== 0) &&
+                  </NavLink>
+                    {(likesArr.length !== 0 || pFriends.length !== 0) && (
                       <div>
-                        <CircleNotificationsIcon className="circle" sx={{ position: 'absolute', right: -30, zIndex: "4", top: 5 }} />
-                      </div>
-                      }
+                        <CircleNotificationsIcon
+                          className='circle'
+                          sx={{
+                            position: 'absolute',
+                            right: -30,
+                            zIndex: '4',
+                            top: 5,
+                          }}
+                        />
                     </div>
-                  <div onClick={(toggleDrawer('left', true))}>
+                    )}
+                  <div onClick={toggleDrawer('left', true)}>
                     <Tooltip
                       title='Open Settings'
                       TransitionComponent={Zoom}
@@ -418,15 +412,12 @@ const Navigation: React.FC<Props> = ({ user }) => {
                         src={user?.picture}
                         alt='User Picture'
                         className='friend-avatar'
-                        sx={{ width: 48, height: 48 }}
+                        sx={{ width: 45, height: 45 }}
                       />
                     </Tooltip>
                   </div>
                 </div>
-              </Toolbar>
-            </div>
-          </AppBar>
-        </nav>
+          </nav>
         <Outlet />
         <div>
           <Drawer
@@ -439,26 +430,29 @@ const Navigation: React.FC<Props> = ({ user }) => {
           </Drawer>
         </div>
         <footer>
-          { !bottomNavHidden && (
-          <div className='create-reel-btn-container'>
-            <Link to='/CreateReel'>
-              <AddCircleIcon color='secondary' sx={{ width: 52, height: 52 }} />
-            </Link>
-          </div>
+          {!bottomNavHidden && (
+            <div className='create-reel-btn-container'>
+              <Link to='/CreateReel'>
+                <AddCircleIcon
+                  color='secondary'
+                  sx={{ width: 52, height: 52 }}
+                />
+              </Link>
+            </div>
           )}
           <div>
-              {(pFriends.length !== 0) &&
+            {pFriends.length !== 0 && (
               <div>
                 <Snackbar
-                open={open}
-                autoHideDuration={6000}
-                onClick={handleClose}
-                message="You have pending friends request(s)"
-                action={action}
-              />
+                  open={open}
+                  autoHideDuration={6000}
+                  onClick={handleClose}
+                  message='You have pending friends request(s)'
+                  action={action}
+                />
               </div>
-              }
-            </div>
+            )}
+          </div>
         </footer>
       </ThemeProvider>
     </>

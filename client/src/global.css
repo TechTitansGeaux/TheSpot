@@ -116,64 +116,7 @@ footer {
 }
 
 
-/* ////// NAVIGATION */
-
-.navbar-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: .75rem 0;
-  z-index: 9999;
-}
-
-#nav-logo {
-  width: 100px;
-  height: 50px;
-  margin-right: 20px;
-  transition: transform .2s ease-out;
-}
-
-#nav-logo:hover {
-  transform: scale(1.06);
-  /* transform: skewY(.5rem); */
-}
-
-.navLink {
-  text-decoration: none;
-  text-transform: uppercase;
-  font-family: var(--title-font);
-  font-size: var(--md-font);
-  color: var(--yellow);
-  transition: color .2s ease-out;
-}
-
-.navLink:hover {
-  color: var(--pink);
-}
-
-button.navLink {
-  width: 100%;
-  height: 100%;
-  background: none;
-  color: inherit;
-  border: none;
-  padding: 0;
-  font: inherit;
-  cursor: pointer;
-  outline: inherit;
-  align-self: center;
-}
-
-.mapLink {
-  margin-right: 100px;
-}
-
-.toolbar-container{
-  display: flex;
-  justify-content: center;
-  padding-right: 40px;
-
-}
+/* ////// NAVIGATION MOVED TO Navigation.css*/
 
 /* ////// SIDEBAR */
 
@@ -185,11 +128,16 @@ button.navLink {
 .drawer-container {
   height: 100vh;
   background-color: var(--light-violet);
+  width: 400px;
+  z-index: 9998;
+  display: flex;
+  justify-content: flex-start;
 }
 
 .drawer-btn {
   transition: color .2s ease-out;
   transition: background-color .2s ease-out;
+  z-index: 9999;
 }
 
 .ListItem {
@@ -202,6 +150,11 @@ button.navLink {
   color: var(--light-violet);
 }
 
+/* .sidebar-btn:hover,
+.sidebar-btn:focus {
+  background-color: var(--yellow);
+} */
+
 .ListItem.Mui-focusVisible {
   background-color: var(--yellow);
   color: var(--light-violet);
@@ -210,14 +163,15 @@ button.navLink {
 /* ////// FEED & REEL */
 
 /* .reel-container {
-  scroll-snap-type: mandatory;
+  scroll-margin-top: 5em;
   scroll-snap-type: y mandatory;
-  scroll-padding-top: 5em;
-  overflow: scroll;
+  max-height: 100vh;
+  overflow-y: auto;
 }
 
 .reel-child {
-  scroll-snap-align: start;
+  scroll-snap-align: start end;
+  height: 100vh;
 } */
 
 .click {
@@ -592,9 +546,14 @@ button.rejectFriend-btn:hover {
 
 /* MEDIA QUERIES */
 
-/* Followers & Friends */
+@media screen and (max-width: 525px) {
+  /* SideBar */
+  .drawer-container {
+    width: 100vw;
+    justify-content: center;
+  }
 
-@media screen and (max-width: 425px) {
+  /* Followers & Friends */
   h1.profile-title {
     text-align: center;
     margin-left: 0;
