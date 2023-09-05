@@ -49,3 +49,11 @@ button.filter-btn:focus {
   background-color: var(--yellow);
   transition: background-color .2s ease-out;
 }
+
+.loading-feed {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  width: auto;
+}

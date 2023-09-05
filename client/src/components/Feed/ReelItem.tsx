@@ -32,6 +32,7 @@ import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import Rsvp from '../UserProfile/Rsvps/Rsvp';
 import UnRsvp from '../UserProfile/Rsvps/UnRsvp';
 
+
 dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat);
 
@@ -275,6 +276,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
     return () => controller?.abort();
   }, []);
 
+  const [isInView, setIsInView] = useState(false);
   useEffect(() => {
     // observe videos with IntersectionObserver API to playback on scroll in view
     const observer = new IntersectionObserver((entries) => {
@@ -291,10 +293,13 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
             .catch((err) => {
               console.error('Auto-play was prevented', err);
             });
-        } else {
-          // else video is out of view PAUSE video and don't Loop
-          myRef.current.play();
-          setLoop(true);
+          } else {
+            // else video is out of view PAUSE video and don't Loop
+            myRef.current.play();
+            setIsInView(true);
+            setLoop(true);
+            // Do something with the intersection data, such as triggering
+            // an animation or lazy loading content
         }
       });
     });
@@ -310,131 +315,79 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   return (
     <div>
       {true && (
-        <div
-          className='reel-child'
-          style={{ fontSize: theme.typography.fontSize }}
-        >
+        <div style={{ fontSize: theme.typography.fontSize }}>
           <>
-            <div
-              className={
-                reel?.User.type === 'personal'
-                  ? 'video-container'
-                  : 'video-container video-business-container'
-              }
-            >
-              {reel.url.length > 15 && (
-                <video
-                  className='reel'
-                  ref={myRef}
-                  id={`video${reel.id}`}
-                  src={reel.url}
-                  loop={loop}
-                  muted={muted}
-                  preload='none'
-                  onClick={handleToggleMute}
-                ></video>
-              )}
-              <h5 className='video-timestamp'>
-                ... {dayjs(`${reel.createdAt}`).fromNow()}
-              </h5>
-              <p className='video-text'>{reel.text}</p>
-              <>
-                <Tooltip
-                  title={
-                    <div>
-                      {eventName}
-                      <br />
-                      {eventDate}
-                      <br />
-                      {pastEvent}
-                    </div>
-                  }
-                  placement='left'
-                  PopperProps={{
-                    sx: {
-                      '& .MuiTooltip-tooltip': {
-                        backgroundColor: 'transparent',
-                        border: 'solid #F5FCFA 1px',
-                        color: '#F5FCFA',
+              <div
+                className={
+                  reel?.User.type === 'personal'
+                    ? 'video-container'
+                    : 'video-container video-business-container'
+                }
+              >
+                {reel.url.length > 15 && (
+                  <video
+                    className='reel'
+                    ref={myRef}
+                    id={`video${reel.id}`}
+                    src={reel.url}
+                    loop={loop}
+                    muted={muted}
+                    preload='none'
+                    onClick={handleToggleMute}
+                  ></video>
+                )}
+                <h5 className='video-timestamp'>
+                  ... {dayjs(`${reel.createdAt}`).fromNow()}
+                </h5>
+                <p className='video-text'>{reel.text}</p>
+                <>
+                  <Tooltip
+                    title={
+                      <div>
+                        {eventName}
+                        <br />
+                        {eventDate}
+                        <br />
+                        {pastEvent}
+                      </div>
+                    }
+                    placement='left'
+                    PopperProps={{
+                      sx: {
+                        '& .MuiTooltip-tooltip': {
+                          backgroundColor: 'transparent',
+                          border: 'solid #F5FCFA 1px',
+                          color: '#F5FCFA',
+                        },
                       },
-                    },
-                  }}
-                >
-                  <InfoIcon
-                    aria-label={eventName + eventDate}
-                    className='info-icon'
-                  />
-                </Tooltip>
-                {/**Removes addFriend button if already approved friend*/}
-                {user?.type === 'business' ||
-                  (!friendList.includes(reel.User.id) &&
-                    reel.User.id !== user?.id && (
-                      <ThemeProvider theme={theme}>
-                        <div className='friend-request'>
-                          <Box className='friend-box'>
-                            <Fab
-                              style={{ transform: 'scale(0.6)' }}
-                              size='small'
-                              color='primary'
-                              aria-label='add'
-                              className='friend-add-btn'
-                              disabled={
-                                disabledNow.includes(reel.User.id) ||
-                                stayDisabled.includes(reel.User.id)
-                              }
-                            >
-                              {reel?.User.type === 'personal' && (
-                                <Tooltip
-                                  title='Add Friend'
-                                  TransitionComponent={Zoom}
-                                  placement='left'
-                                  PopperProps={{
-                                    sx: {
-                                      '& .MuiTooltip-tooltip': {
-                                        backgroundColor: 'transparent',
-                                        border: 'solid #F5FCFA 1px',
-                                        color: '#F5FCFA',
-                                      },
-                                    },
-                                  }}
-                                >
-                                  <AddIcon
-                                    aria-label='Add Friend Button'
-                                    sx={{ width: 25, height: 25 }}
-                                    onClick={() =>
-                                      requestFriendship(reel.User.id)
-                                    }
-                                  />
-                                </Tooltip>
-                              )}
-                              {/**Replaces addFriend button with Follow button reel.User.type is a business*/}
-                              {reel?.User.type === 'business' &&
-                              reel.User.id !== user?.id ? (
-                                <Tooltip
-                                  title={`Follow ${reel?.User.displayName}`}
-                                  TransitionComponent={Zoom}
-                                  placement='left'
-                                  PopperProps={{
-                                    sx: {
-                                      '& .MuiTooltip-tooltip': {
-                                        backgroundColor: 'transparent',
-                                        border: 'solid #F5FCFA 1px',
-                                        color: '#F5FCFA',
-                                      },
-                                    },
-                                  }}
-                                >
-                                  <AddIcon
-                                    aria-label={`Follow ${reel?.User.displayName}`}
-                                    sx={{ width: 25, height: 25 }}
-                                    onClick={() => requestFollow(reel.User.id)}
-                                  />
-                                </Tooltip>
-                              ) : (
-                                reel?.User.type === 'business' &&
-                                followed.includes(reel.User.id) && (
+                    }}
+                  >
+                    <InfoIcon
+                      aria-label={eventName + eventDate}
+                      className='info-icon'
+                    />
+                  </Tooltip>
+                  {/**Removes addFriend button if already approved friend*/}
+                  {user?.type === 'business' ||
+                    (!friendList.includes(reel.User.id) &&
+                      reel.User.id !== user?.id && (
+                        <ThemeProvider theme={theme}>
+                          <div className='friend-request'>
+                            <Box className='friend-box'>
+                              <Fab
+                                style={{ transform: 'scale(0.6)' }}
+                                size='small'
+                                color='primary'
+                                aria-label='add'
+                                className='friend-add-btn'
+                                disabled={
+                                  disabledNow.includes(reel.User.id) ||
+                                  stayDisabled.includes(reel.User.id)
+                                }
+                              >
+                                {reel?.User.type === 'personal' && (
                                   <Tooltip
-                                    title={`Unfollow ${reel?.User.displayName}`}
+                                    title='Add Friend'
                                     TransitionComponent={Zoom}
                                     placement='left'
                                     PopperProps={{
@@ -447,201 +400,255 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                                       },
                                     }}
                                   >
-                                    <ClearOutlinedIcon
-                                      aria-label={`Unfollow ${reel?.User.displayName}`}
+                                    <AddIcon
+                                      aria-label='Add Friend Button'
                                       sx={{ width: 25, height: 25 }}
                                       onClick={() =>
-                                        requestUnfollow(reel.User.id)
+                                        requestFriendship(reel.User.id)
                                       }
                                     />
                                   </Tooltip>
-                                )
-                              )}
-                            </Fab>
-                          </Box>
-                        </div>
-                      </ThemeProvider>
-                    ))}
-                {reel.UserId === user.id && (
-                  <div className='friend-request'>
-                    <div>
-                      <Tooltip
-                        title='Delete Reel'
-                        TransitionComponent={Zoom}
-                        placement='right'
-                        PopperProps={{
-                          sx: {
-                            '& .MuiTooltip-tooltip': {
-                              backgroundColor: 'transparent',
-                              border: 'solid #F5FCFA 1px',
-                              color: '#F5FCFA',
+                                )}
+                                {/**Replaces addFriend button with Follow button reel.User.type is a business*/}
+                                {reel?.User.type === 'business' &&
+                                reel.User.id !== user?.id ? (
+                                  <Tooltip
+                                    title={`Follow ${reel?.User.displayName}`}
+                                    TransitionComponent={Zoom}
+                                    placement='left'
+                                    PopperProps={{
+                                      sx: {
+                                        '& .MuiTooltip-tooltip': {
+                                          backgroundColor: 'transparent',
+                                          border: 'solid #F5FCFA 1px',
+                                          color: '#F5FCFA',
+                                        },
+                                      },
+                                    }}
+                                  >
+                                    <AddIcon
+                                      aria-label={`Follow ${reel?.User.displayName}`}
+                                      sx={{ width: 25, height: 25 }}
+                                      onClick={() =>
+                                        requestFollow(reel.User.id)
+                                      }
+                                    />
+                                  </Tooltip>
+                                ) : (
+                                  reel?.User.type === 'business' &&
+                                  followed.includes(reel.User.id) && (
+                                    <Tooltip
+                                      title={`Unfollow ${reel?.User.displayName}`}
+                                      TransitionComponent={Zoom}
+                                      placement='left'
+                                      PopperProps={{
+                                        sx: {
+                                          '& .MuiTooltip-tooltip': {
+                                            backgroundColor: 'transparent',
+                                            border: 'solid #F5FCFA 1px',
+                                            color: '#F5FCFA',
+                                          },
+                                        },
+                                      }}
+                                    >
+                                      <ClearOutlinedIcon
+                                        aria-label={`Unfollow ${reel?.User.displayName}`}
+                                        sx={{ width: 25, height: 25 }}
+                                        onClick={() =>
+                                          requestUnfollow(reel.User.id)
+                                        }
+                                      />
+                                    </Tooltip>
+                                  )
+                                )}
+                              </Fab>
+                            </Box>
+                          </div>
+                        </ThemeProvider>
+                      ))}
+                  {reel.UserId === user.id && (
+                    <div className='friend-request'>
+                      <div>
+                        <Tooltip
+                          title='Delete Reel'
+                          TransitionComponent={Zoom}
+                          placement='right'
+                          PopperProps={{
+                            sx: {
+                              '& .MuiTooltip-tooltip': {
+                                backgroundColor: 'transparent',
+                                border: 'solid #F5FCFA 1px',
+                                color: '#F5FCFA',
+                              },
                             },
-                          },
-                        }}
-                      >
-                        <button
-                          className='delete-btn'
-                          name='Delete Button'
-                          aria-label='Delete Button'
-                          onClick={handleClickOpen}
+                          }}
                         >
-                          🗑️
-                        </button>
-                      </Tooltip>
-                      <Dialog
-                        open={open}
-                        onClose={handleClose}
-                        aria-labelledby='alert-dialog-title'
-                        aria-describedby='alert-dialog-description'
-                      >
-                        <DialogTitle id='alert-dialog-title'>
-                          {'Delete this reel?'}
-                        </DialogTitle>
-                        <DialogContent>
-                          <DialogContentText id='alert-dialog-description'>
-                            Are you sure you want to delete this reel?
-                          </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                          <Button onClick={handleClose}>No</Button>
-                          <Button onClick={() => deleteReel(reel.id)} autoFocus>
-                            Yes
-                          </Button>
-                        </DialogActions>
-                      </Dialog>
-                    </div>
-                  </div>
-                )}
-              </>
-              <div className='friend-request'>
-                <Tooltip
-                  title={reel.User.displayName}
-                  TransitionComponent={Zoom}
-                  placement='left'
-                  PopperProps={{
-                    sx: {
-                      '& .MuiTooltip-tooltip': {
-                        backgroundColor: 'transparent',
-                        border: 'solid #F5FCFA 1px',
-                        color: '#F5FCFA',
-                      },
-                    },
-                  }}
-                >
-                  <Avatar
-                    className='friend-avatar'
-                    aria-label={`Profile Avatar of ${reel.User.displayName}`}
-                    sx={{ width: 48, height: 48 }}
-                    alt={reel.User.displayName}
-                    src={reel.User.picture}
-                  />
-                </Tooltip>
-              </div>
-            </div>
-            <div className='video-links-container'>
-              <Box sx={{ width: '100%' }}>
-                <BottomNavigation>
-                  <BottomNavigationAction
-                    className='bottom-nav-parent'
-                    label='Likes'
-                    showLabel={false}
-                    component={'div'}
-                    icon={
-                      <div className='count-container'>
-                        {!likesArr.includes(reel.id) ? (
-                          <Likes
-                            handleAddLike={handleAddLike}
-                            handleRemoveLike={handleRemoveLike}
-                            reel={reel}
-                            user={user}
-                            likes={likes}
-                            likesBool={likesArr}
-                          />
-                        ) : (
-                          <Unlikes
-                            handleAddLike={handleAddLike}
-                            handleRemoveLike={handleRemoveLike}
-                            reel={reel}
-                            user={user}
-                            likes={likes}
-                            likesBool={likesArr}
-                          />
-                        )}
-                        {reel.like_count >= 0 ? (
-                          <p className='like-counter'>
-                            {reel.like_count + likeTotal}
-                          </p>
-                        ) : (
-                          <p className='like-counter'>{reel.like_count}</p>
-                        )}
+                          <button
+                            className='delete-btn'
+                            name='Delete Button'
+                            aria-label='Delete Button'
+                            onClick={handleClickOpen}
+                          >
+                            🗑️
+                          </button>
+                        </Tooltip>
+                        <Dialog
+                          open={open}
+                          onClose={handleClose}
+                          aria-labelledby='alert-dialog-title'
+                          aria-describedby='alert-dialog-description'
+                        >
+                          <DialogTitle id='alert-dialog-title'>
+                            {'Delete this reel?'}
+                          </DialogTitle>
+                          <DialogContent>
+                            <DialogContentText id='alert-dialog-description'>
+                              Are you sure you want to delete this reel?
+                            </DialogContentText>
+                          </DialogContent>
+                          <DialogActions>
+                            <Button onClick={handleClose}>No</Button>
+                            <Button
+                              onClick={() => deleteReel(reel.id)}
+                              autoFocus
+                            >
+                              Yes
+                            </Button>
+                          </DialogActions>
+                        </Dialog>
                       </div>
-                    }
-                  />
-                  <BottomNavigationAction
-                    label='Event Location'
-                    component={'div'}
-                    icon={
-                      <Tooltip
-                        title='See Event Location'
-                        TransitionComponent={Zoom}
-                        placement='top'
-                        PopperProps={{
-                          sx: {
-                            '& .MuiTooltip-tooltip': {
-                              backgroundColor: '#0b0113',
-                              border: 'solid #F5FCFA 1px',
-                              color: '#F5FCFA',
-                            },
-                          },
-                        }}
-                      >
-                        <IconButton
-                          sx={{
-                            minHeight: '1rem',
-                            minWidth: '1rem',
-                          }}
-                          component={Link}
-                          to={'/Map'}
-                          state={{
-                            reelEvent: reel.Event.geolocation,
-                            loggedIn: user,
-                          }}
-                        >
-                          <LocationOnIcon
-                            name='Event Location Button'
-                            aria-label='Event Location Button'
-                            color='primary'
-                          />
-                        </IconButton>
-                      </Tooltip>
-                    }
-                    showLabel={false}
-                  />
-                  <BottomNavigationAction
-                    className='bottom-nav-parent'
-                    component={'div'}
-                    label='Going'
-                    icon={
-                      <React.Fragment>
+                    </div>
+                  )}
+                </>
+                <div className='friend-request'>
+                  <Tooltip
+                    title={reel.User.displayName}
+                    TransitionComponent={Zoom}
+                    placement='left'
+                    PopperProps={{
+                      sx: {
+                        '& .MuiTooltip-tooltip': {
+                          backgroundColor: 'transparent',
+                          border: 'solid #F5FCFA 1px',
+                          color: '#F5FCFA',
+                        },
+                      },
+                    }}
+                  >
+                    <Avatar
+                      className='friend-avatar'
+                      aria-label={`Profile Avatar of ${reel.User.displayName}`}
+                      sx={{ width: 48, height: 48 }}
+                      alt={reel.User.displayName}
+                      src={reel.User.picture}
+                    />
+                  </Tooltip>
+                </div>
+              </div>
+              <div className='video-links-container'>
+                <Box sx={{ width: '100%' }}>
+                  <BottomNavigation>
+                    <BottomNavigationAction
+                      className='bottom-nav-parent'
+                      label='Likes'
+                      showLabel={false}
+                      component={'div'}
+                      icon={
                         <div className='count-container'>
-                          {disableRsvp.includes(reel?.Event.id) ? (
-                            <UnRsvp reel={reel} removeRsvps={removeRsvps} />
+                          {!likesArr.includes(reel.id) ? (
+                            <Likes
+                              handleAddLike={handleAddLike}
+                              handleRemoveLike={handleRemoveLike}
+                              reel={reel}
+                              user={user}
+                              likes={likes}
+                              likesBool={likesArr}
+                            />
                           ) : (
-                            <Rsvp reel={reel} addRsvps={addRsvps} />
+                            <Unlikes
+                              handleAddLike={handleAddLike}
+                              handleRemoveLike={handleRemoveLike}
+                              reel={reel}
+                              user={user}
+                              likes={likes}
+                              likesBool={likesArr}
+                            />
                           )}
-                          {reel.Event.rsvp_count !== 0 && (
-                            <p className='rsvp-counter'>
-                              {reel.Event.rsvp_count + rsvpTotal}
+                          {reel.like_count >= 0 ? (
+                            <p className='like-counter'>
+                              {reel.like_count + likeTotal}
                             </p>
+                          ) : (
+                            <p className='like-counter'>{reel.like_count}</p>
                           )}
                         </div>
-                      </React.Fragment>
-                    }
-                    showLabel={false}
-                  />
-                </BottomNavigation>
-              </Box>
-            </div>
+                      }
+                    />
+                    <BottomNavigationAction
+                      label='Event Location'
+                      component={'div'}
+                      icon={
+                        <Tooltip
+                          title='See Event Location'
+                          TransitionComponent={Zoom}
+                          placement='top'
+                          PopperProps={{
+                            sx: {
+                              '& .MuiTooltip-tooltip': {
+                                backgroundColor: '#0b0113',
+                                border: 'solid #F5FCFA 1px',
+                                color: '#F5FCFA',
+                              },
+                            },
+                          }}
+                        >
+                          <IconButton
+                            sx={{
+                              minHeight: '1rem',
+                              minWidth: '1rem',
+                            }}
+                            component={Link}
+                            to={'/Map'}
+                            state={{
+                              reelEvent: reel.Event.geolocation,
+                              loggedIn: user,
+                            }}
+                          >
+                            <LocationOnIcon
+                              name='Event Location Button'
+                              aria-label='Event Location Button'
+                              color='primary'
+                            />
+                          </IconButton>
+                        </Tooltip>
+                      }
+                      showLabel={false}
+                    />
+                    <BottomNavigationAction
+                      className='bottom-nav-parent'
+                      component={'div'}
+                      label='Going'
+                      icon={
+                        <React.Fragment>
+                          <div className='count-container'>
+                            {disableRsvp.includes(reel?.Event.id) ? (
+                              <UnRsvp reel={reel} removeRsvps={removeRsvps} />
+                            ) : (
+                              <Rsvp reel={reel} addRsvps={addRsvps} />
+                            )}
+                            {reel.Event.rsvp_count !== 0 && (
+                              <p className='rsvp-counter'>
+                                {reel.Event.rsvp_count + rsvpTotal}
+                              </p>
+                            )}
+                          </div>
+                        </React.Fragment>
+                      }
+                      showLabel={false}
+                    />
+                  </BottomNavigation>
+                </Box>
+              </div>
           </>
         </div>
       )}

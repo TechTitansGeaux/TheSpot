@@ -6,7 +6,7 @@
  import ConflictingEvent from './ConflictingEvent';
  import dayjs from 'dayjs';
  import localizedFormat from 'dayjs/plugin/localizedFormat';
-import { current } from '@reduxjs/toolkit';
+// import { current } from '@reduxjs/toolkit'; 
   dayjs.extend(localizedFormat)
 
   dayjs().format('L LT')
