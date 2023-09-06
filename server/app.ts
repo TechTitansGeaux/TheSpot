@@ -87,7 +87,14 @@ io.on('connection', (socket) => {
   socket.on('likesNotif', (data) => {
     // console.log('received');
     socket.broadcast.emit('likeSent', data);
-  })
+  });
+
+  // follwers notifications
+  socket.on('followersNotif', (data) => {
+    // console.log('received');
+    socket.broadcast.emit('follower', data);
+  });
+
 });
 
 

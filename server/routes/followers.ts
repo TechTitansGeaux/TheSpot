@@ -66,5 +66,25 @@ followersRouter.delete('/:followedUser_id', (req: any, res: any) => {
     });
 })
 
+// UPDATE checked column to true
+followersRouter.put('/checked/:id', (req: any, res: any) => {
+  const { id } = req.params;
+
+  Followers.update({ checked: true}, {
+    where: {
+      id: id,
+    }
+  }
+    )
+    .then((response: any) => {
+      // console.log('Likes checked UPDATED');
+      res.sendStatus(200);
+    })
+    .catch((err: any) => {
+      console.error('Cannot UPDATE checked:', err);
+      res.sendStatus(500);
+    })
+});
+
 
 export default followersRouter;

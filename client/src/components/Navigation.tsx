@@ -66,6 +66,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
   const [open, setOpen] = useState(false); // open and close snackbar
   const [likesArr, setLikesArr] = useState([]); // user's own reels that have been liked FROM likes table
   const [userReels, setUserReels] = useState([]); // user's own reels
+  const [following, setFollowing] = useState([]); // user's followers that haven't been checked
 
   const [onPage, setOnPage] = useState(
     <NavLink className='navLink' to='/Feed'>
@@ -177,6 +178,47 @@ const Navigation: React.FC<Props> = ({ user }) => {
         })
     }
     setLikesArr([]);
+  };
+
+  // get followers for user and followers notifications
+  const getAllFollowers = () => {
+    const followers: any = []; // followers that haven't been checked
+    axios
+      .get('/followers')
+      .then((response) => {
+        for (let i = 0; i < response.data.length; i++) {
+          if (response.data[i].checked !== true) {
+            followers.push(response.data[i]);
+          }
+        }
+        setFollowing(followers);
+      })
+      .catch((err) => {
+        console.error('Could not GET all followers:', err);
+      })
+  };
+
+  useEffect(() => {
+    getAllFollowers();
+
+    socket.on('follower', (data) => {
+      getAllFollowers();
+    });
+  }, [socket, location.pathname]);
+
+  // once you click followers on sidebar, set followers checked column to true
+  const checkedFollowers = () => {
+    for (let i = 0; i < following.length; i++) {
+      const id = following[i].id;
+      axios
+        .put(`followers/checked/${id}`)
+        .then((response) => {
+          console.log('updated Followers table column checked');
+        })
+        .catch((err) => {
+          console.error('Did not update Followers checked column', err);
+        })
+    }
   };
 
   // When the user clicks on the button, scroll to the top of the page
@@ -318,10 +360,11 @@ const Navigation: React.FC<Props> = ({ user }) => {
               component={Link}
               to={'/Follows'}
               sx={{ minHeight: '4em', paddingLeft: '1.5em' }}
+              onClick={checkedFollowers}
             >
               FOLLOWERS
               <span>
-                {pFriends.length !== 0 && (
+                {following.length !== 0 && (
                   <CircleNotificationsIcon
                     className='circle'
                     sx={{ marginLeft: 1 }}
@@ -380,7 +423,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
                   <NavLink className='navLink mapLink' to='/Map'>
                       Map
                   </NavLink>
-                    {(likesArr.length !== 0 || pFriends.length !== 0) && (
+                    {(likesArr.length !== 0 || pFriends.length !== 0 || following.length !== 0) && (
                       <div>
                         <CircleNotificationsIcon
                           className='circle'
