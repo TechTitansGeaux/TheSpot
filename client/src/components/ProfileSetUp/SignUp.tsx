@@ -47,6 +47,9 @@ const SignUp = () => {
             style={{ width: '240px', height: 'auto' }}
           />
         </div>
+        <div className='flex-col'>
+          <GoogleButton className='google-btn' style={{ width: '240px', height: 'auto' }} onClick={redirectToGoogleSSO} />
+        </div>
         <div className='swiper-parent'>
           <Swiper
             spaceBetween={30}
@@ -131,9 +134,6 @@ const SignUp = () => {
               <span ref={progressContent}></span>
             </div>
           </Swiper>
-        </div>
-        <div className='flex-col'>
-          <GoogleButton className='google-btn' style={{ width: '240px', height: 'auto' }} onClick={redirectToGoogleSSO} />
         </div>
       </div>
     </ThemeProvider>
