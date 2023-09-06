@@ -385,10 +385,10 @@ const Navigation: React.FC<Props> = ({ user }) => {
                         <CircleNotificationsIcon
                           className='circle'
                           sx={{
-                            position: 'absolute',
-                            right: -30,
+                            position: 'relative',
+                            right: -60,
                             zIndex: '4',
-                            top: 5,
+                            top: -15,
                           }}
                         />
                     </div>
@@ -411,7 +411,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
                       <Avatar
                         src={user?.picture}
                         alt='User Picture'
-                        className='friend-avatar'
+                        className='nav-avatar'
                         sx={{ width: 45, height: 45 }}
                       />
                     </Tooltip>

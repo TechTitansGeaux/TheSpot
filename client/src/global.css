@@ -68,6 +68,11 @@ h6 {
 }
 
 /* ////// GLOBAL */
+#app {
+  max-width: 98vw;
+  margin: 0 auto;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -293,7 +298,7 @@ video.reel {
   background-color: var(--white);
   overflow: hidden;
   height: 620px;
-  min-width: 375px;
+  min-width: 355px;
 }
 
 .video-business-container {

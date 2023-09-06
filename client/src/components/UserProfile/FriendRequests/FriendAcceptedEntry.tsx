@@ -57,7 +57,7 @@ const FriendAcceptedEntry: React.FC<Props> = ({
   const friendName = allUsers.reduce((name: String, otherUser: any) => {
     if (otherUser?.id === friend?.accepter_id) {
       // CHANGE to requester_id
-      name = otherUser.displayName;
+      name = otherUser?.displayName;
     }
     return name;
   }, '');
@@ -65,7 +65,7 @@ const FriendAcceptedEntry: React.FC<Props> = ({
   const friendIcon = allUsers.reduce((icon: string, otherUser: any) => {
     if (otherUser?.id === friend?.accepter_id) {
       // CHANGE to requester_id
-      icon = otherUser.mapIcon;
+      icon = otherUser?.mapIcon;
 
     }
     return icon;
@@ -74,6 +74,42 @@ const FriendAcceptedEntry: React.FC<Props> = ({
   return (
     <React.Fragment>
       {<div className='friendRequest-container'>
+          <div className='btn-container'>
+            <Fab
+              style={{
+                transform: 'scale(0.8)',
+                borderColor: 'white',
+                borderStyle: 'solid',
+                borderWidth: 1,
+              }}
+              size='small'
+              color='primary'
+              aria-label='add'
+              disabled={false}
+            >
+              <Tooltip
+                title='Unfriend'
+                TransitionComponent={Zoom}
+                placement='top'
+                PopperProps={{
+                  sx: {
+                    '& .MuiTooltip-tooltip': {
+                      backgroundColor: 'transparent',
+                      border: 'solid #F5FCFA 1px',
+                      color: '#F5FCFA',
+                    },
+                  },
+                }}
+              >
+                <ClearOutlinedIcon
+                  className='rejectFriend-btn'
+                  onClick={() =>
+                    rejectFriendship(friend?.accepter_id, friend?.updatedAt)
+                  }
+                />
+              </Tooltip>
+            </Fab>
+          </div>
         <img
           src={friendIcon}
           alt={friendName}
@@ -84,42 +120,6 @@ const FriendAcceptedEntry: React.FC<Props> = ({
           }}
         />
         <h2 className='friendName'>{friendName}</h2>
-        <div className='btn-container'>
-          <Fab
-            style={{
-              transform: 'scale(0.8)',
-              borderColor: 'white',
-              borderStyle: 'solid',
-              borderWidth: 1,
-            }}
-            size='small'
-            color='primary'
-            aria-label='add'
-            disabled={false}
-          >
-            <Tooltip
-              title='Unfriend'
-              TransitionComponent={Zoom}
-              placement='top'
-              PopperProps={{
-                sx: {
-                  '& .MuiTooltip-tooltip': {
-                    backgroundColor: 'transparent',
-                    border: 'solid #F5FCFA 1px',
-                    color: '#F5FCFA',
-                  },
-                },
-              }}
-            >
-              <ClearOutlinedIcon
-                className='rejectFriend-btn'
-                onClick={() =>
-                  rejectFriendship(friend?.accepter_id, friend?.updatedAt)
-                }
-              />
-            </Tooltip>
-          </Fab>
-        </div>
       </div>}
     <hr></hr>
     </React.Fragment>
