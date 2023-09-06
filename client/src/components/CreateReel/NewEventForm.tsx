@@ -216,8 +216,10 @@ const createEvent = async () => {
      <div
        id='event-form'
        className='popUpEventForm'
+       style={{justifyContent: 'center'}}
        >
          <textarea
+         style={{fontWeight: '400'}}
          className='eventNameInput'
          placeholder='Event Name'
          id='eventName'

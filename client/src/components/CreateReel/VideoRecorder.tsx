@@ -7,7 +7,7 @@ import NewEventForm from './NewEventForm';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
-import { LazyMotion, m, domAnimation } from 'framer-motion';
+// import { LazyMotion, m, domAnimation } from 'framer-motion';
 import { useNavigate  } from 'react-router-dom';
 import Tooltip from '@mui/material/Tooltip';
 import EventNoteIcon from '@mui/icons-material/EventNote';
@@ -268,6 +268,7 @@ const clearReel = () => {
   const box = document.getElementById('event-form');
   box.style.display = 'none';
   setClear(true);
+  setIsCameraLoading(true);
 }
 
 const resetClear = () => {
