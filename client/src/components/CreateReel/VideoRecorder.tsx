@@ -73,6 +73,7 @@ const VideoRecorder: React.FC<Props> = ({
   const [eventIsPublic, setEventIsPublic] = useState(true);
   const [urlRetrieved, setUrlRetrieved] = useState(false);
   const [clear, setClear] = useState(false);
+  const [isCameraLoading, setIsCameraLoading] = useState(true);
 
   type Blob = {
     data: {
@@ -303,6 +304,10 @@ const updateBusinessEventCreated = () => {
 setBusinessEventCreated(true);
 }
 
+const handleCameraLoaded = () => {
+  setIsCameraLoading(false);
+};
+
 // console.log(user.type, '<---- user type')
 // console.log(businessAccount, '<------business account')
 
@@ -352,9 +357,18 @@ setBusinessEventCreated(true);
           </div>
         </div>
         )}
+        { !justRecorded && isCameraLoading && (
+          <div className='webcam'
+          style={{paddingTop: '20em', zIndex: '2', position: 'absolute'}}>
+            <CircularProgress
+            size='8rem'
+            color='secondary'/>
+          </div>
+        )}
         { !justRecorded && (
         <div className='cam-mask'>
           <Webcam
+            style={{zIndex: 1}}
             className='webcam'
             height='100%'
             width='100%'
@@ -363,6 +377,7 @@ setBusinessEventCreated(true);
             ref={webcamRef}
             videoConstraints={videoConstraints}
             muted={true}
+            onUserMedia={handleCameraLoaded}
           />
         </div>
       )}
@@ -375,7 +390,7 @@ setBusinessEventCreated(true);
           color='secondary'
           sx={{ width: 52, height: 52 }}/>
         )}
-        { !capturing && !justRecorded && (
+        { !capturing && !justRecorded && !isCameraLoading && (
           <motion.div
           whileHover={{ scale: 1.2 }}
           >
