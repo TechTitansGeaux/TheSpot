@@ -115,7 +115,7 @@
   box-shadow: 0 0 5px 1px rgb(120, 120, 120);
   display: none;
   transition: all .5s ease;
-  height: 300px;
+  height: 100%;
   width: 200px;
   border: solid var(--yellow);
   border-width: 4px;
@@ -134,7 +134,7 @@
 
 .zoomToEvent {
   position: relative;
-  top: 110px;
+  top: -10px;
   left: -25px;
 }
 
@@ -233,12 +233,12 @@
 .userKey {
   display: inline-block;
   height: 35px;
+  width: 35px;
+  border: 3px solid black;
+  border-radius: 50%;
   margin-right: 10px;
   background-color: var(--pink);
   vertical-align: middle;
-  border-radius: 50%;
-  border: 3px solid black;
-  width: 35px;
   text-align: center;
 }
 
@@ -286,19 +286,6 @@
   height: 35px;
 }
 
-/* .recenterButton {
-  color: black;
-  cursor: pointer;
-  float: right;
-  top: 50%;
-  height: 35px;
-  border-radius: 17.5px;
-  border: 3px solid black;
-  width: 125px;
-  background-color: var(--grey);
-  text-align: center;
-} */
-
 
 @keyframes popOut {
   0% {
@@ -339,9 +326,10 @@
   cursor: pointer;
   float: right;
   top: 50%;
-  height: 45px;
+  height: 40px;
+  width: 40px;
   border: 3px solid black;
-  width: 100px;
+  border-radius: 50%;
   background-color: var(--grey);
   text-align: center;
 }

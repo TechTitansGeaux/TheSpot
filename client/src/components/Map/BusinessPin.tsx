@@ -68,7 +68,7 @@ const BusinessPin: React.FC<Props> = ({ business, setCenter, setZoom, lat, lng, 
           </div>
           <div style={{ textAlign: 'center', fontSize: '15px', marginBottom: '5px' }}>
             <p>
-              {`Member Since: ${dayjs(business.createdAt).format('ll')}`}
+              {`Joined: ${dayjs(business.createdAt).format('ll')}`}
             </p>
           </div>
       </div>

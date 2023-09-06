@@ -9,6 +9,7 @@ import ClusterPin from './ClusterPin';
 import BusinessPin from './BusinessPin';
 import EventRadialMarker from './EventRadialMarker'
 import { useLocation } from "react-router-dom";
+import CenterFocusStrongIcon from '@mui/icons-material/CenterFocusStrong';
 import CircularProgress from '@mui/material/CircularProgress';
 import io from 'socket.io-client';
 const socket = io();
@@ -153,7 +154,7 @@ const Map: React.FC<Props> = (props) => {
 
   // gets all events
   const getEvents = () => {
-    axios.get('/events/allCurrent')
+    axios.get('/events/all')
       .then(({ data }) => {
         setEvents(data)
       })
@@ -436,7 +437,7 @@ const Map: React.FC<Props> = (props) => {
             setZoom(15);
             setCenter({ lat: +lat, lng: +lng});
             }
-          } > RECENTER </div>
+          } > <CenterFocusStrongIcon /></div>
         </div>
       </div>
     </div>

@@ -88,32 +88,27 @@ const Event: React.FC<Props> = ({ event, setCenter, setZoom, lat, lng, zoom }) =
         <div style={{ textAlign: 'center', fontSize:'20px', marginTop: '5px' }}>
           {event.name}
         </div>
-        <div style={{ textAlign: 'center', fontSize:'20px' }}>
-          <p>
-            {`RSVP's: ${event.rsvp_count}`}
-          </p>
-        </div>
-        <div style={{ textAlign: 'center', fontSize:'20px' }}>
+        <div style={{ textAlign: 'center', fontSize:'15px' }}>
           <p>
             {`date: ${dayjs(event.date).format('L')}`}
           </p>
         </div>
-        <div style={{ textAlign: 'center', fontSize:'20px' }}>
+        <div style={{ textAlign: 'center', fontSize:'15px' }}>
           <p>
             {`starts: ${format(event.time)}`}
           </p>
         </div>
-        <div style={{ textAlign: 'center', fontSize:'20px' }}>
+        <div style={{ textAlign: 'center', fontSize:'15px' }}>
           <p>
             {`ends: ${format(event.endTime)}`}
           </p>
         </div>
         {
-          event.twenty_one && <div style={{ textAlign: 'center', fontSize:'20px', marginBottom: '-22.5px' }}>21+</div>
+          event.twenty_one && <div style={{ textAlign: 'center', fontSize:'15px' }}>21+</div>
         }
         <div className='zoomToEvent'>
           <div>
-            <div style={{ position: 'relative', top: '27.5px', left: '60px' }}>zoom to event</div>
+            <div style={{ position: 'relative', top: '30px', left: '60px', fontSize: '15px' }}>zoom to event</div>
             <ThemeProvider theme={zoomToEventTheme}>
               <div>
                 <Box>
