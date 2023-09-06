@@ -7,7 +7,7 @@ import { Suspense, lazy } from 'react';
 import Loading from './Loading'
 const ReelItem = lazy(() => import('./ReelItem'));
 import { useTheme } from '@mui/material/styles';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, m, LazyMotion, domAnimation } from 'framer-motion';
 import io from 'socket.io-client';
 const socket = io();
 
@@ -289,12 +289,15 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
       style={{ fontSize: theme.typography.fontSize }}
     >
       <AnimatePresence initial={false}>
+        <Suspense fallback={<Loading />}>
         {reels.map((reel) => {
           return (
-            <Suspense fallback={<Loading />}>
-              <motion.div
+            <LazyMotion
+              key={reel.id + 'reel' + Math.floor(Math.random() * 25)}
+              features={domAnimation}
+            >
+              <m.div
                 className='reel-child'
-                key={reel.id + 'reel'}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -305,7 +308,7 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
                 }}
               >
                 <ReelItem
-                  key={reel.id + 'reelItem'}
+                  key={reel.id + 'reelItem' + Math.floor(Math.random() * 35)}
                   user={user}
                   reel={reel}
                   reels={reels}
@@ -323,10 +326,11 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
                   muted={muted}
                   handleToggleMute={handleToggleMute}
                 />
-              </motion.div>
-            </Suspense>
+              </m.div>
+            </LazyMotion>
           );
         })}
+        </Suspense>
       </AnimatePresence>
     </main>
   );

@@ -1,14 +1,14 @@
 nav.toolbar-container {
   display: flex;
   position: fixed;
+  justify-content: center;
+  align-items: center;
   background-color: var(--light-violet);
   width: 100vw;
   top: 0;
   z-index: 996;
   margin: 0 auto;
-  justify-content: center;
-  align-items: center;
-  padding-right: 40px;
+  /* padding-right: 40px; */
   padding-top: 3px;
 }
 
@@ -69,4 +69,17 @@ button.navLink {
   background-color: var(--violet);
   border-radius: 50%;
   margin: 2px;
+}
+
+.nav-avatar {
+  position: relative;
+  cursor: pointer;
+  bottom: 10%;
+}
+
+@media screen and (max-width: 525px) {
+  .navbar-container {
+      margin-right: 2em;
+      margin-left: 1em;
+    }
 }

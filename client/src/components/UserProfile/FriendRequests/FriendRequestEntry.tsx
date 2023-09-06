@@ -60,7 +60,7 @@ const FriendRequestEntry: React.FC<Props> = ({
   const pendingFriendName = allUsers.reduce((name: string, otherUser: any) => {
     if (otherUser?.id === pendingFriend?.requester_id) {
       // CHANGE to requester_id
-      name = otherUser.displayName;
+      name = otherUser?.displayName;
     }
     return name;
   }, '');
@@ -68,7 +68,7 @@ const FriendRequestEntry: React.FC<Props> = ({
   const pendingFriendIcon = allUsers.reduce((icon: string, otherUser: any) => {
     if (otherUser?.id === pendingFriend?.requester_id) {
       // CHANGE to requester_id
-      icon = otherUser.mapIcon;
+      icon = otherUser?.mapIcon;
     }
     return icon;
   }, '');
@@ -76,6 +76,77 @@ const FriendRequestEntry: React.FC<Props> = ({
   return (
     <>
       <div className='friendRequest-container'>
+          <div className='btn-container'>
+            <Fab
+              style={{
+                transform: 'scale(0.8)',
+                borderColor: 'white',
+                borderStyle: 'solid',
+                borderWidth: 1,
+              }}
+              size='small'
+              color='primary'
+              aria-label='add'
+              disabled={false}
+            >
+              <Tooltip
+                title='Accept Friend'
+                TransitionComponent={Zoom}
+                placement='top'
+                PopperProps={{
+                  sx: {
+                    '& .MuiTooltip-tooltip': {
+                      backgroundColor: 'transparent',
+                      border: 'solid #F5FCFA 1px',
+                      color: '#F5FCFA',
+                    },
+                  },
+                }}
+              >
+                <CheckIcon
+                  sx={{ width: 20, height: 20 }}
+                  onClick={() => approveFriendship(pendingFriend?.requester_id)}
+                />
+              </Tooltip>
+            </Fab>
+            <Fab
+              style={{
+                transform: 'scale(0.8)',
+                borderColor: 'white',
+                borderStyle: 'solid',
+                borderWidth: 1,
+              }}
+              size='small'
+              color='primary'
+              aria-label='add'
+              disabled={false}
+            >
+              <Tooltip
+                title='Reject Request'
+                TransitionComponent={Zoom}
+                placement='top'
+                PopperProps={{
+                  sx: {
+                    '& .MuiTooltip-tooltip': {
+                      backgroundColor: 'transparent',
+                      border: 'solid #F5FCFA 1px',
+                      color: '#F5FCFA',
+                    },
+                  },
+                }}
+              >
+                <ClearOutlinedIcon
+                  className='rejectFriend-btn'
+                  onClick={() =>
+                    rejectFriendship(
+                      pendingFriend.accepter_id,
+                      pendingFriend?.updatedAt
+                    )
+                  }
+                />
+              </Tooltip>
+            </Fab>
+          </div>
         <img
           src={pendingFriendIcon}
           alt={pendingFriendName}
@@ -86,77 +157,6 @@ const FriendRequestEntry: React.FC<Props> = ({
           }}
         />
         <h2 className='friendName'>{pendingFriendName}</h2>
-        <div className='btn-container'>
-          <Fab
-            style={{
-              transform: 'scale(0.8)',
-              borderColor: 'white',
-              borderStyle: 'solid',
-              borderWidth: 1,
-            }}
-            size='small'
-            color='primary'
-            aria-label='add'
-            disabled={false}
-          >
-            <Tooltip
-              title='Accept Friend'
-              TransitionComponent={Zoom}
-              placement='top'
-              PopperProps={{
-                sx: {
-                  '& .MuiTooltip-tooltip': {
-                    backgroundColor: 'transparent',
-                    border: 'solid #F5FCFA 1px',
-                    color: '#F5FCFA',
-                  },
-                },
-              }}
-            >
-              <CheckIcon
-                sx={{ width: 20, height: 20 }}
-                onClick={() => approveFriendship(pendingFriend?.requester_id)}
-              />
-            </Tooltip>
-          </Fab>
-          <Fab
-            style={{
-              transform: 'scale(0.8)',
-              borderColor: 'white',
-              borderStyle: 'solid',
-              borderWidth: 1,
-            }}
-            size='small'
-            color='primary'
-            aria-label='add'
-            disabled={false}
-          >
-            <Tooltip
-              title='Reject Request'
-              TransitionComponent={Zoom}
-              placement='top'
-              PopperProps={{
-                sx: {
-                  '& .MuiTooltip-tooltip': {
-                    backgroundColor: 'transparent',
-                    border: 'solid #F5FCFA 1px',
-                    color: '#F5FCFA',
-                  },
-                },
-              }}
-            >
-              <ClearOutlinedIcon
-                className='rejectFriend-btn'
-                onClick={() =>
-                  rejectFriendship(
-                    pendingFriend.accepter_id,
-                    pendingFriend?.updatedAt
-                  )
-                }
-              />
-            </Tooltip>
-          </Fab>
-        </div>
       </div>
     <hr></hr>
     </>
