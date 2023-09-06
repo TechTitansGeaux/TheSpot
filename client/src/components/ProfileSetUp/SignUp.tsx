@@ -44,11 +44,11 @@ const SignUp = () => {
           <img
             src={logoGradient}
             alt='app logo'
-            style={{ width: '200px', height: 'auto' }}
+            style={{ width: '240px', height: 'auto' }}
           />
         </div>
         <div className='flex-col'>
-          <GoogleButton className='google-btn' onClick={redirectToGoogleSSO} />
+          <GoogleButton className='google-btn' style={{ width: '240px', height: 'auto' }} onClick={redirectToGoogleSSO} />
         </div>
         <div className='swiper-parent'>
           <Swiper

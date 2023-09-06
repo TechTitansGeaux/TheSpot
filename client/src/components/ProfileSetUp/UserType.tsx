@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
@@ -70,43 +69,53 @@ const UserType = () => {
   return (
     <ThemeProvider theme={theme}>
       <Container className="container-full-w center">
-        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height="75vh" width='auto'>
-          <Typography variant="h4" style={{ padding: '0px', margin: '0' }}>
+        <Box
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          height="75vh"
+          width="auto"
+        >
+          <Typography variant="h4" style={{ padding: '0px', margin: '0', width: '36vh', alignContent: "center" }}>
             Choose Profile Type
           </Typography>
-          <Card style={{ backgroundColor: 'var(--yellow)', marginTop: '1rem' }}>
+          <Card style={{ backgroundColor: 'var(--yellow)', marginTop: '1rem', width: '36vh' }}>
             <CardContent>
-              <FormControlLabel
-                control={
-                  <Radio
-                    color="secondary"
-                    checked={buttonClicked === 'personal'}
-                    onChange={() => handleProfileSelection('personal')}
-                  />
-                }
-                label="Personal"
-                style={{ marginTop: '1rem', marginBottom: '1rem' }}
-              />
-              <FormControlLabel
-                control={
-                  <Radio
-                    color="secondary"
-                    checked={buttonClicked === 'business'}
-                    onChange={() => handleProfileSelection('business')}
-                  />
-                }
-                label="Business"
-                style={{ marginTop: '1rem', marginBottom: '1rem' }}
-              />
-              <Button
-                variant="contained"
-                color="secondary"
-                style={{ marginTop: '1rem', marginBottom: '1rem' }}
-                onClick={handleRedirect}
-                disabled={!buttonClicked} // Enable 'Continue' button only if one of the profile type buttons was clicked
-              >
-                Continue
-              </Button>
+              <div style={{ marginBottom: '1rem' }}>
+                <FormControlLabel
+                  control={
+                    <Radio
+                      color="secondary"
+                      checked={buttonClicked === 'personal'}
+                      onChange={() => handleProfileSelection('personal')}
+                    />
+                  }
+                  label="Personal"
+                />
+              </div>
+              <div style={{ marginBottom: '1rem' }}>
+                <FormControlLabel
+                  control={
+                    <Radio
+                      color="secondary"
+                      checked={buttonClicked === 'business'}
+                      onChange={() => handleProfileSelection('business')}
+                    />
+                  }
+                  label="Business"
+                />
+              </div>
+              <div>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleRedirect}
+                  disabled={!buttonClicked} // Enable 'Continue' button only if one of the profile type buttons was clicked
+                >
+                  Continue
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </Box>

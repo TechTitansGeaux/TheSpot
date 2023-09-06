@@ -26,6 +26,7 @@
   flex-direction: column;
   justify-content: center;
   max-width: 900px;
+  max-height: 900px;
   margin: auto;
 }
 
@@ -102,6 +103,7 @@ BE AWARE Ideal-ish image upload / src size: 1024 x 768 OR 1200 x 800 (-ish) / ra
   background-blend-mode: multiply;
   background-size: auto;
   object-fit: cover;
+  padding-bottom: 1em;
 }
 
 /*CHANGE background-image: url AND
@@ -114,6 +116,7 @@ BE AWARE Ideal-ish image upload / src size: 1024 x 768 OR 1200 x 800 (-ish) / ra
   background-blend-mode: multiply;
   background-size: auto;
   object-fit: cover;
+  padding-bottom: 1em;
 }
 
 /*CHANGE background-image: url AND
@@ -126,6 +129,7 @@ BE AWARE Ideal-ish image upload / src size: 1024 x 768 OR 1200 x 800 (-ish) / ra
   background-blend-mode: multiply;
   background-size: auto;
   object-fit: cover;
+  padding-bottom: 1em;
 }
 
 /*CHANGE background-image: url AND
@@ -138,26 +142,29 @@ BE AWARE Ideal-ish image upload / src size: 1024 x 768 OR 1200 x 800 (-ish) / ra
   background-blend-mode: multiply;
   background-size: auto;
   object-fit: cover;
+  padding-bottom: 1em;
 }
 
 /* Phone Image Below */
 .phone-slide {
-  display: flex;
+  display: block;
   padding-bottom: 1em;
   width: 240px;
   height: auto;
+  object-fit: cover;
 }
 
 .phone-screen {
   display: flex;
   justify-content: center;
   background-color: #ffffff; /* Phone screen background color */
-  width: 240; /* Phone screen width */
+  width: 240px; /* Phone screen width */
   height: 520px; /* Phone screen height */
   border-radius: 17px; /* Phone screen border radius */
   box-shadow: 0 0 0 1px var(--yellow); /* Phone screen drop shadow */
   margin: 0 auto; /* Center the phone screen */
   overflow: hidden; /* Hide any overflowing content */
+  object-fit: cover;
 }
 
 .phone-image {

@@ -241,7 +241,6 @@ const ProfileSetUp: React.FC<ProfileSetUpProps> = ({ startWatch }) => {
             {/* Display Name field */}
             <div>
             <SpeechToText onTranscriptChange={setDisplayName} />
-            <p>Click Microphone For Speech To Text</p>
             <TextField
               label="Display Name"
               variant="outlined"
