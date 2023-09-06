@@ -245,6 +245,9 @@ const Followers = sequelize.define(
         key: 'id',
       },
     },
+    checked: {
+      type: DataTypes.BOOLEAN
+    }
   },
   { timestamps: true }
 );

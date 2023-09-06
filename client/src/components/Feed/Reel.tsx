@@ -145,6 +145,8 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
       .then((data) => {
         setFollowed((prev) => [...prev, followedUser]);
         setDisabled([...disabled, followedUser]);
+        // sockets for following notifications
+        socket.emit('followersNotif', 'following');
         console.log('Now following followedUser_id: ', followedUser);
       })
       .catch((err) => {
