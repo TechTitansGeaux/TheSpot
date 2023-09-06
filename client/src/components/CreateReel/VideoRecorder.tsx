@@ -7,7 +7,7 @@ import NewEventForm from './NewEventForm';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
-import { motion } from 'framer-motion';
+// import { LazyMotion, m, domAnimation } from 'framer-motion';
 import { useNavigate  } from 'react-router-dom';
 import Tooltip from '@mui/material/Tooltip';
 import EventNoteIcon from '@mui/icons-material/EventNote';
@@ -73,6 +73,7 @@ const VideoRecorder: React.FC<Props> = ({
   const [eventIsPublic, setEventIsPublic] = useState(true);
   const [urlRetrieved, setUrlRetrieved] = useState(false);
   const [clear, setClear] = useState(false);
+  const [isCameraLoading, setIsCameraLoading] = useState(true);
 
   type Blob = {
     data: {
@@ -267,6 +268,7 @@ const clearReel = () => {
   const box = document.getElementById('event-form');
   box.style.display = 'none';
   setClear(true);
+  setIsCameraLoading(true);
 }
 
 const resetClear = () => {
@@ -302,6 +304,10 @@ setEventId(newId);
 const updateBusinessEventCreated = () => {
 setBusinessEventCreated(true);
 }
+
+const handleCameraLoaded = () => {
+  setIsCameraLoading(false);
+};
 
 // console.log(user.type, '<---- user type')
 // console.log(businessAccount, '<------business account')
@@ -352,9 +358,18 @@ setBusinessEventCreated(true);
           </div>
         </div>
         )}
+        { !justRecorded && isCameraLoading && (
+          <div className='webcam'
+          style={{paddingTop: '20em', zIndex: '2', position: 'absolute'}}>
+            <CircularProgress
+            size='8rem'
+            color='secondary'/>
+          </div>
+        )}
         { !justRecorded && (
         <div className='cam-mask'>
           <Webcam
+            style={{zIndex: 1}}
             className='webcam'
             height='100%'
             width='100%'
@@ -363,6 +378,7 @@ setBusinessEventCreated(true);
             ref={webcamRef}
             videoConstraints={videoConstraints}
             muted={true}
+            onUserMedia={handleCameraLoaded}
           />
         </div>
       )}
@@ -375,15 +391,17 @@ setBusinessEventCreated(true);
           color='secondary'
           sx={{ width: 52, height: 52 }}/>
         )}
-        { !capturing && !justRecorded && (
-          <motion.div
-          whileHover={{ scale: 1.2 }}
-          >
-            <RadioButtonUncheckedIcon
-            onClick={handleStartCaptureClick}
-            color='secondary'
-            sx={{ width: 52, height: 52 }}/>
-          </motion.div>
+        { !capturing && !justRecorded && !isCameraLoading && (
+          // <LazyMotion features={domAnimation}>
+          //   <m.div
+          //   whileHover={{ scale: 1.2 }}
+          //   >
+              <RadioButtonUncheckedIcon
+              onClick={handleStartCaptureClick}
+              color='secondary'
+              sx={{ width: 52, height: 52 }}/>
+          //   </m.div>
+          // </LazyMotion>
         )}
         {justRecorded && urlRetrieved && (
           <div>
@@ -401,14 +419,16 @@ setBusinessEventCreated(true);
               },
             }}
           >
-          <motion.div
+          {/* <LazyMotion features={domAnimation}>
+          <m.div
           whileHover={{ scale: 1.2 }}
-          >
+          > */}
             <DeleteIcon
             onClick={clearReel}
             color='secondary'
             sx={{ width: 52, height: 52 }}/>
-          </motion.div>
+          {/* </m.div>
+          </LazyMotion> */}
           </Tooltip>
           </div>
         )}
@@ -430,13 +450,15 @@ setBusinessEventCreated(true);
                   },
                 }}
                 >
-                <motion.div
+                {/* <LazyMotion features={domAnimation}>
+                <m.div
                   whileHover={{ scale: 1.2 }}
-                  >
+                  > */}
                     <EventNoteIcon
                     color='secondary'
                     sx={{ width: 52, height: 52 }}/>
-                </motion.div>
+                {/* </m.div>
+                </LazyMotion> */}
                 </Tooltip>
             </div>
           </div>
@@ -457,14 +479,16 @@ setBusinessEventCreated(true);
               },
             }}
           >
-          <motion.div
+          {/* <LazyMotion features={domAnimation}>
+          <m.div
           whileHover={{ scale: 1.2 }}
-          >
+          > */}
             <ArrowCircleRightIcon
             onClick={saveReel}
             color='secondary'
             sx={{ width: 52, height: 52 }}/>
-          </motion.div>
+          {/* </m.div>
+          </LazyMotion> */}
           </Tooltip>
           </div>
         )}
