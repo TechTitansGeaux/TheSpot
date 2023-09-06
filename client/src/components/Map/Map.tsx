@@ -154,7 +154,7 @@ const Map: React.FC<Props> = (props) => {
 
   // gets all events
   const getEvents = () => {
-    axios.get('/events/all')
+    axios.get('/events/allCurrent')
       .then(({ data }) => {
         setEvents(data)
       })

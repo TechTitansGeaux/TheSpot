@@ -182,20 +182,22 @@ const Navigation: React.FC<Props> = ({ user }) => {
 
   // get followers for user and followers notifications
   const getAllFollowers = () => {
-    const followers: any = []; // followers that haven't been checked
-    axios
-      .get('/followers')
-      .then((response) => {
-        for (let i = 0; i < response.data.length; i++) {
-          if (response.data[i].checked !== true) {
-            followers.push(response.data[i]);
+    if (user?.type === 'business') {
+      const followers: any = []; // followers that haven't been checked
+      axios
+        .get('/followers')
+        .then((response) => {
+          for (let i = 0; i < response.data.length; i++) {
+            if (response.data[i].checked !== true) {
+              followers.push(response.data[i]);
+            }
           }
-        }
-        setFollowing(followers);
-      })
-      .catch((err) => {
-        console.error('Could not GET all followers:', err);
-      })
+          setFollowing(followers);
+        })
+        .catch((err) => {
+          console.error('Could not GET all followers:', err);
+        })
+    }
   };
 
   useEffect(() => {
