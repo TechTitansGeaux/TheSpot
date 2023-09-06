@@ -7,7 +7,7 @@ import NewEventForm from './NewEventForm';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
-import { motion } from 'framer-motion';
+import { LazyMotion, m, domAnimation } from 'framer-motion';
 import { useNavigate  } from 'react-router-dom';
 import Tooltip from '@mui/material/Tooltip';
 import EventNoteIcon from '@mui/icons-material/EventNote';
@@ -391,14 +391,16 @@ const handleCameraLoaded = () => {
           sx={{ width: 52, height: 52 }}/>
         )}
         { !capturing && !justRecorded && !isCameraLoading && (
-          <motion.div
-          whileHover={{ scale: 1.2 }}
-          >
-            <RadioButtonUncheckedIcon
-            onClick={handleStartCaptureClick}
-            color='secondary'
-            sx={{ width: 52, height: 52 }}/>
-          </motion.div>
+          // <LazyMotion features={domAnimation}>
+          //   <m.div
+          //   whileHover={{ scale: 1.2 }}
+          //   >
+              <RadioButtonUncheckedIcon
+              onClick={handleStartCaptureClick}
+              color='secondary'
+              sx={{ width: 52, height: 52 }}/>
+          //   </m.div>
+          // </LazyMotion>
         )}
         {justRecorded && urlRetrieved && (
           <div>
@@ -416,14 +418,16 @@ const handleCameraLoaded = () => {
               },
             }}
           >
-          <motion.div
+          {/* <LazyMotion features={domAnimation}>
+          <m.div
           whileHover={{ scale: 1.2 }}
-          >
+          > */}
             <DeleteIcon
             onClick={clearReel}
             color='secondary'
             sx={{ width: 52, height: 52 }}/>
-          </motion.div>
+          {/* </m.div>
+          </LazyMotion> */}
           </Tooltip>
           </div>
         )}
@@ -445,13 +449,15 @@ const handleCameraLoaded = () => {
                   },
                 }}
                 >
-                <motion.div
+                {/* <LazyMotion features={domAnimation}>
+                <m.div
                   whileHover={{ scale: 1.2 }}
-                  >
+                  > */}
                     <EventNoteIcon
                     color='secondary'
                     sx={{ width: 52, height: 52 }}/>
-                </motion.div>
+                {/* </m.div>
+                </LazyMotion> */}
                 </Tooltip>
             </div>
           </div>
@@ -472,14 +478,16 @@ const handleCameraLoaded = () => {
               },
             }}
           >
-          <motion.div
+          {/* <LazyMotion features={domAnimation}>
+          <m.div
           whileHover={{ scale: 1.2 }}
-          >
+          > */}
             <ArrowCircleRightIcon
             onClick={saveReel}
             color='secondary'
             sx={{ width: 52, height: 52 }}/>
-          </motion.div>
+          {/* </m.div>
+          </LazyMotion> */}
           </Tooltip>
           </div>
         )}
