@@ -15,6 +15,25 @@ eventRouter.get('/all', async (req, res) => {
     })
 })
 
+// get current events for map
+eventRouter.get('/allCurrent', async (req, res) => {
+  await Events.findAll()
+    .then((events: any) => {
+      const currentEvents = events.filter((event: {date: string, endTime: string}) => {
+        const rawEventTime = event.date + 'T' + event.endTime;
+        const formattedEventTime = new Date(rawEventTime);
+        const timeForComparing = Date.parse(formattedEventTime.toString());
+        const nowRaw = new Date();
+        const now = Date.parse(nowRaw.toString());
+        return timeForComparing >= now;
+      })
+      res.status(200).send(currentEvents);
+    })
+    .catch((err: any) => {
+      console.error('Failed to GET all events: ', err);
+    })
+})
+
 // get all of one user's events
 eventRouter.get('/userEvents', async (req: any, res: any) => {
   // access user id from req.user
