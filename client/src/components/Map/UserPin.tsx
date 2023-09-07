@@ -159,47 +159,41 @@ const UserPin: React.FC<Props> = ({ user, loggedIn, lat, lng, zoom, friendList, 
         </div>
         <div className='addOrRmFriend'>
           {!pendingFriendList.includes(user.id) && !friendList.includes(user.id) && isNotLoggedInUser && (
-            <div>
-              <div style={{ position: 'relative', top: '-140px', left: '80px', marginBottom: '5px', fontSize: '15px' }}>add friend</div>
-              <div style={{ position: 'relative', top: '-171.5px' }}>
-                <ThemeProvider theme={addFriendTheme}>
-                  <div>
-                    <Box>
-                      <Fab
-                        size='small'
-                        color='primary'
-                        aria-label='add'
-                        className='friend-add-btn'
-                      >
-                        <AddIcon onClick={() => { addFriend(); } } />
-                      </Fab>
-                    </Box>
-                  </div>
-                </ThemeProvider>
-              </div>
+            <div style={{ position: 'relative', top: '-166.5px', left: '-50%', marginBottom: '10px' }}>
+              <ThemeProvider theme={addFriendTheme}>
+                <div>
+                  <Box>
+                    <Fab
+                      variant="extended"
+                      size="small"
+                      color="primary"
+                      className='friend-add-btn'
+                      onClick={() => { addFriend(); } }
+                    > Add Friend
+                    </Fab>
+                  </Box>
+                </div>
+              </ThemeProvider>
             </div>
           )}
         </div>
         <div className='addOrRmFriend'>
           {friendList.includes(user.id) && (
-            <div>
-              <div style={{ position: 'relative', top: '-137.5px', left: '65px', marginBottom: '5px', fontSize: '15px' }}>remove friend</div>
-              <div style={{ position: 'relative', top: '-171.5px' }}>
-                <ThemeProvider theme={rmFriendTheme}>
-                  <div>
-                    <Box>
-                      <Fab
-                        size='small'
-                        color='primary'
-                        aria-label='add'
-                        className='friend-add-btn'
-                      >
-                        <RemoveIcon onClick={() => { removeFriend(); } } />
-                      </Fab>
-                    </Box>
-                  </div>
-                </ThemeProvider>
-              </div>
+            <div style={{ position: 'relative', top: '-166.5px', left: '-57.5%', marginBottom: '10px' }}>
+              <ThemeProvider theme={rmFriendTheme}>
+                <div>
+                  <Box>
+                    <Fab
+                      variant="extended"
+                      size="small"
+                      color="primary"
+                      className='friend-add-btn'
+                      onClick={() => { removeFriend(); } }
+                    > Remove Friend
+                    </Fab>
+                  </Box>
+                </div>
+              </ThemeProvider>
             </div>
           )}
         </div>

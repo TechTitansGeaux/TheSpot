@@ -318,20 +318,22 @@
 /* Bernie added ///// button and button hover */
 .recenterButton {
   display: flex;
+  position: absolute;
   align-items: center;
   justify-content: center;
   font-family: var(--title-font);
-  letter-spacing: .02rem;
   color: black;
   cursor: pointer;
   float: right;
-  top: 50%;
+  top: 11%;
+  right: 11%;
   height: 40px;
   width: 40px;
-  border: 3px solid black;
+  border: 2px solid black;
   border-radius: 50%;
   background-color: var(--grey);
   text-align: center;
+  z-index: 99;
 }
 
 .recenterButton:hover, .recenterButton:focus {
