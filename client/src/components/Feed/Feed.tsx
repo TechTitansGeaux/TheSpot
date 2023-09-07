@@ -291,7 +291,7 @@ const Feed: React.FC<Props> = ({user}) => {
       if (user?.type === 'business') {
         getFollowersList();
       }
-  }, [user, filter]);
+  }, [filter]);
 
   return (
     <>
@@ -327,7 +327,7 @@ const Feed: React.FC<Props> = ({user}) => {
     {user?.type === 'business' && (
       <div className='filter-container'>
       <div className='label'>
-        Filter By
+        Filter By{' '}
       <button
         className='filter-btn'
         name='Filter Button'
