@@ -130,6 +130,9 @@ const urltoFile = (url: any, filename: any, mimeType: any) => {
       handleDataAvailable
     );
     mediaRecorderRef.current.start();
+    setTimeout(() => {
+      handleStopCaptureClick();
+    }, 6000)
   }, [webcamRef, setCapturing, mediaRecorderRef, handleDataAvailable]);
 
   // when they click to end recording video
@@ -273,6 +276,7 @@ const clearReel = () => {
   setUrl('');
   setText('');
   setJustRecorded(false);
+  setUrlRetrieved(false);
   const box = document.getElementById('event-form');
   box.style.display = 'none';
   setClear(true);
