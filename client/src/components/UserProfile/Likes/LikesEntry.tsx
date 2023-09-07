@@ -1,21 +1,6 @@
 import * as React from 'react';
 import './likes.css';
 
-type User = {
-  id: number;
-  username: string;
-  displayName: string;
-  type: string;
-  geolocation: string;
-  mapIcon: string;
-  birthday: string;
-  privacy: string;
-  accessibility: string;
-  email: string;
-  picture: string;
-  googleId: string;
-};
-
 type Props = {
   user: {
     id: number;
@@ -31,7 +16,6 @@ type Props = {
     picture: string;
     googleId: string;
   };
-  allUsers: any;
   like: any;
 };
 

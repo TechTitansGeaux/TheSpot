@@ -11,6 +11,7 @@ The Spot is a revolutionary application that makes getting together with friends
 ## Installation and Start-Up:
   npm install
   sudo service mysql start (WSL)
+  mysql.server start (Mac)
   npm run build:dev
   npm start
 

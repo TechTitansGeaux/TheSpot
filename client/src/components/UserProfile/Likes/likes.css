@@ -3,7 +3,7 @@
   font-size: var(--md-font);
   color: var(--yellow);
   margin: .5em 1em;
-  align-items: center;
+  align-items: left;
 }
 
 .like-name {
@@ -17,7 +17,7 @@
 .container-likes {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: left;
   max-width: 525px;
   margin: 0 auto;
 }
@@ -27,6 +27,6 @@
   /* Likes Entry/List*/
   .container-likes {
     max-width: 90vw;
-    padding: 1.5em;
+    padding-right: 2.5em;
   }
 }
