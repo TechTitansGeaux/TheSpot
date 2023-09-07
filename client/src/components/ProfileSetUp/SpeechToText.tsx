@@ -20,13 +20,15 @@ const SpeechToText = ({ onTranscriptChange }: any) => {
   };
 
   return (
-    <div>
+    <div style={{ alignItems: 'center', paddingRight: '5px' }}>
       <IconButton
         onClick={handleSpeechRecognition}
         color="primary"
         aria-label="Start Speech Recognition"
+        style={{ width: '27px', height: '27px' }}
       >
-        <MicIcon fontSize="small" />
+        <MicIcon fontSize="medium" />
+
       </IconButton>
     </div>
   );
