@@ -35,12 +35,12 @@ type Props = {
   like: any;
 };
 
-const LikesEntry: React.FC<Props> = ({user, allUsers, like}) => {
+const LikesEntry: React.FC<Props> = ({like}) => {
 
   return (
     <>
     <li className='like-entry'>
-      <span className='like-name'>{like.User.displayName}</span>{` liked your reel '${like.Reel.text}'`}
+      <span className='like-name'>{like.User.displayName}</span>{` liked your reel `} <span className='reel-name'>{`'${like.Reel.text}'`}</span>
       </li>
       <hr></hr>
     </>

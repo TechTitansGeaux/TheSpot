@@ -10,11 +10,16 @@
   color: var(--white);
 }
 
+.reel-name {
+  color: var(--pink);
+}
+
 .container-likes {
   display: flex;
   flex-direction: column;
   justify-content: center;
   max-width: 525px;
+  margin: 0 auto;
 }
 
 @media screen and (max-width: 425px) {

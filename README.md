@@ -10,14 +10,16 @@ The Spot is a revolutionary application that makes getting together with friends
 
 ## Installation and Start-Up:
   npm install
+  sudo service mysql start (WSL)
+  npm run build:dev
   npm start
 
 Reach out to one of our devs if you have any questions!
 
 Our Team:
-  Benjamin Klein: linked in
-  Bernie January Jr.: linked in
-  Edward Cooper: linked in
-  Jackie Wisdom: linked in
-  Samson Thai: linked in
+  Benjamin Klein: https://www.linkedin.com/in/benjaminkleindev/
+  Bernie January Jr.: https://www.linkedin.com/in/berniejanuaryjr/
+  Edward Cooper: https://www.linkedin.com/in/edwardcooperii/
+  Jackie Wisdom: https://www.linkedin.com/in/wisdomjackie/
+  Samson Thai: https://www.linkedin.com/in/samsonthai/
 
