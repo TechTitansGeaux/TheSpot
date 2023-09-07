@@ -114,9 +114,17 @@ const urltoFile = (url: any, filename: any, mimeType: any) => {
   // when they click start video
   const handleStartCaptureClick = useCallback(() => {
     setCapturing(true);
+    if (MediaRecorder.isTypeSupported('video/webm')) {
+      console.log('wemb supported')
     mediaRecorderRef.current = new MediaRecorder(webcamRef.current.stream, {
       mimeType: "video/webm",
     });
+  } else if (MediaRecorder.isTypeSupported('video/mp4')) {
+    console.log('mp4 supported')
+    mediaRecorderRef.current = new MediaRecorder(webcamRef.current.stream, {
+      mimeType: "video/mp4",
+    });
+  }
     mediaRecorderRef.current.addEventListener(
       "dataavailable",
       handleDataAvailable
