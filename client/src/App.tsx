@@ -24,7 +24,7 @@ import { setAuthUser, setIsAuthenticated, setFontSize } from './store/appSlice';
 import { RootState } from './store/store';
 import { useTheme } from '@mui/material/styles';
 import io from 'socket.io-client';
-const socket = io();
+const socket = io(process.env.WEBSOCKET);
 import Location from './components/ProfileSetUp/Location';
 
 type User = {
@@ -91,7 +91,7 @@ const App = () => {
 useEffect(() => {
   if (authUser){
 // Listen for geolocation updates from the server
-socket.on('userGeolocationUpdate', (data) => {
+socket.on('connect', (data) => {
   console.log(data.userId, '<------userID');
   console.log(authUser.id, '<------ID');
 

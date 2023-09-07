@@ -68,7 +68,7 @@ const Map: React.FC<Props> = (props) => {
   // Listen for geolocation updates
   useEffect(() => {
     if (isSocketConnected && socket) {
-      socket.on('updateGeolocation', (updatedUser: User) => {
+      socket.on('connect', (updatedUser: User) => {
         setUsers((prevUsers) =>
           prevUsers.map((user) => {
             if (user.id === updatedUser.id) {

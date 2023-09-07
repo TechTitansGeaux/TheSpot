@@ -31,12 +31,14 @@ const uuid = require('uuid');
 const secretKey = uuid.v4();
 
 // server setup for sockets
-import http from 'http';
-const server = http.createServer(app);
+import { createServer } from "http";
+const httpServer = createServer(app);
 import { Server } from "socket.io";
-const io = new Server(server, {
+const io = new Server(httpServer, {
   cors: {
-    origin: "https://thespot.live/"
+    origin: "https://thespot.live/",
+    allowedHeaders: ["my-custom-header"],
+    credentials: true
   }
 });
 
@@ -110,6 +112,6 @@ app.get('/*', (req: Request, res: Response) => {
   });
 });
 
-server.listen(port, () => {
+httpServer.listen(port, () => {
   console.log(`⚡️ Server listening at http://localhost:${port}`);
 });
