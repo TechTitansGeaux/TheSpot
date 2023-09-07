@@ -203,7 +203,7 @@ BE AWARE Ideal-ish image upload / src size: 1024 x 768 OR 1200 x 800 (-ish) / ra
 }
 
 /* google sso button */
-button {
+.google-button {
   max-width: 320px;
   display: flex;
   padding: 0.7rem 1.4rem;
@@ -223,10 +223,10 @@ button {
   transition: all .6s ease;
 }
 
-.button svg {
+.google-button svg {
   height: 24px;
 }
 
-button:hover {
+.google-button:hover {
   transform: scale(1.02);
 }
