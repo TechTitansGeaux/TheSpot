@@ -524,7 +524,7 @@ button.rejectFriend-btn:hover {
 }
 
 .save-event-detail-button {
-  color: var(--violet);
+  color: var(--white);
   background-color: var(--pink);
   border: solid var(--pink);
   border-radius: 5px;
