@@ -8,6 +8,7 @@ const { Likes, Reels, Users } = require('../db/index');
 likesRouter.put('/addLike/:ReelId', (req: any, res: any) => {
   const { ReelId } = req.params;
   const { id } = req.user; // req.user ACTUALLY // tested with req.body
+  // if conditional for UserId
   Reels.increment(
     {
       like_count: 1,
@@ -19,19 +20,22 @@ likesRouter.put('/addLike/:ReelId', (req: any, res: any) => {
     }
   )
     .then((response: any) => {
-      Likes.create({
-        UserId: id,
-        ReelId: ReelId,
-      });
+      Likes.findOrCreate(
+        {
+          where: { UserId: id, ReelId: ReelId },
+          defaults: {
+            UserId: id, ReelId: ReelId
+          }
+        })
+        .then((response: any) => {
+          console.log('Likes UPDATE addLike success', response);
+          res.sendStatus(200);
+        })
+        .catch((err: any) => {
+          console.error('likeRouter PUT addLike from database Error', err);
+          res.sendStatus(500);
+        });
     })
-    .then((response: any) => {
-      // console.log('Likes UPDATE addLike success');
-      res.sendStatus(200);
-    })
-    .catch((err: any) => {
-      console.error('likeRouter PUT addLike from database Error', err);
-      res.sendStatus(500);
-    });
 });
 
 // update route decrement likes

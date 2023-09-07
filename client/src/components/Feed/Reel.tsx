@@ -6,6 +6,7 @@ import { setAuthUser, setIsAuthenticated } from '../../store/appSlice';
 import { Suspense, lazy } from 'react';
 import Loading from './Loading'
 const ReelItem = lazy(() => import('./ReelItem'));
+// import ReelItem from './ReelItem';
 import { useTheme } from '@mui/material/styles';
 import { AnimatePresence, m, LazyMotion, domAnimation } from 'framer-motion';
 import io from 'socket.io-client';
@@ -221,13 +222,13 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
   };
 
   // ADD ONE LIKE per Reel
-  const handleAddLike = (reelId: number) => {
+  const handleAddLike = (reelId: number, idUser: number) => {
     // console.log('ADD like of reelId =>', reelId);
     axios
       .put(`/likes/addLike/${reelId}`)
       .then((data) => {
         // console.log('Likes Updated AXIOS', data);
-        setLikes((prev) => [...prev, reelId]);
+        setLikes((prev) => [...prev, [reelId, idUser]]);
         setLikeTotal((prev) => prev + 1);
       })
       .catch((err) => console.error('Like AXIOS route Error', err));
@@ -244,7 +245,9 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
           setLikes((prev) => prev.splice(foundLike, 1));
         }
         setLikes((prev) => prev.splice(foundLike, 1));
-        setLikeTotal((prev) => prev - 1);
+        if (likeTotal !== 0) {
+          setLikeTotal((prev) => prev - 1);
+        }
       })
       .catch((err) => console.error('Like AXIOS route Error', err));
   };

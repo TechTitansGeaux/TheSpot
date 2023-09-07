@@ -374,6 +374,10 @@ button.rejectFriend-btn:hover {
 
 /* ////// CREATE REEL */
 
+footer {
+    z-index: 997;
+}
+
 .create-reel-btn-container{
   border-radius: 50%;
   width: auto;

@@ -326,6 +326,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   // console.log('reel ---------->', reel)
   // console.log('rsvpTotal', rsvpTotal)
   // console.log('disableRsvp', disableRsvp);
+  console.log('likesArr', likesArr);
   return (
     <div>
       {true && (
@@ -358,39 +359,39 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
               </h5>
               <p className='video-text'>{reel.text}</p>
               <>
-              <ClickAwayListener onClickAway={closeInfo}>
-                <Tooltip
-                onClose={handleInfoClick}
-                open={openInfo}
-                disableFocusListener
-                disableHoverListener
-                disableTouchListener
-                  title={
-                    <div>
-                      {eventName}
-                      <br />
-                      {eventDate}
-                      <br />
-                      {pastEvent}
-                    </div>
-                  }
-                  placement='left'
-                  PopperProps={{
-                    sx: {
-                      '& .MuiTooltip-tooltip': {
-                        backgroundColor: 'transparent',
-                        border: 'solid #F5FCFA 1px',
-                        color: '#F5FCFA',
+                <ClickAwayListener onClickAway={closeInfo}>
+                  <Tooltip
+                    onClose={handleInfoClick}
+                    open={openInfo}
+                    disableFocusListener
+                    disableHoverListener
+                    disableTouchListener
+                    title={
+                      <div>
+                        {eventName}
+                        <br />
+                        {eventDate}
+                        <br />
+                        {pastEvent}
+                      </div>
+                    }
+                    placement='left'
+                    PopperProps={{
+                      sx: {
+                        '& .MuiTooltip-tooltip': {
+                          backgroundColor: 'transparent',
+                          border: 'solid #F5FCFA 1px',
+                          color: '#F5FCFA',
+                        },
                       },
-                    },
-                  }}
-                >
-                  <InfoIcon
-                    onClick={handleInfoClick}
-                    aria-label={eventName + eventDate}
-                    className='info-icon'
-                  />
-                </Tooltip>
+                    }}
+                  >
+                    <InfoIcon
+                      onClick={handleInfoClick}
+                      aria-label={eventName + eventDate}
+                      className='info-icon'
+                    />
+                  </Tooltip>
                 </ClickAwayListener>
                 {/**Removes addFriend button if already approved friend*/}
                 {user?.type === 'business' ||
@@ -599,7 +600,9 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                             {reel.like_count + likeTotal}
                           </p>
                         ) : (
-                          <p className='like-counter'>{reel.like_count}</p>
+                          <p className='like-counter'>
+                            {reel.like_count < 0 ? 0 : reel.like_count}
+                          </p>
                         )}
                       </div>
                     }
