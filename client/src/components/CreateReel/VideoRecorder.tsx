@@ -74,6 +74,9 @@ const VideoRecorder: React.FC<Props> = ({
   const [urlRetrieved, setUrlRetrieved] = useState(false);
   const [clear, setClear] = useState(false);
   const [isCameraLoading, setIsCameraLoading] = useState(true);
+  const FACING_MODE_USER = "user";
+  const FACING_MODE_ENVIRONMENT = "environment";
+  const [facingMode, setFacingMode] = useState(FACING_MODE_USER);
 
   type Blob = {
     data: {
@@ -82,6 +85,7 @@ const VideoRecorder: React.FC<Props> = ({
     }
   };
   
+  // navigator.mediaDevices.enumerateDevices().then(devices => console.log(devices))
 
   const handleDataAvailable = useCallback(
     ({ data }: Blob) => {
@@ -253,9 +257,7 @@ const urltoFile = (url: any, filename: any, mimeType: any) => {
   }, [eventId, reelSaved])
 
   const videoConstraints = {
-    // width: 420,
-    // height: 420,
-    facingMode: "user",
+    facingMode: facingMode,
   };
 
 // handle input text for caption
@@ -321,9 +323,16 @@ const handleCameraLoaded = () => {
   setIsCameraLoading(false);
 };
 
-// console.log(user.type, '<---- user type')
-// console.log(businessAccount, '<------business account')
+const switchCams = React.useCallback(() => {
+  setFacingMode(
+    prevState =>
+      prevState === FACING_MODE_USER
+        ? FACING_MODE_ENVIRONMENT
+        : FACING_MODE_USER
+  );
+}, []);
 
+console.log(facingMode, '<---- facing mode')
   return (
     <div>
       <div className='webContainer'>
@@ -396,6 +405,10 @@ const handleCameraLoaded = () => {
       )}
       </div>
       <div className='cam-buttons-container'>
+      <button
+        className='cameraButtons'
+        onClick={switchCams}
+        >SWITCH</button>
       <div className='cameraButtons'>
         {capturing && (
           <RadioButtonCheckedIcon
