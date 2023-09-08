@@ -9,6 +9,7 @@
   --white: #F5FCFA;
   --t50-white: #f5fcfa80;
   --t25-white: #f5fcfa17;
+  --t90-violet: rgba(11, 1, 19, .9);
   --t75-violet: rgba(11, 1, 19, .75);
   --t50-violet: rgba(11, 1, 19, .50);
   --t25-violet: rgba(11, 1, 19, .25);
@@ -70,7 +71,6 @@ h6 {
 
 /* ////// GLOBAL */
 #app {
-  max-width: 98vw;
   margin: 0 auto;
 }
 
@@ -113,13 +113,13 @@ h1 {
 
 footer {
   position: fixed;
-  background-color: var(--t75-violet);
+  background-color: var(--t90-violet);
   display: flex;
   align-items: center;
   justify-content: center;
   bottom: 0%;
   width: 100vw;
-  z-index: 9999;
+  z-index: 997;
 }
 
 
@@ -171,15 +171,15 @@ footer {
 /* ////// FEED & REEL */
 
 /* .reel-container {
-  scroll-margin-top: 5em;
+  scroll-margin-top: 5.75em;
   scroll-snap-type: y mandatory;
-  max-height: 100vh;
-  overflow-y: auto;
+  height: 100vh;
+  overflow:auto;
 }
 
 .reel-child {
   scroll-snap-align: start end;
-  height: 100vh;
+  height: 100%;
 } */
 
 .click {
@@ -362,15 +362,16 @@ img.follow-icon {
   margin: 1em auto;
   padding: .75em 2em;
   border-radius: 1rem;
-  background-color: linear-gradient(75deg, #120120, #0f011b);
-  box-shadow:  25px -25px 68px #2d0849,
-             -25px 25px 68px #19012d;
+  border: .75px solid var(--violet);
+  background-color: linear-gradient(175deg, #120120, #0f011b);
+  box-shadow:  -5px 15px 48px #350956,
+             15px -5px 48px #1a022e;
 }
 
 hr.line {
   width: 90%;
   margin: 0 auto;
-  border-top: .75px solid var(--violet);
+  border: .75px solid var(--t50-white);
   z-index: 99;
 }
 
@@ -392,14 +393,16 @@ button.rejectFriend-btn:hover {
 
 /* ////// CREATE REEL */
 
-footer {
-    z-index: 997;
-}
 
 .create-reel-btn-container{
   border-radius: 50%;
   width: auto;
   height: auto;
+}
+
+.create-reel-btn:hover {
+  color: var(--yellow);
+  transition: color .2s ease-out;
 }
 
 .webContainer {
@@ -572,6 +575,17 @@ footer {
 
 /* MEDIA QUERIES */
 
+@media screen and (max-width: 410px) {
+  .container-full-w {
+    max-width: 360px;
+    margin: 0 auto;
+  }
+
+  .video-container {
+    min-width: 325px;
+  }
+}
+
 @media screen and (max-width: 525px) {
   /* SideBar */
   .drawer-container {
@@ -627,5 +641,24 @@ footer {
     color: white;
     z-index: 5;
     font-weight: bold;
+  }
+}
+
+@media screen and (max-width: 300px) {
+
+  #app {
+    max-width: 100%;
+  }
+
+  footer {
+      width: 100%;
+    }
+
+  .container-full-w {
+    max-width: 280px;
+  }
+
+  .video-container {
+    min-width: 250px;
   }
 }

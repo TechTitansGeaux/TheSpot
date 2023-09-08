@@ -103,7 +103,7 @@ const FriendAcceptedEntry: React.FC<Props> = ({
                 PopperProps={{
                   sx: {
                     '& .MuiTooltip-tooltip': {
-                      backgroundColor: 'transparent',
+                      backgroundColor: '#0b0113',
                       border: 'solid #F5FCFA 1px',
                       color: '#F5FCFA',
                     },

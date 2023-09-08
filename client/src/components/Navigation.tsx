@@ -420,49 +420,51 @@ const Navigation: React.FC<Props> = ({ user }) => {
     <>
       <ThemeProvider theme={theme}>
         <nav className='toolbar-container'>
-                <div className='navbar-container'>
-                {onPage}
-                  <NavLink className='navLink mapLink' to='/Map'>
-                      Map
-                  </NavLink>
-                    {(likesArr.length !== 0 || pFriends.length !== 0 || following.length !== 0) && (
-                      <div>
-                        <CircleNotificationsIcon
-                          className='circle'
-                          sx={{
-                            position: 'relative',
-                            right: -60,
-                            zIndex: '4',
-                            top: -15,
-                          }}
-                        />
-                    </div>
-                    )}
-                  <div onClick={toggleDrawer('left', true)}>
-                    <Tooltip
-                      title='Open Settings'
-                      TransitionComponent={Zoom}
-                      placement='left'
-                      PopperProps={{
-                        sx: {
-                          '& .MuiTooltip-tooltip': {
-                            backgroundColor: 'transparent',
-                            border: 'solid #F5FCFA 1px',
-                            color: '#F5FCFA',
-                          },
-                        },
-                      }}
-                    >
-                      <Avatar
-                        src={user?.picture}
-                        alt='User Picture'
-                        className='nav-avatar'
-                        sx={{ width: 45, height: 45 }}
-                      />
-                    </Tooltip>
-                  </div>
-                </div>
-          </nav>
+          <div className='navbar-container'>
+            <NavLink className='navLink mapLink' to='/Map'>
+              Map
+            </NavLink>
+            {onPage}
+            <div className='avatar-container'>
+              <div onClick={toggleDrawer('left', true)}>
+                <Tooltip
+                  title='See Profile'
+                  TransitionComponent={Zoom}
+                  placement='left'
+                  PopperProps={{
+                    sx: {
+                      '& .MuiTooltip-tooltip': {
+                        backgroundColor: 'transparent',
+                        border: 'solid #F5FCFA 1px',
+                        color: '#F5FCFA',
+                      },
+                    },
+                  }}
+                >
+                  <Avatar
+                    src={user?.picture}
+                    alt='User Picture'
+                    className='nav-avatar'
+                    sx={{ width: 45, height: 45 }}
+                  />
+                </Tooltip>
+              </div>
+              {(likesArr.length !== 0 ||
+                pFriends.length !== 0 ||
+                following.length !== 0) && (
+                <CircleNotificationsIcon
+                  className='circle'
+                  sx={{
+                    position: 'absolute',
+                    right: '-25%',
+                    top: '0%',
+                    zIndex: '4',
+                  }}
+                />
+              )}
+            </div>
+          </div>
+        </nav>
         <Outlet />
         <div>
           <Drawer
@@ -479,6 +481,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
             <div className='create-reel-btn-container'>
               <Link to='/CreateReel'>
                 <AddCircleIcon
+                  className='create-reel-btn'
                   color='secondary'
                   sx={{ width: 52, height: 52 }}
                 />
