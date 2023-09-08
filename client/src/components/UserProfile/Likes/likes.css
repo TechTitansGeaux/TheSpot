@@ -14,12 +14,17 @@
   color: var(--pink);
 }
 
+.title {
+  letter-spacing: .05rem;
+}
+
 .container-likes {
   display: flex;
   flex-direction: column;
   justify-content: left;
   max-width: 525px;
   margin: 0 auto;
+  letter-spacing: .02rem;
 }
 
 @media screen and (max-width: 425px) {
