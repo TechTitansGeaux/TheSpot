@@ -44,8 +44,16 @@ friendRouter.post('/', (req: any, res: any) => {
   const { accepter_id } = req.body;
   Friendships.findOrCreate({
     // set to pending status // finds, if not found - creates
-    where: { status: 'pending', requester_id: id, accepter_id },
-    defaults: { status: 'pending', requester_id: id, accepter_id },
+    where: {
+      status: 'pending',
+      requester_id: id,
+      accepter_id,
+    },
+    defaults: {
+      status: 'pending',
+      requester_id: id,
+      accepter_id,
+    },
   })
     .then((data: any) => {
       res.sendStatus(201);
@@ -66,6 +74,7 @@ friendRouter.put('/', (req: any, res: any) => {
     {
       where: {
         accepter_id: id, // changed from [id, requester_id] to id
+        requester_id: requester_id,
         status: 'pending',
       },
     }
@@ -74,10 +83,11 @@ friendRouter.put('/', (req: any, res: any) => {
       Friendships.findOrCreate({
         // set to approved status // finds, if not found - creates swapped
         where: {
+          // SWAPPED requester_id: id AND accepter_id: requester_id:
           status: 'approved',
           requester_id: id,
           accepter_id: requester_id,
-        }, // SWAPPED requester_id: id AND accepter_id: requester_id:
+        },
         defaults: {
           status: 'approved',
           requester_id: id,
