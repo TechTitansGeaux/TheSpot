@@ -15,7 +15,8 @@
   --setupBG: #f433aa12;
   --title-font: 'Anton', sans-serif;
   --primary-font: system-ui, sans-serif;
-  --lg-font: 2.5rem;
+  --lg-font: 2.25rem;
+  --mid-lg-font: 1.75rem;
   --md-font: 1.5rem;
   --reg-font: 1rem;
   --sm-font: .5rem;
@@ -75,6 +76,7 @@ h6 {
 
 html {
   scroll-behavior: smooth;
+  background-color: var(--violet);
 }
 
 body {
@@ -336,6 +338,8 @@ video.reel {
 h1.profile-title {
   margin-top: 1em;
   margin-left: .25em;
+  margin-bottom: .5em;
+  z-index: 98;
 }
 
 img.follow-icon {
@@ -346,14 +350,28 @@ img.follow-icon {
 
 .friendName {
   margin-right: 3rem;
+  z-index: 9;
 }
 
 .friendRequest-container {
   display: flex;
   flex-direction: row;
+  width: 95%;
   justify-content: space-between;
   align-items: center;
-  margin: 2em auto;
+  margin: 1em auto;
+  padding: .75em 2em;
+  border-radius: 1rem;
+  background-color: linear-gradient(75deg, #120120, #0f011b);
+  box-shadow:  25px -25px 68px #2d0849,
+             -25px 25px 68px #19012d;
+}
+
+hr.line {
+  width: 90%;
+  margin: 0 auto;
+  border-top: .75px solid var(--violet);
+  z-index: 99;
 }
 
 .rejectFriend-btn {
@@ -564,7 +582,13 @@ footer {
   /* Followers & Friends */
   h1.profile-title {
     text-align: center;
+    margin-bottom: .25em;
     margin-left: 0;
+    font-size: var(--mid-lg-font);
+  }
+
+  .friendRequest-container {
+    padding: .75em .75em;
   }
 }
 
