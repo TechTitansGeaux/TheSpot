@@ -42,10 +42,11 @@ friendRouter.post('/', (req: any, res: any) => {
   // REQUESTER is req.user
   const { id } = req.user;
   const { accepter_id } = req.body;
-  Friendships.create(
-    // set to approved for testing
-    { status: 'pending', requester_id: id, accepter_id }
-  )
+  Friendships.findOrCreate({
+    // set to pending status // finds, if not found - creates
+    where: { status: 'pending', requester_id: id, accepter_id },
+    defaults: { status: 'pending', requester_id: id, accepter_id },
+  })
     .then((data: any) => {
       res.sendStatus(201);
     })
@@ -60,6 +61,7 @@ friendRouter.put('/', (req: any, res: any) => {
   const { id } = req.user;
   const { requester_id } = req.body;
   Friendships.update(
+  // changes pending friend status to approved
     { status: 'approved' },
     {
       where: {
@@ -69,14 +71,19 @@ friendRouter.put('/', (req: any, res: any) => {
     }
   )
     .then((data: any) => {
-      Friendships.create(
-        // set to approved for testing
-        {
+      Friendships.findOrCreate({
+        // set to approved status // finds, if not found - creates swapped
+        where: {
           status: 'approved',
           requester_id: id,
           accepter_id: requester_id,
-        } // SWAPPED requester_id: id AND accepter_id: requester_id:
-      );
+        }, // SWAPPED requester_id: id AND accepter_id: requester_id:
+        defaults: {
+          status: 'approved',
+          requester_id: id,
+          accepter_id: requester_id,
+        },
+      });
     })
     .then((data: any) => {
       res.sendStatus(200);
