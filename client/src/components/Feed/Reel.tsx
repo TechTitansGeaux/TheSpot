@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { setAuthUser, setIsAuthenticated } from '../../store/appSlice';
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, memo } from 'react';
 import Loading from './Loading'
 const ReelItem = lazy(() => import('./ReelItem'));
 // import ReelItem from './ReelItem';
@@ -65,7 +65,7 @@ type Event = {
   PlaceId: 1;
 };
 
-const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
+const Reel: React.FC<Props> = memo(function Reel({ reels, getAllReels }) {
   const theme = useTheme();
   const dispatch = useDispatch();
 
@@ -228,7 +228,7 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
       .put(`/likes/addLike/${reelId}`)
       .then((data) => {
         // console.log('Likes Updated AXIOS', data);
-        setLikes((prev) => [...prev, [reelId, idUser]]);
+        setLikes((prev) => [...prev, reelId]);
         setLikeTotal((prev) => prev + 1);
       })
       .catch((err) => console.error('Like AXIOS route Error', err));
@@ -261,7 +261,7 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
           for (let i = 0; i < response.data.length; i++) {
             for (let j = 0; j < reels.length; j++) {
               if (response.data[i].ReelId === reels[j].id) {
-                likes.push(response.data[i].ReelId);
+                likes.push(response.data[i]);
               }
             }
           }
@@ -278,14 +278,15 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
     }
   };
 
-  useEffect(() => {
-    getLikes();
-  }, []);
+  // useEffect(() => {
+  //   getLikes();
+  // }, []);
 
   useEffect(() => {
     getAllFollowed();
   }, []);
 
+    console.log('reel from REEL ---------->', reels);
   return (
     <main
       className='reel-container'
@@ -337,6 +338,6 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
       </AnimatePresence>
     </main>
   );
-};
+});
 
 export default Reel;
