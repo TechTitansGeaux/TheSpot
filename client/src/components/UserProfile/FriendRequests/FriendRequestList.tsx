@@ -103,7 +103,7 @@ const FriendRequestList: React.FC<Props> = ({ user, allUsers }) => {
   return (
     <>
       <div className='container-full-w'>
-        <h1 className='profile-title'>Pending Friend Requests</h1>
+        {pendingFriends.length !== 0 && <h1 className='profile-title'>Pending Friend Requests</h1>}
         {pendingFriends.length !== 0 &&
           pendingFriends.map((pendingFriend) => {
             return (
