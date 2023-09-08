@@ -81,6 +81,7 @@
   animation-name: popOut;
   animation-timing-function: ease-in;
   animation-duration: .5s;
+  letter-spacing: 0.05rem;
 }
 
 .addOrRmFriend {
@@ -130,6 +131,7 @@
   animation-name: popOut;
   animation-timing-function: ease-in;
   animation-duration: .5s;
+  letter-spacing: 0.05rem;
 }
 
 .zoomToEvent {
@@ -197,6 +199,7 @@
   animation-name: popOut;
   animation-timing-function: ease-in;
   animation-duration: .5s;
+  letter-spacing: 0.05rem;
 }
 
 .BusinessClusterPin {

@@ -200,7 +200,7 @@ const UserPin: React.FC<Props> = ({ user, loggedIn, lat, lng, zoom, friendList, 
         <div className='addOrRmFriend'>
           {pendingFriendList.includes(user.id) && (
             <div>
-              <div style={{ position: 'relative', top: '-170px', marginBottom: '10px', left: '65px', fontSize: '15px' }}>request pending</div>
+              <div style={{ position: 'relative', top: '-170px', marginBottom: '10px', left: '70px', fontSize: '15px' }}>request pending</div>
             </div>
           )}
         </div>
