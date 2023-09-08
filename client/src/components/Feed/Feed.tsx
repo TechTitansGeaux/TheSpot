@@ -37,25 +37,10 @@ const Feed: React.FC<Props> = ({user}) => {
   const [userLat, setUserLat] = useState(0);
   const [userLong, setUserLong] = useState(0);
   const [followers, setFollowers] = useState([]); // followers list for current user (business)
-  const [userType, setUserType] = useState(''); // personal or business
+
     // filter dialog
   const [open, setOpen] = React.useState(false);
   const marks = [{value: 1, label: '1 mile'}, {value: 15, label: '15 miles'}, {value: 30, label: '30 miles'}];
-
-  const findUserType = () => {
-    if (user) {
-      // console.log('user type:', user.type);
-      if (user.type === 'business') {
-        setUserType('business');
-      } else if (user.type === 'personal') {
-        setUserType('personal');
-      }
-    }
-  };
-
-  useEffect(() => {
-    findUserType();
-  }, [user]);
 
   const friendsReels: any = [];
   const followingReels: any = [];
@@ -173,8 +158,7 @@ const Feed: React.FC<Props> = ({user}) => {
   };
 
   const getFriendList = () => {
-    if (user) {
-      if (user.type === 'personal') {
+      if (user?.type === 'personal') {
         axios
           .get(`/feed/frens`)
           .then((response) => {
@@ -185,13 +169,11 @@ const Feed: React.FC<Props> = ({user}) => {
             console.error('Could not GET friends:', err);
           })
       }
-    }
   };
 
   // for personal accounts
   const getFollowingList = () => {
-    if (user) {
-      if (user.type === 'personal') {
+      if (user?.type === 'personal') {
         axios
           .get('/feed/following')
           .then((response) => {
@@ -202,7 +184,6 @@ const Feed: React.FC<Props> = ({user}) => {
             console.error('Could not GET followings:', err);
           })
       }
-    }
   };
 
   const getAllFollowingReels = () => {
@@ -228,8 +209,7 @@ const Feed: React.FC<Props> = ({user}) => {
 
   // business accounts
   const getFollowersList = () => {
-    if (user) {
-      if (user.type === 'business') {
+      if (user?.type === 'business') {
         axios
           .get('/feed/followers')
           .then((response) => {
@@ -240,7 +220,6 @@ const Feed: React.FC<Props> = ({user}) => {
             console.error('Could not GET followers', err);
           })
       }
-    }
   };
 
   const getAllFollowersReels = () => {
@@ -297,32 +276,26 @@ const Feed: React.FC<Props> = ({user}) => {
   }, [filter, geoF, user, userLat]);
 
   useEffect(() => {
-    if (user) {
-      if (user.type === 'personal') {
+      if (user?.type === 'personal') {
         getFriendList();
       }
-    }
   }, [user, filter]);
 
   useEffect(() => {
-    if (user) {
-      if (user.type === 'personal') {
+      if (user?.type === 'personal') {
         getFollowingList();
       }
-    }
   }, [user, filter]);
 
   useEffect(() => {
-    if (user) {
-      if (user.type === 'business') {
+      if (user?.type === 'business') {
         getFollowersList();
       }
-    }
-  }, [user, filter]);
+  }, [filter]);
 
   return (
     <>
-    {userType === 'personal' && (
+    {user?.type === 'personal' && (
       <div className='filter-container'>
       <div className='label'>
         Filter By{' '}
@@ -351,10 +324,10 @@ const Feed: React.FC<Props> = ({user}) => {
     </div>
     )}
 
-    {userType === 'business' && (
+    {user?.type === 'business' && (
       <div className='filter-container'>
       <div className='label'>
-        Filter By
+        Filter By{' '}
       <button
         className='filter-btn'
         name='Filter Button'
