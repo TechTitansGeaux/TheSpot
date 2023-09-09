@@ -93,13 +93,21 @@ const handleEndTime = (e: any) => {
  setEndTime(e.target.value)
 }
 
-// handle changing to 21 +
-const handleTwentyOne = () => {
- if (!twentyOne) {
-   setTwentyOne(true)
- } else {
-   setTwentyOne(false)
- }
+// // handle changing to 21 +
+// const handleTwentyOne = () => {
+//  if (!twentyOne) {
+//    setTwentyOne(true)
+//  } else {
+//    setTwentyOne(false)
+//  }
+// }
+
+const twentyOneYes = () => {
+  setTwentyOne(true)
+}
+
+const twentyOneNo = () => {
+  setTwentyOne(false)
 }
 
 // function to set event location
@@ -212,6 +220,8 @@ const createEvent = async () => {
     console.log('reset event details');
   }, [clear])
 
+  console.log(twentyOne, '<-----21')
+
    return (
      <div
        id='event-form'
@@ -266,12 +276,17 @@ const createEvent = async () => {
          21+
          </label>
          &#160;
-         <input
-         id='twentyOne'
-         type='checkbox'
-         checked={twentyOne}
-         onChange={handleTwentyOne}>
-         </input>
+         <button
+         onClick={twentyOneYes}
+         className='twenty-one-button'>
+          Yes
+         </button>
+         &#160;
+         <button
+         onClick={twentyOneNo}
+         className='twenty-one-button'>
+          No
+          </button>
          <br></br>
          <br></br>
          {noConflicts ?

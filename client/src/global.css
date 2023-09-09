@@ -423,6 +423,10 @@ button.rejectFriend-btn:hover {
   cursor: pointer;
 }
 
+.twenty-one-button:focus {
+  background-color: var(--pink);
+}
+
 .preview-mask {
   display: flex;
   justify-content: center;
