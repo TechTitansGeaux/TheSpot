@@ -93,15 +93,6 @@ const handleEndTime = (e: any) => {
  setEndTime(e.target.value)
 }
 
-// // handle changing to 21 +
-// const handleTwentyOne = () => {
-//  if (!twentyOne) {
-//    setTwentyOne(true)
-//  } else {
-//    setTwentyOne(false)
-//  }
-// }
-
 const twentyOneYes = () => {
   setTwentyOne(true)
 }

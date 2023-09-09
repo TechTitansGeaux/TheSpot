@@ -488,7 +488,7 @@ button.rejectFriend-btn:hover {
 
 .eventCard {
   position: relative;
-  height: 270px;
+  height: auto;
   width: 200px;
   margin: 10px;
   padding: 10px;
