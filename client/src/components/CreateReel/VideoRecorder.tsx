@@ -14,7 +14,6 @@ import EventNoteIcon from '@mui/icons-material/EventNote';
 import CircularProgress from '@mui/material/CircularProgress';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CameraswitchIcon from '@mui/icons-material/Cameraswitch';
-import { CardMedia } from '@mui/material';
 
 type Props = {
   currentEvent: {
@@ -75,10 +74,11 @@ const VideoRecorder: React.FC<Props> = ({
   const [eventIsPublic, setEventIsPublic] = useState(true);
   const [urlRetrieved, setUrlRetrieved] = useState(false);
   const [clear, setClear] = useState(false);
-  const [isCameraLoading, setIsCameraLoading] = useState(false);
+  const [isCameraLoading, setIsCameraLoading] = useState(true);
   const FACING_MODE_USER = "user";
   const FACING_MODE_ENVIRONMENT = "environment";
   const [facingMode, setFacingMode] = useState(FACING_MODE_USER);
+  const [mirrored, setMirrored] = useState(true);
 
   type Blob = {
     data: {
@@ -325,15 +325,21 @@ const handleCameraLoaded = () => {
   setIsCameraLoading(false);
 };
 
-const switchCams = React.useCallback(() => {
+const switchCams = () => {
   setFacingMode(
     prevState =>
       prevState === FACING_MODE_USER
         ? FACING_MODE_ENVIRONMENT
         : FACING_MODE_USER
   );
-}, []);
+  if (mirrored) {
+    setMirrored(false)
+  } else if (!mirrored) {
+    setMirrored(true)
+  }
+};
 
+console.log(mirrored, '<----mirrored')
 console.log(isCameraLoading, '<----- is camera loading')
 console.log(facingMode, '<---- facing mode')
   return (
@@ -392,13 +398,19 @@ console.log(facingMode, '<---- facing mode')
         )}
         { !justRecorded && (
         <div className='cam-mask'>
+          {!isCameraLoading && (
+            <CameraswitchIcon 
+            color='secondary'
+            className='camera-switch-icon'
+            onClick={switchCams}/>
+          )}
           <Webcam
             style={{zIndex: '1'}}
             className='webcam'
             height='100%'
             width='100%'
             audio={true}
-            mirrored={false}
+            mirrored={mirrored}
             ref={webcamRef}
             videoConstraints={videoConstraints}
             muted={true}

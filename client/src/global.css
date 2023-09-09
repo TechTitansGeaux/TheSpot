@@ -415,13 +415,13 @@ button.rejectFriend-btn:hover {
   overflow: hidden;
 }
 
-/* .camera-switch-icon {
+.camera-switch-icon {
   position: absolute;
   top: 10%;
   right: 30%;
   z-index: 5;
   cursor: pointer;
-} */
+}
 
 .preview-mask {
   display: flex;
@@ -609,10 +609,10 @@ button.rejectFriend-btn:hover {
     z-index: 5;
     font-weight: bold;
   }
-  /* .camera-switch-icon {
+  .camera-switch-icon {
     position: absolute;
     top: 10%;
     right: 15%;
     z-index: 5
-  } */
+  }
 }
