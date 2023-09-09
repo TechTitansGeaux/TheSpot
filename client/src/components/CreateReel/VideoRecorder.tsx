@@ -13,6 +13,8 @@ import Tooltip from '@mui/material/Tooltip';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import CircularProgress from '@mui/material/CircularProgress';
 import DeleteIcon from '@mui/icons-material/Delete';
+import CameraswitchIcon from '@mui/icons-material/Cameraswitch';
+import { CardMedia } from '@mui/material';
 
 type Props = {
   currentEvent: {
@@ -389,6 +391,11 @@ console.log(facingMode, '<---- facing mode')
         )}
         { !justRecorded && (
         <div className='cam-mask'>
+          <CameraswitchIcon
+          color='secondary'
+          className='camera-switch-icon'
+          onClick={switchCams}
+          />
           <Webcam
             style={{zIndex: 1}}
             className='webcam'
@@ -405,10 +412,6 @@ console.log(facingMode, '<---- facing mode')
       )}
       </div>
       <div className='cam-buttons-container'>
-      <button
-        className='cameraButtons'
-        onClick={switchCams}
-        >SWITCH</button>
       <div className='cameraButtons'>
         {capturing && (
           <RadioButtonCheckedIcon

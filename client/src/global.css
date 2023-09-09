@@ -415,6 +415,14 @@ button.rejectFriend-btn:hover {
   overflow: hidden;
 }
 
+.camera-switch-icon {
+  position: absolute;
+  top: 10%;
+  right: 30%;
+  z-index: 5;
+  cursor: pointer;
+}
+
 .preview-mask {
   display: flex;
   justify-content: center;
@@ -543,6 +551,7 @@ button.rejectFriend-btn:hover {
   right: 5%;
   cursor: pointer;
 }
+
 /* IF ANYONE'S PLACEHOLDER GOT CHANGED IT WAS THIS!!! */
 ::placeholder {
   color: var(--white)
@@ -599,5 +608,11 @@ button.rejectFriend-btn:hover {
     color: white;
     z-index: 5;
     font-weight: bold;
+  }
+  .camera-switch-icon {
+    position: absolute;
+    top: 10%;
+    right: 15%;
+    z-index: 5
   }
 }
