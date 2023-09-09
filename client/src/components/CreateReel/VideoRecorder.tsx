@@ -75,7 +75,7 @@ const VideoRecorder: React.FC<Props> = ({
   const [eventIsPublic, setEventIsPublic] = useState(true);
   const [urlRetrieved, setUrlRetrieved] = useState(false);
   const [clear, setClear] = useState(false);
-  const [isCameraLoading, setIsCameraLoading] = useState(true);
+  const [isCameraLoading, setIsCameraLoading] = useState(false);
   const FACING_MODE_USER = "user";
   const FACING_MODE_ENVIRONMENT = "environment";
   const [facingMode, setFacingMode] = useState(FACING_MODE_USER);
@@ -334,6 +334,7 @@ const switchCams = React.useCallback(() => {
   );
 }, []);
 
+console.log(isCameraLoading, '<----- is camera loading')
 console.log(facingMode, '<---- facing mode')
   return (
     <div>
@@ -383,7 +384,7 @@ console.log(facingMode, '<---- facing mode')
         )}
         { !justRecorded && isCameraLoading && (
           <div className='webcam'
-          style={{paddingTop: '20em', zIndex: '2', position: 'absolute'}}>
+          style={{paddingTop: '20em', zIndex: '1', position: 'absolute'}}>
             <CircularProgress
             size='8rem'
             color='secondary'/>
@@ -391,13 +392,8 @@ console.log(facingMode, '<---- facing mode')
         )}
         { !justRecorded && (
         <div className='cam-mask'>
-          <CameraswitchIcon
-          color='secondary'
-          className='camera-switch-icon'
-          onClick={switchCams}
-          />
           <Webcam
-            style={{zIndex: 1}}
+            style={{zIndex: '1'}}
             className='webcam'
             height='100%'
             width='100%'
