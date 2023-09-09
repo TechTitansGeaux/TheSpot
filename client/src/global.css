@@ -397,12 +397,17 @@ button.rejectFriend-btn:hover {
   width: auto;
 }
 
+.cam-buttons-container {
+  display: flex;
+  justify-content: center;
+}
+
 .cameraButtons {
   display: flex;
   justify-content: center;
-  align-items: center;
   cursor: pointer;
-  color: inherit
+  color: inherit;
+  column-gap: 60%;
 }
 
 .cam-mask {

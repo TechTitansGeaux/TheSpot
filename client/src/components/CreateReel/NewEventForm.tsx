@@ -269,13 +269,13 @@ const createEvent = async () => {
          &#160;
          <button
          onClick={twentyOneYes}
-         className='twenty-one-button'>
+         style={{backgroundColor: twentyOne ? '#f433ab' : '#F5FCFA', color: twentyOne ? '#F5FCFA' : '#0b0113', fontWeight: 'normal'}}>
           Yes
          </button>
          &#160;
          <button
          onClick={twentyOneNo}
-         className='twenty-one-button'>
+         style={{backgroundColor: twentyOne ? '#F5FCFA' : '#f433ab', color: twentyOne ? '#0b0113' : '#F5FCFA', fontWeight: 'normal'}}>
           No
           </button>
          <br></br>

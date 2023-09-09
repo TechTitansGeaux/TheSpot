@@ -242,6 +242,7 @@ useEffect(() => {
           handleLocation={handleLocation}
           handleAddress={handleAddress}
           currentAddress={address}/>
+          <br></br>
             Date:
             <input
             className='eventDetailInput'
@@ -250,6 +251,7 @@ useEffect(() => {
             onChange={handleDateChange}
             type='date'
             ></input>
+            <br></br>
             <br></br>
             Begins:
             <input
@@ -260,6 +262,7 @@ useEffect(() => {
             type='time'
             ></input>
             <br></br>
+            <br></br>
             Ends:
             <input
             className='eventDetailInput'
@@ -269,21 +272,21 @@ useEffect(() => {
             type='time'
             ></input>
             <br></br>
+            <br></br>
             RSVPs: <div
             className='eventDetailInput'>
             {event.rsvp_count}
               </div>
             <br></br>
+            <br></br>
             21+ : <button
          onClick={twentyOneYes}
-        //  className='twenty-one-button'
          style={{backgroundColor: twentyOne ? '#f433ab' : '#F5FCFA', color: twentyOne ? '#F5FCFA' : '#0b0113', fontWeight: 'normal'}}>
           Yes
          </button>
          &#160;
          <button
          onClick={twentyOneNo}
-        //  className='twenty-one-button'
          style={{backgroundColor: twentyOne ? '#F5FCFA' : '#f433ab', color: twentyOne ? '#0b0113' : '#F5FCFA', fontWeight: 'normal'}}>
           No
           </button>
