@@ -230,6 +230,7 @@ const createEvent = async () => {
          handleLocation={handleLocation}
          handleAddress={handleAddress}
          currentAddress={currentAddress}/>
+         <br></br>
           Date: &#160;
          <input
          className='eventDetailInput'
@@ -238,6 +239,7 @@ const createEvent = async () => {
          onChange={handleEventDate}
          type="date">
          </input>
+         <br></br>
          <br></br>
           Begins: &#160;
          <input
@@ -248,6 +250,7 @@ const createEvent = async () => {
          type='time'>
          </input>
          <br></br>
+         <br></br>
          Ends: &#160;
          <input
          className='eventDetailInput'
@@ -256,6 +259,7 @@ const createEvent = async () => {
          onChange={handleEndTime}
          type='time'>
          </input>
+         <br></br>
          <br></br>
          <label
          htmlFor='twentyOne'>

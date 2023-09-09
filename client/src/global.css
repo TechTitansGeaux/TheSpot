@@ -453,8 +453,8 @@ button.rejectFriend-btn:hover {
   display: none;
   padding: 2%;
   transition: all .5s ease;
-  height: 275px;
-  width: 230px;
+  height: auto;
+  width: 250px;
   border-width: 10px;
   border-radius: 10px;
   background-color: var(--violet);
@@ -599,8 +599,8 @@ button.rejectFriend-btn:hover {
     display: none;
     padding: 4%;
     transition: all .5s ease;
-    height: 275px;
-    width: 230px;
+    height: auto;
+    width: 250px;
     border-width: 10px;
     border-radius: 10px;
     background-color: var(--violet);

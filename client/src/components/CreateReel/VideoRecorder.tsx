@@ -14,6 +14,12 @@ import EventNoteIcon from '@mui/icons-material/EventNote';
 import CircularProgress from '@mui/material/CircularProgress';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CameraswitchIcon from '@mui/icons-material/Cameraswitch';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContentText from '@mui/material/DialogContentText';
 
 type Props = {
   currentEvent: {
@@ -79,6 +85,7 @@ const VideoRecorder: React.FC<Props> = ({
   const FACING_MODE_ENVIRONMENT = "environment";
   const [facingMode, setFacingMode] = useState(FACING_MODE_USER);
   const [mirrored, setMirrored] = useState(true);
+  const [open, setOpen] = useState(false);
 
   type Blob = {
     data: {
@@ -163,7 +170,7 @@ const urltoFile = (url: any, filename: any, mimeType: any) => {
         // turn url into blob
         const blobUrl = URL.createObjectURL(blob);
         // turn blobUrl into file
-        const file = await urltoFile(blobUrl, 'video.webm', 'video/webm') 
+        const file = await urltoFile(blobUrl, 'video.webm', 'video/webm')
         // append file to form data
         const formData = new FormData;
 
@@ -285,6 +292,7 @@ const clearReel = () => {
   box.style.display = 'none';
   setClear(true);
   setIsCameraLoading(true);
+  handleClose();
 }
 
 const resetClear = () => {
@@ -338,6 +346,15 @@ const switchCams = () => {
     setMirrored(true)
   }
 };
+
+  // handle opening delete alert dialog
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  // handle closing delete alert dialog
+  const handleClose = () => {
+    setOpen(false);
+  };
 
 console.log(mirrored, '<----mirrored')
 console.log(isCameraLoading, '<----- is camera loading')
@@ -460,12 +477,33 @@ console.log(facingMode, '<---- facing mode')
           whileHover={{ scale: 1.2 }}
           > */}
             <DeleteIcon
-            onClick={clearReel}
+            onClick={handleClickOpen}
             color='secondary'
             sx={{ width: 52, height: 52 }}/>
           {/* </m.div>
           </LazyMotion> */}
           </Tooltip>
+          <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogTitle id="alert-dialog-title">
+                  {"Are you sure? "}
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    Are you sure you want to delete this reel?
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={clearReel} autoFocus>
+                    Yes
+                  </Button>
+                  <Button onClick={handleClose}>No</Button>
+                </DialogActions>
+              </Dialog>
           </div>
         )}
           {justRecorded && urlRetrieved && (
