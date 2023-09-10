@@ -420,6 +420,10 @@ button.rejectFriend-btn:hover {
   overflow: hidden;
 }
 
+.eventDetailInput:focus::placeholder {
+  color: transparent;
+}
+
 .camera-switch-icon {
   position: absolute;
   top: 10%;
