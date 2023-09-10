@@ -448,7 +448,7 @@ button.rejectFriend-btn:hover {
 
 .reel-input-caption {
   position: absolute;
-  left: 2%;
+  left: auto;
   top: 12%;
   margin: 0 5rem;
   max-width: 350px;
@@ -457,11 +457,18 @@ button.rejectFriend-btn:hover {
   font-family: var(--title-font);
   background: transparent;
   border: none;
+  backdrop-filter: blur(10px);
+  text-align: center;
+}
+
+.reel-input-caption:focus::placeholder {
+  color: transparent;
 }
 
 .popUpEventForm {
-  position: absolute;
   align-items: center;
+  justify-content: center;
+  position: absolute;
   bottom: 8%;
   display: none;
   padding: 2%;

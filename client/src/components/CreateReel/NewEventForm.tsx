@@ -281,7 +281,7 @@ const createEvent = async () => {
          <br></br>
          <br></br>
          {noConflicts ?
-         <div style={{alignItems: 'center'}}>
+         <div style={{textAlign: 'center'}}>
           <br></br>
          <button
          className='save-event-detail-button'

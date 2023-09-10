@@ -20,6 +20,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContentText from '@mui/material/DialogContentText';
+import zIndex from '@mui/material/styles/zIndex';
 
 type Props = {
   currentEvent: {
@@ -463,13 +464,14 @@ console.log(facingMode, '<---- facing mode')
             title='Trash'
             placement='bottom'
             PopperProps={{
+              style: {zIndex: '0'},
               sx: {
                 '& .MuiTooltip-tooltip': {
                   backgroundColor: 'transparent',
                   border: 'solid #F5FCFA 1px',
-                  color: '#F5FCFA',
+                  color: '#F5FCFA'
                 },
-              },
+              }
             }}
           >
           {/* <LazyMotion features={domAnimation}>
@@ -515,6 +517,7 @@ console.log(facingMode, '<---- facing mode')
                 title='Edit'
                 placement='bottom'
                 PopperProps={{
+                  style: {zIndex: '0'},
                   sx: {
                     '& .MuiTooltip-tooltip': {
                       backgroundColor: 'transparent',
@@ -544,6 +547,7 @@ console.log(facingMode, '<---- facing mode')
             title='Post'
             placement='bottom'
             PopperProps={{
+              style: {zIndex: '0'},
               sx: {
                 '& .MuiTooltip-tooltip': {
                   backgroundColor: 'transparent',
