@@ -414,8 +414,8 @@ button.rejectFriend-btn:hover {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 50vw;
-  height: 50hw;
+  width: auto;
+  height: auto;
   border-radius: 10px;
   overflow: hidden;
 }
