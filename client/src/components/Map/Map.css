@@ -81,6 +81,7 @@
   animation-name: popOut;
   animation-timing-function: ease-in;
   animation-duration: .5s;
+  letter-spacing: 0.05rem;
 }
 
 .addOrRmFriend {
@@ -130,6 +131,7 @@
   animation-name: popOut;
   animation-timing-function: ease-in;
   animation-duration: .5s;
+  letter-spacing: 0.05rem;
 }
 
 .zoomToEvent {
@@ -197,6 +199,7 @@
   animation-name: popOut;
   animation-timing-function: ease-in;
   animation-duration: .5s;
+  letter-spacing: 0.05rem;
 }
 
 .BusinessClusterPin {
@@ -318,21 +321,23 @@
 /* Bernie added ///// button and button hover */
 .recenterButton {
   display: flex;
+  position: absolute;
   align-items: center;
   justify-content: center;
   font-family: var(--title-font);
-  letter-spacing: .02rem;
   color: black;
   cursor: pointer;
   float: right;
-  top: 50%;
+  top: 11%;
+  right: 11%;
   height: 40px;
   width: 40px;
-  border: 3px solid black;
+  border: 2px solid black;
   border-radius: 50%;
   background-color: var(--grey);
   text-align: center;
   transition: background-color .2s ease-out;
+  z-index: 99;
 }
 
 .recenterButton:hover, .recenterButton:focus {

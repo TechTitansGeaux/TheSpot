@@ -15,8 +15,7 @@ const uploadReelToCloudinary = async (file: string) => {
       transformation: [
         {aspect_ratio: '3:4', crop: 'fill', width: 465}
       ],
-      q_auto: 'eco',
-      quality: "70:qmax_20"
+      q_auto: 'low'
     });
     return result.secure_url;
   } catch (err) {

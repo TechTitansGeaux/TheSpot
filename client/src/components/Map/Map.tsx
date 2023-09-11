@@ -322,6 +322,11 @@ const Map: React.FC<Props> = (props) => {
   return (
     <div className='mapParent' onWheel={closeAllPopUps}>
       <div className='mapChild'>
+        <div className='recenterButton' onClick={ () => {
+          const [lat, lng] = splitCoords(loggedIn.geolocation);
+          setZoom(15);
+          setCenter({ lat: +lat, lng: +lng});
+        }}> <CenterFocusStrongIcon /></div>
         <div id='map'>
           <GoogleMapReact
             bootstrapURLKeys={{ key: "AIzaSyAYtb7y6JZ2DxgdIESWJky8NyhWuu_YFVg" }}
@@ -432,12 +437,6 @@ const Map: React.FC<Props> = (props) => {
           <div className='userKey'></div><div className='userKeyText'> USERS </div>
           <div className='eventKey'></div><div className='eventKeyText'> EVENTS </div>
           <div className='businessKey'></div><div className='businessKeyText'> BUSINESSES </div>
-          <div className='recenterButton' onClick={ () => {
-            const [lat, lng] = splitCoords(loggedIn.geolocation);
-            setZoom(15);
-            setCenter({ lat: +lat, lng: +lng});
-            }
-          } > <CenterFocusStrongIcon /></div>
         </div>
       </div>
     </div>

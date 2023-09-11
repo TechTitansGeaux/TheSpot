@@ -161,7 +161,7 @@ const startGeolocationWatch = () => {
           <Route path='/Feed' element={<Feed user={user} />}></Route>
           <Route path='/FriendRequests' element={<FriendRequestList allUsers={allUsers} user={user} />} ></Route>
           <Route path='/Follows' element={<FollowersList allUsers={allUsers}  user={user} />}></Route>
-          <Route path='/Likes' element={<LikesList allUsers={allUsers} user={user} />}></Route>
+          <Route path='/Likes' element={<LikesList user={user} />}></Route>
           <Route path='/Settings' element={<Settings startWatch={startGeolocationWatch} fontSize={fontSize} />} ></Route>
           <Route path='/BusinessSettings' element={<BusinessSettings fontSize={fontSize}/>}></Route>
           <Route path='/CreateReel' element={<CreateReel user={user} />} ></Route>

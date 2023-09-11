@@ -13,6 +13,14 @@ import Tooltip from '@mui/material/Tooltip';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import CircularProgress from '@mui/material/CircularProgress';
 import DeleteIcon from '@mui/icons-material/Delete';
+import CameraswitchIcon from '@mui/icons-material/Cameraswitch';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContentText from '@mui/material/DialogContentText';
+import zIndex from '@mui/material/styles/zIndex';
 
 type Props = {
   currentEvent: {
@@ -74,6 +82,11 @@ const VideoRecorder: React.FC<Props> = ({
   const [urlRetrieved, setUrlRetrieved] = useState(false);
   const [clear, setClear] = useState(false);
   const [isCameraLoading, setIsCameraLoading] = useState(true);
+  const FACING_MODE_USER = "user";
+  const FACING_MODE_ENVIRONMENT = "environment";
+  const [facingMode, setFacingMode] = useState(FACING_MODE_USER);
+  const [mirrored, setMirrored] = useState(true);
+  const [open, setOpen] = useState(false);
 
   type Blob = {
     data: {
@@ -82,6 +95,7 @@ const VideoRecorder: React.FC<Props> = ({
     }
   };
   
+  // navigator.mediaDevices.enumerateDevices().then(devices => console.log(devices))
 
   const handleDataAvailable = useCallback(
     ({ data }: Blob) => {
@@ -114,14 +128,25 @@ const urltoFile = (url: any, filename: any, mimeType: any) => {
   // when they click start video
   const handleStartCaptureClick = useCallback(() => {
     setCapturing(true);
+    if (MediaRecorder.isTypeSupported('video/webm')) {
+      console.log('wemb supported')
     mediaRecorderRef.current = new MediaRecorder(webcamRef.current.stream, {
       mimeType: "video/webm",
     });
+  } else if (MediaRecorder.isTypeSupported('video/mp4')) {
+    console.log('mp4 supported')
+    mediaRecorderRef.current = new MediaRecorder(webcamRef.current.stream, {
+      mimeType: "video/mp4",
+    });
+  }
     mediaRecorderRef.current.addEventListener(
       "dataavailable",
       handleDataAvailable
     );
     mediaRecorderRef.current.start();
+    setTimeout(() => {
+      handleStopCaptureClick();
+    }, 6000)
   }, [webcamRef, setCapturing, mediaRecorderRef, handleDataAvailable]);
 
   // when they click to end recording video
@@ -146,7 +171,7 @@ const urltoFile = (url: any, filename: any, mimeType: any) => {
         // turn url into blob
         const blobUrl = URL.createObjectURL(blob);
         // turn blobUrl into file
-        const file = await urltoFile(blobUrl, 'video.webm', 'video/webm') 
+        const file = await urltoFile(blobUrl, 'video.webm', 'video/webm')
         // append file to form data
         const formData = new FormData;
 
@@ -242,9 +267,7 @@ const urltoFile = (url: any, filename: any, mimeType: any) => {
   }, [eventId, reelSaved])
 
   const videoConstraints = {
-    // width: 420,
-    // height: 420,
-    facingMode: "user",
+    facingMode: facingMode,
   };
 
 // handle input text for caption
@@ -265,10 +288,12 @@ const clearReel = () => {
   setUrl('');
   setText('');
   setJustRecorded(false);
+  setUrlRetrieved(false);
   const box = document.getElementById('event-form');
   box.style.display = 'none';
   setClear(true);
   setIsCameraLoading(true);
+  handleClose();
 }
 
 const resetClear = () => {
@@ -309,9 +334,32 @@ const handleCameraLoaded = () => {
   setIsCameraLoading(false);
 };
 
-// console.log(user.type, '<---- user type')
-// console.log(businessAccount, '<------business account')
+const switchCams = () => {
+  setFacingMode(
+    prevState =>
+      prevState === FACING_MODE_USER
+        ? FACING_MODE_ENVIRONMENT
+        : FACING_MODE_USER
+  );
+  if (mirrored) {
+    setMirrored(false)
+  } else if (!mirrored) {
+    setMirrored(true)
+  }
+};
 
+  // handle opening delete alert dialog
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  // handle closing delete alert dialog
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+console.log(mirrored, '<----mirrored')
+console.log(isCameraLoading, '<----- is camera loading')
+console.log(facingMode, '<---- facing mode')
   return (
     <div>
       <div className='webContainer'>
@@ -360,7 +408,7 @@ const handleCameraLoaded = () => {
         )}
         { !justRecorded && isCameraLoading && (
           <div className='webcam'
-          style={{paddingTop: '20em', zIndex: '2', position: 'absolute'}}>
+          style={{paddingTop: '20em', zIndex: '1', position: 'absolute'}}>
             <CircularProgress
             size='8rem'
             color='secondary'/>
@@ -368,13 +416,19 @@ const handleCameraLoaded = () => {
         )}
         { !justRecorded && (
         <div className='cam-mask'>
+          {!isCameraLoading && (
+            <CameraswitchIcon 
+            color='secondary'
+            className='camera-switch-icon'
+            onClick={switchCams}/>
+          )}
           <Webcam
-            style={{zIndex: 1}}
+            style={{zIndex: '1'}}
             className='webcam'
             height='100%'
             width='100%'
             audio={true}
-            mirrored={false}
+            mirrored={mirrored}
             ref={webcamRef}
             videoConstraints={videoConstraints}
             muted={true}
@@ -410,13 +464,14 @@ const handleCameraLoaded = () => {
             title='Trash'
             placement='bottom'
             PopperProps={{
+              style: {zIndex: '0'},
               sx: {
                 '& .MuiTooltip-tooltip': {
                   backgroundColor: 'transparent',
                   border: 'solid #F5FCFA 1px',
-                  color: '#F5FCFA',
+                  color: '#F5FCFA'
                 },
-              },
+              }
             }}
           >
           {/* <LazyMotion features={domAnimation}>
@@ -424,12 +479,33 @@ const handleCameraLoaded = () => {
           whileHover={{ scale: 1.2 }}
           > */}
             <DeleteIcon
-            onClick={clearReel}
+            onClick={handleClickOpen}
             color='secondary'
             sx={{ width: 52, height: 52 }}/>
           {/* </m.div>
           </LazyMotion> */}
           </Tooltip>
+          <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogTitle id="alert-dialog-title">
+                  {"Are you sure? "}
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    Are you sure you want to delete this reel?
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={clearReel} autoFocus>
+                    Yes
+                  </Button>
+                  <Button onClick={handleClose}>No</Button>
+                </DialogActions>
+              </Dialog>
           </div>
         )}
           {justRecorded && urlRetrieved && (
@@ -441,6 +517,7 @@ const handleCameraLoaded = () => {
                 title='Edit'
                 placement='bottom'
                 PopperProps={{
+                  style: {zIndex: '0'},
                   sx: {
                     '& .MuiTooltip-tooltip': {
                       backgroundColor: 'transparent',
@@ -470,6 +547,7 @@ const handleCameraLoaded = () => {
             title='Post'
             placement='bottom'
             PopperProps={{
+              style: {zIndex: '0'},
               sx: {
                 '& .MuiTooltip-tooltip': {
                   backgroundColor: 'transparent',

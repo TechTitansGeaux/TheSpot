@@ -111,14 +111,13 @@ const UpcomingEvent: React.FC<Props> = ({event, getMyEvents, user}) => {
     setJustSaved(false);
   }
 // handle changing to 21 +
-const handleTwentyOneChange = () => {
-  if (!twentyOne) {
-    setTwentyOne(true)
-  } else {
-    setTwentyOne(false)
-  }
-  setJustSaved(false);
- }
+const twentyOneYes = () => {
+  setTwentyOne(true)
+}
+
+const twentyOneNo = () => {
+  setTwentyOne(false)
+}
 
   // get all frens
   const getFriendList = () => {
@@ -215,6 +214,7 @@ useEffect(() => {
     }
   }
 
+  console.log(twentyOne, '<-----21')
   // delete event
   const deleteEvent = () => {
     axios.delete(`/events/delete/${event.id}`)
@@ -242,6 +242,7 @@ useEffect(() => {
           handleLocation={handleLocation}
           handleAddress={handleAddress}
           currentAddress={address}/>
+          <br></br>
             Date:
             <input
             className='eventDetailInput'
@@ -250,6 +251,7 @@ useEffect(() => {
             onChange={handleDateChange}
             type='date'
             ></input>
+            <br></br>
             <br></br>
             Begins:
             <input
@@ -260,6 +262,7 @@ useEffect(() => {
             type='time'
             ></input>
             <br></br>
+            <br></br>
             Ends:
             <input
             className='eventDetailInput'
@@ -269,17 +272,24 @@ useEffect(() => {
             type='time'
             ></input>
             <br></br>
+            <br></br>
             RSVPs: <div
             className='eventDetailInput'>
             {event.rsvp_count}
               </div>
             <br></br>
-            21+ : <input
-              id='twentyOne'
-              type='checkbox'
-              checked={twentyOne}
-              onChange={handleTwentyOneChange}>
-            </input>
+            <br></br>
+            21+ : <button
+         onClick={twentyOneYes}
+         style={{backgroundColor: twentyOne ? '#f433ab' : '#F5FCFA', color: twentyOne ? '#F5FCFA' : '#0b0113', fontWeight: 'normal'}}>
+          Yes
+         </button>
+         &#160;
+         <button
+         onClick={twentyOneNo}
+         style={{backgroundColor: twentyOne ? '#F5FCFA' : '#f433ab', color: twentyOne ? '#0b0113' : '#F5FCFA', fontWeight: 'normal'}}>
+          No
+          </button>
           </div>
           {!noConflicts && (<ConflictingEvent
           conflictingEvent={conflictingEvent}/>)}

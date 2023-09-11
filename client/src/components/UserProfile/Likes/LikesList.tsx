@@ -3,21 +3,6 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import LikesEntry from './LikesEntry';
 
-type User = {
-  id: number;
-  username: string;
-  displayName: string;
-  type: string;
-  geolocation: string;
-  mapIcon: string;
-  birthday: string;
-  privacy: string;
-  accessibility: string;
-  email: string;
-  picture: string;
-  googleId: string;
-};
-
 type Props = {
   user: {
     id: number;
@@ -33,9 +18,8 @@ type Props = {
     picture: string;
     googleId: string;
   };
-  allUsers: [User];
 };
-const LikesList: React.FC<Props> = ({user, allUsers}) => {
+const LikesList: React.FC<Props> = ({user}) => {
   const [likesArr, setLikesArr] = useState([]); // user's own reels that have been liked FROM likes table
   const [userReels, setUserReels] = useState([]); // user's own reels
 
@@ -87,12 +71,11 @@ const LikesList: React.FC<Props> = ({user, allUsers}) => {
   return (
     <ul>
     <div className='container-likes'>
-      <h1>Likes List</h1>
+      <h1 className='title'>Likes</h1>
       {likesArr.map((like, index) => {
         return <LikesEntry key={`${index}-${like.id}`}
         like={like}
         user={user}
-        allUsers={allUsers}
         />
       })}
 
