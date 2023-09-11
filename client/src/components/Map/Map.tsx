@@ -96,7 +96,7 @@ const Map: React.FC<Props> = (props) => {
     return arr;
   }
 
-  if (!users.length || !businesses.length || !loggedIn) {
+  if (!users.length || !loggedIn) {
     // Data is not yet available, render loading ring
     return (
       <div style={{textAlign: 'center', transform: 'translateY(250px)', fontSize: '40px'}}>

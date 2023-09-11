@@ -33,7 +33,6 @@
   border-radius: 50%;
   display: inline-block;
   position: relative;
-  transform: translate(-50%, -50%);
   z-index: 10;
   cursor: pointer;
   font-size: 30px;
@@ -75,8 +74,8 @@
   font-family: var(--title-font);
   color: white;
   position: relative;
-  top: -28.5px;
-  left: -100px;
+  top: 35px;
+  left: 0px;
   z-index: 11;
   animation-name: popOut;
   animation-timing-function: ease-in;

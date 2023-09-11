@@ -207,4 +207,4 @@ const UserPin: React.FC<Props> = ({ user, loggedIn, lat, lng, zoom, friendList, 
   );
 }
 
-
+export default UserPin;
