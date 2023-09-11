@@ -397,22 +397,43 @@ button.rejectFriend-btn:hover {
   width: auto;
 }
 
+.cam-buttons-container {
+  display: flex;
+  justify-content: center;
+}
+
 .cameraButtons {
   display: flex;
   justify-content: center;
-  align-items: center;
   cursor: pointer;
-  color: inherit
+  color: inherit;
+  column-gap: 60%;
 }
 
 .cam-mask {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 50vw;
-  height: 50hw;
+  width: auto;
+  height: auto;
   border-radius: 10px;
   overflow: hidden;
+}
+
+.eventDetailInput:focus::placeholder {
+  color: transparent;
+}
+
+.camera-switch-icon {
+  position: absolute;
+  top: 10%;
+  right: 30%;
+  z-index: 5;
+  cursor: pointer;
+}
+
+.twenty-one-button:focus {
+  background-color: var(--pink);
 }
 
 .preview-mask {
@@ -427,7 +448,7 @@ button.rejectFriend-btn:hover {
 
 .reel-input-caption {
   position: absolute;
-  left: 2%;
+  left: auto;
   top: 12%;
   margin: 0 5rem;
   max-width: 350px;
@@ -436,17 +457,24 @@ button.rejectFriend-btn:hover {
   font-family: var(--title-font);
   background: transparent;
   border: none;
+  backdrop-filter: blur(10px);
+  text-align: center;
+}
+
+.reel-input-caption:focus::placeholder {
+  color: transparent;
 }
 
 .popUpEventForm {
-  position: absolute;
   align-items: center;
+  justify-content: center;
+  position: absolute;
   bottom: 8%;
   display: none;
   padding: 2%;
   transition: all .5s ease;
-  height: 275px;
-  width: 230px;
+  height: auto;
+  width: 250px;
   border-width: 10px;
   border-radius: 10px;
   background-color: var(--violet);
@@ -476,7 +504,7 @@ button.rejectFriend-btn:hover {
 
 .eventCard {
   position: relative;
-  height: 270px;
+  height: auto;
   width: 200px;
   margin: 10px;
   padding: 10px;
@@ -543,6 +571,7 @@ button.rejectFriend-btn:hover {
   right: 5%;
   cursor: pointer;
 }
+
 /* IF ANYONE'S PLACEHOLDER GOT CHANGED IT WAS THIS!!! */
 ::placeholder {
   color: var(--white)
@@ -590,8 +619,8 @@ button.rejectFriend-btn:hover {
     display: none;
     padding: 4%;
     transition: all .5s ease;
-    height: 275px;
-    width: 230px;
+    height: auto;
+    width: 250px;
     border-width: 10px;
     border-radius: 10px;
     background-color: var(--violet);
@@ -599,5 +628,11 @@ button.rejectFriend-btn:hover {
     color: white;
     z-index: 5;
     font-weight: bold;
+  }
+  .camera-switch-icon {
+    position: absolute;
+    top: 10%;
+    right: 15%;
+    z-index: 5
   }
 }

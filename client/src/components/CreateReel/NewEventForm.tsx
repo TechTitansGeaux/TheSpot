@@ -93,13 +93,12 @@ const handleEndTime = (e: any) => {
  setEndTime(e.target.value)
 }
 
-// handle changing to 21 +
-const handleTwentyOne = () => {
- if (!twentyOne) {
-   setTwentyOne(true)
- } else {
-   setTwentyOne(false)
- }
+const twentyOneYes = () => {
+  setTwentyOne(true)
+}
+
+const twentyOneNo = () => {
+  setTwentyOne(false)
 }
 
 // function to set event location
@@ -212,6 +211,8 @@ const createEvent = async () => {
     console.log('reset event details');
   }, [clear])
 
+  console.log(twentyOne, '<-----21')
+
    return (
      <div
        id='event-form'
@@ -230,6 +231,7 @@ const createEvent = async () => {
          handleLocation={handleLocation}
          handleAddress={handleAddress}
          currentAddress={currentAddress}/>
+         <br></br>
           Date: &#160;
          <input
          className='eventDetailInput'
@@ -238,6 +240,7 @@ const createEvent = async () => {
          onChange={handleEventDate}
          type="date">
          </input>
+         <br></br>
          <br></br>
           Begins: &#160;
          <input
@@ -248,6 +251,7 @@ const createEvent = async () => {
          type='time'>
          </input>
          <br></br>
+         <br></br>
          Ends: &#160;
          <input
          className='eventDetailInput'
@@ -257,21 +261,27 @@ const createEvent = async () => {
          type='time'>
          </input>
          <br></br>
+         <br></br>
          <label
          htmlFor='twentyOne'>
          21+
          </label>
          &#160;
-         <input
-         id='twentyOne'
-         type='checkbox'
-         checked={twentyOne}
-         onChange={handleTwentyOne}>
-         </input>
+         <button
+         onClick={twentyOneYes}
+         style={{backgroundColor: twentyOne ? '#f433ab' : '#F5FCFA', color: twentyOne ? '#F5FCFA' : '#0b0113', fontWeight: 'normal'}}>
+          Yes
+         </button>
+         &#160;
+         <button
+         onClick={twentyOneNo}
+         style={{backgroundColor: twentyOne ? '#F5FCFA' : '#f433ab', color: twentyOne ? '#0b0113' : '#F5FCFA', fontWeight: 'normal'}}>
+          No
+          </button>
          <br></br>
          <br></br>
          {noConflicts ?
-         <div style={{alignItems: 'center'}}>
+         <div style={{textAlign: 'center'}}>
           <br></br>
          <button
          className='save-event-detail-button'

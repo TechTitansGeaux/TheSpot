@@ -88,11 +88,13 @@ const PastEvent: React.FC<Props> = ({event, getMyEvents}) => {
           {event.address}
           </div>
           <br></br>
+          <br></br>
           Date:&#160;
           <div
           className='eventDetailInput'>
           {eventDate}
           </div>
+          <br></br>
           <br></br>
           Began:&#160;
           <div
@@ -100,17 +102,20 @@ const PastEvent: React.FC<Props> = ({event, getMyEvents}) => {
           {eventTime}
           </div>
           <br></br>
+          <br></br>
           Ended:&#160;
           <div
           className='eventDetailInput'>
           {eventEndTime}
           </div>
           <br></br>
+          <br></br>
           RSVPs:&#160;
           <div
           className='eventDetailInput'>
           {event.rsvp_count}
           </div>
+          <br></br>
           <br></br>
           21+: &#160;
           <div
