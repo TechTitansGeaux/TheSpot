@@ -689,7 +689,8 @@ button.rejectFriend-btn:hover {
 
   .video-container {
     min-width: 250px;
-
+  }
+  
   .camera-switch-icon {
     position: absolute;
     top: 10%;

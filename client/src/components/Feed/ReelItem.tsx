@@ -582,7 +582,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                             handleAddLike={handleAddLike}
                             handleRemoveLike={handleRemoveLike}
                             reel={reel}
-                            // user={user}
+                            user={user}
                             likes={likes}
                             likesBool={likesArr}
                           />
@@ -591,7 +591,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                             handleAddLike={handleAddLike}
                             handleRemoveLike={handleRemoveLike}
                             reel={reel}
-                            // user={user}
+                            user={user}
                             likes={likes}
                             likesBool={likesArr}
                           />
