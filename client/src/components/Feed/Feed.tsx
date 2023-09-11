@@ -279,13 +279,13 @@ const Feed: React.FC<Props> = ({user}) => {
       if (user?.type === 'personal') {
         getFriendList();
       }
-  }, [user, filter]);
+  }, [filter]);
 
   useEffect(() => {
       if (user?.type === 'personal') {
         getFollowingList();
       }
-  }, [user, filter]);
+  }, [filter]);
 
   useEffect(() => {
       if (user?.type === 'business') {
