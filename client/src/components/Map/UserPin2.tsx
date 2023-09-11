@@ -24,6 +24,8 @@ type Props = {
     createdAt: string
     updatedAt: string
   }
+  latitude: number
+  longitude: number
   friendList: number[]
   pendingFriendList: number[]
   loggedIn: {
@@ -42,6 +44,10 @@ type Props = {
   }
   getPendingFriendList: () => void
   getFriendList: () => void
+  setZoom: (zoom: number) => void
+  setCenter: (center: object) => void
+  closeAllPopUps: () => void
+  zoom: number
 };
 
 const addFriendTheme = createTheme({
@@ -74,14 +80,62 @@ const rmFriendTheme = createTheme({
   },
 });
 
-const UserPin: React.FC<Props> = ({ user, loggedIn, latitude, longitude, zoom, friendList, pendingFriendList, getFriendList, getPendingFriendList, setZoom, setCenter }) => {
+const UserPin: React.FC<Props> = ({ user, loggedIn, lat, lng, zoom, friendList, pendingFriendList, getFriendList, getPendingFriendList, setZoom, setCenter }) => {
 
+  const togglePopUp = () => {
+    const box = document.getElementById('popUp' + user.username + user.id)
+    if (box.style.display === 'block') {
+      box.style.animationName = 'popOff';
+      setTimeout(() => {
+        box.style.display = 'none';
+      }, 500)
+    } else {
+      box.style.animationName = 'popOut';
+      box.style.display = 'block';
+    }
+  }
+
+  // request friend ship
+  const addFriend = () => {
+    axios
+      .post('/friends', {
+        // accepter_id is user on reel
+        accepter_id: user.id
+      })
+      .then(() => {
+        getFriendList();
+        getPendingFriendList();
+      })
+      .catch((err) => {
+        console.error('Friend request axios FAILED', err);
+      });
+  };
+
+  const removeFriend = () => {
+    axios
+      .delete(`/friends/removeFriend/${user.id}`, { data: { updatedAt: user.updatedAt }})
+      .then(() => {
+        getFriendList()
+        getPendingFriendList();
+      })
+      .catch((err) => {
+        console.error('Remove friend request axios FAILED', err);
+      });
+  }
 
   const isNotLoggedInUser = (user.id !== loggedIn.id) || null;
+
+
 
   return (
     <div>
       <div className='userDot' id={user.username + user.id} onClick={ () => {
+        if (zoom < 15) {
+          setZoom(15);
+          setCenter({lat: lat - 0.005, lng: lng});
+        } else {
+          setCenter({lat: lat - (0.005 / ( 2 ** (zoom - 15))), lng: lng});
+        }
         togglePopUp();
       } } >
         <img
@@ -153,4 +207,4 @@ const UserPin: React.FC<Props> = ({ user, loggedIn, latitude, longitude, zoom, f
   );
 }
 
-export default UserPin;
+
