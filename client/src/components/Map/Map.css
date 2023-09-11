@@ -27,6 +27,9 @@
   box-shadow: 0 0 5px 1px rgb(120, 120, 120);
   align-items: center;
   justify-content: center;
+  margin-top: 50%;
+  margin-left: 50%;
+  margin-right: 50%;
   height: 50px;
   width: 50px;
   background-color: var(--pink);
@@ -37,6 +40,7 @@
   cursor: pointer;
   font-size: 30px;
   text-align: center;
+  transform: translateX(-50%);
   overflow-y: hidden; /* Hide vertical scrollbar */
   overflow-x: hidden; /* Hide horizontal scrollbar */
 }
@@ -74,8 +78,7 @@
   font-family: var(--title-font);
   color: white;
   position: relative;
-  top: 35px;
-  left: 0px;
+  top: -10px;
   z-index: 11;
   animation-name: popOut;
   animation-timing-function: ease-in;
