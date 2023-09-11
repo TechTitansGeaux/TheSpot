@@ -9,13 +9,15 @@
   --white: #F5FCFA;
   --t50-white: #f5fcfa80;
   --t25-white: #f5fcfa17;
+  --t90-violet: rgba(11, 1, 19, .9);
   --t75-violet: rgba(11, 1, 19, .75);
   --t50-violet: rgba(11, 1, 19, .50);
   --t25-violet: rgba(11, 1, 19, .25);
   --setupBG: #f433aa12;
   --title-font: 'Anton', sans-serif;
   --primary-font: system-ui, sans-serif;
-  --lg-font: 2.5rem;
+  --lg-font: 2.25rem;
+  --mid-lg-font: 1.75rem;
   --md-font: 1.5rem;
   --reg-font: 1rem;
   --sm-font: .5rem;
@@ -69,12 +71,12 @@ h6 {
 
 /* ////// GLOBAL */
 #app {
-  max-width: 98vw;
   margin: 0 auto;
 }
 
 html {
   scroll-behavior: smooth;
+  background-color: var(--violet);
 }
 
 body {
@@ -111,13 +113,13 @@ h1 {
 
 footer {
   position: fixed;
-  background-color: var(--t75-violet);
+  background-color: var(--t90-violet);
   display: flex;
   align-items: center;
   justify-content: center;
   bottom: 0%;
   width: 100vw;
-  z-index: 9999;
+  z-index: 997;
 }
 
 
@@ -169,15 +171,15 @@ footer {
 /* ////// FEED & REEL */
 
 /* .reel-container {
-  scroll-margin-top: 5em;
+  scroll-margin-top: 5.75em;
   scroll-snap-type: y mandatory;
-  max-height: 100vh;
-  overflow-y: auto;
+  height: 100vh;
+  overflow:auto;
 }
 
 .reel-child {
   scroll-snap-align: start end;
-  height: 100vh;
+  height: 100%;
 } */
 
 .click {
@@ -336,6 +338,8 @@ video.reel {
 h1.profile-title {
   margin-top: 1em;
   margin-left: .25em;
+  margin-bottom: .5em;
+  z-index: 98;
 }
 
 img.follow-icon {
@@ -346,14 +350,29 @@ img.follow-icon {
 
 .friendName {
   margin-right: 3rem;
+  z-index: 9;
 }
 
 .friendRequest-container {
   display: flex;
   flex-direction: row;
+  width: 95%;
   justify-content: space-between;
   align-items: center;
-  margin: 2em auto;
+  margin: 1em auto;
+  padding: .75em 2em;
+  border-radius: 1rem;
+  border: .75px solid var(--violet);
+  background-color: linear-gradient(175deg, #120120, #0f011b);
+  box-shadow:  -5px 15px 48px #350956,
+             15px -5px 48px #1a022e;
+}
+
+hr.line {
+  width: 90%;
+  margin: 0 auto;
+  border: .75px solid var(--t50-white);
+  z-index: 99;
 }
 
 .rejectFriend-btn {
@@ -374,10 +393,16 @@ button.rejectFriend-btn:hover {
 
 /* ////// CREATE REEL */
 
+
 .create-reel-btn-container{
   border-radius: 50%;
   width: auto;
   height: auto;
+}
+
+.create-reel-btn:hover {
+  color: var(--yellow);
+  transition: color .2s ease-out;
 }
 
 .webContainer {
@@ -579,6 +604,17 @@ button.rejectFriend-btn:hover {
 
 /* MEDIA QUERIES */
 
+@media screen and (max-width: 410px) {
+  .container-full-w {
+    max-width: 360px;
+    margin: 0 auto;
+  }
+
+  .video-container {
+    min-width: 325px;
+  }
+}
+
 @media screen and (max-width: 525px) {
   /* SideBar */
   .drawer-container {
@@ -589,7 +625,13 @@ button.rejectFriend-btn:hover {
   /* Followers & Friends */
   h1.profile-title {
     text-align: center;
+    margin-bottom: .25em;
     margin-left: 0;
+    font-size: var(--mid-lg-font);
+  }
+
+  .friendRequest-container {
+    padding: .75em .75em;
   }
 }
 
@@ -629,10 +671,30 @@ button.rejectFriend-btn:hover {
     z-index: 5;
     font-weight: bold;
   }
+}
+
+@media screen and (max-width: 300px) {
+
+  #app {
+    max-width: 100%;
+  }
+
+  footer {
+      width: 100%;
+    }
+
+  .container-full-w {
+    max-width: 280px;
+  }
+
+  .video-container {
+    min-width: 250px;
+
   .camera-switch-icon {
     position: absolute;
     top: 10%;
     right: 15%;
     z-index: 5
+
   }
 }

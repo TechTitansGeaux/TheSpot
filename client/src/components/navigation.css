@@ -15,9 +15,10 @@ nav.toolbar-container {
 .navbar-container {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  width: 410px;
+  justify-content: space-between;
   align-items: inherit;
-  padding: .5rem 0;
+  padding: .5rem 1em;
   z-index: 997;
 }
 
@@ -25,7 +26,7 @@ nav.toolbar-container {
 #nav-logo {
   width: 100px;
   height: 50px;
-  margin-right: 20px;
+  /* margin-right: 20px; */
   transition: transform .2s ease-out;
 }
 
@@ -34,6 +35,7 @@ nav.toolbar-container {
 }
 
 .navLink {
+  /* margin: 0 auto; */
   text-decoration: none;
   text-transform: uppercase;
   font-family: var(--title-font);
@@ -60,26 +62,44 @@ button.navLink {
   align-self: center;
 }
 
-.mapLink {
-  margin-right: 100px;
-}
+/* .mapLink {
+  margin: 0 auto;
+} */
 
 .circle {
   color: var(--yellow);
   background-color: var(--violet);
   border-radius: 50%;
-  margin: 2px;
+  /* margin: 2px; */
+}
+
+.avatar-container {
+  position: relative;
 }
 
 .nav-avatar {
-  position: relative;
   cursor: pointer;
-  bottom: 10%;
+}
+
+
+@media screen and (max-width: 300px) {
+  nav.toolbar-container {
+      width: 100%;
+      top: 0;
+      margin: 0 auto;
+  }
+
+  .navbar-container {
+    width: 100%;
+      margin-right: .25em;
+      margin-left: .5em;
+    }
+    
 }
 
 @media screen and (max-width: 525px) {
   .navbar-container {
       margin-right: 2em;
-      margin-left: 1em;
+      margin-left: 1.5em;
     }
 }

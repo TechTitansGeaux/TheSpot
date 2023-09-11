@@ -336,6 +336,7 @@
   border-radius: 50%;
   background-color: var(--grey);
   text-align: center;
+  transition: background-color .2s ease-out;
   z-index: 99;
 }
 
@@ -344,7 +345,6 @@
   letter-spacing: .02rem;
   color: var(--violet);
   background-color: var(--yellow);
-  transition: background-color .2s ease-out;
 }
 
 /* Bernie added ///// media query for responsive views */

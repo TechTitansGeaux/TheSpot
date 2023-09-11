@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Reel from './Reel';
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import './feed.css';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -28,7 +28,7 @@ type Props = {
   AddFriend?: React.ReactNode | React.ReactNode[];
 };
 
-const Feed: React.FC<Props> = ({user}) => {
+const Feed: React.FC<Props> = memo(function Feed({user}){
   const [reels, setReels] = useState([]);
   const [filter, setFilter] = useState('recent'); // filter feed state
   const [geoF, setGeoF] = useState(15); //geo filter by miles
@@ -266,7 +266,6 @@ const Feed: React.FC<Props> = ({user}) => {
     setOpen(false);
   };
 
-
   useEffect(() => {
     userCoord(user);
   }, [user, reels]);
@@ -292,6 +291,8 @@ const Feed: React.FC<Props> = ({user}) => {
         getFollowersList();
       }
   }, [filter]);
+
+//   console.log('reel from FEED ---------->', reels);
 
   return (
     <>
@@ -374,6 +375,6 @@ const Feed: React.FC<Props> = ({user}) => {
       </div>
     </>
   );
-};
+});
 
 export default Feed;

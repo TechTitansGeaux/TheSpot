@@ -28,17 +28,17 @@ type Props = {
   likesBool: any;
 };
 
-const Likes: React.FC<Props> = ({ handleRemoveLike, handleAddLike, reel }) => {
+const Likes: React.FC<Props> = ({ handleRemoveLike, handleAddLike, reel, user }) => {
   const [clicked, setClicked] = useState(false);
 
   const handleLikeClick = (reelId: number) => {
     if (clicked === false) {
       setClicked(true);
-      handleAddLike(reelId);
+      handleAddLike(reelId, user?.id);
       socket.emit('likesNotif', 'like');
     } else {
       setClicked(false);
-      handleRemoveLike(reelId);
+      handleRemoveLike(reelId, user?.id);
     }
   };
 

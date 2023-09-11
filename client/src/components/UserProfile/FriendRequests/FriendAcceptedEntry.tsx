@@ -53,7 +53,6 @@ const FriendAcceptedEntry: React.FC<Props> = ({
   allUsers,
   // reject
 }) => {
-
   const friendName = allUsers.reduce((name: String, otherUser: any) => {
     if (otherUser?.id === friend?.accepter_id) {
       // CHANGE to requester_id
@@ -66,14 +65,24 @@ const FriendAcceptedEntry: React.FC<Props> = ({
     if (otherUser?.id === friend?.accepter_id) {
       // CHANGE to requester_id
       icon = otherUser?.mapIcon;
-
     }
     return icon;
   }, '');
 
   return (
     <React.Fragment>
-      {<div className='friendRequest-container'>
+      {
+        <div className='friendRequest-container'>
+          <img
+            src={friendIcon}
+            alt={friendName}
+            style={{
+              width: '40px',
+              height: '40px',
+              marginRight: '10px',
+            }}
+          />
+          <h2 className='friendName'>{friendName}</h2>
           <div className='btn-container'>
             <Fab
               style={{
@@ -94,7 +103,7 @@ const FriendAcceptedEntry: React.FC<Props> = ({
                 PopperProps={{
                   sx: {
                     '& .MuiTooltip-tooltip': {
-                      backgroundColor: 'transparent',
+                      backgroundColor: '#0b0113',
                       border: 'solid #F5FCFA 1px',
                       color: '#F5FCFA',
                     },
@@ -110,18 +119,9 @@ const FriendAcceptedEntry: React.FC<Props> = ({
               </Tooltip>
             </Fab>
           </div>
-        <img
-          src={friendIcon}
-          alt={friendName}
-          style={{
-            width: '40px',
-            height: '40px',
-            marginRight: '10px',
-          }}
-        />
-        <h2 className='friendName'>{friendName}</h2>
-      </div>}
-    <hr></hr>
+        </div>
+      }
+      <hr className='line'></hr>
     </React.Fragment>
   );
 };

@@ -3,9 +3,10 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { setAuthUser, setIsAuthenticated } from '../../store/appSlice';
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, memo } from 'react';
 import Loading from './Loading'
 const ReelItem = lazy(() => import('./ReelItem'));
+// import ReelItem from './ReelItem';
 import { useTheme } from '@mui/material/styles';
 import { AnimatePresence, m, LazyMotion, domAnimation } from 'framer-motion';
 import io from 'socket.io-client';
@@ -64,7 +65,7 @@ type Event = {
   PlaceId: 1;
 };
 
-const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
+const Reel: React.FC<Props> = memo(function Reel({ reels, getAllReels }) {
   const theme = useTheme();
   const dispatch = useDispatch();
 
@@ -221,7 +222,7 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
   };
 
   // ADD ONE LIKE per Reel
-  const handleAddLike = (reelId: number) => {
+  const handleAddLike = (reelId: number, idUser: number) => {
     // console.log('ADD like of reelId =>', reelId);
     axios
       .put(`/likes/addLike/${reelId}`)
@@ -244,7 +245,9 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
           setLikes((prev) => prev.splice(foundLike, 1));
         }
         setLikes((prev) => prev.splice(foundLike, 1));
-        setLikeTotal((prev) => prev - 1);
+        if (likeTotal !== 0) {
+          setLikeTotal((prev) => prev - 1);
+        }
       })
       .catch((err) => console.error('Like AXIOS route Error', err));
   };
@@ -258,7 +261,7 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
           for (let i = 0; i < response.data.length; i++) {
             for (let j = 0; j < reels.length; j++) {
               if (response.data[i].ReelId === reels[j].id) {
-                likes.push(response.data[i].ReelId);
+                likes.push(response.data[i]);
               }
             }
           }
@@ -275,14 +278,15 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
     }
   };
 
-  useEffect(() => {
-    getLikes();
-  }, []);
+  // useEffect(() => {
+  //   getLikes();
+  // }, []);
 
   useEffect(() => {
     getAllFollowed();
   }, []);
 
+    console.log('reel from REEL ---------->', reels);
   return (
     <main
       className='reel-container'
@@ -334,6 +338,6 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
       </AnimatePresence>
     </main>
   );
-};
+});
 
 export default Reel;

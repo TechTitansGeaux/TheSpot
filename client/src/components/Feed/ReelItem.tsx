@@ -10,8 +10,7 @@ import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import InfoIcon from '@mui/icons-material/Info';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useState, useEffect, useRef } from 'react';
-import { memo } from 'react';
+import { useState, useEffect, useRef, memo } from 'react';
 import { useTheme } from '@mui/material/styles';
 import axios from 'axios';
 import dayjs from 'dayjs';
@@ -219,9 +218,9 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
     }
   };
 
-  useEffect(() => {
-    getLikes();
-  }, []);
+  // useEffect(() => {
+
+  // }, []);
 
   // GET all the rsvps
   const getRSVPs = () => {
@@ -243,6 +242,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
 
   useEffect(() => {
     getRSVPs();
+    getLikes();
   }, []);
 
   // POST / add new rsvps
@@ -290,7 +290,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
     return () => controller?.abort();
   }, []);
 
-  const [isInView, setIsInView] = useState(false);
+  // const [isInView, setIsInView] = useState(false);
   useEffect(() => {
     // observe videos with IntersectionObserver API to playback on scroll in view
     const observer = new IntersectionObserver((entries) => {
@@ -310,7 +310,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
           } else {
             // else video is out of view PAUSE video and don't Loop
             myRef.current.play();
-            setIsInView(true);
+            // setIsInView(true);
             setLoop(true);
             // Do something with the intersection data, such as triggering
             // an animation or lazy loading content
@@ -323,9 +323,11 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   }, []);
 
   // console.log('reels ---------->', reels)
-  // console.log('reel ---------->', reel)
+  console.log('reel from REELITEM ---------->', reels)
   // console.log('rsvpTotal', rsvpTotal)
   // console.log('disableRsvp', disableRsvp);
+  // console.log('likesArr', likesArr);
+  // console.log('likes', likes);
   return (
     <div>
       {true && (
@@ -358,39 +360,39 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
               </h5>
               <p className='video-text'>{reel.text}</p>
               <>
-              <ClickAwayListener onClickAway={closeInfo}>
-                <Tooltip
-                onClose={handleInfoClick}
-                open={openInfo}
-                disableFocusListener
-                disableHoverListener
-                disableTouchListener
-                  title={
-                    <div>
-                      {eventName}
-                      <br />
-                      {eventDate}
-                      <br />
-                      {pastEvent}
-                    </div>
-                  }
-                  placement='left'
-                  PopperProps={{
-                    sx: {
-                      '& .MuiTooltip-tooltip': {
-                        backgroundColor: 'transparent',
-                        border: 'solid #F5FCFA 1px',
-                        color: '#F5FCFA',
+                <ClickAwayListener onClickAway={closeInfo}>
+                  <Tooltip
+                    onClose={handleInfoClick}
+                    open={openInfo}
+                    disableFocusListener
+                    disableHoverListener
+                    disableTouchListener
+                    title={
+                      <div>
+                        {eventName}
+                        <br />
+                        {eventDate}
+                        <br />
+                        {pastEvent}
+                      </div>
+                    }
+                    placement='left'
+                    PopperProps={{
+                      sx: {
+                        '& .MuiTooltip-tooltip': {
+                          backgroundColor: 'transparent',
+                          border: 'solid #F5FCFA 1px',
+                          color: '#F5FCFA',
+                        },
                       },
-                    },
-                  }}
-                >
-                  <InfoIcon
-                    onClick={handleInfoClick}
-                    aria-label={eventName + eventDate}
-                    className='info-icon'
-                  />
-                </Tooltip>
+                    }}
+                  >
+                    <InfoIcon
+                      onClick={handleInfoClick}
+                      aria-label={eventName + eventDate}
+                      className='info-icon'
+                    />
+                  </Tooltip>
                 </ClickAwayListener>
                 {/**Removes addFriend button if already approved friend*/}
                 {user?.type === 'business' ||
@@ -575,12 +577,12 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                     component={'div'}
                     icon={
                       <div className='count-container'>
-                        {!likesArr.includes(reel.id) ? (
+                        {!likesArr.includes(reel.id) && user.id ? (
                           <Likes
                             handleAddLike={handleAddLike}
                             handleRemoveLike={handleRemoveLike}
                             reel={reel}
-                            user={user}
+                            // user={user}
                             likes={likes}
                             likesBool={likesArr}
                           />
@@ -589,7 +591,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                             handleAddLike={handleAddLike}
                             handleRemoveLike={handleRemoveLike}
                             reel={reel}
-                            user={user}
+                            // user={user}
                             likes={likes}
                             likesBool={likesArr}
                           />
@@ -599,7 +601,9 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                             {reel.like_count + likeTotal}
                           </p>
                         ) : (
-                          <p className='like-counter'>{reel.like_count}</p>
+                          <p className='like-counter'>
+                            {reel.like_count < 0 ? 0 : reel.like_count}
+                          </p>
                         )}
                       </div>
                     }
