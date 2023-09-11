@@ -1,8 +1,6 @@
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import React from 'react';
 import axios from 'axios';
