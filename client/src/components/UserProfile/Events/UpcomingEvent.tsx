@@ -1,5 +1,5 @@
   /* eslint-disable @typescript-eslint/no-explicit-any */
-import * as React from 'react';
+import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Button from '@mui/material/Button';
@@ -214,7 +214,6 @@ useEffect(() => {
     }
   }
 
-  console.log(twentyOne, '<-----21')
   // delete event
   const deleteEvent = () => {
     axios.delete(`/events/delete/${event.id}`)

@@ -1,5 +1,5 @@
  /* eslint-disable @typescript-eslint/no-explicit-any */
- import * as React from 'react';
+ import React from 'react';
  import { useState, useEffect } from "react";
  import axios from 'axios';
  import EventLocationSearch from './EventLocationSearch';
@@ -208,10 +208,7 @@ const createEvent = async () => {
     setEndTime('');
     setTwentyOne(false);
     resetClear();
-    console.log('reset event details');
   }, [clear])
-
-  console.log(twentyOne, '<-----21')
 
    return (
      <div

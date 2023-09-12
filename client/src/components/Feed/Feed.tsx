@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import Reel from './Reel';
 import axios from 'axios';
 import { useState, useEffect, memo } from 'react';
