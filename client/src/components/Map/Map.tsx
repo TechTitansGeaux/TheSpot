@@ -36,7 +36,8 @@ const Map: React.FC<Props> = (props) => {
   const [ users, setUsers ] = useState([]);
   const [ friendList, setFriendList ] = useState([]);
   const [ pendingFriendList, setPendingFriendList ] = useState([]);
-  const [ initView, setInitView ] = useState({})
+  const [ viewState, setViewState ] = useState({});
+
 
 
   // gets users friends
@@ -86,7 +87,7 @@ const Map: React.FC<Props> = (props) => {
       getFriendList();
       getPendingFriendList();
       const [lat, lng] = splitCoords(loggedIn.geolocation);
-      setInitView({latitude: +lat, longitude: +lng, zoom: 10})
+      setViewState({latitude: +lat, longitude: +lng, zoom: 15})
     }
   }, [loggedIn])
 
@@ -108,13 +109,15 @@ const Map: React.FC<Props> = (props) => {
   }
 
 
+
   return (
     <div className='mapParent'>
       <div className='mapChild'>
         <div id='map'>
           <MapBox
             mapboxAccessToken="pk.eyJ1IjoiYmVuamFtaW5rbGVpbjk5IiwiYSI6ImNsbWUzMnZxZDFma3EzZHE2NG1hdjUxdjQifQ.-dyi2R3I4LmoAH-MWuNZPA"
-            initialViewState={initView}
+            {...viewState}
+            onMove={evt => {setViewState(evt.viewState)}}
             style={{width: '100%', height: '100%'}}
             mapStyle="mapbox://styles/mapbox/streets-v9"
           >

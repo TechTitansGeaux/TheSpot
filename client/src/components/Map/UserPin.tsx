@@ -2,7 +2,7 @@ import localizedFormat from 'dayjs/plugin/localizedFormat';
 import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Marker } from 'react-map-gl';
+import { Marker, useMap } from 'react-map-gl';
 import React from 'react';
 import axios from 'axios';
 import dayjs = require('dayjs');
@@ -46,6 +46,7 @@ type Props = {
   latitude: number
   longitude: number
   key: string
+
 };
 
 const addFriendTheme = createTheme({
@@ -79,6 +80,13 @@ const rmFriendTheme = createTheme({
 });
 
 const UserPin: React.FC<Props> = ({ user, loggedIn, friendList, pendingFriendList, longitude, latitude, key }) => {
+
+  const { current } = useMap();
+
+  const zoomTo = (lng: number, lat: number) => {
+    current.flyTo({center: [+lng, +lat], zoom: 15});
+  }
+
   const togglePopUp = () => {
     const box = document.getElementById('popUp' + user.username + user.id)
     if (box.style.display === 'block') {
@@ -98,6 +106,7 @@ const UserPin: React.FC<Props> = ({ user, loggedIn, friendList, pendingFriendLis
     <Marker longitude={longitude} latitude={latitude} key={key} anchor='top'>
         <div className='userDot' id={user.username + user.id} onClick={ () => {
           togglePopUp();
+          zoomTo(longitude, latitude);
         } } >
           <img
             src={user.mapIcon}
