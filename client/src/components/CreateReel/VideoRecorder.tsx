@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import * as React from 'react';
+import React from 'react';
 import { useEffect, useCallback, useRef, useState } from "react";
 import Webcam from "react-webcam";
 import axios from 'axios';
@@ -151,13 +151,11 @@ const urltoFile = (url: any, filename: any, mimeType: any) => {
 
   // when they click to end recording video
   const handleStopCaptureClick = useCallback(async () => {
-    console.log('stop capturing clicked')
     await mediaRecorderRef.current.stop();
     setCapturing(false);
     setJustRecorded(true);
   }, [mediaRecorderRef, setCapturing]);
 
-  console.log(capturing, '<---- capturing state var')
 
   // upload whenever they are done recording and setJustRecorded is called
   useEffect(() => {
@@ -174,6 +172,8 @@ const urltoFile = (url: any, filename: any, mimeType: any) => {
         const file = await urltoFile(blobUrl, 'video.webm', 'video/webm')
         // append file to form data
         const formData = new FormData;
+
+        console.log(file.size, '<------ size of file')
 
         formData.append('video', file);
         // console.log(file, '<---- file that is appended to formData')
@@ -357,9 +357,7 @@ const switchCams = () => {
     setOpen(false);
   };
 
-console.log(mirrored, '<----mirrored')
-console.log(isCameraLoading, '<----- is camera loading')
-console.log(facingMode, '<---- facing mode')
+
   return (
     <div>
       <div className='webContainer'>

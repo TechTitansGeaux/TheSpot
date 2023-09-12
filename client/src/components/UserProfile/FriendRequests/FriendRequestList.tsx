@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import FriendRequestEntry from './FriendRequestEntry';
 import FriendAcceptedEntry from './FriendAcceptedEntry';
 import { useState, useEffect} from 'react';

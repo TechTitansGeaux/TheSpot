@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import RsvpSharpIcon from '@mui/icons-material/RsvpSharp';
 import Fab from '@mui/material/Fab';
 import Tooltip from '@mui/material/Tooltip';

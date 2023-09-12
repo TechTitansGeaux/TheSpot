@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
 import axios from 'axios';

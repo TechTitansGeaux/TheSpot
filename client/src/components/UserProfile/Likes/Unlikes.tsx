@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useState } from 'react';
 import io from 'socket.io-client';

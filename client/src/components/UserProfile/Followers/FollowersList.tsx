@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import FollowingEntry from './FollowingEntry';
 import FollowedEntry from './FollowedEntry';
 import axios from 'axios';
