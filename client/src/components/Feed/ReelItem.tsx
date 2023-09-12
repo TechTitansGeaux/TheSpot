@@ -10,8 +10,7 @@ import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import InfoIcon from '@mui/icons-material/Info';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useState, useEffect, useRef, memo } from 'react';
-import { useTheme } from '@mui/material/styles';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -98,6 +97,8 @@ type Props = {
   muted: boolean;
   handleToggleMute: () => void;
   openAlert: boolean;
+  followAlert: boolean;
+  messageAlert: string;
   handleAlertClose: any;
 };
 
@@ -137,7 +138,7 @@ declare module '@mui/material/Snackbar' {
   }
 }
 
-const ReelItem: React.FC<Props> = memo(function ReelItem({
+const ReelItem: React.FC<Props> = ({
   reel,
   reels,
   friendList,
@@ -155,8 +156,10 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   muted,
   handleToggleMute,
   openAlert,
-  handleAlertClose,
-}) {
+  followAlert,
+  messageAlert,
+  handleAlertClose
+}) => {
   // const theme = useTheme();
   // REFERENCE VIDEO HTML element in JSX element // Uses a ref to hold an array of generated refs, and assign them when mapping.
   const myRef = useRef<HTMLVideoElement>(null);
@@ -210,9 +213,9 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   };
 
   // call check event time once on first render
-  useEffect(() => {
-    checkEventTime();
-  }, []);
+  // useEffect(() => {
+
+  // }, []);
 
   const handleOpen = () => {
     setOpen(true);
@@ -267,7 +270,14 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
 
   useEffect(() => {
     getRSVPs();
+  }, []);
+
+  useEffect(() => {
     getLikes();
+  }, []);
+
+  useEffect(() => {
+    checkEventTime();
   }, []);
 
   // POST / add new rsvps
@@ -493,7 +503,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                                 <AddIcon
                                   aria-label={`Follow ${reel?.User.displayName}`}
                                   sx={{ width: 25, height: 25 }}
-                                  onClick={() => requestFollow(reel.User.id)}
+                                  onClick={() => requestFollow(reel.User.id, reel?.User.displayName)}
                                 />
                               </Tooltip>
                             ) : (
@@ -619,7 +629,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                             handleRemoveLike={handleRemoveLike}
                             reel={reel}
                             user={user}
-                            likes={likes}
+                            // likes={likes}
                             likesBool={likesArr}
                           />
                         ) : (
@@ -627,8 +637,8 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                             handleAddLike={handleAddLike}
                             handleRemoveLike={handleRemoveLike}
                             reel={reel}
-                            user={user}
-                            likes={likes}
+                            // user={user}
+                            // likes={likes}
                             likesBool={likesArr}
                           />
                         )}
@@ -723,9 +733,19 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
           message='Friend Request Sent'
           action={action}
         />
+        <Snackbar
+          variant='theSpot-pink'
+          sx={{ zIndex: 999, paddingBottom: '50px' }}
+          anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
+          open={followAlert}
+          autoHideDuration={4000}
+          onClick={handleAlertClose}
+          message={messageAlert || 'Follow Request Sent'}
+          action={action}
+        />
       </ThemeProvider>
     </div>
   );
-});
+};
 
 export default ReelItem;

@@ -23,8 +23,8 @@ type Props = {
   reel: any;
   handleAddLike: any;
   handleRemoveLike: any;
-  user: User;
-  likes: any[];
+  // user: User;
+  // likes: any[];
   likesBool: any;
 };
 
