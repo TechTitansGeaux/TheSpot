@@ -31,7 +31,8 @@ import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import Rsvp from '../UserProfile/Rsvps/Rsvp';
 import UnRsvp from '../UserProfile/Rsvps/UnRsvp';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
-
+import Snackbar from '@mui/material/Snackbar';
+import CloseIcon from '@mui/icons-material/Close';
 
 dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat);
@@ -96,9 +97,25 @@ type Props = {
   followed: number[];
   muted: boolean;
   handleToggleMute: () => void;
+  openAlert: boolean;
+  handleAlertClose: any;
 };
 
 const theme = createTheme({
+  components: {
+    MuiSnackbar: {
+      variants: [
+        {
+          props: { variant: 'theSpot-pink' },
+          style: {
+            '& .MuiSnackbarContent-root': {
+              background: '#f433ab',
+            },
+          },
+        },
+      ],
+    },
+  },
   palette: {
     primary: {
       main: '#f0f465',
@@ -112,6 +129,13 @@ const theme = createTheme({
     },
   },
 });
+
+// interface Type for createTheme
+declare module '@mui/material/Snackbar' {
+  interface SnackbarProps {
+    variant: 'theSpot-pink';
+  }
+}
 
 const ReelItem: React.FC<Props> = memo(function ReelItem({
   reel,
@@ -130,8 +154,10 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   followed,
   muted,
   handleToggleMute,
+  openAlert,
+  handleAlertClose,
 }) {
-  const theme = useTheme();
+  // const theme = useTheme();
   // REFERENCE VIDEO HTML element in JSX element // Uses a ref to hold an array of generated refs, and assign them when mapping.
   const myRef = useRef<HTMLVideoElement>(null);
   const [loop, setLoop] = useState(false);
@@ -151,18 +177,20 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   const [rsvpTotal, setRsvpTotal] = useState(0);
   const [disableRsvp, setDisableRsvp] = useState([]);
   const [openInfo, setOpenInfo] = useState(false);
+  // to open friends alert
+  // const [openAlert, setOpenAlert] = useState(false);
 
   const handleInfoClick = () => {
     if (openInfo) {
       setOpenInfo(false);
     } else {
-      setOpenInfo(true)
+      setOpenInfo(true);
     }
   };
 
   const closeInfo = () => {
     setOpenInfo(false);
-  }
+  };
 
   // check if event is over
   const checkEventTime = () => {
@@ -218,9 +246,6 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
     }
   };
 
-  // useEffect(() => {
-
-  // }, []);
 
   // GET all the rsvps
   const getRSVPs = () => {
@@ -307,13 +332,12 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
             .catch((err) => {
               console.error('Auto-play was prevented', err);
             });
-          } else {
-            // else video is out of view PAUSE video and don't Loop
-            myRef.current.play();
-            // setIsInView(true);
-            setLoop(true);
-            // Do something with the intersection data, such as triggering
-            // an animation or lazy loading content
+        } else {
+          // else video is out of view PAUSE video and don't Loop
+          myRef.current.play();
+          // setIsInView(true);
+          setLoop(true);
+
         }
       });
     });
@@ -322,8 +346,22 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
     return () => observer.disconnect();
   }, []);
 
+
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size='small'
+        aria-label='close'
+        color='inherit'
+        onClick={handleAlertClose}
+      >
+        <CloseIcon fontSize='small' />
+      </IconButton>
+    </React.Fragment>
+  );
+
   // console.log('reels ---------->', reels)
-  console.log('reel from REELITEM ---------->', reels)
+  console.log('reel from REELITEM ---------->', reels);
   // console.log('rsvpTotal', rsvpTotal)
   // console.log('disableRsvp', disableRsvp);
   // console.log('likesArr', likesArr);
@@ -398,23 +436,71 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                 {user?.type === 'business' ||
                   (!friendList.includes(reel.User.id) &&
                     reel.User.id !== user?.id && (
-                      <ThemeProvider theme={theme}>
-                        <div className='friend-request'>
-                          <Box className='friend-box'>
-                            <Fab
-                              style={{ transform: 'scale(0.6)' }}
-                              size='small'
-                              color='primary'
-                              aria-label='add'
-                              className='friend-add-btn'
-                              disabled={
-                                disabledNow.includes(reel.User.id) ||
-                                stayDisabled.includes(reel.User.id)
-                              }
-                            >
-                              {reel?.User.type === 'personal' && (
+                      <div className='friend-request'>
+                        <Box className='friend-box'>
+                          <Fab
+                            style={{ transform: 'scale(0.6)' }}
+                            size='small'
+                            color='primary'
+                            aria-label='add'
+                            className='friend-add-btn'
+                            disabled={
+                              disabledNow.includes(reel.User.id) ||
+                              stayDisabled.includes(reel.User.id)
+                            }
+                          >
+                            {reel?.User.type === 'personal' && (
+                              <Tooltip
+                                title='Add Friend'
+                                TransitionComponent={Zoom}
+                                placement='left'
+                                PopperProps={{
+                                  sx: {
+                                    '& .MuiTooltip-tooltip': {
+                                      backgroundColor: 'transparent',
+                                      border: 'solid #F5FCFA 1px',
+                                      color: '#F5FCFA',
+                                    },
+                                  },
+                                }}
+                              >
+                                <AddIcon
+                                  aria-label='Add Friend Button'
+                                  sx={{ width: 25, height: 25 }}
+                                  onClick={() => {
+                                    requestFriendship(reel.User.id);
+                                  }}
+                                />
+                              </Tooltip>
+                            )}
+                            {/**Replaces addFriend button with Follow button reel.User.type is a business*/}
+                            {reel?.User.type === 'business' &&
+                            reel.User.id !== user?.id ? (
+                              <Tooltip
+                                title={`Follow ${reel?.User.displayName}`}
+                                TransitionComponent={Zoom}
+                                placement='left'
+                                PopperProps={{
+                                  sx: {
+                                    '& .MuiTooltip-tooltip': {
+                                      backgroundColor: 'transparent',
+                                      border: 'solid #F5FCFA 1px',
+                                      color: '#F5FCFA',
+                                    },
+                                  },
+                                }}
+                              >
+                                <AddIcon
+                                  aria-label={`Follow ${reel?.User.displayName}`}
+                                  sx={{ width: 25, height: 25 }}
+                                  onClick={() => requestFollow(reel.User.id)}
+                                />
+                              </Tooltip>
+                            ) : (
+                              reel?.User.type === 'business' &&
+                              followed.includes(reel.User.id) && (
                                 <Tooltip
-                                  title='Add Friend'
+                                  title={`Unfollow ${reel?.User.displayName}`}
                                   TransitionComponent={Zoom}
                                   placement='left'
                                   PopperProps={{
@@ -427,69 +513,19 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                                     },
                                   }}
                                 >
-                                  <AddIcon
-                                    aria-label='Add Friend Button'
+                                  <ClearOutlinedIcon
+                                    aria-label={`Unfollow ${reel?.User.displayName}`}
                                     sx={{ width: 25, height: 25 }}
                                     onClick={() =>
-                                      requestFriendship(reel.User.id)
+                                      requestUnfollow(reel.User.id)
                                     }
                                   />
                                 </Tooltip>
-                              )}
-                              {/**Replaces addFriend button with Follow button reel.User.type is a business*/}
-                              {reel?.User.type === 'business' &&
-                              reel.User.id !== user?.id ? (
-                                <Tooltip
-                                  title={`Follow ${reel?.User.displayName}`}
-                                  TransitionComponent={Zoom}
-                                  placement='left'
-                                  PopperProps={{
-                                    sx: {
-                                      '& .MuiTooltip-tooltip': {
-                                        backgroundColor: 'transparent',
-                                        border: 'solid #F5FCFA 1px',
-                                        color: '#F5FCFA',
-                                      },
-                                    },
-                                  }}
-                                >
-                                  <AddIcon
-                                    aria-label={`Follow ${reel?.User.displayName}`}
-                                    sx={{ width: 25, height: 25 }}
-                                    onClick={() => requestFollow(reel.User.id)}
-                                  />
-                                </Tooltip>
-                              ) : (
-                                reel?.User.type === 'business' &&
-                                followed.includes(reel.User.id) && (
-                                  <Tooltip
-                                    title={`Unfollow ${reel?.User.displayName}`}
-                                    TransitionComponent={Zoom}
-                                    placement='left'
-                                    PopperProps={{
-                                      sx: {
-                                        '& .MuiTooltip-tooltip': {
-                                          backgroundColor: 'transparent',
-                                          border: 'solid #F5FCFA 1px',
-                                          color: '#F5FCFA',
-                                        },
-                                      },
-                                    }}
-                                  >
-                                    <ClearOutlinedIcon
-                                      aria-label={`Unfollow ${reel?.User.displayName}`}
-                                      sx={{ width: 25, height: 25 }}
-                                      onClick={() =>
-                                        requestUnfollow(reel.User.id)
-                                      }
-                                    />
-                                  </Tooltip>
-                                )
-                              )}
-                            </Fab>
-                          </Box>
-                        </div>
-                      </ThemeProvider>
+                              )
+                            )}
+                          </Fab>
+                        </Box>
+                      </div>
                     ))}
                 {reel.UserId === user.id && (
                   <div className='friend-request'>
@@ -582,7 +618,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                             handleAddLike={handleAddLike}
                             handleRemoveLike={handleRemoveLike}
                             reel={reel}
-                            // user={user}
+                            user={user}
                             likes={likes}
                             likesBool={likesArr}
                           />
@@ -591,7 +627,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                             handleAddLike={handleAddLike}
                             handleRemoveLike={handleRemoveLike}
                             reel={reel}
-                            // user={user}
+                            user={user}
                             likes={likes}
                             likesBool={likesArr}
                           />
@@ -676,6 +712,18 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
           </>
         </div>
       )}
+      <ThemeProvider theme={theme}>
+        <Snackbar
+          variant='theSpot-pink'
+          sx={{ zIndex: 999, paddingBottom: '50px' }}
+          anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
+          open={openAlert}
+          autoHideDuration={4000}
+          onClick={handleAlertClose}
+          message='Friend Request Sent'
+          action={action}
+        />
+      </ThemeProvider>
     </div>
   );
 });
