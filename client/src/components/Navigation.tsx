@@ -492,6 +492,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
             {pFriends.length !== 0 && (
               <div>
                 <Snackbar
+                  variant='theSpot-pink'
                   open={open}
                   autoHideDuration={6000}
                   onClick={handleClose}

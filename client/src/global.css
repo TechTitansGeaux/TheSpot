@@ -158,15 +158,11 @@ footer {
   color: var(--light-violet);
 }
 
-/* .sidebar-btn:hover,
-.sidebar-btn:focus {
-  background-color: var(--yellow);
-} */
-
 .ListItem.Mui-focusVisible {
   background-color: var(--yellow);
   color: var(--light-violet);
 }
+
 
 /* ////// FEED & REEL */
 
@@ -690,7 +686,7 @@ button.rejectFriend-btn:hover {
   .video-container {
     min-width: 250px;
   }
-  
+
   .camera-switch-icon {
     position: absolute;
     top: 10%;

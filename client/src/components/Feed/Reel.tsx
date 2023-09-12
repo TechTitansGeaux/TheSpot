@@ -68,7 +68,10 @@ type Event = {
 const Reel: React.FC<Props> = memo(function Reel({ reels, getAllReels }) {
   const theme = useTheme();
   const dispatch = useDispatch();
-
+  // to open friends alert
+  const [openAlert, setOpenAlert] = useState(false);
+  // to open follower alert
+  const [followAlert, setFollowAlert] = useState(false);
   // GET current user
   const [user, setUser] = useState<User>(null);
   const [friendList, setFriendList] = useState([]);
@@ -77,10 +80,10 @@ const Reel: React.FC<Props> = memo(function Reel({ reels, getAllReels }) {
   const [likeTotal, setLikeTotal] = useState(0);
   const [likes, setLikes] = useState([]); // user's reels that have been liked
   // const [likesPersist, setLikesPersist] = useState([]);
-    // state of audio on reels
-    const [muted, setMuted] = useState(true);
-      // toggle reel audio
-  const handleToggleMute = () => setMuted(current => !current);
+  // state of audio on reels
+  const [muted, setMuted] = useState(true);
+  // toggle reel audio
+  const handleToggleMute = () => setMuted((current) => !current);
 
   const fetchAuthUser = async () => {
     try {
@@ -139,6 +142,8 @@ const Reel: React.FC<Props> = memo(function Reel({ reels, getAllReels }) {
   // POST request to follow a business user
   const requestFollow = (followedUser: number) => {
     console.log('request to followedUser_id=>', followedUser);
+    handleAlertOpen('Now Following');
+
     axios
       .put('/followers', {
         followedUser_id: followedUser,
@@ -165,7 +170,7 @@ const Reel: React.FC<Props> = memo(function Reel({ reels, getAllReels }) {
       })
       .then((data) => {
         const foundFollower = followed.indexOf(followedUser);
-        console.log('found follower ===>', foundFollower)
+        console.log('found follower ===>', foundFollower);
         setDisabled([...disabled, followedUser]);
         setFollowed((prev) => prev.splice(foundFollower, 1));
         console.log('Now unfollowing | delete followedUser_id: ', followedUser);
@@ -179,6 +184,7 @@ const Reel: React.FC<Props> = memo(function Reel({ reels, getAllReels }) {
   const requestFriendship = (friend: number) => {
     console.log('your friendship is requested', friend);
     setDisabled([...disabled, friend]);
+    handleAlertOpen('Friend Request Pending');
     axios
       .post('/friends', {
         // accepter_id is user on reel
@@ -286,7 +292,29 @@ const Reel: React.FC<Props> = memo(function Reel({ reels, getAllReels }) {
     getAllFollowed();
   }, []);
 
-    console.log('reel from REEL ---------->', reels);
+  // snackbar logic for pending friends
+  //Snackbar for friends and follows
+  const handleAlertOpen = (option: string) => {
+    console.log('snackbar open for pending friend');
+    if (option === 'Friend Request Pending') {
+      setOpenAlert(true);
+    } else {
+      setFollowAlert(true);
+    }
+  };
+
+  const handleAlertClose = (
+    event: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenAlert(false);
+  };
+
+  console.log('reel from REEL ---------->', reels);
   return (
     <main
       className='reel-container'
@@ -294,46 +322,48 @@ const Reel: React.FC<Props> = memo(function Reel({ reels, getAllReels }) {
     >
       <AnimatePresence initial={false}>
         <Suspense fallback={<Loading />}>
-        {reels.map((reel) => {
-          return (
-            <LazyMotion
-              key={reel.id + 'reel' + Math.floor(Math.random() * 25)}
-              features={domAnimation}
-            >
-              <m.div
-                className='reel-child'
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{
-                  ease: 'anticipate',
-                  duration: 0.2,
-                  delay: 0.2,
-                }}
+          {reels.map((reel) => {
+            return (
+              <LazyMotion
+                key={reel.id + 'reel' + Math.floor(Math.random() * 25)}
+                features={domAnimation}
               >
-                <ReelItem
-                  key={reel.id + 'reelItem' + Math.floor(Math.random() * 35)}
-                  user={user}
-                  reel={reel}
-                  reels={reels}
-                  friendList={friendList}
-                  requestFriendship={requestFriendship}
-                  requestUnfollow={requestUnfollow}
-                  requestFollow={requestFollow}
-                  followed={followed}
-                  disabledNow={disabled}
-                  deleteReel={deleteReel}
-                  handleAddLike={handleAddLike}
-                  handleRemoveLike={handleRemoveLike}
-                  likeTotal={likeTotal}
-                  likes={likes}
-                  muted={muted}
-                  handleToggleMute={handleToggleMute}
-                />
-              </m.div>
-            </LazyMotion>
-          );
-        })}
+                <m.div
+                  className='reel-child'
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{
+                    ease: 'anticipate',
+                    duration: 0.2,
+                    delay: 0.2,
+                  }}
+                >
+                  <ReelItem
+                    key={reel.id + 'reelItem' + Math.floor(Math.random() * 35)}
+                    user={user}
+                    reel={reel}
+                    reels={reels}
+                    friendList={friendList}
+                    requestFriendship={requestFriendship}
+                    requestUnfollow={requestUnfollow}
+                    requestFollow={requestFollow}
+                    followed={followed}
+                    disabledNow={disabled}
+                    deleteReel={deleteReel}
+                    handleAddLike={handleAddLike}
+                    handleRemoveLike={handleRemoveLike}
+                    likeTotal={likeTotal}
+                    likes={likes}
+                    muted={muted}
+                    handleToggleMute={handleToggleMute}
+                    openAlert={openAlert}
+                    handleAlertClose={handleAlertClose}
+                  />
+                </m.div>
+              </LazyMotion>
+            );
+          })}
         </Suspense>
       </AnimatePresence>
     </main>
