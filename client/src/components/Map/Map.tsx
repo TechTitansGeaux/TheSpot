@@ -1,8 +1,10 @@
 import './Map.css';
-import React, { useState, useEffect } from 'react';
-import MapBox from 'react-map-gl';
+import React, { useState, useEffect, useRef } from 'react';
+import MapBox, { useMap  } from 'react-map-gl';
 import axios from 'axios';
 import UserPin from './UserPin';
+import useSupercluster from 'use-supercluster';
+import ClusterPin from './ClusterPin';
 import CircularProgress from '@mui/material/CircularProgress';
 
 
@@ -97,6 +99,43 @@ const Map: React.FC<Props> = (props) => {
     return arr;
   }
 
+  const mapRef = useRef();
+
+  // clustering points for user pins
+  const userPoints = users.filter((user) => {
+      if (user.id === loggedIn.id) {
+      return true;
+      } else if (user.privacy === 'private') {
+        return false;
+      } else if (user.privacy === 'friends only' && !friendList.includes(user.id)){
+       return false;
+      }
+      else if (user.type === 'business') {
+        return false
+      } else {
+        return true;
+      }
+    }).map((user) => {
+      const [lat, lng] = splitCoords(user.geolocation);
+      return {
+        type: 'Feature',
+        properties: {
+          cluster: false,
+          user: user,
+        },
+        geometry: { type: 'Point', coordinates: [+lng, +lat]},
+      }
+    })
+
+  const bounds = mapRef.current ? mapRef.current.getMap().getBounds().toArray().flat() : null;
+
+  const { clusters: userClusters, supercluster: userSupercluster } = useSupercluster({
+    points: userPoints,
+    bounds,
+    zoom: viewState.zoom,
+    options: { radius: 75, maxZoom: 19, }
+  })
+
   if (!users.length || !loggedIn) {
     // Data is not yet available, render loading ring
     return (
@@ -120,23 +159,31 @@ const Map: React.FC<Props> = (props) => {
             onMove={evt => {setViewState(evt.viewState)}}
             style={{width: '100%', height: '100%'}}
             mapStyle="mapbox://styles/mapbox/streets-v9"
+            ref={mapRef}
           >
-            {
-                users.map((user) => {
-                  const [lat, lng] = splitCoords(user.geolocation);
-                  return <UserPin
-                    getPendingFriendList={getPendingFriendList}
-                    pendingFriendList={pendingFriendList}
-                    getFriendList={getFriendList}
-                    friendList={friendList}
-                    user={user}
-                    key={user.id}
-                    loggedIn={loggedIn}
-                    latitude={+lat}
-                    longitude={+lng}
-                    />
+              {
+                userClusters.map((cluster: any, i: number) => {
+                  const [ lng, lat ] = cluster.geometry.coordinates;
+                  const { cluster: isCluster, point_count: pointCount, user} = cluster.properties;
+
+                  if (isCluster) {
+                    const expansionZoom = Math.min(userSupercluster.getClusterExpansionZoom(cluster.id), 20);
+                    return <ClusterPin amount={pointCount} key={'userCluster' + i} latitude={lat} longitude={lng} className='UserClusterPin' expansionZoom={expansionZoom}/>;
+                  } else {
+                    return <UserPin
+                      getPendingFriendList={getPendingFriendList}
+                      pendingFriendList={pendingFriendList}
+                      getFriendList={getFriendList}
+                      friendList={friendList}
+                      user={user}
+                      key={user.id}
+                      loggedIn={loggedIn}
+                      latitude={+lat}
+                      longitude={+lng}
+                      />
+                  }
                 })
-            }
+              }
           </MapBox>
         </div>
         <div className='legend'>

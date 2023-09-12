@@ -55,7 +55,6 @@
   border-radius: 50%;
   display: inline-block;
   position: relative;
-  transform: translate(-50%, -50%);
   z-index: 10;
   cursor: pointer;
   text-align: center;
