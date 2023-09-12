@@ -95,7 +95,7 @@ const UserPin: React.FC<Props> = ({ user, loggedIn, friendList, pendingFriendLis
   const isNotLoggedInUser = (user.id !== loggedIn.id) || null;
 
   return (
-    <Marker longitude={longitude} latitude={latitude} key={key} >
+    <Marker longitude={longitude} latitude={latitude} key={key} anchor='top'>
         <div className='userDot' id={user.username + user.id} onClick={ () => {
           togglePopUp();
         } } >

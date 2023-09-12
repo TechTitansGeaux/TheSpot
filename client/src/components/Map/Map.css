@@ -27,7 +27,6 @@
   box-shadow: 0 0 5px 1px rgb(120, 120, 120);
   align-items: center;
   justify-content: center;
-  margin-top: 50%;
   margin-left: 50%;
   margin-right: 50%;
   height: 50px;
@@ -36,6 +35,7 @@
   border-radius: 50%;
   display: inline-block;
   position: relative;
+  top: -25px;
   z-index: 10;
   cursor: pointer;
   font-size: 30px;
@@ -78,7 +78,7 @@
   font-family: var(--title-font);
   color: white;
   position: relative;
-  top: -10px;
+  top: -35px;
   z-index: 11;
   animation-name: popOut;
   animation-timing-function: ease-in;
