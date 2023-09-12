@@ -106,7 +106,7 @@ const Map: React.FC<Props> = (props) => {
     return arr;
   }
 
-  const mapRef = useRef();
+  const mapRef = useRef<any>();
 
   // clustering points for user pins
   const userPoints = users.filter((user) => {
@@ -171,7 +171,7 @@ const Map: React.FC<Props> = (props) => {
             projection={{name: 'globe'}}
             onLoad={(e) => {
               const [lng, lat] = userLngLat;
-              e.target.flyTo({center: [lng, lat], zoom: 15, duration: 3000});
+              e.target.flyTo({center: [lng, lat], zoom: 15, duration: 2500});
             }}
           >
               {
