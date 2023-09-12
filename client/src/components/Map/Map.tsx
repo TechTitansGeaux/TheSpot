@@ -1,6 +1,6 @@
 import './Map.css';
 import React, { useState, useEffect, useRef } from 'react';
-import MapBox, { useMap  } from 'react-map-gl';
+import MapBox, { useMap } from 'react-map-gl';
 import axios from 'axios';
 import UserPin from './UserPin';
 import useSupercluster from 'use-supercluster';
@@ -38,7 +38,12 @@ const Map: React.FC<Props> = (props) => {
   const [ users, setUsers ] = useState([]);
   const [ friendList, setFriendList ] = useState([]);
   const [ pendingFriendList, setPendingFriendList ] = useState([]);
-  const [ viewState, setViewState ] = useState({});
+  const [ viewState, setViewState ] = useState<{zoom: number, longitude: number, latitude: number}>({
+    longitude: -94.30272073458288,
+    latitude: 23.592677069427353,
+    zoom: 0.5068034173376552
+  });
+  const [ userLngLat, setUserLngLat ] = useState([])
 
 
 
@@ -89,9 +94,11 @@ const Map: React.FC<Props> = (props) => {
       getFriendList();
       getPendingFriendList();
       const [lat, lng] = splitCoords(loggedIn.geolocation);
-      setViewState({latitude: +lat, longitude: +lng, zoom: 15})
+      setUserLngLat([+lng, + lat]);
     }
   }, [loggedIn])
+
+  useEffect(() => {}, [viewState])
 
   // function to split coordinates into array so lat and lng can easily be destructured
   const splitCoords = (coords: string) => {
@@ -149,6 +156,7 @@ const Map: React.FC<Props> = (props) => {
 
 
 
+  console.log(viewState);
   return (
     <div className='mapParent'>
       <div className='mapChild'>
@@ -160,6 +168,11 @@ const Map: React.FC<Props> = (props) => {
             style={{width: '100%', height: '100%'}}
             mapStyle="mapbox://styles/mapbox/streets-v9"
             ref={mapRef}
+            projection={{name: 'globe'}}
+            onLoad={(e) => {
+              const [lng, lat] = userLngLat;
+              e.target.flyTo({center: [lng, lat], zoom: 15, duration: 3000});
+            }}
           >
               {
                 userClusters.map((cluster: any, i: number) => {
