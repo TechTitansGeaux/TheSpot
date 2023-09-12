@@ -79,7 +79,7 @@ const rmFriendTheme = createTheme({
   },
 });
 
-const UserPin: React.FC<Props> = ({ user, loggedIn, friendList, pendingFriendList, longitude, latitude, key }) => {
+const UserPin: React.FC<Props> = ({ user, loggedIn, friendList, pendingFriendList, longitude, latitude, key, getFriendList, getPendingFriendList, }) => {
 
   const { current } = useMap();
 
@@ -98,6 +98,34 @@ const UserPin: React.FC<Props> = ({ user, loggedIn, friendList, pendingFriendLis
       box.style.animationName = 'popOut';
       box.style.display = 'block';
     }
+  }
+
+   // request friend ship
+   const addFriend = () => {
+    axios
+      .post('/friends', {
+        // accepter_id is user on reel
+        accepter_id: user.id
+      })
+      .then(() => {
+        getFriendList();
+        getPendingFriendList();
+      })
+      .catch((err) => {
+        console.error('Friend request axios FAILED', err);
+      });
+  };
+
+  const removeFriend = () => {
+    axios
+      .delete(`/friends/removeFriend/${user.id}`, { data: { updatedAt: user.updatedAt }})
+      .then(() => {
+        getFriendList()
+        getPendingFriendList();
+      })
+      .catch((err) => {
+        console.error('Remove friend request axios FAILED', err);
+      });
   }
 
   const isNotLoggedInUser = (user.id !== loggedIn.id) || null;
@@ -136,6 +164,7 @@ const UserPin: React.FC<Props> = ({ user, loggedIn, friendList, pendingFriendLis
                         size="small"
                         color="primary"
                         className='friend-add-btn'
+                        onClick={() => { addFriend(); } }
                       > Add Friend
                       </Fab>
                     </Box>
@@ -155,6 +184,7 @@ const UserPin: React.FC<Props> = ({ user, loggedIn, friendList, pendingFriendLis
                         size="small"
                         color="primary"
                         className='friend-add-btn'
+                        onClick={() => { removeFriend(); } }
                       > Remove Friend
                       </Fab>
                     </Box>
