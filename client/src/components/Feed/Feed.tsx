@@ -257,7 +257,7 @@ const Feed: React.FC<Props> = memo(function Feed({user}){
     }
   };
 
-  // filter dialog
+  // filter dialog box
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -278,13 +278,13 @@ const Feed: React.FC<Props> = memo(function Feed({user}){
       if (user?.type === 'personal') {
         getFriendList();
       }
-  }, [user, filter]);
+  }, [filter]);
 
   useEffect(() => {
       if (user?.type === 'personal') {
         getFollowingList();
       }
-  }, [user, filter]);
+  }, [filter]);
 
   useEffect(() => {
       if (user?.type === 'business') {
