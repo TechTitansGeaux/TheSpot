@@ -257,7 +257,7 @@ const Feed: React.FC<Props> = ({user}) => {
     }
   };
 
-  // filter dialog
+  // filter dialog box
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -265,7 +265,6 @@ const Feed: React.FC<Props> = ({user}) => {
   const handleClose = () => {
     setOpen(false);
   };
-
 
   useEffect(() => {
     userCoord(user);
