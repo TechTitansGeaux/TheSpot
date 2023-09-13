@@ -3,12 +3,14 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { setAuthUser, setIsAuthenticated } from '../../store/appSlice';
-import { Suspense, lazy, memo } from 'react';
-import Loading from './Loading'
-const ReelItem = lazy(() => import('./ReelItem'));
-// import ReelItem from './ReelItem';
+import { FixedSizeList as List } from 'react-window';
+import InfiniteLoader from 'react-window-infinite-loader';
+// import { Suspense, lazy } from 'react';
+// import Loading from './Loading'
+// const ReelItem = lazy(() => import('./ReelItem'));
+import ReelItem from './ReelItem';
 import { useTheme } from '@mui/material/styles';
-import { AnimatePresence, m, LazyMotion, domAnimation } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import io from 'socket.io-client';
 const socket = io();
 
@@ -65,13 +67,15 @@ type Event = {
   PlaceId: 1;
 };
 
-const Reel: React.FC<Props> = memo(function Reel({ reels, getAllReels }) {
+const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
   // to open friends alert
   const [openAlert, setOpenAlert] = useState(false);
   // to open follower alert
   const [followAlert, setFollowAlert] = useState(false);
+  // to following message alert
+  const [messageAlert, setMessageAlert] = useState('');
   // GET current user
   const [user, setUser] = useState<User>(null);
   const [friendList, setFriendList] = useState([]);
@@ -100,6 +104,7 @@ const Reel: React.FC<Props> = memo(function Reel({ reels, getAllReels }) {
 
   useEffect(() => {
     fetchAuthUser();
+    console.log('useEffect fetchAuthUser | Reel.tsx line 107 | NO CALL ON LOAD');
   }, []);
 
   // GET request get friendList from Friendship table in DB // set to state variable
@@ -112,6 +117,9 @@ const Reel: React.FC<Props> = memo(function Reel({ reels, getAllReels }) {
         data.map((user: any) => {
           if (user?.status === 'approved') {
             setFriendList((prev) => [...prev, user.accepter_id]);
+            console.log(
+              'useEffect axios setFriendList | Reel.tsx line 120 | NO CALL ON LOAD'
+            );
           }
         });
       })
@@ -140,9 +148,9 @@ const Reel: React.FC<Props> = memo(function Reel({ reels, getAllReels }) {
   };
 
   // POST request to follow a business user
-  const requestFollow = (followedUser: number) => {
+  const requestFollow = (followedUser: number, followedUserName: string) => {
     console.log('request to followedUser_id=>', followedUser);
-    handleAlertOpen('Now Following');
+    handleAlertOpen(`Now Following ${followedUserName}`);
 
     axios
       .put('/followers', {
@@ -272,11 +280,6 @@ const Reel: React.FC<Props> = memo(function Reel({ reels, getAllReels }) {
             }
           }
           setLikes(likes);
-          // for (let i = 0; i < response.data.length; i++) {
-          //   if (user?.id === response.data[i].UserId) {
-          //     setLikes((prev) => [...prev, response.data[i].ReelId]);
-          //   }
-          // }
         })
         .catch((err) => {
           console.error('Could not GET all likes:', err);
@@ -284,12 +287,16 @@ const Reel: React.FC<Props> = memo(function Reel({ reels, getAllReels }) {
     }
   };
 
-  // useEffect(() => {
-  //   getLikes();
-  // }, []);
+  useEffect(() => {
+    getLikes();
+    console.log('useEffect getLikes | Reel.tsx line 209 | NO CALL ON LOAD');
+  }, []);
 
   useEffect(() => {
     getAllFollowed();
+    console.log(
+      'useEffect getAllFollowed | Reel.tsx line 295 | NO CALL ON LOAD'
+    );
   }, []);
 
   // snackbar logic for pending friends
@@ -299,6 +306,7 @@ const Reel: React.FC<Props> = memo(function Reel({ reels, getAllReels }) {
     if (option === 'Friend Request Pending') {
       setOpenAlert(true);
     } else {
+      setMessageAlert(option);
       setFollowAlert(true);
     }
   };
@@ -312,23 +320,21 @@ const Reel: React.FC<Props> = memo(function Reel({ reels, getAllReels }) {
     }
 
     setOpenAlert(false);
+    setFollowAlert(false);
   };
 
-  console.log('reel from REEL ---------->', reels);
+  // console.log('reel from REEL ---------->', reels);
   return (
     <main
       className='reel-container'
-      style={{ fontSize: theme.typography.fontSize }}
+      // style={{ fontSize: theme.typography.fontSize }}
     >
       <AnimatePresence initial={false}>
-        <Suspense fallback={<Loading />}>
+        {/* <Suspense fallback={<Loading />}> */}
           {reels.map((reel) => {
             return (
-              <LazyMotion
-                key={reel.id + 'reel' + Math.floor(Math.random() * 25)}
-                features={domAnimation}
-              >
-                <m.div
+              <motion.div
+                  key={reel.id}
                   className='reel-child'
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -339,35 +345,38 @@ const Reel: React.FC<Props> = memo(function Reel({ reels, getAllReels }) {
                     delay: 0.2,
                   }}
                 >
-                  <ReelItem
-                    key={reel.id + 'reelItem' + Math.floor(Math.random() * 35)}
-                    user={user}
-                    reel={reel}
-                    reels={reels}
-                    friendList={friendList}
-                    requestFriendship={requestFriendship}
-                    requestUnfollow={requestUnfollow}
-                    requestFollow={requestFollow}
-                    followed={followed}
-                    disabledNow={disabled}
-                    deleteReel={deleteReel}
-                    handleAddLike={handleAddLike}
-                    handleRemoveLike={handleRemoveLike}
-                    likeTotal={likeTotal}
-                    likes={likes}
-                    muted={muted}
-                    handleToggleMute={handleToggleMute}
-                    openAlert={openAlert}
-                    handleAlertClose={handleAlertClose}
-                  />
-                </m.div>
-              </LazyMotion>
+              {/* // <List> */}
+                <ReelItem
+                  key={reel.id + 'reelItem' + Math.floor(Math.random() * 35)}
+                  user={user}
+                  reel={reel}
+                  reels={reels}
+                  friendList={friendList}
+                  requestFriendship={requestFriendship}
+                  requestUnfollow={requestUnfollow}
+                  requestFollow={requestFollow}
+                  followed={followed}
+                  disabledNow={disabled}
+                  deleteReel={deleteReel}
+                  handleAddLike={handleAddLike}
+                  handleRemoveLike={handleRemoveLike}
+                  likeTotal={likeTotal}
+                  likes={likes}
+                  muted={muted}
+                  handleToggleMute={handleToggleMute}
+                  openAlert={openAlert}
+                  followAlert={followAlert}
+                  messageAlert={messageAlert}
+                  handleAlertClose={handleAlertClose}
+                />
+              {/* // </List> */}
+                </motion.div>
             );
           })}
-        </Suspense>
+        {/* </Suspense> */}
       </AnimatePresence>
     </main>
   );
-});
+};
 
-export default Reel;
+export default React.memo(Reel);

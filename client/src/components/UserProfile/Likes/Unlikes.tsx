@@ -24,25 +24,26 @@ type Props = {
   handleAddLike: any;
   handleRemoveLike: any;
   user: User;
-  likes: any[];
+  // likes: any[];
   likesBool: any;
 };
 
 const Unlikes: React.FC<Props> = ({
   handleRemoveLike,
   handleAddLike,
-  reel
+  reel,
+  user
 }) => {
   const [clicked, setClicked] = useState(true); // how to make this conditional - PER REEL?
 
   const handleLikeClick = (reelId: number) => {
     if (clicked === false) {
       setClicked(true);
-      handleAddLike(reelId);
+      handleAddLike(reelId, user?.id);
       socket.emit('likesNotif', 'like');
     } else {
       setClicked(false);
-      handleRemoveLike(reelId);
+      handleRemoveLike(reelId, user?.id);
     }
   };
 

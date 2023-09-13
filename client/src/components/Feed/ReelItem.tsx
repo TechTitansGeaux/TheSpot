@@ -10,8 +10,7 @@ import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import InfoIcon from '@mui/icons-material/Info';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useState, useEffect, useRef, memo } from 'react';
-import { useTheme } from '@mui/material/styles';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -98,6 +97,8 @@ type Props = {
   muted: boolean;
   handleToggleMute: () => void;
   openAlert: boolean;
+  followAlert: boolean;
+  messageAlert: string;
   handleAlertClose: any;
 };
 
@@ -137,7 +138,7 @@ declare module '@mui/material/Snackbar' {
   }
 }
 
-const ReelItem: React.FC<Props> = memo(function ReelItem({
+const ReelItem: React.FC<Props> = ({
   reel,
   reels,
   friendList,
@@ -149,14 +150,15 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   disabledNow,
   handleAddLike,
   handleRemoveLike,
-  likes,
   likeTotal,
   followed,
   muted,
   handleToggleMute,
   openAlert,
-  handleAlertClose,
-}) {
+  followAlert,
+  messageAlert,
+  handleAlertClose
+}) => {
   // const theme = useTheme();
   // REFERENCE VIDEO HTML element in JSX element // Uses a ref to hold an array of generated refs, and assign them when mapping.
   const myRef = useRef<HTMLVideoElement>(null);
@@ -210,9 +212,9 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   };
 
   // call check event time once on first render
-  useEffect(() => {
-    checkEventTime();
-  }, []);
+  // useEffect(() => {
+
+  // }, []);
 
   const handleOpen = () => {
     setOpen(true);
@@ -233,7 +235,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
           for (let i = 0; i < response.data.length; i++) {
             for (let j = 0; j < reels.length; j++) {
               if (response.data[i].ReelId === reels[j].id) {
-                likes.push(response.data[i].ReelId);
+                likes.push(response.data[i].ReelId + `${response.data[i].UserId}`);
               }
             }
           }
@@ -256,7 +258,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
         setRsvps(data);
         data.map((rsvp: any) => {
           if (rsvp.UserId === user?.id) {
-            setDisableRsvp((prev) => [...prev, rsvp.EventId]);
+            setDisableRsvp((prev) => [...prev, rsvp.EventId+`${rsvp.UserId}`]);
           }
         });
       })
@@ -267,7 +269,21 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
 
   useEffect(() => {
     getRSVPs();
+    console.log('useEffect getRSVPs | ReelItem.tsx line 272 | EVERY REEL RENDERS');
+  }, []);
+
+  useEffect(() => {
     getLikes();
+    console.log(
+      'useEffect getLikes | ReelItem.tsx line 277 | EVERY REEL RENDERS'
+    );
+  }, []);
+
+  useEffect(() => {
+    console.log(
+      'useEffect checkEventTime | ReelItem.tsx line 282 | EVERY REEL RENDERS'
+    );
+    checkEventTime();
   }, []);
 
   // POST / add new rsvps
@@ -297,7 +313,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   // GET request get friendList from Friendship table in DB // set to state variable
   useEffect(() => {
     // update abort clean-ups to end axios request for unmounting
-    const controller = new AbortController();
+    // const controller = new AbortController();
     axios
       .get('/feed/friendlist/pending')
       .then(({ data }) => {
@@ -305,6 +321,8 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
         data.map((user: any) => {
           if (user.status === 'pending') {
             setStayDisabled((prev) => [...prev, user.accepter_id]);
+            console.log('useEffect axios setStayDisabled | ReelItem.tsx line 320');
+
           }
         });
       })
@@ -312,7 +330,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
         console.error('Failed to get Disabled List:', err);
       });
     // aborts axios request when component unmounts
-    return () => controller?.abort();
+    // return () => controller?.abort();
   }, []);
 
   // const [isInView, setIsInView] = useState(false);
@@ -328,6 +346,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
             .then((_) => {
               myRef.current.pause();
               setLoop(false);
+              console.log('useEffect Intersection API pause | ReelItem.tsx line 345');
             })
             .catch((err) => {
               console.error('Auto-play was prevented', err);
@@ -337,6 +356,8 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
           myRef.current.play();
           // setIsInView(true);
           setLoop(true);
+          console.log('useEffect Intersection API play | ReelItem.tsx line 352');
+
 
         }
       });
@@ -344,7 +365,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
     observer.observe(myRef.current);
 
     return () => observer.disconnect();
-  }, []);
+  }, [user]);
 
 
   const action = (
@@ -361,7 +382,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
   );
 
   // console.log('reels ---------->', reels)
-  console.log('reel from REELITEM ---------->', reels);
+  // console.log('reel from REELITEM ---------->', reels);
   // console.log('rsvpTotal', rsvpTotal)
   // console.log('disableRsvp', disableRsvp);
   // console.log('likesArr', likesArr);
@@ -493,7 +514,12 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                                 <AddIcon
                                   aria-label={`Follow ${reel?.User.displayName}`}
                                   sx={{ width: 25, height: 25 }}
-                                  onClick={() => requestFollow(reel.User.id)}
+                                  onClick={() =>
+                                    requestFollow(
+                                      reel.User.id,
+                                      reel?.User.displayName
+                                    )
+                                  }
                                 />
                               </Tooltip>
                             ) : (
@@ -613,13 +639,13 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                     component={'div'}
                     icon={
                       <div className='count-container'>
-                        {!likesArr.includes(reel.id) && user.id ? (
+                        {!likesArr.includes(reel.id+`${user?.id}`) ? (
                           <Likes
                             handleAddLike={handleAddLike}
                             handleRemoveLike={handleRemoveLike}
                             reel={reel}
                             user={user}
-                            likes={likes}
+                            // likes={likes}
                             likesBool={likesArr}
                           />
                         ) : (
@@ -628,7 +654,7 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                             handleRemoveLike={handleRemoveLike}
                             reel={reel}
                             user={user}
-                            likes={likes}
+                            // likes={likes}
                             likesBool={likesArr}
                           />
                         )}
@@ -691,7 +717,9 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
                     icon={
                       <React.Fragment>
                         <div className='count-container'>
-                          {disableRsvp.includes(reel?.Event.id) ? (
+                          {disableRsvp.includes(
+                            reel?.Event.id+`${user?.id}`
+                          ) ? (
                             <UnRsvp reel={reel} removeRsvps={removeRsvps} />
                           ) : (
                             <Rsvp reel={reel} addRsvps={addRsvps} />
@@ -723,9 +751,19 @@ const ReelItem: React.FC<Props> = memo(function ReelItem({
           message='Friend Request Sent'
           action={action}
         />
+        <Snackbar
+          variant='theSpot-pink'
+          sx={{ zIndex: 999, paddingBottom: '50px' }}
+          anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
+          open={followAlert}
+          autoHideDuration={4000}
+          onClick={handleAlertClose}
+          message={messageAlert || 'Follow Request Sent'}
+          action={action}
+        />
       </ThemeProvider>
     </div>
   );
-});
+};
 
 export default ReelItem;
