@@ -39,9 +39,7 @@ const fileUpload = multer({storage});
 reelRouter.post('/upload', fileUpload.single('video'), async (req: any, res: any) => {
 
     const cloudURL = await uploadReelToCloudinary(req.file.path)
-    // // cloudURL comes as a mkv, here I jankily turn it into a webm
-    // cloudURL = cloudURL.slice(0, cloudURL.length - 3) + 'webm';
-    // also jankily getting the publicID
+    // getting the publicID
     const cloudID = cloudURL.slice(cloudURL.length - 23, cloudURL.length - 5);
 
     res.status(200).json({cloudID, cloudURL})
