@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { setAuthUser } from '../../store/appSlice';
 import { RootState } from '../../store/store';
-import Location from './Location';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -17,10 +16,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import SpeechToText from '../ProfileSetUp/SpeechToText'
-
-type ProfileSetUpProps = {
-  startWatch: () => void;
-};
 
 
 const theme = createTheme({
@@ -39,7 +34,7 @@ const theme = createTheme({
 });
 
 
-const ProfileSetUp: React.FC<ProfileSetUpProps> = ({ startWatch }) => {
+const ProfileSetUp: React.FC = () => {
   const dispatch = useDispatch();
   const authUser = useSelector((state: RootState) => state.app.authUser);
 
@@ -209,13 +204,6 @@ const ProfileSetUp: React.FC<ProfileSetUpProps> = ({ startWatch }) => {
                 {errors.uploadImage}
               </Alert>
             )}
-
-            <Location startWatch={startWatch} />
-            {errors.geolocation && (
-              <Alert severity="error">
-              {errors.geolocation}
-            </Alert>
-          )}
 
             {/* Username field */}
             <p>Click Microphone For Speech To Text</p>

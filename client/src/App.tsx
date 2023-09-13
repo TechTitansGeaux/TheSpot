@@ -23,9 +23,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setAuthUser, setIsAuthenticated, setFontSize } from './store/appSlice';
 import { RootState } from './store/store';
 import { useTheme } from '@mui/material/styles';
-import io from 'socket.io-client';
-const socket = io(process.env.WEBSOCKET);
-import Location from './components/ProfileSetUp/Location';
 
 type User = {
   id: number;
@@ -65,14 +62,50 @@ const App = () => {
     }
   };
 
+
   useEffect(() => {
     dispatch(setFontSize(fontSize));
-
-    // Apply font size to the root element
     document.documentElement.style.fontSize = fontSize;
     fetchAuthUser();
     getAllUsers();
   }, [fontSize]);
+
+  const startGeolocationWatch = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.watchPosition(
+        (position) => {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        console.log(authUser);
+        console.log(position, '<-----POSITION');
+        if (authUser.type === 'personal') {
+          const newGeolocation = `${latitude},${longitude}`;
+          console.log(newGeolocation, '<-----NEWGEOLO');
+          axios
+            .patch(`/users/updateGeolocation/${authUser.id}`, { geolocation: newGeolocation })
+            .then((response) => {
+              dispatch(setAuthUser(response.data));
+            })
+            .catch((error) => {
+              console.error('Error updating geolocation on server:', error);
+            });
+        }
+      },
+      (error) => {
+        console.error('Error watching geolocation:', error);
+      },
+      {
+        enableHighAccuracy: true
+      }
+    );
+  } else {
+    console.error('Geolocation is not supported by your browser');
+  }
+};
+
+useEffect(() => {
+  startGeolocationWatch();
+})
 
   // get all other users
   const getAllUsers = async () => {
@@ -87,74 +120,13 @@ const App = () => {
     }
   }
 
-// watch for user's geolocation update
-useEffect(() => {
-  if (authUser){
-// Listen for geolocation updates from the server
-socket.on('connect', (data) => {
-  console.log(data.userId, '<------userID');
-  console.log(authUser.id, '<------ID');
-
-  // Update the user's geolocation in the state if the IDs match
-  if (data.userId === authUser.id) {
-    dispatch(setAuthUser({ ...authUser, geolocation: data.newGeolocation }));
-  }
-});
-
-// Clean up the socket connection when the component unmounts
-return () => {
-  socket.disconnect();
-};
-  }
-
-}, []);
-
-
-const startGeolocationWatch = () => {
-  // Check if geolocation is supported by the browser
-  if (!navigator.geolocation) {
-    console.error('Geolocation is not supported by your browser');
-    return null; // Return null as there's no watchId
-  }
-
-  // Start watching for geolocation updates
-  const watchId = navigator.geolocation.watchPosition(
-    (position) => {
-      // Extract latitude and longitude from the position
-      const latitude = position.coords.latitude;
-      const longitude = position.coords.longitude;
-
-      // Update the user's geolocation on the server
-      if (authUser) {
-        const newGeolocation = `${latitude},${longitude}`;
-        axios
-          .patch(`/users/updateGeolocation/${authUser.id}`, { geolocation: newGeolocation })
-          .then((response) => {
-            console.log(newGeolocation);
-            dispatch(setAuthUser(response.data));
-          })
-          .catch((error) => {
-            console.error('Error updating geolocation on server:', error);
-          });
-      }
-    },
-    (error) => {
-      console.error('Error watching geolocation:', error);
-    }
-  );
-
-  return watchId; // Return the watchId
-};
-
-
-
   return (
     <div style={{ fontSize: theme.typography.fontSize }}>
     <BrowserRouter>
       <Routes>
         <Route index element={<SignUp />}></Route>
         <Route path='/' element={<Navigation user={user} />}>
-          <Route path='/ProfileSetUp' element={<ProfileSetUp startWatch={startGeolocationWatch} />}></Route>
+          <Route path='/ProfileSetUp' element={<ProfileSetUp />}></Route>
           <Route path='/BusinessProfile' element={<BusinessProfile />}></Route>
           <Route path='/Events' element={<EventsList user={user} />}></Route>
           <Route path='/UserType' element={<UserType />}></Route>
@@ -167,7 +139,7 @@ const startGeolocationWatch = () => {
           <Route path='/CreateReel' element={<CreateReel user={user} />} ></Route>
           <Route path='/Map' element={<Map reelEvent={null} loggedIn={user} />}></Route>
         </Route>
-        <Route path='/Location' element={<Location startWatch={startGeolocationWatch} />}></Route>
+
       </Routes>
     </BrowserRouter>
     </div>

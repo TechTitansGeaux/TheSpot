@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { setAuthUser } from '../../store/appSlice';
 import { RootState } from '../../store/store';
-// import Location from './Location';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -18,7 +17,6 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import SpeechToText from '../ProfileSetUp/SpeechToText';
 import LocationSearchInput from './LocationSearchInput';
-
 
 const theme = createTheme({
   palette: {
@@ -141,9 +139,6 @@ const BusinessProfile = () => {
       });
 };
 
-
-
-
   const handleImageChange = (event: any) => {
     setSelectedImage(event.target.files[0]);
     setIsImageSelected(true);
@@ -167,16 +162,6 @@ const BusinessProfile = () => {
       setErrors({ ...errors, uploadImage: 'An error occurred while uploading the image. Please try again later.' });
     }
   };
-
-
-
-
-
-  // const handleTranscriptChange = (newTranscript: any) => {
-  //   //  use the newTranscript value to update the relevant text field
-  //   return newTranscript; //updating displayName with transcript
-  // };
-
 
   return (
     <ThemeProvider theme={theme}>

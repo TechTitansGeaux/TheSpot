@@ -11,8 +11,6 @@ import EventRadialMarker from './EventRadialMarker'
 import { useLocation } from "react-router-dom";
 import CenterFocusStrongIcon from '@mui/icons-material/CenterFocusStrong';
 import CircularProgress from '@mui/material/CircularProgress';
-import io from 'socket.io-client';
-const socket = io();
 
 type Props =  {
   loggedIn: {
@@ -47,42 +45,6 @@ const Map: React.FC<Props> = (props) => {
   const [ friendList, setFriendList ] = useState([]);
   const [ pendingFriendList, setPendingFriendList ] = useState([]);
   const [ businesses, setBusinesses ] = useState([]);
-
-
-  // set up Socket.io connection
-  const [isSocketConnected, setIsSocketConnected] = useState(false);
-  useEffect(() => {
-    socket.on('connect', () => {
-      setIsSocketConnected(true);
-    });
-
-    socket.on('disconnect', () => {
-      setIsSocketConnected(false);
-    });
-
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
-
-  // Listen for geolocation updates
-  useEffect(() => {
-    if (isSocketConnected && socket) {
-      socket.on('connect', (updatedUser: User) => {
-        setUsers((prevUsers) =>
-          prevUsers.map((user) => {
-            if (user.id === updatedUser.id) {
-              return {
-                ...user,
-                geolocation: updatedUser.geolocation,
-              };
-            }
-            return user;
-          })
-        );
-      });
-    }
-  }, [socket, isSocketConnected]);
 
 
   // function to split coordinates into array so lat and lng can easily be destructured
