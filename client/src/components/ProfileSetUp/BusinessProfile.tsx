@@ -104,6 +104,21 @@ const BusinessProfile = () => {
       newErrors.privacy = '';
     }
 
+    if (!displayName) {
+      newErrors.displayName = 'Display Name is required.';
+    } else {
+      newErrors.displayName = '';
+    }
+
+    // Check if the username already exists in the database
+    const allUsers = await axios.get('/users/');
+
+    if (allUsers.data.some((user: { username: string; }) => user.username === username)) {
+    // Username already exists, suggest a new username
+    const suggestedUsername = generateSuggestedUsername(username);
+    newErrors.username = `Username already exists. Try '${suggestedUsername}' or choose a different one.`;
+  }
+
     setErrors(newErrors);
 
     if (
@@ -138,6 +153,17 @@ const BusinessProfile = () => {
         setErrors({ ...errors, saveProfile: 'An error occurred while saving your profile. Please try again later.' });
       });
 };
+
+  // Function to generate a suggested username based on the original username and a random number
+  const generateSuggestedUsername = (originalUsername: string) => {
+    let suggestedUsername = originalUsername;
+    const counter = Math.floor(Math.random());
+
+
+    suggestedUsername = `${originalUsername}_${counter}`;
+
+    return suggestedUsername;
+  };
 
   const handleImageChange = (event: any) => {
     setSelectedImage(event.target.files[0]);

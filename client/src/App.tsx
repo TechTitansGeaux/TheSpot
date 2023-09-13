@@ -76,7 +76,6 @@ const App = () => {
         (position) => {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
-        console.log(authUser);
         console.log(position, '<-----POSITION');
         if (authUser.type === 'personal') {
           const newGeolocation = `${latitude},${longitude}`;

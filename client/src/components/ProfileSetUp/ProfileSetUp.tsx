@@ -66,7 +66,7 @@ const ProfileSetUp: React.FC = () => {
     }
   }, [authUser]);
 
-  const handleProfileSetup = () => {
+  const handleProfileSetup = async () => {
     const newErrors = { ...errors };
 
     if (!username) {
@@ -105,6 +105,16 @@ const ProfileSetUp: React.FC = () => {
       newErrors.privacy = '';
     }
 
+
+    // Check if the username already exists in the database
+    const allUsers = await axios.get('/users/');
+
+    if (allUsers.data.some((user: { username: string; }) => user.username === username)) {
+    // Username already exists, suggest a new username
+    const suggestedUsername = generateSuggestedUsername(username);
+    newErrors.username = `Username already exists. Try '${suggestedUsername}' or choose a different one.`;
+  }
+
     setErrors(newErrors);
 
     if (
@@ -140,6 +150,17 @@ const ProfileSetUp: React.FC = () => {
       });
   };
 
+  // Function to generate a suggested username based on the original username and a random number
+  const generateSuggestedUsername = (originalUsername: string) => {
+    let suggestedUsername = originalUsername;
+    const counter = Math.floor(Math.random());
+
+
+    suggestedUsername = `${originalUsername}_${counter}`;
+
+    return suggestedUsername;
+  };
+
   const handleImageChange = (event: any) => {
     setSelectedImage(event.target.files[0]);
     setIsImageSelected(true);
@@ -163,11 +184,6 @@ const ProfileSetUp: React.FC = () => {
       setErrors({ ...errors, uploadImage: 'An error occurred while uploading the image. Please try again later.' });
     }
   };
-
-  // const handleTranscriptChange = (newTranscript: any) => {
-  //   //  use the newTranscript value to update the relevant text field
-  //   return newTranscript; //updating displayName with transcript
-  // };
 
   return (
     <ThemeProvider theme={theme}>
