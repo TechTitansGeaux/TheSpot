@@ -10,7 +10,7 @@ import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import InfoIcon from '@mui/icons-material/Info';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -32,6 +32,8 @@ import UnRsvp from '../UserProfile/Rsvps/UnRsvp';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Snackbar from '@mui/material/Snackbar';
 import CloseIcon from '@mui/icons-material/Close';
+import io from 'socket.io-client';
+const socket = io();
 
 dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat);
@@ -83,23 +85,11 @@ type Props = {
     Event: Event;
   }[];
   friendList?: any;
-  requestFriendship: any;
-  requestFollow: any;
-  requestUnfollow: any;
   user: User;
   deleteReel: any;
-  disabledNow: any;
-  handleAddLike: any;
-  handleRemoveLike: any;
   likes: any;
-  likeTotal: number;
-  followed: number[];
   muted: boolean;
   handleToggleMute: () => void;
-  openAlert: boolean;
-  followAlert: boolean;
-  messageAlert: string;
-  handleAlertClose: any;
 };
 
 const theme = createTheme({
@@ -111,6 +101,7 @@ const theme = createTheme({
           style: {
             '& .MuiSnackbarContent-root': {
               background: '#f433ab',
+              zIndex: 99999
             },
           },
         },
@@ -142,22 +133,10 @@ const ReelItem: React.FC<Props> = ({
   reel,
   reels,
   friendList,
-  requestFriendship,
-  requestFollow,
-  requestUnfollow,
   user,
   deleteReel,
-  disabledNow,
-  handleAddLike,
-  handleRemoveLike,
-  likeTotal,
-  followed,
   muted,
   handleToggleMute,
-  openAlert,
-  followAlert,
-  messageAlert,
-  handleAlertClose
 }) => {
   // const theme = useTheme();
   // REFERENCE VIDEO HTML element in JSX element // Uses a ref to hold an array of generated refs, and assign them when mapping.
@@ -165,6 +144,10 @@ const ReelItem: React.FC<Props> = ({
   const [loop, setLoop] = useState(false);
   const [stayDisabled, setStayDisabled] = useState([]);
   const [likesArr, setLikesArr] = useState([]); // user's own reels that have been liked FROM likes table
+  const [likeTotal, setLikeTotal] = useState(0);
+  const [likes, setLikes] = useState([]); // user's reels that have been liked
+  const [followed, setFollowed] = useState([]); // followers state
+
   // Alert Dialog 'are you sure you want to delete this reel?'
   const [open, setOpen] = useState(false);
   // state of whether event is already over
@@ -179,13 +162,24 @@ const ReelItem: React.FC<Props> = ({
   const [rsvpTotal, setRsvpTotal] = useState(0);
   const [disableRsvp, setDisableRsvp] = useState([]);
   const [openInfo, setOpenInfo] = useState(false);
+  const [disabled, setDisabled] = useState([]);
   // to open friends alert
-  // const [openAlert, setOpenAlert] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
+  // to open follower alert
+  const [followAlert, setFollowAlert] = useState(false);
+  // to following message alert
+  const [messageAlert, setMessageAlert] = useState('');
+  // GET current user
+
+  const toggleEventTimeButton = useCallback(() => {
+    checkEventTime();
+  }, []);
 
   const handleInfoClick = () => {
     if (openInfo) {
       setOpenInfo(false);
     } else {
+      toggleEventTimeButton();
       setOpenInfo(true);
     }
   };
@@ -211,11 +205,6 @@ const ReelItem: React.FC<Props> = ({
     // }
   };
 
-  // call check event time once on first render
-  // useEffect(() => {
-
-  // }, []);
-
   const handleOpen = () => {
     setOpen(true);
   };
@@ -235,7 +224,9 @@ const ReelItem: React.FC<Props> = ({
           for (let i = 0; i < response.data.length; i++) {
             for (let j = 0; j < reels.length; j++) {
               if (response.data[i].ReelId === reels[j].id) {
-                likes.push(response.data[i].ReelId + `${response.data[i].UserId}`);
+                likes.push(
+                  response.data[i].ReelId + `${response.data[i].UserId}`
+                );
               }
             }
           }
@@ -248,7 +239,6 @@ const ReelItem: React.FC<Props> = ({
     }
   };
 
-
   // GET all the rsvps
   const getRSVPs = () => {
     axios
@@ -258,7 +248,10 @@ const ReelItem: React.FC<Props> = ({
         setRsvps(data);
         data.map((rsvp: any) => {
           if (rsvp.UserId === user?.id) {
-            setDisableRsvp((prev) => [...prev, rsvp.EventId+`${rsvp.UserId}`]);
+            setDisableRsvp((prev) => [
+              ...prev,
+              rsvp.EventId + `${rsvp.UserId}`,
+            ]);
           }
         });
       })
@@ -267,33 +260,19 @@ const ReelItem: React.FC<Props> = ({
       });
   };
 
-  useEffect(() => {
+  // RSVP functionality
+  const toggleRsvpButton = useCallback(() => {
     getRSVPs();
-    console.log('useEffect getRSVPs | ReelItem.tsx line 272 | EVERY REEL RENDERS');
-  }, []);
-
-  useEffect(() => {
-    getLikes();
-    console.log(
-      'useEffect getLikes | ReelItem.tsx line 277 | EVERY REEL RENDERS'
-    );
-  }, []);
-
-  useEffect(() => {
-    console.log(
-      'useEffect checkEventTime | ReelItem.tsx line 282 | EVERY REEL RENDERS'
-    );
-    checkEventTime();
   }, []);
 
   // POST / add new rsvps
   const addRsvps = (EventId: number) => {
+    toggleRsvpButton();
     axios
       .put(`/RSVPs/addRsvp/${EventId}`)
       .then((data) => {
         console.log('RSVP added and Updated via AXIOS', data);
         setRsvpTotal((prev) => prev + 1);
-        // setDisableRsvp((prev) => [...prev, [EventId, user?.id]]);
       })
       .catch((err) => console.error('Like AXIOS route Error', err));
   };
@@ -305,7 +284,6 @@ const ReelItem: React.FC<Props> = ({
       .then((data) => {
         console.log('RSVP added and Updated via AXIOS', data);
         setRsvpTotal((prev) => prev - 1);
-        // setDisableRsvp((prev) => [...prev, [EventId, user?.id]]);
       })
       .catch((err) => console.error('Like AXIOS route Error', err));
   };
@@ -321,8 +299,9 @@ const ReelItem: React.FC<Props> = ({
         data.map((user: any) => {
           if (user.status === 'pending') {
             setStayDisabled((prev) => [...prev, user.accepter_id]);
-            console.log('useEffect axios setStayDisabled | ReelItem.tsx line 320');
-
+            console.log(
+              'useEffect axios setStayDisabled | ReelItem.tsx line 320'
+            );
           }
         });
       })
@@ -333,7 +312,144 @@ const ReelItem: React.FC<Props> = ({
     // return () => controller?.abort();
   }, []);
 
-  // const [isInView, setIsInView] = useState(false);
+  // likes functionality
+  const toggleLikeButton = useCallback(() => {
+    getLikes();
+  }, []);
+
+  // ADD ONE LIKE per Reel
+  const handleAddLike = (reelId: number, idUser: number) => {
+    // console.log('ADD like of reelId =>', reelId);
+    toggleLikeButton();
+    axios
+      .put(`/likes/addLike/${reelId}`)
+      .then((data) => {
+        // console.log('Likes Updated AXIOS', data);
+        setLikes((prev) => [...prev, reelId]);
+        setLikeTotal((prev) => prev + 1);
+      })
+      .catch((err) => console.error('Like AXIOS route Error', err));
+  };
+
+  // REMOVE ONE LIKE per Reel
+  const handleRemoveLike = (reelId: number) => {
+    // console.log('REMOVE like of reelId =>', reelId);
+    axios
+      .put(`/likes/removeLike/${reelId}`)
+      .then((data) => {
+        const foundLike = likes.indexOf(reelId);
+        if (foundLike !== -1) {
+          setLikes((prev) => prev.splice(foundLike, 1));
+        }
+        setLikes((prev) => prev.splice(foundLike, 1));
+        if (likeTotal !== 0) {
+          setLikeTotal((prev) => prev - 1);
+        }
+      })
+      .catch((err) => console.error('Like AXIOS route Error', err));
+  };
+
+  // Friends Functionality
+  // POST request friendship 'pending' status to db
+  const requestFriendship = (friend: number) => {
+    console.log('your friendship is requested', friend);
+    setDisabled([...disabled, friend]);
+    handleAlertOpen('Friend Request Pending');
+    axios
+      .post('/friends', {
+        // accepter_id is user on reel
+        accepter_id: friend,
+      })
+      .then((data) => {
+        // console.log('Friend request POSTED', data);
+      })
+      .catch((err) => {
+        console.error('Friend request axios FAILED', err);
+      });
+  };
+
+  // PUT request update friendship from 'pending' to 'approved'
+  const approveFriendship = (friend: number) => {
+    console.log('friendship approved');
+    axios
+      .put('/friends', {
+        requester_id: friend, // CHANGED from requester_id
+      })
+      .then((data) => {
+        // console.log('Friend request approved PUT', data);
+      })
+      .catch((err) => {
+        console.error('Friend PUT request axios FAILED:', err);
+      });
+  };
+
+  // Follows Functionality
+  // POST request to follow a business user
+  const requestFollow = (followedUser: number, followedUserName: string) => {
+    console.log('request to followedUser_id=>', followedUser);
+    handleAlertOpen(`Now Following ${followedUserName}`);
+
+    axios
+      .put('/followers', {
+        followedUser_id: followedUser,
+      })
+      .then((data) => {
+        setFollowed((prev) => [...prev, followedUser]);
+        setDisabled([...disabled, followedUser]);
+        // sockets for following notifications
+        socket.emit('followersNotif', 'following');
+        console.log('Now following followedUser_id: ', followedUser);
+      })
+      .catch((err) => {
+        console.error('Follow request axios FAILED: ', err);
+      });
+  };
+
+  // DELETE request to unfollow a business user
+  const requestUnfollow = (followedUser: number) => {
+    console.log('request to followedUser_id=>', followedUser);
+    // update below to remove from array like friends
+    axios
+      .delete(`/followers/${followedUser}`, {
+        data: { followedUser_id: followedUser },
+      })
+      .then((data) => {
+        const foundFollower = followed.indexOf(followedUser);
+        console.log('found follower ===>', foundFollower);
+        setDisabled([...disabled, followedUser]);
+        setFollowed((prev) => prev.splice(foundFollower, 1));
+        console.log('Now unfollowing | delete followedUser_id: ', followedUser);
+      })
+      .catch((err) => {
+        console.error('unfollow request axios FAILED: ', err);
+      });
+  };
+
+  //Snackbar Functionality
+  // snackbar logic for pending friends
+  //Snackbar for friends and follows
+  const handleAlertOpen = (option: string) => {
+    console.log('snackbar open for pending friend');
+    if (option === 'Friend Request Pending') {
+      setOpenAlert(true);
+    } else {
+      setMessageAlert(option);
+      setFollowAlert(true);
+    }
+  };
+
+  const handleAlertClose = (
+    event: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenAlert(false);
+    setFollowAlert(false);
+  };
+
   useEffect(() => {
     // observe videos with IntersectionObserver API to playback on scroll in view
     const observer = new IntersectionObserver((entries) => {
@@ -346,7 +462,9 @@ const ReelItem: React.FC<Props> = ({
             .then((_) => {
               myRef.current.pause();
               setLoop(false);
-              console.log('useEffect Intersection API pause | ReelItem.tsx line 345');
+              console.log(
+                'useEffect Intersection API pause | ReelItem.tsx line 345'
+              );
             })
             .catch((err) => {
               console.error('Auto-play was prevented', err);
@@ -354,11 +472,10 @@ const ReelItem: React.FC<Props> = ({
         } else {
           // else video is out of view PAUSE video and don't Loop
           myRef.current.play();
-          // setIsInView(true);
           setLoop(true);
-          console.log('useEffect Intersection API play | ReelItem.tsx line 352');
-
-
+          console.log(
+            'useEffect Intersection API play | ReelItem.tsx line 352'
+          );
         }
       });
     });
@@ -366,7 +483,6 @@ const ReelItem: React.FC<Props> = ({
 
     return () => observer.disconnect();
   }, [user]);
-
 
   const action = (
     <React.Fragment>
@@ -389,6 +505,28 @@ const ReelItem: React.FC<Props> = ({
   // console.log('likes', likes);
   return (
     <div>
+      <ThemeProvider theme={theme}>
+        <Snackbar
+          variant='theSpot-pink'
+          sx={{ paddingBottom: '50px' }}
+          anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
+          open={openAlert}
+          autoHideDuration={4000}
+          onClick={handleAlertClose}
+          message='Friend Request Sent'
+          action={action}
+        />
+        <Snackbar
+          variant='theSpot-pink'
+          sx={{ paddingBottom: '50px' }}
+          anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
+          open={followAlert}
+          autoHideDuration={4000}
+          onClick={handleAlertClose}
+          message={messageAlert || 'Follow Request Sent'}
+          action={action}
+        />
+      </ThemeProvider>
       {true && (
         <div
           className='reel-child'
@@ -466,7 +604,7 @@ const ReelItem: React.FC<Props> = ({
                             aria-label='add'
                             className='friend-add-btn'
                             disabled={
-                              disabledNow.includes(reel.User.id) ||
+                              disabled.includes(reel.User.id) ||
                               stayDisabled.includes(reel.User.id)
                             }
                           >
@@ -639,13 +777,12 @@ const ReelItem: React.FC<Props> = ({
                     component={'div'}
                     icon={
                       <div className='count-container'>
-                        {!likesArr.includes(reel.id+`${user?.id}`) ? (
+                        {!likesArr.includes(reel.id + `${user?.id}`) ? (
                           <Likes
                             handleAddLike={handleAddLike}
                             handleRemoveLike={handleRemoveLike}
                             reel={reel}
                             user={user}
-                            // likes={likes}
                             likesBool={likesArr}
                           />
                         ) : (
@@ -654,7 +791,6 @@ const ReelItem: React.FC<Props> = ({
                             handleRemoveLike={handleRemoveLike}
                             reel={reel}
                             user={user}
-                            // likes={likes}
                             likesBool={likesArr}
                           />
                         )}
@@ -718,7 +854,7 @@ const ReelItem: React.FC<Props> = ({
                       <React.Fragment>
                         <div className='count-container'>
                           {disableRsvp.includes(
-                            reel?.Event.id+`${user?.id}`
+                            reel?.Event.id + `${user?.id}`
                           ) ? (
                             <UnRsvp reel={reel} removeRsvps={removeRsvps} />
                           ) : (
@@ -740,28 +876,6 @@ const ReelItem: React.FC<Props> = ({
           </>
         </div>
       )}
-      <ThemeProvider theme={theme}>
-        <Snackbar
-          variant='theSpot-pink'
-          sx={{ zIndex: 999, paddingBottom: '50px' }}
-          anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
-          open={openAlert}
-          autoHideDuration={4000}
-          onClick={handleAlertClose}
-          message='Friend Request Sent'
-          action={action}
-        />
-        <Snackbar
-          variant='theSpot-pink'
-          sx={{ zIndex: 999, paddingBottom: '50px' }}
-          anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
-          open={followAlert}
-          autoHideDuration={4000}
-          onClick={handleAlertClose}
-          message={messageAlert || 'Follow Request Sent'}
-          action={action}
-        />
-      </ThemeProvider>
     </div>
   );
 };

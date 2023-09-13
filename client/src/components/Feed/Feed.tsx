@@ -268,18 +268,15 @@ const Feed: React.FC<Props> = ({user}) => {
 
   useEffect(() => {
     userCoord(user);
-    console.log('useEffect userCoord | Feed.tsx line 271')
   }, [user, reels]);
 
   useEffect(() => {
     getAllReels();
-    console.log('useEffect getAllReels | Feed.tsx line 276 || CALLS TWICE')
   }, [filter, geoF, user, userLat]);
 
   useEffect(() => {
     if (user?.type === 'personal') {
       getFriendList();
-      console.log('useEffect getFriendList | Feed.tsx line 282')
     }
   }, [filter]);
 
@@ -292,11 +289,9 @@ const Feed: React.FC<Props> = ({user}) => {
   useEffect(() => {
     if (user?.type === 'business') {
       getFollowersList();
-      console.log('useEffect getFollowersList | Feed.tsx line 295');
       }
   }, [filter]);
 
-  // console.log('reel from FEED ---------->', reels);
 
   return (
     <>

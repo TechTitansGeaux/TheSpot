@@ -24,7 +24,6 @@ type Props = {
   handleAddLike: any;
   handleRemoveLike: any;
   user: User;
-  // likes: any[];
   likesBool: any;
 };
 
