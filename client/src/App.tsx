@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { lazy } from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Map from './components/Map/Map';
+const Map = lazy(() => import('./components/Map/Map'));
+// import Map from './components/Map/Map';
 import Feed from './components/Feed/Feed';
-import CreateReel from './components/CreateReel/CreateReel';
+const CreateReel = lazy(() => import('./components/CreateReel/CreateReel'));
+// import CreateReel from './components/CreateReel/CreateReel';
 import Navigation from './components/Navigation';
 import './global.css';
 import SignUp from './components/ProfileSetUp/SignUp';
@@ -13,12 +15,18 @@ import BusinessProfile from './components/ProfileSetUp/BusinessProfile';
 import UserType  from './components/ProfileSetUp/UserType';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import Settings from './components/ProfileSetUp/Settings';
-import BusinessSettings from './components/ProfileSetUp/BusinessSettings';
-import FriendRequestList from './components/UserProfile/FriendRequests/FriendRequestList';
-import FollowersList from './components/UserProfile/Followers/FollowersList';
-import LikesList from './components/UserProfile/Likes/LikesList';
-import EventsList from './components/UserProfile/Events/EventsList';
+const Settings = lazy(() => import('./components/ProfileSetUp/Settings'));
+// import Settings from './components/ProfileSetUp/Settings';
+const BusinessSettings = lazy(() => import('./components/ProfileSetUp/BusinessSettings'));
+// import BusinessSettings from './components/ProfileSetUp/BusinessSettings';
+const FriendRequestList = lazy(() => import('./components/UserProfile/FriendRequests/FriendRequestList'));
+// import FriendRequestList from './components/UserProfile/FriendRequests/FriendRequestList';
+const FollowersList = lazy(() => import('./components/UserProfile/Followers/FollowersList'));
+// import FollowersList from './components/UserProfile/Followers/FollowersList';
+const LikesList = lazy(() => import('./components/UserProfile/Likes/LikesList'));
+// import LikesList from './components/UserProfile/Likes/LikesList';
+const EventsList = lazy(() => import('./components/UserProfile/Events/EventsList'));
+// import EventsList from './components/UserProfile/Events/EventsList';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAuthUser, setIsAuthenticated, setFontSize } from './store/appSlice';
 import { RootState } from './store/store';
@@ -151,24 +159,26 @@ const startGeolocationWatch = () => {
   return (
     <div style={{ fontSize: theme.typography.fontSize }}>
     <BrowserRouter>
-      <Routes>
-        <Route index element={<SignUp />}></Route>
-        <Route path='/' element={<Navigation user={user} />}>
-          <Route path='/ProfileSetUp' element={<ProfileSetUp startWatch={startGeolocationWatch} />}></Route>
-          <Route path='/BusinessProfile' element={<BusinessProfile />}></Route>
-          <Route path='/Events' element={<EventsList user={user} />}></Route>
-          <Route path='/UserType' element={<UserType />}></Route>
-          <Route path='/Feed' element={<Feed user={user} />}></Route>
-          <Route path='/FriendRequests' element={<FriendRequestList allUsers={allUsers} user={user} />} ></Route>
-          <Route path='/Follows' element={<FollowersList allUsers={allUsers}  user={user} />}></Route>
-          <Route path='/Likes' element={<LikesList user={user} />}></Route>
-          <Route path='/Settings' element={<Settings startWatch={startGeolocationWatch} fontSize={fontSize} />} ></Route>
-          <Route path='/BusinessSettings' element={<BusinessSettings fontSize={fontSize}/>}></Route>
-          <Route path='/CreateReel' element={<CreateReel user={user} />} ></Route>
-          <Route path='/Map' element={<Map reelEvent={null} loggedIn={user} />}></Route>
-        </Route>
-        <Route path='/Location' element={<Location startWatch={startGeolocationWatch} />}></Route>
-      </Routes>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Routes>
+          <Route index element={<SignUp />}></Route>
+          <Route path='/' element={<Navigation user={user} />}>
+            <Route path='/ProfileSetUp' element={<ProfileSetUp startWatch={startGeolocationWatch} />}></Route>
+            <Route path='/BusinessProfile' element={<BusinessProfile />}></Route>
+            <Route path='/Events' element={<EventsList user={user} />}></Route>
+            <Route path='/UserType' element={<UserType />}></Route>
+            <Route path='/Feed' element={<Feed user={user} />}></Route>
+              <Route path='/FriendRequests' element={<FriendRequestList allUsers={allUsers} user={user} />} ></Route>
+              <Route path='/Follows' element={<FollowersList allUsers={allUsers}  user={user} />}></Route>
+              <Route path='/Likes' element={<LikesList user={user} />}></Route>
+              <Route path='/Settings' element={<Settings startWatch={startGeolocationWatch} fontSize={fontSize} />} ></Route>
+              <Route path='/BusinessSettings' element={<BusinessSettings fontSize={fontSize}/>}></Route>
+              <Route path='/CreateReel' element={<CreateReel user={user} />} ></Route>
+              <Route path='/Map' element={<Map reelEvent={null} loggedIn={user} />}></Route>
+          </Route>
+          <Route path='/Location' element={<Location startWatch={startGeolocationWatch} />}></Route>
+        </Routes>
+      </Suspense>
     </BrowserRouter>
     </div>
   );
