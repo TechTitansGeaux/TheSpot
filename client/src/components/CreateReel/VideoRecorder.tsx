@@ -20,7 +20,6 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContentText from '@mui/material/DialogContentText';
-import zIndex from '@mui/material/styles/zIndex';
 
 type Props = {
   currentEvent: {
@@ -129,7 +128,7 @@ const urltoFile = (url: any, filename: any, mimeType: any) => {
   const handleStartCaptureClick = useCallback(() => {
     setCapturing(true);
     if (MediaRecorder.isTypeSupported('video/webm')) {
-      console.log('wemb supported')
+      console.log('webm supported')
     mediaRecorderRef.current = new MediaRecorder(webcamRef.current.stream, {
       mimeType: "video/webm",
     });
@@ -178,11 +177,15 @@ const urltoFile = (url: any, filename: any, mimeType: any) => {
         formData.append('video', file);
         // console.log(file, '<---- file that is appended to formData')
         // send video form data to server
-        await axios.post('/reel/upload', formData)
-        .then(({data}) => {
-          // console.log(data, '<---data from axios upload')
-          setPublic_id(data.cloudID);
-          setUrl(data.cloudURL)
+
+        await axios.post('/reel/upload', formData, {
+          maxBodyLength: 10000000,
+          maxContentLength: 10000000,
+        })
+        .then((res) => {
+          console.log(res, '<---res from axios upload')
+          setPublic_id(res.data.cloudID);
+          setUrl(res.data.cloudURL)
           setUrlRetrieved(true)
           setRecordedChunks([]);
         })

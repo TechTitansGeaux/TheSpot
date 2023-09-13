@@ -147,9 +147,9 @@ const eventCheck = (location: any, date: any) => {
         // rule out the current event that we are editing
         if (resObj.data[i].id !== event.id) {
           //determine if any are happening at time PUBLIC
-          // if inputed events START TIME is BETWEEN found events START & END times => conflict
+          // if inputted events START TIME is BETWEEN found events START & END times => conflict
           // or
-          // if inputed events END TIME is BETWEEN found events START & END times => conflict
+          // if inputted events END TIME is BETWEEN found events START & END times => conflict
           if (time > resObj.data[i].time && time < resObj.data[i].endTime ||
             endTime > resObj.data[i].time && endTime < resObj.data[i].endTime) {
               // determine if public
