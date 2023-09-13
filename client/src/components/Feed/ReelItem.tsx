@@ -279,6 +279,7 @@ const ReelItem: React.FC<Props> = ({
 
   // Delete / remove an rsvp
   const removeRsvps = (EventId: number) => {
+    toggleRsvpButton();
     axios
       .delete(`/RSVPs/delete/${EventId}`)
       .then((data) => {
