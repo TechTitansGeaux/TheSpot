@@ -4,6 +4,7 @@ import MapBox, { useMap } from 'react-map-gl';
 import axios from 'axios';
 import ClusterPin from './ClusterPin';
 import UserPin from './UserPin';
+import BusinessPin from './BusinessPin';
 import EventPin from './EventPin';
 import EventRadialMarker from './EventRadialMarker';
 import useSupercluster from 'use-supercluster';
@@ -41,6 +42,7 @@ const Map: React.FC<Props> = (props) => {
   const [ friendList, setFriendList ] = useState([]);
   const [ pendingFriendList, setPendingFriendList ] = useState([]);
   const [ events, setEvents ] = useState([]);
+  const [ businesses, setBusinesses ] = useState([]);
   const [ viewState, setViewState ] = useState<{zoom: number, longitude: number, latitude: number}>({
     longitude: -94.30272073458288,
     latitude: 23.592677069427353,
@@ -102,12 +104,24 @@ const Map: React.FC<Props> = (props) => {
       });
   }
 
+    // gets all businesses
+    const getBusinesses = () => {
+      axios.get('/users/businesses')
+        .then((res) => {
+          setBusinesses(res.data);
+        })
+        .catch((err) => {
+          console.log('error getting businesses for map: ', err);
+        })
+    }
+
   useEffect(() => {
     if (loggedIn) {
       getUsers();
       getFriendList();
       getPendingFriendList();
       getEvents();
+      getBusinesses();
       const [lat, lng] = splitCoords(loggedIn.geolocation);
       setUserLngLat([+lng, + lat]);
     }
@@ -179,6 +193,25 @@ const Map: React.FC<Props> = (props) => {
     options: { radius: 50, maxZoom: 19, }
   })
 
+    // clustering points for business pins
+    const businessPoints = businesses.map((business) => {
+      const [lat, lng] = splitCoords(business.geolocation);
+      return {
+        type: 'Feature',
+        properties: {
+          cluster: false,
+          business: business,
+        },
+        geometry: { type: 'Point', coordinates: [+lng, +lat]},
+      }
+    })
+
+    const { clusters: businessClusters, supercluster: businessSupercluster } = useSupercluster({
+      points: businessPoints,
+      bounds,
+      zoom: viewState.zoom,
+      options: { radius: 50, maxZoom: 19, }
+    })
 
 
   // if Data is not yet available, render loading ring
@@ -229,7 +262,29 @@ const Map: React.FC<Props> = (props) => {
                     latitude={+lat}
                     longitude={+lng}
                     i={i}
+                    zoom={viewState.zoom}
                     />
+                }
+              })
+            }
+            {
+              businessClusters.map((cluster: any, i: number) => {
+                const [ lng, lat ] = cluster.geometry.coordinates;
+                const { cluster: isCluster, point_count: pointCount, business} = cluster.properties;
+
+                if (isCluster) {
+                    const expansionZoom = Math.min(businessSupercluster.getClusterExpansionZoom(cluster.id), 20);
+                    return <ClusterPin amount={pointCount} key={'businessCluster' + i} latitude={lat} longitude={lng} className='BusinessClusterPin' expansionZoom={expansionZoom}/>;
+                } else {
+                  return <BusinessPin
+                  business={business}
+                  key={business.id}
+                  latitude={lat}
+                  longitude={lng}
+                  i={i}
+                  // closeAllPopUps={closeAllPopUps}
+                  // zoom={zoom}
+                />;
                 }
               })
             }

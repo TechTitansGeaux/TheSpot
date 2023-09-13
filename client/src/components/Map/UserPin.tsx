@@ -46,6 +46,7 @@ type Props = {
   latitude: number
   longitude: number
   i: number
+  zoom: number
 
 };
 
@@ -79,7 +80,7 @@ const rmFriendTheme = createTheme({
   },
 });
 
-const UserPin: React.FC<Props> = ({ user, loggedIn, friendList, pendingFriendList, longitude, latitude, i, getFriendList, getPendingFriendList, }) => {
+const UserPin: React.FC<Props> = ({ user, loggedIn, friendList, pendingFriendList, longitude, latitude, i, getFriendList, getPendingFriendList, zoom }) => {
 
   const { current } = useMap();
 
@@ -131,7 +132,7 @@ const UserPin: React.FC<Props> = ({ user, loggedIn, friendList, pendingFriendLis
   const isNotLoggedInUser = (user.id !== loggedIn.id) || null;
 
   return (
-    <Marker longitude={longitude} latitude={latitude} key={'userPin' + i} anchor='top'>
+    <Marker longitude={longitude} latitude={latitude} key={'userPin' + i} anchor='top' style={{zIndex: '0'}}>
         <div className='userDot' id={user.username + user.id} onClick={ () => {
           togglePopUp();
           zoomTo(longitude, latitude);

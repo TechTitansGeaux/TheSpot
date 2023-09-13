@@ -44,6 +44,13 @@ const zoomToEventTheme = createTheme({
 });
 
 const Event: React.FC<Props> = ({ event, latitude, longitude, i }) => {
+
+  const { current } = useMap();
+
+  const zoomTo = (lng: number, lat: number) => {
+    current.flyTo({center: [+lng, +lat], zoom: 18});
+  }
+
   const togglePopUp = () => {
     const box = document.getElementById('popUp' + event.name + event.id)
     if (box.style.display === 'block') {
@@ -67,7 +74,7 @@ const Event: React.FC<Props> = ({ event, latitude, longitude, i }) => {
   };
 
   return (
-    <Marker latitude={latitude} longitude={longitude} key={'eventPin' + i} anchor='top'>
+    <Marker latitude={latitude} longitude={longitude} key={'eventPin' + i} anchor='top' style={{zIndex: '0'}}>
         <div className='eventDot' id={event.name + event.id} onClick={ () => {
           togglePopUp();
         }}>
@@ -112,11 +119,9 @@ const Event: React.FC<Props> = ({ event, latitude, longitude, i }) => {
                       aria-label='add'
                       className='friend-add-btn'
                     >
-                      {/* <ZoomInIcon onClick={ () => {
-                        console.log(lat, lng);
-                        setZoom(18);
-                        setCenter({lat: lat, lng: lng});
-                      } } /> */}
+                      <ZoomInIcon onClick={ () => {
+                        zoomTo(longitude, latitude);
+                      } } />
                     </Fab>
                   </Box>
                 </div>

@@ -10,7 +10,7 @@ type Props = {
 
 const EventRadialMarker: React.FC<Props>= ({zoom, latitude, longitude}) => {
   return (
-    <Marker latitude={latitude} longitude={longitude} anchor='center' >
+    <Marker latitude={latitude} longitude={longitude} anchor='center' style={{zIndex: '0'}} >
       <div style={{  height: `${(20 * ( 2 ** (zoom - 15)))}px`, width: `${(20 * ( 2 ** (zoom - 15)))}px` }} className='EventRadialMarker'>
       </div>
     </Marker>
