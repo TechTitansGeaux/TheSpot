@@ -43,7 +43,7 @@ const io = new Server(server, {
 
 // middleware
 app.use(express.json());
-app.use(express.urlencoded({ extended: false, limit: '100mB' }));
+app.use(express.urlencoded({ extended: true, limit: '100mB' }));
 app.use(express.static(distPath));
 // users session
 
