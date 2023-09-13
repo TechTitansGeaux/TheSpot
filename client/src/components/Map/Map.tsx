@@ -225,8 +225,36 @@ const Map: React.FC<Props> = (props) => {
     )
   }
 
+  const closeAllPopUps = () => {
+    const userPopUps = document.getElementsByClassName('userPopUp');
+    const eventPopUps = document.getElementsByClassName('eventPopUp');
+    const busPopUps = document.getElementsByClassName('businessPopUp');
+
+    Array.prototype.forEach.call( userPopUps, (popUp: any) => {
+      popUp.style.animationName = 'popOff';
+      setTimeout(() => {
+        popUp.style.display = 'none';
+      }, 500)
+    })
+
+    Array.prototype.forEach.call( eventPopUps, (popUp: any) => {
+      popUp.style.animationName = 'popOff';
+      setTimeout(() => {
+        popUp.style.display = 'none';
+      }, 500)
+    })
+
+    Array.prototype.forEach.call( busPopUps, (popUp: any) => {
+      popUp.style.animationName = 'popOff';
+      setTimeout(() => {
+        popUp.style.display = 'none';
+      }, 500)
+    })
+  }
+
+
   return (
-    <div className='mapParent'>
+    <div className='mapParent' onWheel={closeAllPopUps}>
       <div className='mapChild'>
         <div id='map'>
           <MapBox
@@ -241,6 +269,7 @@ const Map: React.FC<Props> = (props) => {
               const [lng, lat] = userLngLat;
               e.target.flyTo({center: [lng, lat], zoom: 15, duration: 2500});
             }}
+            onDrag={closeAllPopUps}
           >
             {
               userClusters.map((cluster: any, i: number) => {
