@@ -70,20 +70,12 @@ type Event = {
 const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
-  // to open friends alert
-  const [openAlert, setOpenAlert] = useState(false);
-  // to open follower alert
-  const [followAlert, setFollowAlert] = useState(false);
-  // to following message alert
-  const [messageAlert, setMessageAlert] = useState('');
-  // GET current user
   const [user, setUser] = useState<User>(null);
   const [friendList, setFriendList] = useState([]);
-  const [disabled, setDisabled] = useState([]);
+  // const [disabled, setDisabled] = useState([]);
   const [followed, setFollowed] = useState([]);
-  const [likeTotal, setLikeTotal] = useState(0);
   const [likes, setLikes] = useState([]); // user's reels that have been liked
-  // const [likesPersist, setLikesPersist] = useState([]);
+
   // state of audio on reels
   const [muted, setMuted] = useState(true);
   // toggle reel audio
@@ -147,80 +139,6 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
       });
   };
 
-  // POST request to follow a business user
-  const requestFollow = (followedUser: number, followedUserName: string) => {
-    console.log('request to followedUser_id=>', followedUser);
-    handleAlertOpen(`Now Following ${followedUserName}`);
-
-    axios
-      .put('/followers', {
-        followedUser_id: followedUser,
-      })
-      .then((data) => {
-        setFollowed((prev) => [...prev, followedUser]);
-        setDisabled([...disabled, followedUser]);
-        // sockets for following notifications
-        socket.emit('followersNotif', 'following');
-        console.log('Now following followedUser_id: ', followedUser);
-      })
-      .catch((err) => {
-        console.error('Follow request axios FAILED: ', err);
-      });
-  };
-
-  // DELETE request to unfollow a business user
-  const requestUnfollow = (followedUser: number) => {
-    console.log('request to followedUser_id=>', followedUser);
-    // update below to remove from array like friends
-    axios
-      .delete(`/followers/${followedUser}`, {
-        data: { followedUser_id: followedUser },
-      })
-      .then((data) => {
-        const foundFollower = followed.indexOf(followedUser);
-        console.log('found follower ===>', foundFollower);
-        setDisabled([...disabled, followedUser]);
-        setFollowed((prev) => prev.splice(foundFollower, 1));
-        console.log('Now unfollowing | delete followedUser_id: ', followedUser);
-      })
-      .catch((err) => {
-        console.error('unfollow request axios FAILED: ', err);
-      });
-  };
-
-  // POST request friendship 'pending' status to db
-  const requestFriendship = (friend: number) => {
-    console.log('your friendship is requested', friend);
-    setDisabled([...disabled, friend]);
-    handleAlertOpen('Friend Request Pending');
-    axios
-      .post('/friends', {
-        // accepter_id is user on reel
-        accepter_id: friend,
-      })
-      .then((data) => {
-        // console.log('Friend request POSTED', data);
-      })
-      .catch((err) => {
-        console.error('Friend request axios FAILED', err);
-      });
-  };
-
-  // PUT request update friendship from 'pending' to 'approved'
-  const approveFriendship = (friend: number) => {
-    console.log('friendship approved');
-    axios
-      .put('/friends', {
-        requester_id: friend, // CHANGED from requester_id
-      })
-      .then((data) => {
-        // console.log('Friend request approved PUT', data);
-      })
-      .catch((err) => {
-        console.error('Friend PUT request axios FAILED:', err);
-      });
-  };
-
   // DELETE your own reel
   const deleteReel = (reelId: number) => {
     axios
@@ -233,37 +151,6 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
       .catch((err) => {
         console.error('Could not DELETE reel', err);
       });
-  };
-
-  // ADD ONE LIKE per Reel
-  const handleAddLike = (reelId: number, idUser: number) => {
-    // console.log('ADD like of reelId =>', reelId);
-    axios
-      .put(`/likes/addLike/${reelId}`)
-      .then((data) => {
-        // console.log('Likes Updated AXIOS', data);
-        setLikes((prev) => [...prev, reelId]);
-        setLikeTotal((prev) => prev + 1);
-      })
-      .catch((err) => console.error('Like AXIOS route Error', err));
-  };
-
-  // REMOVE ONE LIKE per Reel
-  const handleRemoveLike = (reelId: number) => {
-    // console.log('REMOVE like of reelId =>', reelId);
-    axios
-      .put(`/likes/removeLike/${reelId}`)
-      .then((data) => {
-        const foundLike = likes.indexOf(reelId);
-        if (foundLike !== -1) {
-          setLikes((prev) => prev.splice(foundLike, 1));
-        }
-        setLikes((prev) => prev.splice(foundLike, 1));
-        if (likeTotal !== 0) {
-          setLikeTotal((prev) => prev - 1);
-        }
-      })
-      .catch((err) => console.error('Like AXIOS route Error', err));
   };
 
   // get reels that have been liked
@@ -299,31 +186,6 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
     );
   }, []);
 
-  // snackbar logic for pending friends
-  //Snackbar for friends and follows
-  const handleAlertOpen = (option: string) => {
-    console.log('snackbar open for pending friend');
-    if (option === 'Friend Request Pending') {
-      setOpenAlert(true);
-    } else {
-      setMessageAlert(option);
-      setFollowAlert(true);
-    }
-  };
-
-  const handleAlertClose = (
-    event: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setOpenAlert(false);
-    setFollowAlert(false);
-  };
-
-  // console.log('reel from REEL ---------->', reels);
   return (
     <main
       className='reel-container'
@@ -352,22 +214,10 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
                   reel={reel}
                   reels={reels}
                   friendList={friendList}
-                  requestFriendship={requestFriendship}
-                  requestUnfollow={requestUnfollow}
-                  requestFollow={requestFollow}
-                  followed={followed}
-                  disabledNow={disabled}
                   deleteReel={deleteReel}
-                  handleAddLike={handleAddLike}
-                  handleRemoveLike={handleRemoveLike}
-                  likeTotal={likeTotal}
                   likes={likes}
                   muted={muted}
                   handleToggleMute={handleToggleMute}
-                  openAlert={openAlert}
-                  followAlert={followAlert}
-                  messageAlert={messageAlert}
-                  handleAlertClose={handleAlertClose}
                 />
               {/* // </List> */}
                 </motion.div>
