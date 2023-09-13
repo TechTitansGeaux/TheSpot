@@ -7,6 +7,7 @@ import localizedFormat from 'dayjs/plugin/localizedFormat';
 import dayjs = require('dayjs');
 dayjs.extend(localizedFormat);
 import RsvpSharpIcon from '@mui/icons-material/RsvpSharp';
+import { Marker, useMap } from 'react-map-gl';
 
 type Props = {
   event: {
@@ -20,12 +21,11 @@ type Props = {
     twenty_one: boolean,
     PlaceId: number,
   }
-  lat: number
-  lng: number
-  setZoom: (zoom: number) => void
-  setCenter: (center: object) => void
-  closeAllPopUps: () => void
-  zoom: number
+  latitude: number
+  longitude: number
+  i: number
+  // closeAllPopUps: () => void
+  // zoom: number
 }
 
 const zoomToEventTheme = createTheme({
@@ -43,7 +43,7 @@ const zoomToEventTheme = createTheme({
   },
 });
 
-const Event: React.FC<Props> = ({ event, setCenter, setZoom, lat, lng, zoom }) => {
+const Event: React.FC<Props> = ({ event, latitude, longitude, i }) => {
   const togglePopUp = () => {
     const box = document.getElementById('popUp' + event.name + event.id)
     if (box.style.display === 'block') {
@@ -67,70 +67,64 @@ const Event: React.FC<Props> = ({ event, setCenter, setZoom, lat, lng, zoom }) =
   };
 
   return (
-    <div>
-      <div className='eventDot' id={event.name + event.id} onClick={ () => {
-        if (zoom < 15) {
-          setZoom(15);
-          setCenter({lat: lat - 0.005, lng: lng});
-        } else {
-          setCenter({lat: lat - (0.005 / ( 2 ** (zoom - 15))), lng: lng});
-        }
-        togglePopUp();
-      }}>
-        <div >
-          <RsvpSharpIcon style={{ transform: 'scale(1.25)' }} color='secondary' />
-        </div>
-        <div style={{ transform: 'translateY(-10px)' }}>
-          { event.rsvp_count }
-        </div>
-      </div>
-      <div className='eventPopUp' id={'popUp' + event.name + event.id} >
-        <div style={{ textAlign: 'center', fontSize:'20px', marginTop: '5px' }}>
-          {event.name}
-        </div>
-        <div style={{ textAlign: 'center', fontSize:'15px' }}>
-          <p>
-            {`date: ${dayjs(event.date).format('L')}`}
-          </p>
-        </div>
-        <div style={{ textAlign: 'center', fontSize:'15px' }}>
-          <p>
-            {`starts: ${format(event.time)}`}
-          </p>
-        </div>
-        <div style={{ textAlign: 'center', fontSize:'15px' }}>
-          <p>
-            {`ends: ${format(event.endTime)}`}
-          </p>
-        </div>
-        {
-          event.twenty_one && <div style={{ textAlign: 'center', fontSize:'15px' }}>21+</div>
-        }
-        <div className='zoomToEvent'>
-          <div>
-            <div style={{ position: 'relative', top: '30px', left: '60px', fontSize: '15px' }}>zoom to event</div>
-            <ThemeProvider theme={zoomToEventTheme}>
-              <div>
-                <Box>
-                  <Fab
-                    size='small'
-                    color='primary'
-                    aria-label='add'
-                    className='friend-add-btn'
-                  >
-                    <ZoomInIcon onClick={ () => {
-                      console.log(lat, lng);
-                      setZoom(18);
-                      setCenter({lat: lat, lng: lng});
-                     } } />
-                  </Fab>
-                </Box>
-              </div>
-            </ThemeProvider>
+    <Marker latitude={latitude} longitude={longitude} key={'eventPin' + i} anchor='top'>
+        <div className='eventDot' id={event.name + event.id} onClick={ () => {
+          togglePopUp();
+        }}>
+          <div >
+            <RsvpSharpIcon style={{ transform: 'scale(1.25)' }} color='secondary' />
+          </div>
+          <div style={{ transform: 'translateY(-10px)' }}>
+            { event.rsvp_count }
           </div>
         </div>
-      </div>
-    </div>
+        <div className='eventPopUp' id={'popUp' + event.name + event.id} >
+          <div style={{ textAlign: 'center', fontSize:'20px', marginTop: '5px' }}>
+            {event.name}
+          </div>
+          <div style={{ textAlign: 'center', fontSize:'15px' }}>
+            <p>
+              {`date: ${dayjs(event.date).format('L')}`}
+            </p>
+          </div>
+          <div style={{ textAlign: 'center', fontSize:'15px' }}>
+            <p>
+              {`starts: ${format(event.time)}`}
+            </p>
+          </div>
+          <div style={{ textAlign: 'center', fontSize:'15px' }}>
+            <p>
+              {`ends: ${format(event.endTime)}`}
+            </p>
+          </div>
+          {
+            event.twenty_one && <div style={{ textAlign: 'center', fontSize:'15px' }}>21+</div>
+          }
+          <div className='zoomToEvent'>
+            <div>
+              <div style={{ position: 'relative', top: '30px', left: '60px', fontSize: '15px' }}>zoom to event</div>
+              <ThemeProvider theme={zoomToEventTheme}>
+                <div>
+                  <Box>
+                    <Fab
+                      size='small'
+                      color='primary'
+                      aria-label='add'
+                      className='friend-add-btn'
+                    >
+                      {/* <ZoomInIcon onClick={ () => {
+                        console.log(lat, lng);
+                        setZoom(18);
+                        setCenter({lat: lat, lng: lng});
+                      } } /> */}
+                    </Fab>
+                  </Box>
+                </div>
+              </ThemeProvider>
+            </div>
+          </div>
+        </div>
+    </Marker>
   )
 }
 

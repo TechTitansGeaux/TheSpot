@@ -38,8 +38,8 @@
   top: -25px;
   z-index: 10;
   cursor: pointer;
-  font-size: 30px;
   text-align: center;
+  font-size: 30px;
   transform: translateX(-50%);
   overflow-y: hidden; /* Hide vertical scrollbar */
   overflow-x: hidden; /* Hide horizontal scrollbar */
@@ -95,18 +95,19 @@
   box-shadow: 0 0 5px 1px rgb(120, 120, 120);
   align-items: center;
   justify-content: center;
+  margin-left: 50%;
+  margin-right: 50%;
   height: 50px;
   width: 50px;
   background-color: var(--yellow);
   border-radius: 50%;
   display: inline-block;
   position: relative;
-  transform: translate(-50%, -75%);
+  top: -25px;
+  left: -25px;
   z-index: 10;
   cursor: pointer;
   text-align: center;
-  overflow-y: auto;
-  margin-top: 12.5px;
   font-size: 20px;
   color: black;
   overflow-y: hidden; /* Hide vertical scrollbar */
@@ -126,8 +127,7 @@
   font-family: var(--title-font);
   color: white;
   position: relative;
-  top: -41.75px;
-  left: -100px;
+  top: -35px;
   z-index: 11;
   animation-name: popOut;
   animation-timing-function: ease-in;
@@ -151,8 +151,6 @@
   border-radius: 50%;
   display: inline-block;
   position: relative;
-  top: -38.5px;
-  left: -25px;
   z-index: 10;
   cursor: pointer;
   text-align: center;

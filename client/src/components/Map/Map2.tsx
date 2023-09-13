@@ -7,7 +7,7 @@ import UserPin from './UserPin';
 import EventPin from './EventPin';
 import ClusterPin from './ClusterPin';
 import BusinessPin from './BusinessPin';
-import EventRadialMarker from './EventRadialMarker'
+import EventRadialMarker from './EventRadialMarker';
 import { useLocation } from "react-router-dom";
 import CenterFocusStrongIcon from '@mui/icons-material/CenterFocusStrong';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -43,7 +43,7 @@ const Map: React.FC<Props> = (props) => {
   console.log('rendered')
 
   const [ users, setUsers ] = useState([]);
-  const [ events, setEvents ] = useState([])
+  const [ events, setEvents ] = useState([]);
   const [ friendList, setFriendList ] = useState([]);
   const [ pendingFriendList, setPendingFriendList ] = useState([]);
   const [ businesses, setBusinesses ] = useState([]);
