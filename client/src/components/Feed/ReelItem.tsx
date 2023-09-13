@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
@@ -150,7 +150,6 @@ const ReelItem: React.FC<Props> = ({
   disabledNow,
   handleAddLike,
   handleRemoveLike,
-  likes,
   likeTotal,
   followed,
   muted,
@@ -236,7 +235,7 @@ const ReelItem: React.FC<Props> = ({
           for (let i = 0; i < response.data.length; i++) {
             for (let j = 0; j < reels.length; j++) {
               if (response.data[i].ReelId === reels[j].id) {
-                likes.push(response.data[i].ReelId);
+                likes.push(response.data[i].ReelId + `${response.data[i].UserId}`);
               }
             }
           }
@@ -259,7 +258,7 @@ const ReelItem: React.FC<Props> = ({
         setRsvps(data);
         data.map((rsvp: any) => {
           if (rsvp.UserId === user?.id) {
-            setDisableRsvp((prev) => [...prev, rsvp.EventId]);
+            setDisableRsvp((prev) => [...prev, rsvp.EventId+`${rsvp.UserId}`]);
           }
         });
       })
@@ -270,13 +269,20 @@ const ReelItem: React.FC<Props> = ({
 
   useEffect(() => {
     getRSVPs();
+    console.log('useEffect getRSVPs | ReelItem.tsx line 272 | EVERY REEL RENDERS');
   }, []);
 
   useEffect(() => {
     getLikes();
+    console.log(
+      'useEffect getLikes | ReelItem.tsx line 277 | EVERY REEL RENDERS'
+    );
   }, []);
 
   useEffect(() => {
+    console.log(
+      'useEffect checkEventTime | ReelItem.tsx line 282 | EVERY REEL RENDERS'
+    );
     checkEventTime();
   }, []);
 
@@ -307,7 +313,7 @@ const ReelItem: React.FC<Props> = ({
   // GET request get friendList from Friendship table in DB // set to state variable
   useEffect(() => {
     // update abort clean-ups to end axios request for unmounting
-    const controller = new AbortController();
+    // const controller = new AbortController();
     axios
       .get('/feed/friendlist/pending')
       .then(({ data }) => {
@@ -315,6 +321,8 @@ const ReelItem: React.FC<Props> = ({
         data.map((user: any) => {
           if (user.status === 'pending') {
             setStayDisabled((prev) => [...prev, user.accepter_id]);
+            console.log('useEffect axios setStayDisabled | ReelItem.tsx line 320');
+
           }
         });
       })
@@ -322,7 +330,7 @@ const ReelItem: React.FC<Props> = ({
         console.error('Failed to get Disabled List:', err);
       });
     // aborts axios request when component unmounts
-    return () => controller?.abort();
+    // return () => controller?.abort();
   }, []);
 
   // const [isInView, setIsInView] = useState(false);
@@ -338,6 +346,7 @@ const ReelItem: React.FC<Props> = ({
             .then((_) => {
               myRef.current.pause();
               setLoop(false);
+              console.log('useEffect Intersection API pause | ReelItem.tsx line 345');
             })
             .catch((err) => {
               console.error('Auto-play was prevented', err);
@@ -347,6 +356,8 @@ const ReelItem: React.FC<Props> = ({
           myRef.current.play();
           // setIsInView(true);
           setLoop(true);
+          console.log('useEffect Intersection API play | ReelItem.tsx line 352');
+
 
         }
       });
@@ -354,7 +365,7 @@ const ReelItem: React.FC<Props> = ({
     observer.observe(myRef.current);
 
     return () => observer.disconnect();
-  }, []);
+  }, [user]);
 
 
   const action = (
@@ -371,7 +382,7 @@ const ReelItem: React.FC<Props> = ({
   );
 
   // console.log('reels ---------->', reels)
-  console.log('reel from REELITEM ---------->', reels);
+  // console.log('reel from REELITEM ---------->', reels);
   // console.log('rsvpTotal', rsvpTotal)
   // console.log('disableRsvp', disableRsvp);
   // console.log('likesArr', likesArr);
@@ -503,7 +514,12 @@ const ReelItem: React.FC<Props> = ({
                                 <AddIcon
                                   aria-label={`Follow ${reel?.User.displayName}`}
                                   sx={{ width: 25, height: 25 }}
-                                  onClick={() => requestFollow(reel.User.id, reel?.User.displayName)}
+                                  onClick={() =>
+                                    requestFollow(
+                                      reel.User.id,
+                                      reel?.User.displayName
+                                    )
+                                  }
                                 />
                               </Tooltip>
                             ) : (
@@ -623,7 +639,7 @@ const ReelItem: React.FC<Props> = ({
                     component={'div'}
                     icon={
                       <div className='count-container'>
-                        {!likesArr.includes(reel.id) && user.id ? (
+                        {!likesArr.includes(reel.id+`${user?.id}`) ? (
                           <Likes
                             handleAddLike={handleAddLike}
                             handleRemoveLike={handleRemoveLike}
@@ -637,7 +653,7 @@ const ReelItem: React.FC<Props> = ({
                             handleAddLike={handleAddLike}
                             handleRemoveLike={handleRemoveLike}
                             reel={reel}
-                            // user={user}
+                            user={user}
                             // likes={likes}
                             likesBool={likesArr}
                           />
@@ -701,7 +717,9 @@ const ReelItem: React.FC<Props> = ({
                     icon={
                       <React.Fragment>
                         <div className='count-container'>
-                          {disableRsvp.includes(reel?.Event.id) ? (
+                          {disableRsvp.includes(
+                            reel?.Event.id+`${user?.id}`
+                          ) ? (
                             <UnRsvp reel={reel} removeRsvps={removeRsvps} />
                           ) : (
                             <Rsvp reel={reel} addRsvps={addRsvps} />

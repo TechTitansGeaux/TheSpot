@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import Reel from './Reel';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
@@ -268,31 +268,35 @@ const Feed: React.FC<Props> = ({user}) => {
 
   useEffect(() => {
     userCoord(user);
+    console.log('useEffect userCoord | Feed.tsx line 271')
   }, [user, reels]);
 
   useEffect(() => {
     getAllReels();
+    console.log('useEffect getAllReels | Feed.tsx line 276 || CALLS TWICE')
   }, [filter, geoF, user, userLat]);
 
   useEffect(() => {
-      if (user?.type === 'personal') {
-        getFriendList();
-      }
+    if (user?.type === 'personal') {
+      getFriendList();
+      console.log('useEffect getFriendList | Feed.tsx line 282')
+    }
   }, [filter]);
 
   useEffect(() => {
-      if (user?.type === 'personal') {
-        getFollowingList();
-      }
+    if (user?.type === 'personal') {
+      getFollowingList();
+    }
   }, [filter]);
 
   useEffect(() => {
-      if (user?.type === 'business') {
-        getFollowersList();
+    if (user?.type === 'business') {
+      getFollowersList();
+      console.log('useEffect getFollowersList | Feed.tsx line 295');
       }
   }, [filter]);
 
-//   console.log('reel from FEED ---------->', reels);
+  // console.log('reel from FEED ---------->', reels);
 
   return (
     <>
@@ -377,4 +381,4 @@ const Feed: React.FC<Props> = ({user}) => {
   );
 };
 
-export default Feed;
+export default React.memo(Feed);

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useState } from 'react';
 import io from 'socket.io-client';
@@ -23,7 +23,7 @@ type Props = {
   reel: any;
   handleAddLike: any;
   handleRemoveLike: any;
-  // user: User;
+  user: User;
   // likes: any[];
   likesBool: any;
 };
@@ -31,18 +31,19 @@ type Props = {
 const Unlikes: React.FC<Props> = ({
   handleRemoveLike,
   handleAddLike,
-  reel
+  reel,
+  user
 }) => {
   const [clicked, setClicked] = useState(true); // how to make this conditional - PER REEL?
 
   const handleLikeClick = (reelId: number) => {
     if (clicked === false) {
       setClicked(true);
-      handleAddLike(reelId);
+      handleAddLike(reelId, user?.id);
       socket.emit('likesNotif', 'like');
     } else {
       setClicked(false);
-      handleRemoveLike(reelId);
+      handleRemoveLike(reelId, user?.id);
     }
   };
 

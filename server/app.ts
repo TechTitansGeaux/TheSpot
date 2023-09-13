@@ -14,6 +14,7 @@ import eventRouter  from './routes/events';
 import likesRouter  from './routes/likes';
 import followersRouter from './routes/followers'
 import rsvpRouter from './routes/RSVPs';
+const MemoryStore = require('memorystore')(session);
 
 
 
@@ -45,11 +46,20 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(distPath));
 // users session
+
+
+/**
+A session store implementation for Express using lru-cache.
+Because the default MemoryStore for express-session will lead to a memory leak due to it haven't a suitable way to make them expire. */
 app.use(
   session({
+    cookie: { maxAge: 86400000 },
+    store: new MemoryStore({
+      checkPeriod: 86400000, // prune expired entries every 24h
+    }),
     secret: secretKey,
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
   })
 );
 app.use(passport.initialize());

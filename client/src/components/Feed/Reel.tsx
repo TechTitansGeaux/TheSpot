@@ -1,14 +1,16 @@
-import * as React from 'react';
+import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { setAuthUser, setIsAuthenticated } from '../../store/appSlice';
+import { FixedSizeList as List } from 'react-window';
+import InfiniteLoader from 'react-window-infinite-loader';
 // import { Suspense, lazy } from 'react';
 // import Loading from './Loading'
 // const ReelItem = lazy(() => import('./ReelItem'));
 import ReelItem from './ReelItem';
 import { useTheme } from '@mui/material/styles';
-import { AnimatePresence, motion, LazyMotion, domAnimation } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import io from 'socket.io-client';
 const socket = io();
 
@@ -102,6 +104,7 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
 
   useEffect(() => {
     fetchAuthUser();
+    console.log('useEffect fetchAuthUser | Reel.tsx line 107 | NO CALL ON LOAD');
   }, []);
 
   // GET request get friendList from Friendship table in DB // set to state variable
@@ -114,6 +117,9 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
         data.map((user: any) => {
           if (user?.status === 'approved') {
             setFriendList((prev) => [...prev, user.accepter_id]);
+            console.log(
+              'useEffect axios setFriendList | Reel.tsx line 120 | NO CALL ON LOAD'
+            );
           }
         });
       })
@@ -283,10 +289,14 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
 
   useEffect(() => {
     getLikes();
+    console.log('useEffect getLikes | Reel.tsx line 209 | NO CALL ON LOAD');
   }, []);
 
   useEffect(() => {
     getAllFollowed();
+    console.log(
+      'useEffect getAllFollowed | Reel.tsx line 295 | NO CALL ON LOAD'
+    );
   }, []);
 
   // snackbar logic for pending friends
@@ -313,11 +323,11 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
     setFollowAlert(false);
   };
 
-  console.log('reel from REEL ---------->', reels);
+  // console.log('reel from REEL ---------->', reels);
   return (
     <main
       className='reel-container'
-      style={{ fontSize: theme.typography.fontSize }}
+      // style={{ fontSize: theme.typography.fontSize }}
     >
       <AnimatePresence initial={false}>
         {/* <Suspense fallback={<Loading />}> */}
@@ -335,29 +345,31 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
                     delay: 0.2,
                   }}
                 >
-                  <ReelItem
-                    key={reel.id + 'reelItem' + Math.floor(Math.random() * 35)}
-                    user={user}
-                    reel={reel}
-                    reels={reels}
-                    friendList={friendList}
-                    requestFriendship={requestFriendship}
-                    requestUnfollow={requestUnfollow}
-                    requestFollow={requestFollow}
-                    followed={followed}
-                    disabledNow={disabled}
-                    deleteReel={deleteReel}
-                    handleAddLike={handleAddLike}
-                    handleRemoveLike={handleRemoveLike}
-                    likeTotal={likeTotal}
-                    likes={likes}
-                    muted={muted}
-                    handleToggleMute={handleToggleMute}
-                    openAlert={openAlert}
-                    followAlert={followAlert}
-                    messageAlert={messageAlert}
-                    handleAlertClose={handleAlertClose}
-                  />
+              {/* // <List> */}
+                <ReelItem
+                  key={reel.id + 'reelItem' + Math.floor(Math.random() * 35)}
+                  user={user}
+                  reel={reel}
+                  reels={reels}
+                  friendList={friendList}
+                  requestFriendship={requestFriendship}
+                  requestUnfollow={requestUnfollow}
+                  requestFollow={requestFollow}
+                  followed={followed}
+                  disabledNow={disabled}
+                  deleteReel={deleteReel}
+                  handleAddLike={handleAddLike}
+                  handleRemoveLike={handleRemoveLike}
+                  likeTotal={likeTotal}
+                  likes={likes}
+                  muted={muted}
+                  handleToggleMute={handleToggleMute}
+                  openAlert={openAlert}
+                  followAlert={followAlert}
+                  messageAlert={messageAlert}
+                  handleAlertClose={handleAlertClose}
+                />
+              {/* // </List> */}
                 </motion.div>
             );
           })}
@@ -367,4 +379,4 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
   );
 };
 
-export default Reel;
+export default React.memo(Reel);
