@@ -1,16 +1,17 @@
 import './Map.css';
 import React, { useState, useEffect, useRef } from 'react';
-import GoogleMapReact from 'google-map-react';
-import useSupercluster from 'use-supercluster';
+import MapBox, { useMap } from 'react-map-gl';
 import axios from 'axios';
-import UserPin from './UserPin';
-import EventPin from './EventPin';
 import ClusterPin from './ClusterPin';
+import UserPin from './UserPin';
 import BusinessPin from './BusinessPin';
-import EventRadialMarker from './EventRadialMarker'
+import EventPin from './EventPin';
+import EventRadialMarker from './EventRadialMarker';
+import useSupercluster from 'use-supercluster';
+import CircularProgress from '@mui/material/CircularProgress';
 import { useLocation } from "react-router-dom";
 import CenterFocusStrongIcon from '@mui/icons-material/CenterFocusStrong';
-import CircularProgress from '@mui/material/CircularProgress';
+
 
 type Props =  {
   loggedIn: {
@@ -38,13 +39,26 @@ type User = {
 
 const Map: React.FC<Props> = (props) => {
   const { loggedIn } = props;
-  // console.log('rendered')
 
   const [ users, setUsers ] = useState([]);
-  const [ events, setEvents ] = useState([])
   const [ friendList, setFriendList ] = useState([]);
   const [ pendingFriendList, setPendingFriendList ] = useState([]);
+  const [ events, setEvents ] = useState([]);
   const [ businesses, setBusinesses ] = useState([]);
+  const [ viewState, setViewState ] = useState<{zoom: number, longitude: number, latitude: number}>({
+    longitude: -94.30272073458288,
+    latitude: 23.592677069427353,
+    zoom: 0.5068034173376552
+  });
+  const [ userLngLat, setUserLngLat ] = useState([]);
+
+   // get event location if trying to see event loc from reel
+   const location = useLocation();
+   let eventLocation: string;
+   if (location.state) {
+     eventLocation = location.state.reelEvent;
+   }
+
 
 
   // function to split coordinates into array so lat and lng can easily be destructured
@@ -53,23 +67,17 @@ const Map: React.FC<Props> = (props) => {
     return arr;
   }
 
- // sets the coords to open map to
-  const location = useLocation();
-  let eventLocation: string;
-  if (location.state) {
-    eventLocation = location.state.reelEvent;
-  }
+  // get all users
+  const getUsers = () => {
+    axios.get('/users')
+      .then((res) => {
+        setUsers(res.data);
+      })
+      .catch((err) => {
+        console.log('error getting users', err);
+      });
 
-  let defaultCenter;
-  if (eventLocation) {
-    const [lat, lng] = splitCoords(eventLocation);
-    defaultCenter = {lat: +lat, lng: +lng}
-  } else if (loggedIn) {
-    const [lat, lng] = splitCoords(loggedIn.geolocation);
-    defaultCenter = {lat: +lat, lng: +lng}
   }
-
-  const [ center, setCenter ] = useState(defaultCenter);
 
   // gets users friends
   const getFriendList = () => {
@@ -79,7 +87,7 @@ const Map: React.FC<Props> = (props) => {
           acc.push(user.accepter_id);
           return acc;
         }, []);
-        setFriendList(friendsIds)
+        setFriendList(friendsIds);
       })
       .catch((err) => {
         console.error('Failed to get Friends:', err);
@@ -94,47 +102,36 @@ const Map: React.FC<Props> = (props) => {
           acc.push(user.accepter_id);
           return acc;
         }, []);
-        setPendingFriendList(pendingFriendsIds)
+        setPendingFriendList(pendingFriendsIds);
       })
       .catch((err) => {
         console.error('Failed to get pending Friends:', err);
       });
   }
 
-  // get all users
-  const getUsers = () => {
-    axios.get('/users')
-      .then((res) => {
-        setUsers(res.data);
-
-      })
-      .catch((err) => {
-        console.log('error getting users', err);
-      });
-  }
-
 
   // gets all events
   const getEvents = () => {
-    axios.get('/events/allCurrent')
+    axios.get('/events/all')
       .then(({ data }) => {
-        setEvents(data)
+        console.log(data);
+        setEvents(data);
       })
       .catch((err) => {
         console.error('Failed to get Events:', err);
       });
   }
 
-  // gets all businesses
-  const getBusinesses = () => {
-    axios.get('/users/businesses')
-      .then((res) => {
-        setBusinesses(res.data);
-      })
-      .catch((err) => {
-        console.log('error getting businesses for map: ', err);
-      })
-  }
+    // gets all businesses
+    const getBusinesses = () => {
+      axios.get('/users/businesses')
+        .then((res) => {
+          setBusinesses(res.data);
+        })
+        .catch((err) => {
+          console.log('error getting businesses for map: ', err);
+        })
+    }
 
   useEffect(() => {
     if (loggedIn) {
@@ -145,52 +142,48 @@ const Map: React.FC<Props> = (props) => {
       getBusinesses();
       if (!eventLocation) {
         const [lat, lng] = splitCoords(loggedIn.geolocation);
-        setCenter({lat: +lat, lng: +lng})
+        setUserLngLat([+lng, + lat]);
       }
     }
   }, [loggedIn])
 
-  // track map boundaries and zoom level
-  const mapRef = useRef();
-  const [ zoom, setZoom ] = useState(15); // <== must match default zoom
-  const [ bounds, setBounds ] = useState(null);
+  const mapRef = useRef<any>();
+
+  const bounds = mapRef.current ? mapRef.current.getMap().getBounds().toArray().flat() : null;
 
   // clustering points for user pins
   const userPoints = users.filter((user) => {
-    if (user.id === loggedIn.id) {
-    return true;
-    } else if (user.privacy === 'private') {
-      return false;
-    } else if (user.privacy === 'friends only' && !friendList.includes(user.id)){
-     return false;
-    }
-    else if (user.type === 'business') {
-      return false
-    } else {
+      if (user.id === loggedIn.id) {
       return true;
-    }
-  }).map((user) => {
-    const [lat, lng] = splitCoords(user.geolocation);
-    return {
-      type: 'Feature',
-      properties: {
-        cluster: false,
-        user: user,
-      },
-      geometry: { type: 'Point', coordinates: [+lng, +lat]},
-    }
-  })
+      } else if (user.privacy === 'private') {
+        return false;
+      } else if (user.privacy === 'friends only' && !friendList.includes(user.id)){
+       return false;
+      }
+      else if (user.type === 'business') {
+        return false
+      } else {
+        return true;
+      }
+    }).map((user) => {
+      const [lat, lng] = splitCoords(user.geolocation);
+      return {
+        type: 'Feature',
+        properties: {
+          cluster: false,
+          user: user,
+        },
+        geometry: { type: 'Point', coordinates: [+lng, +lat]},
+      }
+    })
+
 
   const { clusters: userClusters, supercluster: userSupercluster } = useSupercluster({
     points: userPoints,
     bounds,
-    zoom,
-    options: {
-      radius: 75,
-      maxZoom: 19,
-    }
+    zoom: viewState.zoom,
+    options: { radius: 50, maxZoom: 19, }
   })
-
 
   // clustering points for events pins
   const eventPoints = events.map((event) => {
@@ -208,70 +201,33 @@ const Map: React.FC<Props> = (props) => {
   const { clusters: eventClusters, supercluster: eventSupercluster } = useSupercluster({
     points: eventPoints,
     bounds,
-    zoom,
-    options: {
-      radius: 75,
-      maxZoom: 19,
-    }
+    zoom: viewState.zoom,
+    options: { radius: 50, maxZoom: 19, }
   })
 
-
-  // clustering points for business pins
-  const businessPoints = businesses.map((business) => {
-    const [lat, lng] = splitCoords(business.geolocation);
-    return {
-      type: 'Feature',
-      properties: {
-        cluster: false,
-        business: business,
-      },
-      geometry: { type: 'Point', coordinates: [+lng, +lat]},
-    }
-  })
-
-  const { clusters: businessClusters, supercluster: businessSupercluster } = useSupercluster({
-    points: businessPoints,
-    bounds,
-    zoom,
-    options: {
-      radius: 75,
-      maxZoom: 19,
-    }
-  })
-
-  const options = {
-    // minZoom: 11,
-    // maxZoom: 19,
-    disableDefaultUI: true,
-    styles: [
-      { stylers: [{ 'saturation': 1 }, { 'gamma': 0.5 }, { 'lightness': 4 }, { 'visibility': 'on' }] },
-      { featureType: "poi", stylers: [{ visibility: 'off' }] }
-    ]
-  }
-
-
-  const closeAllPopUps = () => {
-    const userPopUps = document.getElementsByClassName('userPopUp');
-    const eventPopUps = document.getElementsByClassName('eventPopUp');
-    const busPopUps = document.getElementsByClassName('businessPopUp');
-
-    Array.prototype.forEach.call( userPopUps, (popUp: any) => {
-      popUp.style.display = 'none';
+    // clustering points for business pins
+    const businessPoints = businesses.map((business) => {
+      const [lat, lng] = splitCoords(business.geolocation);
+      return {
+        type: 'Feature',
+        properties: {
+          cluster: false,
+          business: business,
+        },
+        geometry: { type: 'Point', coordinates: [+lng, +lat]},
+      }
     })
 
-    Array.prototype.forEach.call( eventPopUps, (popUp: any) => {
-      popUp.style.display = 'none';
+    const { clusters: businessClusters, supercluster: businessSupercluster } = useSupercluster({
+      points: businessPoints,
+      bounds,
+      zoom: viewState.zoom,
+      options: { radius: 50, maxZoom: 19, }
     })
 
-    Array.prototype.forEach.call( busPopUps, (popUp: any) => {
-      popUp.style.display = 'none';
-    })
-  }
 
-
-
-  if (!users.length || !businesses.length || !loggedIn) {
-    // Data is not yet available, render loading or placeholder content
+  // if Data is not yet available, render loading ring
+  if (!users.length || !loggedIn) {
     return (
       <div style={{textAlign: 'center', transform: 'translateY(250px)', fontSize: '40px'}}>
         <CircularProgress
@@ -281,119 +237,128 @@ const Map: React.FC<Props> = (props) => {
     )
   }
 
+  const closeAllPopUps = () => {
+    const userPopUps = document.getElementsByClassName('userPopUp');
+    const eventPopUps = document.getElementsByClassName('eventPopUp');
+    const busPopUps = document.getElementsByClassName('businessPopUp');
+
+    Array.prototype.forEach.call( userPopUps, (popUp: any) => {
+      popUp.style.animationName = 'popOff';
+      setTimeout(() => {
+        popUp.style.display = 'none';
+      }, 500)
+    })
+
+    Array.prototype.forEach.call( eventPopUps, (popUp: any) => {
+      popUp.style.animationName = 'popOff';
+      setTimeout(() => {
+        popUp.style.display = 'none';
+      }, 500)
+    })
+
+    Array.prototype.forEach.call( busPopUps, (popUp: any) => {
+      popUp.style.animationName = 'popOff';
+      setTimeout(() => {
+        popUp.style.display = 'none';
+      }, 500)
+    })
+  }
+
+
   return (
     <div className='mapParent' onWheel={closeAllPopUps}>
       <div className='mapChild'>
-        <div className='recenterButton' onClick={ () => {
-          const [lat, lng] = splitCoords(loggedIn.geolocation);
-          setZoom(15);
-          setCenter({ lat: +lat, lng: +lng});
+      <div className='recenterButton' onClick={ () => {
+          // const [lat, lng] = splitCoords(loggedIn.geolocation);
         }}> <CenterFocusStrongIcon /></div>
         <div id='map'>
-          <GoogleMapReact
-            bootstrapURLKeys={{ key: "AIzaSyAYtb7y6JZ2DxgdIESWJky8NyhWuu_YFVg" }}
-            zoom={zoom}
-            center={center}
-            options={options}
+          <MapBox
+            mapboxAccessToken="pk.eyJ1IjoiYmVuamFtaW5rbGVpbjk5IiwiYSI6ImNsbWUzMnZxZDFma3EzZHE2NG1hdjUxdjQifQ.-dyi2R3I4LmoAH-MWuNZPA"
+            {...viewState}
+            onMove={evt => {setViewState(evt.viewState)}}
+            style={{width: '100%', height: '100%'}}
+            mapStyle="mapbox://styles/mapbox/streets-v9"
+            ref={mapRef}
+            projection={{name: 'globe'}}
+            onLoad={(e) => {
+              if (!eventLocation) {
+                const [lng, lat] = userLngLat;
+                e.target.flyTo({center: [lng, lat], zoom: 15, duration: 2500});
+              } else {
+                const [lat, lng] = splitCoords(eventLocation)
+                e.target.flyTo({center: [+lng, +lat], zoom: 15, duration: 2500});
+              }
+            }}
             onDrag={closeAllPopUps}
-            yesIWantToUseGoogleMapApiInternals
-            onGoogleApiLoaded={({ map }) => {
-              mapRef.current = map;
-            }}
-            onChange={({ zoom, bounds, center }) => {
-              setCenter(center);
-              setZoom(zoom);
-              setBounds([
-                bounds.nw.lng,
-                bounds.se.lat,
-                bounds.se.lng,
-                bounds.nw.lat
-              ])
-            }}
           >
-          {
-            userClusters.map((cluster: any, i: number) => {
-              const [ lng, lat ] = cluster.geometry.coordinates;
-              const { cluster: isCluster, point_count: pointCount, user} = cluster.properties;
+            {
+              userClusters.map((cluster: any, i: number) => {
+                const [ lng, lat ] = cluster.geometry.coordinates;
+                const { cluster: isCluster, point_count: pointCount, user} = cluster.properties;
 
-              if (isCluster) {
-                return <ClusterPin amount={pointCount} key={'userCluster' + i} lat={lat} lng={lng} className='UserClusterPin' onClick={() => {
-                  const expansionZoom = Math.min(userSupercluster.getClusterExpansionZoom(cluster.id), 20)
-                  setZoom(expansionZoom);
-                  setCenter({lat: lat, lng: lng});
-                }} />;
-              } else {
-                return <UserPin
-                  getPendingFriendList={getPendingFriendList}
-                  pendingFriendList={pendingFriendList}
-                  getFriendList={getFriendList}
-                  friendList={friendList}
-                  user={user}
-                  key={user.id}
-                  lat={lat}
-                  lng={lng}
-                  loggedIn={loggedIn}
-                  setZoom={setZoom}
-                  setCenter={setCenter}
-                  closeAllPopUps={closeAllPopUps}
-                  zoom={zoom}
+                if (isCluster) {
+                  const expansionZoom = Math.min(userSupercluster.getClusterExpansionZoom(cluster.id), 20);
+                  return <ClusterPin amount={pointCount} key={'userCluster' + i} latitude={lat} longitude={lng} className='UserClusterPin' expansionZoom={expansionZoom}/>;
+                } else {
+                  return <UserPin
+                    getPendingFriendList={getPendingFriendList}
+                    pendingFriendList={pendingFriendList}
+                    getFriendList={getFriendList}
+                    friendList={friendList}
+                    user={user}
+                    key={user.id}
+                    loggedIn={loggedIn}
+                    latitude={+lat}
+                    longitude={+lng}
+                    i={i}
+                    zoom={viewState.zoom}
+                    />
+                }
+              })
+            }
+            {
+              businessClusters.map((cluster: any, i: number) => {
+                const [ lng, lat ] = cluster.geometry.coordinates;
+                const { cluster: isCluster, point_count: pointCount, business} = cluster.properties;
+
+                if (isCluster) {
+                    const expansionZoom = Math.min(businessSupercluster.getClusterExpansionZoom(cluster.id), 20);
+                    return <ClusterPin amount={pointCount} key={'businessCluster' + i} latitude={lat} longitude={lng} className='BusinessClusterPin' expansionZoom={expansionZoom}/>;
+                } else {
+                  return <BusinessPin
+                  business={business}
+                  key={business.id}
+                  latitude={lat}
+                  longitude={lng}
+                  i={i}
+                  zoom={viewState.zoom}
                 />;
-              }
-            })
-          }
-          {
-            businessClusters.map((cluster: any, i: number) => {
-              const [ lng, lat ] = cluster.geometry.coordinates;
-              const { cluster: isCluster, point_count: pointCount, business} = cluster.properties;
+                }
+              })
+            }
+            {
+              eventClusters.map((cluster: any, i: number) => {
+                const [ lng, lat ] = cluster.geometry.coordinates;
+                const { cluster: isCluster, point_count: pointCount, event} = cluster.properties;
 
-              if (isCluster) {
-                return <ClusterPin amount={pointCount} key={'businessCluster' + i} lat={lat} lng={lng} className='BusinessClusterPin' onClick={() => {
-                  const expansionZoom = Math.min(businessSupercluster.getClusterExpansionZoom(cluster.id), 20)
-                  setZoom(expansionZoom);
-                  setCenter({lat: lat, lng: lng});
-                }} />;
-              } else {
-                return <BusinessPin
-                business={business}
-                key={business.id}
-                lat={lat}
-                lng={lng}
-                setZoom={setZoom}
-                setCenter={setCenter}
-                closeAllPopUps={closeAllPopUps}
-                zoom={zoom}
-              />;
-              }
-            })
-          }
-          {
-            eventClusters.map((cluster: any, i: number) => {
-              const [ lng, lat ] = cluster.geometry.coordinates;
-              const { cluster: isCluster, point_count: pointCount, event} = cluster.properties;
-
-              if (isCluster) {
-                return <ClusterPin amount={pointCount} key={'eventCluster' + i} lat={lat} lng={lng} className='EventClusterPin' onClick={() => {
-                  const expansionZoom = Math.min(eventSupercluster.getClusterExpansionZoom(cluster.id), 20)
-                  setZoom(expansionZoom);
-                  setCenter({lat: lat, lng: lng});
-                }} />;
-              } else if (!isCluster && zoom >= 17) {
-                return <EventRadialMarker zoom={zoom} key={'eventRadialMarker' + i} lat={lat} lng={lng} />
-              } else {
-                return <EventPin
-                  event={event}
-                  lat={+lat}
-                  lng={+lng}
-                  key={event.id}
-                  setZoom={setZoom}
-                  setCenter={setCenter}
-                  closeAllPopUps={closeAllPopUps}
-                  zoom={zoom}
-                />
-              }
-            })
-          }
-          </GoogleMapReact>
+                if (isCluster) {
+                  const expansionZoom = Math.min(eventSupercluster.getClusterExpansionZoom(cluster.id), 20);
+                  return <ClusterPin amount={pointCount} key={'eventCluster' + i} latitude={lat} longitude={lng} className='EventClusterPin' expansionZoom={expansionZoom}/>;
+                } else if (!isCluster && viewState.zoom >= 17) {
+                  return <EventRadialMarker zoom={viewState.zoom} key={'eventRadialMarker' + i} latitude={lat} longitude={lng} />
+                } else {
+                  return <EventPin
+                    event={event}
+                    latitude={+lat}
+                    longitude={+lng}
+                    key={event.id}
+                    i={i}
+                    zoom={viewState.zoom}
+                  />
+                }
+              })
+            }
+          </MapBox>
         </div>
         <div className='legend'>
           <div className='userKey'></div><div className='userKeyText'> USERS </div>
