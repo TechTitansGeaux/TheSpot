@@ -256,7 +256,7 @@ const ProfileSetUp: React.FC = () => {
               }}
               helperText={errors.displayName}
               error={!!errors.displayName}
-              style={{ color: 'var(--setupBG)', marginBottom: '1rem', marginTop: '1rem' }}
+              style={{ color: 'var(--setupBG)', marginBottom: '1rem'}}
             />
             <SpeechToText onTranscriptChange={setDisplayName} />
             </div>

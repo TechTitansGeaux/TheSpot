@@ -225,7 +225,7 @@ const Settings: React.FC<Props> = ({fontSize, startWatch}) => {
               onChange={(e) => {
                 setDisplayName(e.target.value);
               }}
-              style={{ color: 'var(--setupBG)', marginBottom: '1rem', marginTop: '1rem' }}
+              style={{ color: 'var(--setupBG)', marginBottom: '1rem' }}
             />
             </div>
 
