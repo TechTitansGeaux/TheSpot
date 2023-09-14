@@ -14,7 +14,12 @@ import UploadFile from '@mui/icons-material/UploadFile';
 import MenuItem from '@mui/material/MenuItem';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import LocationSearchInput from './LocationSearchInput';
-import SpeechToText from './SpeechToText'
+import SpeechToText from './SpeechToText';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContentText from '@mui/material/DialogContentText';
 
 type Props = {
 fontSize: string;
@@ -55,7 +60,7 @@ const BusinessSettings: React.FC<Props> = ({fontSize}) => {
       secondary: {
         main: '#f433ab',
         light: '#f0f465',
-        contrastText: '#0b0113',
+        contrastText: '#e3f2fd',
       },
     },
     typography: {
@@ -251,7 +256,7 @@ useEffect(() => {
               onChange={(e) => {
                 setDisplayName(e.target.value);
               }}
-              style={{ color: 'var(--setupBG)', marginBottom: '1rem', marginTop: '1rem' }}
+              style={{ color: 'var(--setupBG)', marginBottom: '1rem'}}
             />
             <SpeechToText onTranscriptChange={setDisplayName} />
             </div>
@@ -315,23 +320,14 @@ useEffect(() => {
             <MenuItem value='lg-font'>Large</MenuItem>
           </TextField>
 
-
-              <Button
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
+            <Button
               variant="contained"
               color="secondary"
               onClick={handleSettings}
-              style={{ marginTop: '1rem', marginBottom: '1rem' }}
             >
               Save Profile
             </Button>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
-              <Button
-                variant="outlined"
-                color="secondary"
-                onClick={handleLogout}
-              >
-                Logout
-              </Button>
 
               <Button
                 variant="outlined"

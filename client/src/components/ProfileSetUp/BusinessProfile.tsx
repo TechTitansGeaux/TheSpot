@@ -246,14 +246,14 @@ const BusinessProfile = () => {
               }}
               helperText={errors.username}
               error={!!errors.username}
-              style={{ color: 'var(--setupBG)', marginBottom: '1rem', marginTop: '1rem' }}
+              style={{ color: 'var(--setupBG)', marginBottom: '1rem' }}
             />
             <SpeechToText onTranscriptChange={setUsername} />
             </div>
 
 
             {/* Display Name field */}
-            <div style={{ display: 'flex', alignItems: 'center',  }}>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
             <TextField
               label="Display Name"
               variant="outlined"
@@ -266,7 +266,7 @@ const BusinessProfile = () => {
               }}
               helperText={errors.displayName}
               error={!!errors.displayName}
-              style={{ color: 'var(--setupBG)', marginBottom: '1rem', marginTop: '1rem' }}
+              style={{ color: 'var(--setupBG)', marginBottom: '1rem' }}
             />
             <SpeechToText onTranscriptChange={setDisplayName} />
             </div>

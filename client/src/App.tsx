@@ -106,6 +106,7 @@ useEffect(() => {
   startGeolocationWatch();
 }, []);
 
+
   // get all other users
   const getAllUsers = async () => {
     try {

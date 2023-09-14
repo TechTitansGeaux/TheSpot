@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Outlet, NavLink, Link } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -20,6 +21,9 @@ import Snackbar from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import io from 'socket.io-client';
+import Button from '@mui/material/Button';
+import { setAuthUser } from '../store/appSlice';
+import { RootState } from '../store/store';
 const socket = io();
 
 type Anchor = 'left';
@@ -78,6 +82,8 @@ const Navigation: React.FC<Props> = ({ user }) => {
   const [setting, setSetting] = useState('');
   // const [userType, setUserType] = useState(null);
   const [bottomNavHidden, setBottomNavHidden] = useState(false) // boolean state var to hide bottom nav
+  const dispatch = useDispatch();
+  const authUser = useSelector((state: RootState) => state.app.authUser);
 
   useEffect(() => {
     if (feedPath === '/CreateReel' || feedPath === '/UserType' || feedPath === '/ProfileSetUp' || feedPath === '/BusinessProfile') {
@@ -87,6 +93,12 @@ const Navigation: React.FC<Props> = ({ user }) => {
     }
   }, [feedPath])
 
+  const handleLogout = () => {
+    // logout the user by clearing the authUser state
+    dispatch(setAuthUser(null));
+    // redirect the user to the homepage
+    window.location.href = `${process.env.HOST}/`;
+  };
 
   // get all pending friends for current user
   const getAllPFriends = () => {
@@ -412,6 +424,15 @@ const Navigation: React.FC<Props> = ({ user }) => {
             SETTINGS
           </ListItemButton>
         </ListItem>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20rem', paddingLeft: '1em' }}>
+            <Button
+                variant="outlined"
+                color="secondary"
+                onClick={handleLogout}
+              >
+                Logout
+              </Button>
+            </div>
       </List>
     </Box>
   );
