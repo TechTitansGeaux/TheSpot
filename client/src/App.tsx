@@ -77,7 +77,7 @@ const App = () => {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
         console.log(position, '<-----POSITION');
-        if (authUser.type === 'personal') {
+        if (authUser?.type === 'personal') {
           const newGeolocation = `${latitude},${longitude}`;
           console.log(newGeolocation, '<-----NEWGEOLO');
           axios
