@@ -10,6 +10,8 @@ import EventRadialMarker from './EventRadialMarker';
 import useSupercluster from 'use-supercluster';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useLocation } from "react-router-dom";
+import CenterFocusStrongIcon from '@mui/icons-material/CenterFocusStrong';
+
 
 
 type Props =  {
@@ -267,6 +269,9 @@ const Map: React.FC<Props> = (props) => {
   return (
     <div className='mapParent' onWheel={closeAllPopUps}>
       <div className='mapChild'>
+      <div className='recenterButton' onClick={ () => {
+          // const [lat, lng] = splitCoords(loggedIn.geolocation);
+        }}> <CenterFocusStrongIcon /></div>
         <div id='map'>
           <MapBox
             mapboxAccessToken="pk.eyJ1IjoiYmVuamFtaW5rbGVpbjk5IiwiYSI6ImNsbWUzMnZxZDFma3EzZHE2NG1hdjUxdjQifQ.-dyi2R3I4LmoAH-MWuNZPA"
