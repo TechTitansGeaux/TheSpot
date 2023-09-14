@@ -91,8 +91,8 @@ io.on('connection', (socket) => {
 
   // Listen for geolocation updates from clients
   socket.on('updateGeolocation', (data) => {
-    // Broadcast the updated geolocation to all other clients
-    socket.broadcast.emit('userGeolocationUpdate', data);
+    // Broadcast the updated geolocation to all connected clients
+    io.emit('userGeolocationUpdate', data);
   });
 
   socket.on('disconnect', () => {
