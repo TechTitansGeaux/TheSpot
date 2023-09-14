@@ -327,8 +327,7 @@ const Map: React.FC<Props> = (props) => {
                   latitude={lat}
                   longitude={lng}
                   i={i}
-                  // closeAllPopUps={closeAllPopUps}
-                  // zoom={zoom}
+                  zoom={viewState.zoom}
                 />;
                 }
               })
@@ -350,6 +349,7 @@ const Map: React.FC<Props> = (props) => {
                     longitude={+lng}
                     key={event.id}
                     i={i}
+                    zoom={viewState.zoom}
                   />
                 }
               })

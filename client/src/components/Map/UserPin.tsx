@@ -85,7 +85,11 @@ const UserPin: React.FC<Props> = ({ user, loggedIn, friendList, pendingFriendLis
   const { current } = useMap();
 
   const zoomTo = (lng: number, lat: number) => {
-    current.flyTo({center: [+lng, +lat], zoom: 15});
+    if (zoom < 15) {
+      current.flyTo({center: [+lng, +lat], zoom: 15});
+    } else {
+      current.flyTo({center: [+lng, +lat]});
+    }
   }
 
   const togglePopUp = () => {

@@ -24,8 +24,7 @@ type Props = {
   latitude: number
   longitude: number
   i: number
-  // closeAllPopUps: () => void
-  // zoom: number
+  zoom: number
 }
 
 const zoomToEventTheme = createTheme({
@@ -43,12 +42,19 @@ const zoomToEventTheme = createTheme({
   },
 });
 
-const Event: React.FC<Props> = ({ event, latitude, longitude, i }) => {
+const Event: React.FC<Props> = ({ event, latitude, longitude, i, zoom }) => {
 
   const { current } = useMap();
 
-  const zoomTo = (lng: number, lat: number) => {
+  const zoomToEvent = (lng: number, lat: number) => {
     current.flyTo({center: [+lng, +lat], zoom: 18});
+  }
+  const zoomTo = (lng: number, lat: number) => {
+    if (zoom < 15) {
+      current.flyTo({center: [+lng, +lat], zoom: 15});
+    } else {
+      current.flyTo({center: [+lng, +lat]});
+    }
   }
 
   const togglePopUp = () => {
@@ -77,6 +83,7 @@ const Event: React.FC<Props> = ({ event, latitude, longitude, i }) => {
     <Marker latitude={latitude} longitude={longitude} key={'eventPin' + i} anchor='top' style={{zIndex: '0'}}>
         <div className='eventDot' id={event.name + event.id} onClick={ () => {
           togglePopUp();
+          zoomTo(longitude, latitude);
         }}>
           <div >
             <RsvpSharpIcon style={{ transform: 'scale(1.25)' }} color='secondary' />
@@ -120,7 +127,7 @@ const Event: React.FC<Props> = ({ event, latitude, longitude, i }) => {
                       className='friend-add-btn'
                     >
                       <ZoomInIcon onClick={ () => {
-                        zoomTo(longitude, latitude);
+                        zoomToEvent(longitude, latitude);
                       } } />
                     </Fab>
                   </Box>

@@ -25,10 +25,11 @@ type Props = {
   longitude: number
   i: number
   // closeAllPopUps: () => void
-  // zoom: number
+  zoom: number
 }
 
-const BusinessPin: React.FC<Props> = ({ business, latitude, longitude, i }) => {
+const BusinessPin: React.FC<Props> = ({ business, latitude, longitude, i, zoom }) => {
+
   const togglePopUp = () => {
     const box = document.getElementById('popUp' + business.username + business.id)
     if (box.style.display === 'block') {
@@ -42,15 +43,20 @@ const BusinessPin: React.FC<Props> = ({ business, latitude, longitude, i }) => {
     }
   }
 
+  const { current } = useMap();
+
+  const zoomTo = (lng: number, lat: number) => {
+    if (zoom < 15) {
+      current.flyTo({center: [+lng, +lat], zoom: 15});
+    } else {
+      current.flyTo({center: [+lng, +lat]});
+    }
+  }
+
   return (
     <Marker longitude={longitude} latitude={latitude} key={'userPin' + i} anchor='top' style={{zIndex: '0'}}>
       <div className='businessDot' id={business.username + business.id} onClick={ () => {
-        // if (zoom < 15) {
-        //   setZoom(15);
-        //   setCenter({lat: lat - 0.005, lng: lng});
-        // } else {
-        //   setCenter({lat: lat - (0.005 / ( 2 ** (zoom - 15))), lng: lng});
-        // }
+        zoomTo(longitude, latitude);
         togglePopUp();
       }} >
         <img
