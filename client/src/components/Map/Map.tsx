@@ -9,6 +9,7 @@ import EventPin from './EventPin';
 import EventRadialMarker from './EventRadialMarker';
 import useSupercluster from 'use-supercluster';
 import CircularProgress from '@mui/material/CircularProgress';
+import { useLocation } from "react-router-dom";
 
 
 type Props =  {
@@ -48,7 +49,15 @@ const Map: React.FC<Props> = (props) => {
     latitude: 23.592677069427353,
     zoom: 0.5068034173376552
   });
-  const [ userLngLat, setUserLngLat ] = useState([])
+  const [ userLngLat, setUserLngLat ] = useState([]);
+
+   // get event location if trying to see event loc from reel
+   const location = useLocation();
+   let eventLocation: string;
+   if (location.state) {
+     eventLocation = location.state.reelEvent;
+   }
+
 
   // get all users
   const getUsers = () => {
@@ -122,8 +131,10 @@ const Map: React.FC<Props> = (props) => {
       getPendingFriendList();
       getEvents();
       getBusinesses();
-      const [lat, lng] = splitCoords(loggedIn.geolocation);
-      setUserLngLat([+lng, + lat]);
+      if (!eventLocation) {
+        const [lat, lng] = splitCoords(loggedIn.geolocation);
+        setUserLngLat([+lng, + lat]);
+      }
     }
   }, [loggedIn])
 
@@ -266,8 +277,13 @@ const Map: React.FC<Props> = (props) => {
             ref={mapRef}
             projection={{name: 'globe'}}
             onLoad={(e) => {
-              const [lng, lat] = userLngLat;
-              e.target.flyTo({center: [lng, lat], zoom: 15, duration: 2500});
+              if (!eventLocation) {
+                const [lng, lat] = userLngLat;
+                e.target.flyTo({center: [lng, lat], zoom: 15, duration: 2500});
+              } else {
+                const [lat, lng] = splitCoords(eventLocation)
+                e.target.flyTo({center: [+lng, +lat], zoom: 15, duration: 2500});
+              }
             }}
             onDrag={closeAllPopUps}
           >
