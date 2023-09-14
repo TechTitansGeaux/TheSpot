@@ -96,7 +96,6 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
 
   useEffect(() => {
     fetchAuthUser();
-    console.log('useEffect fetchAuthUser | Reel.tsx line 107 | NO CALL ON LOAD');
   }, []);
 
   // GET request get friendList from Friendship table in DB // set to state variable
@@ -176,14 +175,10 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
 
   useEffect(() => {
     getLikes();
-    console.log('useEffect getLikes | Reel.tsx line 209 | NO CALL ON LOAD');
   }, []);
 
   useEffect(() => {
     getAllFollowed();
-    console.log(
-      'useEffect getAllFollowed | Reel.tsx line 295 | NO CALL ON LOAD'
-    );
   }, []);
 
   return (
