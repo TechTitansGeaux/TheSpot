@@ -20,7 +20,7 @@ const SpeechToText = ({ onTranscriptChange }: any) => {
   };
 
   return (
-    <div style={{ alignItems: 'center', paddingRight: '5px' }}>
+    <div style={{ alignItems: 'center', paddingLeft: '5px' }}>
       <IconButton
         onClick={handleSpeechRecognition}
         color="primary"

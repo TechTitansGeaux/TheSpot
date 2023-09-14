@@ -224,7 +224,6 @@ const ProfileSetUp: React.FC = () => {
             {/* Username field */}
             <p>Click Microphone For Speech To Text</p>
             <div style={{ display: 'flex', alignItems: 'center' }}>
-            <SpeechToText onTranscriptChange={setUsername} />
             <TextField
               label="Username"
               variant="outlined"
@@ -239,12 +238,12 @@ const ProfileSetUp: React.FC = () => {
               error={!!errors.username}
               style={{ color: 'var(--setupBG)', marginBottom: '1rem', marginTop: '1rem' }}
             />
+            <SpeechToText onTranscriptChange={setUsername} />
             </div>
 
 
             {/* Display Name field */}
             <div style={{ display: 'flex', alignItems: 'center',  }}>
-            <SpeechToText onTranscriptChange={setDisplayName} />
             <TextField
               label="Display Name"
               variant="outlined"
@@ -259,6 +258,7 @@ const ProfileSetUp: React.FC = () => {
               error={!!errors.displayName}
               style={{ color: 'var(--setupBG)', marginBottom: '1rem', marginTop: '1rem' }}
             />
+            <SpeechToText onTranscriptChange={setDisplayName} />
             </div>
 
             {/* Privacy field */}

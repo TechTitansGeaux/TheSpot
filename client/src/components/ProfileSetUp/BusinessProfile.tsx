@@ -233,9 +233,7 @@ const BusinessProfile = () => {
           )}
 
             {/* Username field */}
-            <div>
-            <SpeechToText onTranscriptChange={setUsername} />
-            <p>Click Microphone For Speech To Text</p>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
             <TextField
               label="Username"
               variant="outlined"
@@ -250,12 +248,12 @@ const BusinessProfile = () => {
               error={!!errors.username}
               style={{ color: 'var(--setupBG)', marginBottom: '1rem', marginTop: '1rem' }}
             />
+            <SpeechToText onTranscriptChange={setUsername} />
             </div>
 
 
             {/* Display Name field */}
-            <div>
-            <SpeechToText onTranscriptChange={setDisplayName} />
+            <div style={{ display: 'flex', alignItems: 'center',  }}>
             <TextField
               label="Display Name"
               variant="outlined"
@@ -270,6 +268,7 @@ const BusinessProfile = () => {
               error={!!errors.displayName}
               style={{ color: 'var(--setupBG)', marginBottom: '1rem', marginTop: '1rem' }}
             />
+            <SpeechToText onTranscriptChange={setDisplayName} />
             </div>
 
 

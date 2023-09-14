@@ -83,6 +83,7 @@ const LocationSearchInput: React.FC = () => {
 
   return (
     <ThemeProvider theme={theme}>
+    <p>Click Microphone For Speech To Text</p>
     <div>
       <PlacesAutocomplete
         value={address}
@@ -90,9 +91,7 @@ const LocationSearchInput: React.FC = () => {
         onSelect={handleSelect}
       >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-          <div>
-            <SpeechToText onTranscriptChange={setAddress} />
-            <p>Click Microphone For Speech To Text</p>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
               <TextField
                 label="Address"
                 variant="outlined"
@@ -103,6 +102,7 @@ const LocationSearchInput: React.FC = () => {
                 error={!!errors.address}
                 style={{ color: 'var(--setupBG)', marginBottom: '1rem', marginTop: '1rem' }}
               />
+              <SpeechToText onTranscriptChange={setAddress} />
             <div className="autocomplete-dropdown-container">
               {loading && <div>Loading...</div>}
               {suggestions.map((suggestion, index) => {
