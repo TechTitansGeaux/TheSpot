@@ -201,3 +201,32 @@ BE AWARE Ideal-ish image upload / src size: 1024 x 768 OR 1200 x 800 (-ish) / ra
   stroke-dasharray: 125.6;
   transform: rotate(-90deg);
 }
+
+/* google sso button */
+.google-button {
+  max-width: 320px;
+  display: flex;
+  padding: 0.7rem 1.4rem;
+  font-size: 0.675rem;
+  line-height: 1.25rem;
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+  vertical-align: middle;
+  align-items: center;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  gap: 0.75rem;
+  color: rgb(65, 63, 63);
+  background-color: #fff;
+  cursor: pointer;
+  transition: all .6s ease;
+}
+
+.google-button svg {
+  height: 24px;
+}
+
+.google-button:hover {
+  transform: scale(1.02);
+}

@@ -14,7 +14,6 @@ import TextField from '@mui/material/TextField';
 import UploadFile from '@mui/icons-material/UploadFile';
 import MenuItem from '@mui/material/MenuItem';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Location from './Location';
 import SpeechToText from '../ProfileSetUp/SpeechToText'
 
 
@@ -213,11 +212,10 @@ const Settings: React.FC<Props> = ({fontSize, startWatch}) => {
             </Button>
           )}
         </div>
-        <Location startWatch={startWatch} />
 
-        <div>
+        <p>Click Microphone For Speech To Text</p>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
             <SpeechToText onTranscriptChange={setDisplayName} />
-            <p>Click Microphone For Speech To Text</p>
             <TextField
               label="Display Name"
               variant="outlined"

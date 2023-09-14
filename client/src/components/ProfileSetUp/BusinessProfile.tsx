@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { setAuthUser } from '../../store/appSlice';
 import { RootState } from '../../store/store';
-// import Location from './Location';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -18,7 +17,6 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import SpeechToText from '../ProfileSetUp/SpeechToText';
 import LocationSearchInput from './LocationSearchInput';
-
 
 const theme = createTheme({
   palette: {
@@ -106,6 +104,21 @@ const BusinessProfile = () => {
       newErrors.privacy = '';
     }
 
+    if (!displayName) {
+      newErrors.displayName = 'Display Name is required.';
+    } else {
+      newErrors.displayName = '';
+    }
+
+    // Check if the username already exists in the database
+    const allUsers = await axios.get('/users/');
+
+    if (allUsers.data.some((user: { username: string; }) => user.username === username)) {
+    // Username already exists, suggest a new username
+    const suggestedUsername = generateSuggestedUsername(username);
+    newErrors.username = `Username already exists. Try '${suggestedUsername}' or choose a different one.`;
+  }
+
     setErrors(newErrors);
 
     if (
@@ -141,8 +154,16 @@ const BusinessProfile = () => {
       });
 };
 
+  // Function to generate a suggested username based on the original username and a random number
+  const generateSuggestedUsername = (originalUsername: string) => {
+    let suggestedUsername = originalUsername;
+    const counter = Math.floor(Math.random());
 
 
+    suggestedUsername = `${originalUsername}_${counter}`;
+
+    return suggestedUsername;
+  };
 
   const handleImageChange = (event: any) => {
     setSelectedImage(event.target.files[0]);
@@ -167,16 +188,6 @@ const BusinessProfile = () => {
       setErrors({ ...errors, uploadImage: 'An error occurred while uploading the image. Please try again later.' });
     }
   };
-
-
-
-
-
-  // const handleTranscriptChange = (newTranscript: any) => {
-  //   //  use the newTranscript value to update the relevant text field
-  //   return newTranscript; //updating displayName with transcript
-  // };
-
 
   return (
     <ThemeProvider theme={theme}>
@@ -222,9 +233,7 @@ const BusinessProfile = () => {
           )}
 
             {/* Username field */}
-            <div>
-            <SpeechToText onTranscriptChange={setUsername} />
-            <p>Click Microphone For Speech To Text</p>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
             <TextField
               label="Username"
               variant="outlined"
@@ -239,12 +248,12 @@ const BusinessProfile = () => {
               error={!!errors.username}
               style={{ color: 'var(--setupBG)', marginBottom: '1rem', marginTop: '1rem' }}
             />
+            <SpeechToText onTranscriptChange={setUsername} />
             </div>
 
 
             {/* Display Name field */}
-            <div>
-            <SpeechToText onTranscriptChange={setDisplayName} />
+            <div style={{ display: 'flex', alignItems: 'center',  }}>
             <TextField
               label="Display Name"
               variant="outlined"
@@ -259,6 +268,7 @@ const BusinessProfile = () => {
               error={!!errors.displayName}
               style={{ color: 'var(--setupBG)', marginBottom: '1rem', marginTop: '1rem' }}
             />
+            <SpeechToText onTranscriptChange={setDisplayName} />
             </div>
 
 

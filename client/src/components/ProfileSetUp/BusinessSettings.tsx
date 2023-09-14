@@ -241,10 +241,7 @@ useEffect(() => {
           )}
         </div>
         <LocationSearchInput />
-
-        <div>
-            <SpeechToText onTranscriptChange={setDisplayName} />
-            <p>Click Microphone For Speech To Text</p>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
             <TextField
               label="Display Name"
               variant="outlined"
@@ -256,6 +253,7 @@ useEffect(() => {
               }}
               style={{ color: 'var(--setupBG)', marginBottom: '1rem', marginTop: '1rem' }}
             />
+            <SpeechToText onTranscriptChange={setDisplayName} />
             </div>
 
 
