@@ -14,7 +14,8 @@ import TextField from '@mui/material/TextField';
 import UploadFile from '@mui/icons-material/UploadFile';
 import MenuItem from '@mui/material/MenuItem';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import SpeechToText from '../ProfileSetUp/SpeechToText'
+import SpeechToText from '../ProfileSetUp/SpeechToText';
+
 
 
 
@@ -172,13 +173,6 @@ const Settings: React.FC<Props> = ({fontSize, startWatch}) => {
     }
   };
 
-  const handleLogout = () => {
-    // logout the user by clearing the authUser state
-    dispatch(setAuthUser(null));
-    // redirect the user to the homepage
-    window.location.href = `${process.env.HOST}/`;
-  };
-
   if (!authUser) {
     // Handle the case when authUser is null, e.g., show a loading spinner
     return <div>Loading...</div>;
@@ -215,7 +209,6 @@ const Settings: React.FC<Props> = ({fontSize, startWatch}) => {
 
         <p>Click Microphone For Speech To Text</p>
         <div style={{ display: 'flex', alignItems: 'center' }}>
-            <SpeechToText onTranscriptChange={setDisplayName} />
             <TextField
               label="Display Name"
               variant="outlined"
@@ -225,8 +218,9 @@ const Settings: React.FC<Props> = ({fontSize, startWatch}) => {
               onChange={(e) => {
                 setDisplayName(e.target.value);
               }}
-              style={{ color: 'var(--setupBG)', marginBottom: '1rem' }}
+              style={{ color: 'var(--setupBG)', marginBottom: '1rem', marginTop: '1rem' }}
             />
+            <SpeechToText onTranscriptChange={setDisplayName} />
             </div>
 
 
@@ -284,23 +278,14 @@ const Settings: React.FC<Props> = ({fontSize, startWatch}) => {
             <MenuItem value='lg-font'>Large</MenuItem>
           </TextField>
 
-
-              <Button
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
+            <Button
               variant="contained"
               color="secondary"
               onClick={handleSettings}
-              style={{ marginTop: '1rem', marginBottom: '1rem' }}
             >
               Save Profile
             </Button>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
-              <Button
-                variant="outlined"
-                color="secondary"
-                onClick={handleLogout}
-              >
-                Logout
-              </Button>
 
               <Button
                 variant="outlined"
