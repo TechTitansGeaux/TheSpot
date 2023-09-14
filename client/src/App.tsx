@@ -104,7 +104,7 @@ const App = () => {
 
 useEffect(() => {
   startGeolocationWatch();
-}, []);
+}, [authUser]);
 
 
   // get all other users
