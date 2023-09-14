@@ -101,7 +101,7 @@ const theme = createTheme({
           style: {
             '& .MuiSnackbarContent-root': {
               background: '#f433ab',
-              zIndex: 99999
+              zIndex: '99999'
             },
           },
         },
@@ -261,6 +261,7 @@ const ReelItem: React.FC<Props> = ({
   };
 
   // RSVP functionality
+
   const toggleRsvpButton = useCallback(() => {
     getRSVPs();
   }, []);
@@ -273,6 +274,7 @@ const ReelItem: React.FC<Props> = ({
       .then((data) => {
         console.log('RSVP added and Updated via AXIOS', data);
         setRsvpTotal((prev) => prev + 1);
+        // setDisableRsvp((prev) => [...prev, [EventId, user?.id]]);
       })
       .catch((err) => console.error('Like AXIOS route Error', err));
   };
@@ -300,9 +302,6 @@ const ReelItem: React.FC<Props> = ({
         data.map((user: any) => {
           if (user.status === 'pending') {
             setStayDisabled((prev) => [...prev, user.accepter_id]);
-            console.log(
-              'useEffect axios setStayDisabled | ReelItem.tsx line 320'
-            );
           }
         });
       })
@@ -320,7 +319,6 @@ const ReelItem: React.FC<Props> = ({
 
   // ADD ONE LIKE per Reel
   const handleAddLike = (reelId: number, idUser: number) => {
-    // console.log('ADD like of reelId =>', reelId);
     toggleLikeButton();
     axios
       .put(`/likes/addLike/${reelId}`)
@@ -463,9 +461,6 @@ const ReelItem: React.FC<Props> = ({
             .then((_) => {
               myRef.current.pause();
               setLoop(false);
-              console.log(
-                'useEffect Intersection API pause | ReelItem.tsx line 345'
-              );
             })
             .catch((err) => {
               console.error('Auto-play was prevented', err);
@@ -474,9 +469,6 @@ const ReelItem: React.FC<Props> = ({
           // else video is out of view PAUSE video and don't Loop
           myRef.current.play();
           setLoop(true);
-          console.log(
-            'useEffect Intersection API play | ReelItem.tsx line 352'
-          );
         }
       });
     });
@@ -484,6 +476,12 @@ const ReelItem: React.FC<Props> = ({
 
     return () => observer.disconnect();
   }, [user]);
+
+  //TEST FUNCTIONALITY OF LIKES AND RSVPS
+  useEffect(() => {
+    toggleLikeButton();
+    toggleRsvpButton();
+  }, []);
 
   const action = (
     <React.Fragment>
@@ -498,12 +496,6 @@ const ReelItem: React.FC<Props> = ({
     </React.Fragment>
   );
 
-  // console.log('reels ---------->', reels)
-  // console.log('reel from REELITEM ---------->', reels);
-  // console.log('rsvpTotal', rsvpTotal)
-  // console.log('disableRsvp', disableRsvp);
-  // console.log('likesArr', likesArr);
-  // console.log('likes', likes);
   return (
     <div>
       <ThemeProvider theme={theme}>

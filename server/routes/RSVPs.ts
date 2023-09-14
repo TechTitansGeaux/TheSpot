@@ -58,10 +58,16 @@ rsvpRouter.put('/addRsvp/:EventId', (req: any, res: any) => {
     })
     .then((response: Express.Response) => {
       console.log('RSVP response', response)
-      RSVPs.create({
+      RSVPs.findOrCreate({
+        where: {
         UserId: id,
         EventId: EventId
-       })
+      },
+      defaults: {
+          UserId: id,
+          EventId: EventId
+        }
+      });
       res.sendStatus(201);
     })
     .catch((err: any) => {
