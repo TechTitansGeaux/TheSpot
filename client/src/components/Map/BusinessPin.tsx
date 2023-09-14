@@ -1,6 +1,7 @@
 import React from 'react';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import dayjs = require('dayjs');
+import { Marker, useMap } from 'react-map-gl';
 dayjs.extend(localizedFormat);
 
 type Props = {
@@ -20,15 +21,15 @@ type Props = {
     createdAt: string
     updatedAt: string
   }
-  lat: number
-  lng: number
-  setZoom: (zoom: number) => void
-  setCenter: (center: object) => void
-  closeAllPopUps: () => void
+  latitude: number
+  longitude: number
+  i: number
+  // closeAllPopUps: () => void
   zoom: number
 }
 
-const BusinessPin: React.FC<Props> = ({ business, setCenter, setZoom, lat, lng, zoom }) => {
+const BusinessPin: React.FC<Props> = ({ business, latitude, longitude, i, zoom }) => {
+
   const togglePopUp = () => {
     const box = document.getElementById('popUp' + business.username + business.id)
     if (box.style.display === 'block') {
@@ -42,15 +43,20 @@ const BusinessPin: React.FC<Props> = ({ business, setCenter, setZoom, lat, lng, 
     }
   }
 
+  const { current } = useMap();
+
+  const zoomTo = (lng: number, lat: number) => {
+    if (zoom < 15) {
+      current.flyTo({center: [+lng, +lat], zoom: 15});
+    } else {
+      current.flyTo({center: [+lng, +lat]});
+    }
+  }
+
   return (
-    <div>
+    <Marker longitude={longitude} latitude={latitude} key={'userPin' + i} anchor='top' style={{zIndex: '0'}}>
       <div className='businessDot' id={business.username + business.id} onClick={ () => {
-        if (zoom < 15) {
-          setZoom(15);
-          setCenter({lat: lat - 0.005, lng: lng});
-        } else {
-          setCenter({lat: lat - (0.005 / ( 2 ** (zoom - 15))), lng: lng});
-        }
+        zoomTo(longitude, latitude);
         togglePopUp();
       }} >
         <img
@@ -72,7 +78,7 @@ const BusinessPin: React.FC<Props> = ({ business, setCenter, setZoom, lat, lng, 
             </p>
           </div>
       </div>
-    </div>
+    </Marker>
   )
 }
 

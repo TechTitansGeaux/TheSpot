@@ -1,9 +1,8 @@
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Marker, useMap } from 'react-map-gl';
 import React from 'react';
 import axios from 'axios';
 import dayjs = require('dayjs');
@@ -26,8 +25,6 @@ type Props = {
     createdAt: string
     updatedAt: string
   }
-  lat: number
-  lng: number
   friendList: number[]
   pendingFriendList: number[]
   loggedIn: {
@@ -46,10 +43,11 @@ type Props = {
   }
   getPendingFriendList: () => void
   getFriendList: () => void
-  setZoom: (zoom: number) => void
-  setCenter: (center: object) => void
-  closeAllPopUps: () => void
+  latitude: number
+  longitude: number
+  i: number
   zoom: number
+
 };
 
 const addFriendTheme = createTheme({
@@ -82,7 +80,17 @@ const rmFriendTheme = createTheme({
   },
 });
 
-const UserPin: React.FC<Props> = ({ user, loggedIn, lat, lng, zoom, friendList, pendingFriendList, getFriendList, getPendingFriendList, setZoom, setCenter }) => {
+const UserPin: React.FC<Props> = ({ user, loggedIn, friendList, pendingFriendList, longitude, latitude, i, getFriendList, getPendingFriendList, zoom }) => {
+
+  const { current } = useMap();
+
+  const zoomTo = (lng: number, lat: number) => {
+    if (zoom < 15) {
+      current.flyTo({center: [+lng, +lat], zoom: 15});
+    } else {
+      current.flyTo({center: [+lng, +lat]});
+    }
+  }
 
   const togglePopUp = () => {
     const box = document.getElementById('popUp' + user.username + user.id)
@@ -97,8 +105,8 @@ const UserPin: React.FC<Props> = ({ user, loggedIn, lat, lng, zoom, friendList, 
     }
   }
 
-  // request friend ship
-  const addFriend = () => {
+   // request friend ship
+   const addFriend = () => {
     axios
       .post('/friends', {
         // accepter_id is user on reel
@@ -127,85 +135,78 @@ const UserPin: React.FC<Props> = ({ user, loggedIn, lat, lng, zoom, friendList, 
 
   const isNotLoggedInUser = (user.id !== loggedIn.id) || null;
 
-
-
   return (
-    <div>
-      <div className='userDot' id={user.username + user.id} onClick={ () => {
-        if (zoom < 15) {
-          setZoom(15);
-          setCenter({lat: lat - 0.005, lng: lng});
-        } else {
-          setCenter({lat: lat - (0.005 / ( 2 ** (zoom - 15))), lng: lng});
-        }
-        togglePopUp();
-      } } >
-        <img
-          src={user.mapIcon}
-          style={{ width: '40px', height: '40px', marginLeft: '1.5px', marginTop: '2.5px'}}
-        />
-      </div>
-      <div className='userPopUp' id={'popUp' + user.username + user.id}>
-        <div style={{ textAlign: 'center', fontSize:'20px', marginTop: '5px' }}>
-          {user.displayName}
+    <Marker longitude={longitude} latitude={latitude} key={'userPin' + i} anchor='top' style={{zIndex: '0'}}>
+        <div className='userDot' id={user.username + user.id} onClick={ () => {
+          togglePopUp();
+          zoomTo(longitude, latitude);
+        } } >
+          <img
+            src={user.mapIcon}
+            style={{ width: '40px', height: '40px', marginLeft: '1.5px', marginTop: '2.5px'}}
+          />
         </div>
-        <div style={{ textAlign: 'center', fontSize: '15px' }}>
-          @{user.username}
+        <div className='userPopUp' id={'popUp' + user.username + user.id}>
+          <div style={{ textAlign: 'center', fontSize:'20px', marginTop: '5px' }}>
+            {user.displayName}
+          </div>
+          <div style={{ textAlign: 'center', fontSize: '15px' }}>
+            @{user.username}
+          </div>
+          <div style={{ textAlign: 'center', fontSize: '15px', marginBottom: '10px' }}>
+            <p>
+              {`Joined: ${dayjs(user.createdAt).format('ll')}`}
+            </p>
+          </div>
+          <div className='addOrRmFriend'>
+            {!pendingFriendList.includes(user.id) && !friendList.includes(user.id) && isNotLoggedInUser && (
+              <div style={{ position: 'relative', top: '-166.5px', left: '-50%', marginBottom: '10px' }}>
+                <ThemeProvider theme={addFriendTheme}>
+                  <div>
+                    <Box>
+                      <Fab
+                        variant="extended"
+                        size="small"
+                        color="primary"
+                        className='friend-add-btn'
+                        onClick={() => { addFriend(); } }
+                      > Add Friend
+                      </Fab>
+                    </Box>
+                  </div>
+                </ThemeProvider>
+              </div>
+            )}
+          </div>
+          <div className='addOrRmFriend'>
+            {friendList.includes(user.id) && (
+              <div style={{ position: 'relative', top: '-166.5px', left: '-57.5%', marginBottom: '10px' }}>
+                <ThemeProvider theme={rmFriendTheme}>
+                  <div>
+                    <Box>
+                      <Fab
+                        variant="extended"
+                        size="small"
+                        color="primary"
+                        className='friend-add-btn'
+                        onClick={() => { removeFriend(); } }
+                      > Remove Friend
+                      </Fab>
+                    </Box>
+                  </div>
+                </ThemeProvider>
+              </div>
+            )}
+          </div>
+          <div className='addOrRmFriend'>
+            {pendingFriendList.includes(user.id) && (
+              <div>
+                <div style={{ position: 'relative', top: '-170px', marginBottom: '10px', left: '70px', fontSize: '15px' }}>request pending</div>
+              </div>
+            )}
+          </div>
         </div>
-        <div style={{ textAlign: 'center', fontSize: '15px', marginBottom: '10px' }}>
-          <p>
-            {`Joined: ${dayjs(user.createdAt).format('ll')}`}
-          </p>
-        </div>
-        <div className='addOrRmFriend'>
-          {!pendingFriendList.includes(user.id) && !friendList.includes(user.id) && isNotLoggedInUser && (
-            <div style={{ position: 'relative', top: '-166.5px', left: '-50%', marginBottom: '10px' }}>
-              <ThemeProvider theme={addFriendTheme}>
-                <div>
-                  <Box>
-                    <Fab
-                      variant="extended"
-                      size="small"
-                      color="primary"
-                      className='friend-add-btn'
-                      onClick={() => { addFriend(); } }
-                    > Add Friend
-                    </Fab>
-                  </Box>
-                </div>
-              </ThemeProvider>
-            </div>
-          )}
-        </div>
-        <div className='addOrRmFriend'>
-          {friendList.includes(user.id) && (
-            <div style={{ position: 'relative', top: '-166.5px', left: '-57.5%', marginBottom: '10px' }}>
-              <ThemeProvider theme={rmFriendTheme}>
-                <div>
-                  <Box>
-                    <Fab
-                      variant="extended"
-                      size="small"
-                      color="primary"
-                      className='friend-add-btn'
-                      onClick={() => { removeFriend(); } }
-                    > Remove Friend
-                    </Fab>
-                  </Box>
-                </div>
-              </ThemeProvider>
-            </div>
-          )}
-        </div>
-        <div className='addOrRmFriend'>
-          {pendingFriendList.includes(user.id) && (
-            <div>
-              <div style={{ position: 'relative', top: '-170px', marginBottom: '10px', left: '70px', fontSize: '15px' }}>request pending</div>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
+    </Marker>
   );
 }
 

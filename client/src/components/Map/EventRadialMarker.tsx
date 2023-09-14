@@ -1,16 +1,19 @@
 import React from 'react';
+import { Marker } from 'react-map-gl';
 
 type Props = {
   zoom: number
   key: string
-  lat: number
-  lng: number
+  latitude: number
+  longitude: number
 }
 
-const EventRadialMarker: React.FC<Props>= ({zoom}) => {
+const EventRadialMarker: React.FC<Props>= ({zoom, latitude, longitude}) => {
   return (
-    <div style={{  height: `${(20 * ( 2 ** (zoom - 15)))}px`, width: `${(20 * ( 2 ** (zoom - 15)))}px` }} className='EventRadialMarker'>
-    </div>
+    <Marker latitude={latitude} longitude={longitude} anchor='center' style={{zIndex: '0'}} >
+      <div style={{  height: `${(20 * ( 2 ** (zoom - 15)))}px`, width: `${(20 * ( 2 ** (zoom - 15)))}px` }} className='EventRadialMarker'>
+      </div>
+    </Marker>
   )
 }
 
