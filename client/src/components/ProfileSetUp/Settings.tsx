@@ -21,7 +21,6 @@ import SpeechToText from '../ProfileSetUp/SpeechToText';
 
 type Props = {
 fontSize: string;
-startWatch: () => void;
 }
 
 
@@ -33,7 +32,7 @@ const fontSizes = {
 };
 
 
-const Settings: React.FC<Props> = ({fontSize, startWatch}) => {
+const Settings: React.FC<Props> = ({fontSize}) => {
   const dispatch = useDispatch();
   const authUser = useSelector((state: RootState) => state.app.authUser);
   const [selectedImage, setSelectedImage] = React.useState(null);

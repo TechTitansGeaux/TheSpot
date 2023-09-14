@@ -24,6 +24,7 @@ import { setAuthUser, setIsAuthenticated, setFontSize } from './store/appSlice';
 import { RootState } from './store/store';
 import { useTheme } from '@mui/material/styles';
 
+
 type User = {
   id: number;
   username: string;
@@ -47,6 +48,7 @@ const App = () => {
   const [user, setUser] = useState<User>(null);
   const fontSize = useSelector((state: RootState) => state.app.fontSize); // Default font size
   const [allUsers, setAllUsers] = useState<[User]>(null);
+  const [location, setLocation] = useState<User>(null);
 
   const fetchAuthUser = async () => {
     try {
@@ -76,18 +78,19 @@ const App = () => {
         (position) => {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
-        console.log(position, '<-----POSITION');
         if (authUser?.type === 'personal') {
           const newGeolocation = `${latitude},${longitude}`;
-          console.log(newGeolocation, '<-----NEWGEOLO');
-          axios
-            .patch(`/users/updateGeolocation/${authUser.id}`, { geolocation: newGeolocation })
-            .then((response) => {
-              dispatch(setAuthUser(response.data));
-            })
-            .catch((error) => {
-              console.error('Error updating geolocation on server:', error);
-            });
+          if (String(position) !== newGeolocation) {
+            console.log(newGeolocation, '<-----NEWGEOLO');
+            axios
+              .patch(`/users/updateGeolocation/${authUser.id}`, { geolocation: newGeolocation })
+              .then((response) => {
+                dispatch(setAuthUser(response.data));
+              })
+              .catch((error) => {
+                console.error('Error updating geolocation on server:', error);
+              });
+            }
         }
       },
       (error) => {
@@ -104,7 +107,7 @@ const App = () => {
 
 useEffect(() => {
   startGeolocationWatch();
-}, [authUser]);
+}, [location]);
 
 
   // get all other users
@@ -118,6 +121,14 @@ useEffect(() => {
     } catch (error) {
       console.error('error in getAllUsers App', error);
     }
+  }
+
+  useEffect(() => {
+    getLocation();
+  }, [authUser])
+
+  const getLocation = () => {
+    setLocation(authUser?.geolocation);
   }
 
   return (
@@ -134,7 +145,7 @@ useEffect(() => {
           <Route path='/FriendRequests' element={<FriendRequestList allUsers={allUsers} user={user} />} ></Route>
           <Route path='/Follows' element={<FollowersList allUsers={allUsers}  user={user} />}></Route>
           <Route path='/Likes' element={<LikesList user={user} />}></Route>
-          <Route path='/Settings' element={<Settings startWatch={startGeolocationWatch} fontSize={fontSize} />} ></Route>
+          <Route path='/Settings' element={<Settings fontSize={fontSize} />} ></Route>
           <Route path='/BusinessSettings' element={<BusinessSettings fontSize={fontSize}/>}></Route>
           <Route path='/CreateReel' element={<CreateReel user={user} />} ></Route>
           <Route path='/Map' element={<Map reelEvent={null} loggedIn={user} />}></Route>
