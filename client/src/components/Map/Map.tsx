@@ -171,8 +171,6 @@ const Map: React.FC<Props> = (props) => {
     }
   }, [loggedIn]);
 
-  console.log(refresh, 'REFRESH');
-
   const mapRef = useRef<any>();
 
   const bounds = mapRef.current ? mapRef.current.getMap().getBounds().toArray().flat() : null;
@@ -292,7 +290,7 @@ const Map: React.FC<Props> = (props) => {
   return (
     <div className='mapParent' onWheel={closeAllPopUps}>
       <div className='mapChild'>
-      <div className='recenterButton' onClick={  () => {
+      <div className='recenterButton' onClick={() => {
         const [lat, lng] = splitCoords(loggedIn.geolocation);
         setViewState({
           latitude: +lat,
