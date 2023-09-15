@@ -320,8 +320,8 @@ const Map: React.FC<Props> = (props) => {
                 const { cluster: isCluster, point_count: pointCount, business} = cluster.properties;
 
                 if (isCluster) {
-                    const expansionZoom = Math.min(businessSupercluster.getClusterExpansionZoom(cluster.id), 20);
-                    return <ClusterPin amount={pointCount} key={'businessCluster' + i} latitude={lat} longitude={lng} className='BusinessClusterPin' expansionZoom={expansionZoom}/>;
+                  const expansionZoom = Math.min(businessSupercluster.getClusterExpansionZoom(cluster.id), 20);
+                  return <ClusterPin amount={pointCount} key={'businessCluster' + i} latitude={lat} longitude={lng} className='BusinessClusterPin' expansionZoom={expansionZoom}/>;
                 } else {
                   return <BusinessPin
                   business={business}
