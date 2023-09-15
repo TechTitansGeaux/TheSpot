@@ -23,6 +23,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setAuthUser, setIsAuthenticated, setFontSize } from './store/appSlice';
 import { RootState } from './store/store';
 import { useTheme } from '@mui/material/styles';
+import io from 'socket.io-client';
+const socket = io();
 
 
 type User = {
@@ -48,7 +50,7 @@ const App = () => {
   const [user, setUser] = useState<User>(null);
   const fontSize = useSelector((state: RootState) => state.app.fontSize); // Default font size
   const [allUsers, setAllUsers] = useState<[User]>(null);
-  const [location, setLocation] = useState<User>(null);
+  const [location, setLocation] = useState<string>(null);
 
   const fetchAuthUser = async () => {
     try {
@@ -73,25 +75,31 @@ const App = () => {
   }, [fontSize]);
 
   const startGeolocationWatch = () => {
+    if (authUser?.geolocation === location) {
+      return;
+    }
     if (navigator.geolocation) {
       navigator.geolocation.watchPosition(
         (position) => {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
+        const newGeolocation = `${latitude},${longitude}`;
+        setLocation(newGeolocation);
+        console.log(location, '<-----LOCATION');
+        console.log(user?.geolocation, '<----POSITION');
         if (authUser?.type === 'personal') {
-          const newGeolocation = `${latitude},${longitude}`;
-          if (String(position) !== newGeolocation) {
-            console.log(newGeolocation, '<-----NEWGEOLO');
             axios
               .patch(`/users/updateGeolocation/${authUser.id}`, { geolocation: newGeolocation })
               .then((response) => {
                 dispatch(setAuthUser(response.data));
+                setUser(response.data);
+                socket.emit('userGeolocationUpdate', 'refresh')
               })
               .catch((error) => {
                 console.error('Error updating geolocation on server:', error);
               });
-            }
         }
+
       },
       (error) => {
         console.error('Error watching geolocation:', error);
@@ -121,14 +129,6 @@ useEffect(() => {
     } catch (error) {
       console.error('error in getAllUsers App', error);
     }
-  }
-
-  useEffect(() => {
-    getLocation();
-  }, [authUser])
-
-  const getLocation = () => {
-    setLocation(authUser?.geolocation);
   }
 
   return (

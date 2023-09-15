@@ -11,6 +11,8 @@ import useSupercluster from 'use-supercluster';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useLocation } from "react-router-dom";
 import CenterFocusStrongIcon from '@mui/icons-material/CenterFocusStrong';
+import io from 'socket.io-client';
+const socket = io();
 
 
 type Props =  {
@@ -51,6 +53,7 @@ const Map: React.FC<Props> = (props) => {
     zoom: 0.5068034173376552
   });
   const [ userLngLat, setUserLngLat ] = useState([]);
+  const [ refresh, setRefresh] = useState(false);
 
    // get event location if trying to see event loc from reel
    const location = useLocation();
@@ -140,12 +143,22 @@ const Map: React.FC<Props> = (props) => {
       getPendingFriendList();
       getEvents();
       getBusinesses();
+      setRefresh(false);
       if (!eventLocation) {
         const [lat, lng] = splitCoords(loggedIn.geolocation);
         setUserLngLat([+lng, + lat]);
       }
     }
-  }, [loggedIn])
+  }, [loggedIn, refresh])
+
+
+    socket.on('refresh', (data) => {
+      console.log('data', data);
+      setRefresh(true);
+    })
+
+
+  console.log(refresh);
 
   const mapRef = useRef<any>();
 
@@ -264,7 +277,6 @@ const Map: React.FC<Props> = (props) => {
     })
   }
 
-
   return (
     <div className='mapParent' onWheel={closeAllPopUps}>
       <div className='mapChild'>
@@ -295,6 +307,7 @@ const Map: React.FC<Props> = (props) => {
               userClusters.map((cluster: any, i: number) => {
                 const [ lng, lat ] = cluster.geometry.coordinates;
                 const { cluster: isCluster, point_count: pointCount, user} = cluster.properties;
+
 
                 if (isCluster) {
                   const expansionZoom = Math.min(userSupercluster.getClusterExpansionZoom(cluster.id), 20);
