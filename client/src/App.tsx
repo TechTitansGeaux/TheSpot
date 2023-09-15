@@ -140,13 +140,10 @@ const App = () => {
     }
 };
 
-
+// testing to run only once
   useEffect(() => {
     startGeolocationWatch();
-}, [user, location]);
-
-
-
+}, []); // [user, location] <- previous value
 
   // get all other users
   const getAllUsers = async () => {
