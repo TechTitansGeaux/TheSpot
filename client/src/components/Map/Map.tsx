@@ -272,7 +272,7 @@ const Map: React.FC<Props> = (props) => {
         }}> <CenterFocusStrongIcon /></div>
         <div id='map'>
           <MapBox
-            mapboxAccessToken="pk.eyJ1IjoiYmVuamFtaW5rbGVpbjk5IiwiYSI6ImNsbWUzMnZxZDFma3EzZHE2NG1hdjUxdjQifQ.-dyi2R3I4LmoAH-MWuNZPA"
+            mapboxAccessToken={`${process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}`}
             {...viewState}
             onMove={evt => {setViewState(evt.viewState)}}
             style={{width: '100%', height: '100%'}}
