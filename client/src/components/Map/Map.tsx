@@ -136,6 +136,11 @@ const Map: React.FC<Props> = (props) => {
         })
     }
 
+    socket.on('refresh', (data) => {
+      console.log('data', data);
+      setRefresh(true);
+    })
+
   useEffect(() => {
     if (loggedIn) {
       getUsers();
@@ -151,14 +156,16 @@ const Map: React.FC<Props> = (props) => {
     }
   }, [loggedIn, refresh])
 
-
-    socket.on('refresh', (data) => {
-      console.log('data', data);
-      setRefresh(true);
-    })
-
-
-  console.log(refresh);
+  useEffect(() => {
+    if (loggedIn){
+      const [lat, lng] = splitCoords(loggedIn.geolocation)
+      setViewState({
+        latitude: +lat,
+        longitude: +lng,
+        zoom: 15,
+      })
+    }
+  }, [loggedIn]);
 
   const mapRef = useRef<any>();
 
