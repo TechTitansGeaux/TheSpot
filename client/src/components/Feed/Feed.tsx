@@ -268,7 +268,7 @@ const Feed: React.FC<Props> = ({user}) => {
 
   useEffect(() => {
     userCoord(user);
-  }, [user, reels]);
+  }, [user]);
 
   useEffect(() => {
     getAllReels();
@@ -278,19 +278,19 @@ const Feed: React.FC<Props> = ({user}) => {
     if (user?.type === 'personal') {
       getFriendList();
     }
-  }, [filter]);
+  }, [user]);
 
   useEffect(() => {
     if (user?.type === 'personal') {
       getFollowingList();
     }
-  }, [filter]);
+  }, [user]);
 
   useEffect(() => {
     if (user?.type === 'business') {
       getFollowersList();
       }
-  }, [filter]);
+  }, [user]);
 
 
   return (
