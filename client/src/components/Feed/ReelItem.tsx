@@ -300,7 +300,7 @@ const ReelItem: React.FC<Props> = ({
       .then(({ data }) => {
         // console.log('data from friends to DISABLE button Axios GET ==>', data);
         data.map((user: any) => {
-          if (user.status === 'pending') {
+          if (user?.status === 'pending') {
             setStayDisabled((prev) => [...prev, user.accepter_id]);
           }
         });
@@ -684,7 +684,7 @@ const ReelItem: React.FC<Props> = ({
                         </Box>
                       </div>
                     ))}
-                {reel.UserId === user.id && (
+                {reel.UserId === user?.id && (
                   <div className='friend-request'>
                     <div>
                       <Tooltip

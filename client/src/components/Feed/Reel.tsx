@@ -5,10 +5,10 @@ import { useDispatch } from 'react-redux';
 import { setAuthUser, setIsAuthenticated } from '../../store/appSlice';
 import { FixedSizeList as List } from 'react-window';
 import InfiniteLoader from 'react-window-infinite-loader';
-// import { Suspense, lazy } from 'react';
-// import Loading from './Loading'
-// const ReelItem = lazy(() => import('./ReelItem'));
-import ReelItem from './ReelItem';
+import { Suspense, lazy } from 'react';
+import Loading from './Loading'
+const ReelItem = lazy(() => import('./ReelItem'));
+// import ReelItem from './ReelItem';
 import { useTheme } from '@mui/material/styles';
 import { AnimatePresence, motion } from 'framer-motion';
 import io from 'socket.io-client';
@@ -186,11 +186,11 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
       className='reel-container'
       // style={{ fontSize: theme.typography.fontSize }}
     >
+      <Suspense fallback={<Loading />}>
       <AnimatePresence initial={false}>
-        {/* <Suspense fallback={<Loading />}> */}
           {reels.map((reel) => {
             return (
-              <motion.div
+                <motion.div
                   key={reel.id}
                   className='reel-child'
                   initial={{ opacity: 0 }}
@@ -202,24 +202,24 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
                     delay: 0.2,
                   }}
                 >
-              {/* // <List> */}
-                <ReelItem
-                  key={reel.id + 'reelItem' + Math.floor(Math.random() * 35)}
-                  user={user}
-                  reel={reel}
-                  reels={reels}
-                  friendList={friendList}
-                  deleteReel={deleteReel}
-                  likes={likes}
-                  muted={muted}
-                  handleToggleMute={handleToggleMute}
-                />
-              {/* // </List> */}
+                  {/* // <List> */}
+                  <ReelItem
+                    key={reel.id + 'reelItem' + Math.floor(Math.random() * 35)}
+                    user={user}
+                    reel={reel}
+                    reels={reels}
+                    friendList={friendList}
+                    deleteReel={deleteReel}
+                    likes={likes}
+                    muted={muted}
+                    handleToggleMute={handleToggleMute}
+                  />
+                  {/* // </List> */}
                 </motion.div>
             );
           })}
-        {/* </Suspense> */}
       </AnimatePresence>
+      </Suspense>
     </main>
   );
 };
