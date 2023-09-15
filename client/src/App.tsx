@@ -75,7 +75,7 @@ const App = () => {
   }, [fontSize]);
 
   const startGeolocationWatch = () => {
-    if (authUser?.geolocation === location) {
+    if (user?.geolocation === location) {
       return;
     }
     if (navigator.geolocation) {

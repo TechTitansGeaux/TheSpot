@@ -148,13 +148,17 @@ const Map: React.FC<Props> = (props) => {
       getPendingFriendList();
       getEvents();
       getBusinesses();
-      setRefresh(false);
       if (!eventLocation) {
         const [lat, lng] = splitCoords(loggedIn.geolocation);
         setUserLngLat([+lng, + lat]);
       }
     }
-  }, [loggedIn, refresh])
+  }, [loggedIn])
+
+  useEffect(() => {
+    getUsers();
+    setRefresh(false);
+  }, [refresh])
 
   useEffect(() => {
     if (loggedIn){
@@ -166,6 +170,8 @@ const Map: React.FC<Props> = (props) => {
       })
     }
   }, [loggedIn]);
+
+  console.log(refresh, 'REFRESH');
 
   const mapRef = useRef<any>();
 
@@ -287,8 +293,13 @@ const Map: React.FC<Props> = (props) => {
   return (
     <div className='mapParent' onWheel={closeAllPopUps}>
       <div className='mapChild'>
-      <div className='recenterButton' onClick={ () => {
-          // const [lat, lng] = splitCoords(loggedIn.geolocation);
+      <div className='recenterButton' onClick={  () => {
+        const [lat, lng] = splitCoords(loggedIn.geolocation);
+        setViewState({
+          latitude: +lat,
+          longitude: +lng,
+          zoom: 15,
+        })
         }}> <CenterFocusStrongIcon /></div>
         <div id='map'>
           <MapBox
