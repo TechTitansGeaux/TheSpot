@@ -123,9 +123,9 @@ useEffect(() => {
     }
   }
 
-  useEffect(() => {
-    getLocation();
-  }, [authUser])
+  // useEffect(() => {
+  //   getLocation();
+  // }, [authUser])
 
   const getLocation = () => {
     setLocation(authUser?.geolocation);
