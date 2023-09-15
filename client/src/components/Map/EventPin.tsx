@@ -23,7 +23,6 @@ type Props = {
   }
   latitude: number
   longitude: number
-  i: number
   zoom: number
 }
 
@@ -42,7 +41,7 @@ const zoomToEventTheme = createTheme({
   },
 });
 
-const Event: React.FC<Props> = ({ event, latitude, longitude, i, zoom }) => {
+const Event: React.FC<Props> = ({ event, latitude, longitude, zoom }) => {
 
   const { current } = useMap();
 
@@ -80,7 +79,7 @@ const Event: React.FC<Props> = ({ event, latitude, longitude, i, zoom }) => {
   };
 
   return (
-    <Marker latitude={latitude} longitude={longitude} key={'eventPin' + i} anchor='top' style={{zIndex: '0'}}>
+    <Marker latitude={latitude} longitude={longitude} key={'eventPin' + event.id} anchor='top' style={{zIndex: '0'}}>
         <div className='eventDot' id={event.name + event.id} onClick={ () => {
           togglePopUp();
           zoomTo(longitude, latitude);

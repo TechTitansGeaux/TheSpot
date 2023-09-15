@@ -153,15 +153,14 @@ const Map: React.FC<Props> = (props) => {
 
   // clustering points for user pins
   const userPoints = users.filter((user) => {
-      if (user.id === loggedIn.id) {
-      return true;
+      if (user.type === 'business') {
+        return false;
+      } else if (user.id === loggedIn.id) {
+        return true;
       } else if (user.privacy === 'private') {
         return false;
       } else if (user.privacy === 'friends only' && !friendList.includes(user.id)){
        return false;
-      }
-      else if (user.type === 'business') {
-        return false
       } else {
         return true;
       }
@@ -310,7 +309,6 @@ const Map: React.FC<Props> = (props) => {
                     loggedIn={loggedIn}
                     latitude={+lat}
                     longitude={+lng}
-                    i={i}
                     zoom={viewState.zoom}
                     />
                 }
@@ -330,7 +328,6 @@ const Map: React.FC<Props> = (props) => {
                   key={business.id}
                   latitude={lat}
                   longitude={lng}
-                  i={i}
                   zoom={viewState.zoom}
                 />;
                 }
@@ -352,7 +349,6 @@ const Map: React.FC<Props> = (props) => {
                     latitude={+lat}
                     longitude={+lng}
                     key={event.id}
-                    i={i}
                     zoom={viewState.zoom}
                   />
                 }
