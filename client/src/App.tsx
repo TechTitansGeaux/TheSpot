@@ -51,6 +51,7 @@ const App = () => {
   const fontSize = useSelector((state: RootState) => state.app.fontSize); // Default font size
   const [allUsers, setAllUsers] = useState<[User]>(null);
   const [location, setLocation] = useState<string>(null);
+  const [geo, setGeo] = useState(true);
 
   const fetchAuthUser = async () => {
     try {
@@ -85,6 +86,7 @@ const App = () => {
         const longitude = position.coords.longitude;
         const newGeolocation = `${latitude},${longitude}`;
         setLocation(newGeolocation);
+        setGeo(false);
         console.log(location, '<-----LOCATION');
         console.log(user?.geolocation, '<----POSITION');
         if (authUser?.type === 'personal') {
@@ -115,7 +117,7 @@ const App = () => {
 
 useEffect(() => {
   startGeolocationWatch();
-}, [location]);
+}, [geo]);
 
 
   // get all other users

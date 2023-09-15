@@ -293,7 +293,7 @@ const Map: React.FC<Props> = (props) => {
   return (
     <div className='mapParent' onWheel={closeAllPopUps}>
       <div className='mapChild'>
-      <div className='recenterButton' onClick={  () => {
+      <div className='recenterButton' onClick={() => {
         const [lat, lng] = splitCoords(loggedIn.geolocation);
         setViewState({
           latitude: +lat,
