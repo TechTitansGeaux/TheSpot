@@ -92,7 +92,6 @@ const SignUp = () => {
                 className='phone-screen'
               >
                 <img
-                  // loading='lazy'
                   src={createReelImage}
                   alt='Create Reels'
                   className='phone-image'
@@ -110,7 +109,6 @@ const SignUp = () => {
                 className='phone-screen'
               >
                 <img
-                  // loading='lazy'
                   src={mapsImage}
                   alt='MAPS'
                   className='phone-image'
@@ -128,7 +126,6 @@ const SignUp = () => {
                 className='phone-screen'
               >
                 <img
-                  // loading='lazy'
                   src={eventsImage}
                   alt='EVENTS'
                   className='phone-image'
