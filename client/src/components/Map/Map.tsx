@@ -171,8 +171,6 @@ const Map: React.FC<Props> = (props) => {
     }
   }, [loggedIn]);
 
-  console.log(refresh, 'REFRESH');
-
   const mapRef = useRef<any>();
 
   const bounds = mapRef.current ? mapRef.current.getMap().getBounds().toArray().flat() : null;
