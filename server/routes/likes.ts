@@ -133,4 +133,26 @@ likesRouter.get('/likesuser', (req: any, res: any) => {
     });
 });
 
+// GET likes from likes table in most recent order AND by current user logged in AND checked is null
+likesRouter.get('/likesusernull', (req: any, res: any) => {
+  const { id } = req.user;
+  Likes.findAll({
+    order: [['createdAt', 'DESC']],
+    include: [{ model: Users }, { model: Reels }],
+    where: { UserId: id, checked: null},
+  })
+    .then((response: any) => {
+      if (response === null) {
+        console.log('likes do not exist');
+        res.sendStatus(404);
+      } else {
+        res.status(200).send(response);
+      }
+    })
+    .catch((err: any) => {
+      console.error('Cannot GET likes:', err);
+      res.sendStatus(500);
+    });
+});
+
 export default likesRouter;

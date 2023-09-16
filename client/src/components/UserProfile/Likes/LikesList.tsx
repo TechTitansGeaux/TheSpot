@@ -25,13 +25,12 @@ const LikesList: React.FC<Props> = ({user}) => {
     // get reels that have been liked AND checked
     const getLikes = () => {
       if (user) {
-        console.log('user', user);
+        // console.log('user', user);
         axios
           .get('/likes/likesuser')
           .then((response) => {
-            console.log('likes:', response.data);
+            // console.log('likes:', response.data);
             setLikesArr(response.data);
-            console.log('likes array:', likesArr);
           })
           .catch((err) => {
             console.error('Could not GET all likes:', err);
@@ -45,16 +44,16 @@ const LikesList: React.FC<Props> = ({user}) => {
 
   return (
     <ul>
-    <div className='container-likes'>
-      <h1 className='title'>Likes</h1>
-      {likesArr.map((like, index) => {
-        return <LikesEntry key={`${index}-${like.id}`}
-        like={like}
-        user={user}
-        />
-      })}
+      <div className='container-likes'>
+        <h1 className='title'>Likes</h1>
+        {likesArr.map((like, index) => {
+          return <LikesEntry key={`${index}-${like.id}`}
+          like={like}
+          user={user}
+          />
+        })}
 
-    </div>
+      </div>
 
     </ul>
   );
