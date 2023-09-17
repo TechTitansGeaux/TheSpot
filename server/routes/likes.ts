@@ -111,7 +111,7 @@ likesRouter.put('/checked/:id', (req: any, res: any) => {
     })
 });
 
-// GET likes from likes table in most recent order AND ReelId === Users.Id
+// GET likes from likes table in most recent order AND Reels UserId === user.id
 likesRouter.get('/likesuser', (req: any, res: any) => {
   const { id } = req.user;
   Likes.findAll({
@@ -134,7 +134,7 @@ likesRouter.get('/likesuser', (req: any, res: any) => {
     });
 });
 
-// GET likes from likes table in most recent order AND by current user logged in AND checked is null
+// GET likes from likes table in most recent order AND by checked is null
 likesRouter.get('/likesusernull', (req: any, res: any) => {
   const { id } = req.user;
   Likes.findAll({
