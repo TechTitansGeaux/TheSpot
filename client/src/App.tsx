@@ -25,6 +25,7 @@ import { setAuthUser, setIsAuthenticated, setFontSize } from './store/appSlice';
 import { RootState } from './store/store';
 import { useTheme } from '@mui/material/styles';
 import io from 'socket.io-client';
+import { start } from 'repl';
 const socket = io();
 
 
@@ -98,15 +99,12 @@ const App = () => {
   }, [fontSize]);
 
   const startGeolocationWatch = () => {
+    console.log('before if---------')
     if (user && location) {
     const [lat1, lng1] = user.geolocation.split(',');
     const [lat2, lng2] = location.split(',');
-    // if distance b/t user and center of event is less than 300ft
-    if (distance(+lat1, +lat2, +lng1, +lng2) < 150) {
-      return;
-    }
     if (navigator.geolocation) {
-      navigator.geolocation.watchPosition(
+      navigator.geolocation.getCurrentPosition(
         (position) => {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
@@ -114,6 +112,10 @@ const App = () => {
         setLocation(newGeolocation);
         console.log(location, '<-----LOCATION');
         console.log(user?.geolocation, '<----POSITION');
+        if (distance(+lat1, +lat2, +lng1, +lng2) < 10) {
+          return;
+        }
+        console.log('after if-----------')
         if (authUser?.type === 'personal') {
             axios
               .patch(`/users/updateGeolocation/${authUser.id}`, { geolocation: newGeolocation })
@@ -141,10 +143,19 @@ const App = () => {
     }
 };
 
-// testing to run only once
   useEffect(() => {
-    startGeolocationWatch();
-}, [user, location]); // [user, location] <- previous value
+    // const interval = setInterval(() => {
+    //   startGeolocationWatch();
+    //   console.log('weeeeee')
+    // }, 8000);
+
+    // return () => {
+    //   clearInterval(interval);
+    // }
+
+    startGeolocationWatch()
+}, [user]);
+
 
   // get all other users
   const getAllUsers = async () => {
