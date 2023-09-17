@@ -213,7 +213,7 @@ const Feed: React.FC<Props> = ({user}) => {
         axios
           .get('/feed/followers')
           .then((response) => {
-            console.log('followers:', response.data);
+            // console.log('followers:', response.data);
             setFollowers(response.data);
           })
           .catch((err) => {
