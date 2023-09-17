@@ -3,14 +3,11 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { setAuthUser, setIsAuthenticated } from '../../store/appSlice';
-import { FixedSizeList as List } from 'react-window';
-import InfiniteLoader from 'react-window-infinite-loader';
 import { Suspense, lazy } from 'react';
 import Loading from './Loading'
 const ReelItem = lazy(() => import('./ReelItem'));
 // import ReelItem from './ReelItem';
 import { useTheme } from '@mui/material/styles';
-import { AnimatePresence, motion } from 'framer-motion';
 import io from 'socket.io-client';
 const socket = io();
 
@@ -34,6 +31,10 @@ type Props = {
     accepter_id: number;
   }[];
   getAllReels: any;
+  getAllReelsRecent: any;
+  reelsLoaded: boolean;
+  filter: string;
+  handleAlertOpen: any;
 };
 
 type User = {
@@ -67,14 +68,19 @@ type Event = {
   PlaceId: 1;
 };
 
-const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
+const Reel: React.FC<Props> = ({
+  reels,
+  getAllReels,
+  getAllReelsRecent,
+  reelsLoaded,
+  filter,
+  handleAlertOpen,
+}) => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const [user, setUser] = useState<User>(null);
   const [friendList, setFriendList] = useState([]);
-  // const [disabled, setDisabled] = useState([]);
   const [followed, setFollowed] = useState([]);
-  const [likes, setLikes] = useState([]); // user's reels that have been liked
 
   // state of audio on reels
   const [muted, setMuted] = useState(true);
@@ -152,31 +158,6 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
       });
   };
 
-  // get reels that have been liked
-  const getLikes = () => {
-    if (user) {
-      axios
-        .get('/likes/likes')
-        .then((response) => {
-          for (let i = 0; i < response.data.length; i++) {
-            for (let j = 0; j < reels.length; j++) {
-              if (response.data[i].ReelId === reels[j].id) {
-                likes.push(response.data[i]);
-              }
-            }
-          }
-          setLikes(likes);
-        })
-        .catch((err) => {
-          console.error('Could not GET all likes:', err);
-        });
-    }
-  };
-
-  useEffect(() => {
-    getLikes();
-  }, []);
-
   useEffect(() => {
     getAllFollowed();
   }, []);
@@ -186,40 +167,30 @@ const Reel: React.FC<Props> = ({ reels, getAllReels }) => {
       className='reel-container'
       // style={{ fontSize: theme.typography.fontSize }}
     >
-      <Suspense fallback={<Loading />}>
-      <AnimatePresence initial={false}>
-          {reels.map((reel) => {
-            return (
-                <motion.div
-                  key={reel.id}
-                  className='reel-child'
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{
-                    ease: 'anticipate',
-                    duration: 0.2,
-                    delay: 0.2,
-                  }}
-                >
-                  {/* // <List> */}
-                  <ReelItem
-                    key={reel.id + 'reelItem' + Math.floor(Math.random() * 35)}
-                    user={user}
-                    reel={reel}
-                    reels={reels}
-                    friendList={friendList}
-                    deleteReel={deleteReel}
-                    likes={likes}
-                    muted={muted}
-                    handleToggleMute={handleToggleMute}
-                  />
-                  {/* // </List> */}
-                </motion.div>
-            );
-          })}
-      </AnimatePresence>
-      </Suspense>
+      {reelsLoaded && reels.length > 0 ? (
+        reels.map((reel, id) => {
+          return (
+            <Suspense key={'motion' + id} fallback={<Loading />}>
+              <ReelItem
+                index={id}
+                lastReelIndex={reels.length - 1}
+                filter={filter}
+                user={user}
+                reel={reel}
+                reels={reels}
+                friendList={friendList}
+                deleteReel={deleteReel}
+                muted={muted}
+                handleToggleMute={handleToggleMute}
+                getAllReelsRecent={getAllReelsRecent}
+                handleAlertOpen={handleAlertOpen}
+              />
+            </Suspense>
+          );
+        })
+      ) : (
+        <Loading />
+      )}
     </main>
   );
 };
