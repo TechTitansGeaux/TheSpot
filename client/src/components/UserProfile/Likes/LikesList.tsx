@@ -29,7 +29,7 @@ const LikesList: React.FC<Props> = ({user}) => {
         axios
           .get('/likes/likesuser')
           .then((response) => {
-            // console.log('likes:', response.data);
+            console.log('likes:', response.data);
             setLikesArr(response.data);
           })
           .catch((err) => {

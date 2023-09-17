@@ -79,7 +79,6 @@ const Navigation: React.FC<Props> = ({ user }) => {
   const location = useLocation();
   const feedPath = location.pathname;
   const [setting, setSetting] = useState('');
-  // const [userType, setUserType] = useState(null);
   const [bottomNavHidden, setBottomNavHidden] = useState(false) // boolean state var to hide bottom nav
   const dispatch = useDispatch();
   const authUser = useSelector((state: RootState) => state.app.authUser);
@@ -142,7 +141,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
   };
 
   useEffect(() => {
-    // getLikes();
+    getLikes();
 
     socket.on('likeSent', (data) => {
       getLikes();

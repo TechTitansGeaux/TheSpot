@@ -111,13 +111,14 @@ likesRouter.put('/checked/:id', (req: any, res: any) => {
     })
 });
 
-// GET likes from likes table in most recent order AND by current user logged in
+// GET likes from likes table in most recent order AND ReelId === Users.Id
 likesRouter.get('/likesuser', (req: any, res: any) => {
   const { id } = req.user;
   Likes.findAll({
     order: [['createdAt', 'DESC']],
-    include: [{ model: Users }, { model: Reels }],
-    where: { UserId: id},
+    include: [{ model: Users }, { model: Reels,
+      where: { UserId: id} }],
+
   })
     .then((response: any) => {
       if (response === null) {
@@ -138,8 +139,9 @@ likesRouter.get('/likesusernull', (req: any, res: any) => {
   const { id } = req.user;
   Likes.findAll({
     order: [['createdAt', 'DESC']],
-    include: [{ model: Users }, { model: Reels }],
-    where: { UserId: id, checked: null},
+    include: [{ model: Users }, { model: Reels,
+      where: { UserId: id} }],
+    where: { checked: null},
   })
     .then((response: any) => {
       if (response === null) {
