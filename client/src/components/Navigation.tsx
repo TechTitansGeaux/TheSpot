@@ -24,6 +24,7 @@ import io from 'socket.io-client';
 import Button from '@mui/material/Button';
 import { setAuthUser } from '../store/appSlice';
 import { RootState } from '../store/store';
+
 const socket = io();
 
 type Anchor = 'left';
@@ -313,7 +314,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
           <ListItemButton
             className='sidebar-btn'
             component={Link}
-            to={'/Feed'}
+            to={'/MyReels'}
             sx={{ minHeight: '4em', paddingLeft: '1.5em' }}
           >
             MY REELS
@@ -476,7 +477,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
                 <AddCircleIcon
                   className='create-reel-btn'
                   color='secondary'
-                  sx={{ width: 52, height: 52 }}
+                  sx={{ width: 52, height: 52}}
                 />
               </Link>
             </div>

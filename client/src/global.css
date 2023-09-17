@@ -167,15 +167,17 @@ footer {
 /* ////// FEED & REEL */
 
 /* .reel-container {
-  scroll-margin-top: 5.75em;
+  scroll-margin-top: 5.5em;
   scroll-snap-type: y mandatory;
   height: 100vh;
-  overflow:auto;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
 }
 
 .reel-child {
   scroll-snap-align: start end;
-  height: 100%;
+  height: 80vh;
+  position: relative;
 } */
 
 .click {
@@ -218,18 +220,15 @@ button.delete-btn:hover {
 
 .friend-request {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
   right: 3%;
   height: 25px;
   top: 79%;
+
 }
 
 .friend-add-btn {
-  position: absolute;
+  position: relative;
   left: 88%;
-  z-index: 2;
 }
 
 .friend-avatar {
@@ -293,7 +292,7 @@ video.reel {
 
 .video-container {
   position: relative;
-  background-color: var(--white);
+  background-color: var(--light-violet);
   overflow: hidden;
   height: 620px;
   min-width: 355px;
