@@ -37,8 +37,9 @@ const httpServer = createServer(app);
 import { Server } from "socket.io";
 const io = new Server(httpServer, {
   cors: {
-    origin: "https://thespot.live/",
+    origin: "https://www.thespot.live/",
     allowedHeaders: ["my-custom-header"],
+    methods: ["GET", "POST"],
     credentials: true
   }
 });
