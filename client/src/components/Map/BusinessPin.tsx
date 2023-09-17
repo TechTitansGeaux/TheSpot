@@ -23,12 +23,11 @@ type Props = {
   }
   latitude: number
   longitude: number
-  i: number
   // closeAllPopUps: () => void
   zoom: number
 }
 
-const BusinessPin: React.FC<Props> = ({ business, latitude, longitude, i, zoom }) => {
+const BusinessPin: React.FC<Props> = ({ business, latitude, longitude, zoom }) => {
 
   const togglePopUp = () => {
     const box = document.getElementById('popUp' + business.username + business.id)
@@ -54,7 +53,7 @@ const BusinessPin: React.FC<Props> = ({ business, latitude, longitude, i, zoom }
   }
 
   return (
-    <Marker longitude={longitude} latitude={latitude} key={'userPin' + i} anchor='top' style={{zIndex: '0'}}>
+    <Marker longitude={longitude} latitude={latitude} key={'businessPin' + business.id} anchor='top' style={{zIndex: '0'}}>
       <div className='businessDot' id={business.username + business.id} onClick={ () => {
         zoomTo(longitude, latitude);
         togglePopUp();

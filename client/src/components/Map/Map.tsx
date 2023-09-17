@@ -11,6 +11,8 @@ import useSupercluster from 'use-supercluster';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useLocation } from "react-router-dom";
 import CenterFocusStrongIcon from '@mui/icons-material/CenterFocusStrong';
+import io from 'socket.io-client';
+const socket = io();
 
 
 type Props =  {
@@ -51,6 +53,7 @@ const Map: React.FC<Props> = (props) => {
     zoom: 0.5068034173376552
   });
   const [ userLngLat, setUserLngLat ] = useState([]);
+  const [ refresh, setRefresh] = useState(false);
 
    // get event location if trying to see event loc from reel
    const location = useLocation();
@@ -133,6 +136,11 @@ const Map: React.FC<Props> = (props) => {
         })
     }
 
+    socket.on('refresh', (data) => {
+      console.log('data', data);
+      setRefresh(true);
+    })
+
   useEffect(() => {
     if (loggedIn) {
       getUsers();
@@ -147,21 +155,36 @@ const Map: React.FC<Props> = (props) => {
     }
   }, [loggedIn])
 
+  useEffect(() => {
+    getUsers();
+    setRefresh(false);
+  }, [refresh])
+
+  useEffect(() => {
+    if (loggedIn){
+      const [lat, lng] = splitCoords(loggedIn.geolocation)
+      setViewState({
+        latitude: +lat,
+        longitude: +lng,
+        zoom: 15,
+      })
+    }
+  }, [loggedIn]);
+
   const mapRef = useRef<any>();
 
   const bounds = mapRef.current ? mapRef.current.getMap().getBounds().toArray().flat() : null;
 
   // clustering points for user pins
   const userPoints = users.filter((user) => {
-      if (user.id === loggedIn.id) {
-      return true;
+      if (user.type === 'business') {
+        return false;
+      } else if (user.id === loggedIn.id) {
+        return true;
       } else if (user.privacy === 'private') {
         return false;
       } else if (user.privacy === 'friends only' && !friendList.includes(user.id)){
        return false;
-      }
-      else if (user.type === 'business') {
-        return false
       } else {
         return true;
       }
@@ -264,16 +287,20 @@ const Map: React.FC<Props> = (props) => {
     })
   }
 
-
   return (
     <div className='mapParent' onWheel={closeAllPopUps}>
       <div className='mapChild'>
-      <div className='recenterButton' onClick={ () => {
-          // const [lat, lng] = splitCoords(loggedIn.geolocation);
+      <div className='recenterButton' onClick={() => {
+        const [lat, lng] = splitCoords(loggedIn.geolocation);
+        setViewState({
+          latitude: +lat,
+          longitude: +lng,
+          zoom: 15,
+        })
         }}> <CenterFocusStrongIcon /></div>
         <div id='map'>
           <MapBox
-            mapboxAccessToken="pk.eyJ1IjoiYmVuamFtaW5rbGVpbjk5IiwiYSI6ImNsbWUzMnZxZDFma3EzZHE2NG1hdjUxdjQifQ.-dyi2R3I4LmoAH-MWuNZPA"
+            mapboxAccessToken={`${process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}`}
             {...viewState}
             onMove={evt => {setViewState(evt.viewState)}}
             style={{width: '100%', height: '100%'}}
@@ -296,6 +323,7 @@ const Map: React.FC<Props> = (props) => {
                 const [ lng, lat ] = cluster.geometry.coordinates;
                 const { cluster: isCluster, point_count: pointCount, user} = cluster.properties;
 
+
                 if (isCluster) {
                   const expansionZoom = Math.min(userSupercluster.getClusterExpansionZoom(cluster.id), 20);
                   return <ClusterPin amount={pointCount} key={'userCluster' + i} latitude={lat} longitude={lng} className='UserClusterPin' expansionZoom={expansionZoom}/>;
@@ -310,7 +338,6 @@ const Map: React.FC<Props> = (props) => {
                     loggedIn={loggedIn}
                     latitude={+lat}
                     longitude={+lng}
-                    i={i}
                     zoom={viewState.zoom}
                     />
                 }
@@ -322,15 +349,14 @@ const Map: React.FC<Props> = (props) => {
                 const { cluster: isCluster, point_count: pointCount, business} = cluster.properties;
 
                 if (isCluster) {
-                    const expansionZoom = Math.min(businessSupercluster.getClusterExpansionZoom(cluster.id), 20);
-                    return <ClusterPin amount={pointCount} key={'businessCluster' + i} latitude={lat} longitude={lng} className='BusinessClusterPin' expansionZoom={expansionZoom}/>;
+                  const expansionZoom = Math.min(businessSupercluster.getClusterExpansionZoom(cluster.id), 20);
+                  return <ClusterPin amount={pointCount} key={'businessCluster' + i} latitude={lat} longitude={lng} className='BusinessClusterPin' expansionZoom={expansionZoom}/>;
                 } else {
                   return <BusinessPin
                   business={business}
                   key={business.id}
                   latitude={lat}
                   longitude={lng}
-                  i={i}
                   zoom={viewState.zoom}
                 />;
                 }
@@ -352,7 +378,6 @@ const Map: React.FC<Props> = (props) => {
                     latitude={+lat}
                     longitude={+lng}
                     key={event.id}
-                    i={i}
                     zoom={viewState.zoom}
                   />
                 }

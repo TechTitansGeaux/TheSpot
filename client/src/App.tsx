@@ -24,6 +24,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setAuthUser, setIsAuthenticated, setFontSize } from './store/appSlice';
 import { RootState } from './store/store';
 import { useTheme } from '@mui/material/styles';
+import io from 'socket.io-client';
+const socket = io();
 
 
 type User = {
@@ -49,7 +51,29 @@ const App = () => {
   const [user, setUser] = useState<User>(null);
   const fontSize = useSelector((state: RootState) => state.app.fontSize); // Default font size
   const [allUsers, setAllUsers] = useState<[User]>(null);
-  const [location, setLocation] = useState<User>(null);
+  const [location, setLocation] = useState<string>('0, 0');
+  const [geo, setGeo] = useState(false);
+
+    // find distance (miles) with 2 points
+    const distance = (lat1: number, lat2: number, lon1: number, lon2: number) => {
+
+      lon1 = lon1 * Math.PI / 180;
+      lon2 = lon2 * Math.PI / 180;
+      lat1 = lat1 * Math.PI / 180;
+      lat2 = lat2 * Math.PI / 180;
+      // Haversine formula
+      const dlon = lon2 - lon1;
+      const dlat = lat2 - lat1;
+      const a = Math.pow(Math.sin(dlat / 2), 2)
+                + Math.cos(lat1) * Math.cos(lat2)
+                * Math.pow(Math.sin(dlon / 2),2);
+
+      const c = 2 * Math.asin(Math.sqrt(a));
+
+      const r = 3956;
+
+      return (c * r * 5280);
+    };
 
   const fetchAuthUser = async () => {
     try {
@@ -74,25 +98,35 @@ const App = () => {
   }, [fontSize]);
 
   const startGeolocationWatch = () => {
+    if (user && location) {
+    const [lat1, lng1] = user.geolocation.split(',');
+    const [lat2, lng2] = location.split(',');
+    // if distance b/t user and center of event is less than 300ft
+    if (distance(+lat1, +lat2, +lng1, +lng2) < 150) {
+      return;
+    }
     if (navigator.geolocation) {
       navigator.geolocation.watchPosition(
         (position) => {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
+        const newGeolocation = `${latitude},${longitude}`;
+        setLocation(newGeolocation);
+        console.log(location, '<-----LOCATION');
+        console.log(user?.geolocation, '<----POSITION');
         if (authUser?.type === 'personal') {
-          const newGeolocation = `${latitude},${longitude}`;
-          if (String(position) !== newGeolocation) {
-            console.log(newGeolocation, '<-----NEWGEOLO');
             axios
               .patch(`/users/updateGeolocation/${authUser.id}`, { geolocation: newGeolocation })
               .then((response) => {
                 dispatch(setAuthUser(response.data));
+                setUser(response.data);
+                socket.emit('userGeolocationUpdate', 'refresh')
               })
               .catch((error) => {
                 console.error('Error updating geolocation on server:', error);
               });
-            }
         }
+
       },
       (error) => {
         console.error('Error watching geolocation:', error);
@@ -104,12 +138,13 @@ const App = () => {
   } else {
     console.error('Geolocation is not supported by your browser');
   }
+    }
 };
 
-useEffect(() => {
-  startGeolocationWatch();
-}, [location]);
-
+// testing to run only once
+  useEffect(() => {
+    startGeolocationWatch();
+}, [user, location]); // [user, location] <- previous value
 
   // get all other users
   const getAllUsers = async () => {
@@ -122,14 +157,6 @@ useEffect(() => {
     } catch (error) {
       console.error('error in getAllUsers App', error);
     }
-  }
-
-  // useEffect(() => {
-  //   getLocation();
-  // }, [authUser])
-
-  const getLocation = () => {
-    setLocation(authUser?.geolocation);
   }
 
   return (

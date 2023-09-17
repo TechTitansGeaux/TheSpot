@@ -281,17 +281,17 @@ const Feed: React.FC<Props> = ({user}) => {
 
   // business accounts
   const getFollowersList = () => {
-    if (user?.type === 'business') {
-      axios
-        .get('/feed/followers')
-        .then((response) => {
-          console.log('followers:', response.data);
-          setFollowers(response.data);
-        })
-        .catch((err) => {
-          console.error('Could not GET followers', err);
-        });
-    }
+     if (user?.type === 'business') {
+        axios
+          .get('/feed/followers')
+          .then((response) => {
+            // console.log('followers:', response.data);
+            setFollowers(response.data);
+          })
+          .catch((err) => {
+            console.error('Could not GET followers', err);
+          })
+      }
   };
 
   const getAllFollowersReels = () => {
@@ -378,7 +378,7 @@ const Feed: React.FC<Props> = ({user}) => {
 
   useEffect(() => {
     userCoord(user);
-  }, [user, reels]);
+  }, [user]);
 
   useEffect(() => {
     getAllReels(3);
@@ -388,21 +388,19 @@ const Feed: React.FC<Props> = ({user}) => {
     if (user?.type === 'personal') {
       getFriendList();
     }
-  }, [filter]);
+  }, [user]);
 
   useEffect(() => {
     if (user?.type === 'personal') {
       getFollowingList();
     }
-  }, [filter]);
+  }, [user]);
 
   useEffect(() => {
     if (user?.type === 'business') {
       getFollowersList();
-    }
-  }, [filter]);
-
-  console.log('reels from feed.tsx', reels);
+      }
+  }, [user]);
 
   return (
     <>
