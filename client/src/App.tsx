@@ -25,7 +25,6 @@ import { setAuthUser, setIsAuthenticated, setFontSize } from './store/appSlice';
 import { RootState } from './store/store';
 import { useTheme } from '@mui/material/styles';
 import io from 'socket.io-client';
-import { start } from 'repl';
 const socket = io();
 
 
@@ -104,7 +103,7 @@ const App = () => {
     const [lat1, lng1] = user.geolocation.split(',');
     const [lat2, lng2] = location.split(',');
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
+      navigator.geolocation.watchPosition(
         (position) => {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
@@ -144,15 +143,6 @@ const App = () => {
 };
 
   useEffect(() => {
-    // const interval = setInterval(() => {
-    //   startGeolocationWatch();
-    //   console.log('weeeeee')
-    // }, 8000);
-
-    // return () => {
-    //   clearInterval(interval);
-    // }
-
     startGeolocationWatch()
 }, [user]);
 

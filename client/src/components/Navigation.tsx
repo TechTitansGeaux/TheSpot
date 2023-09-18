@@ -314,6 +314,16 @@ const Navigation: React.FC<Props> = ({ user }) => {
           <ListItemButton
             className='sidebar-btn'
             component={Link}
+            to={'/Feed'}
+            sx={{ minHeight: '4em', paddingLeft: '1.5em' }}
+          >
+            HOME
+          </ListItemButton>
+        </ListItem>
+        <ListItem className='drawer-btn' disablePadding>
+          <ListItemButton
+            className='sidebar-btn'
+            component={Link}
             to={'/MyReels'}
             sx={{ minHeight: '4em', paddingLeft: '1.5em' }}
           >
@@ -397,15 +407,18 @@ const Navigation: React.FC<Props> = ({ user }) => {
             SETTINGS
           </ListItemButton>
         </ListItem>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20rem', paddingLeft: '1em' }}>
-            <Button
-                variant="outlined"
-                color="secondary"
-                onClick={handleLogout}
-              >
-                Logout
-              </Button>
-            </div>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            marginTop: '20rem',
+            paddingLeft: '1em',
+          }}
+        >
+          <Button variant='outlined' color='secondary' onClick={handleLogout}>
+            Logout
+          </Button>
+        </div>
       </List>
     </Box>
   );
