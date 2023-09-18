@@ -11,8 +11,8 @@ import useSupercluster from 'use-supercluster';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useLocation } from "react-router-dom";
 import CenterFocusStrongIcon from '@mui/icons-material/CenterFocusStrong';
-import io from 'socket.io-client';
-const socket = io();
+// import io from 'socket.io-client';
+// const socket = io();
 
 
 type Props =  {
@@ -136,10 +136,10 @@ const Map: React.FC<Props> = (props) => {
         })
     }
 
-    socket.on('refresh', (data) => {
-      console.log('data', data);
-      setRefresh(true);
-    })
+    // socket.on('refresh', (data) => {
+    //   console.log('data', data);
+    //   setRefresh(true);
+    // })
 
   useEffect(() => {
     if (loggedIn) {

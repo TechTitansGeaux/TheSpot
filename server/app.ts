@@ -87,32 +87,32 @@ app.use('/followers', followersRouter)
 app.use('/RSVPs', rsvpRouter)
 
 // Emit user geolocation updates to connected clients
-io.on('connection', (socket) => {
-  // console.log(`A user connected ${socket.id}`);
+// io.on('connection', (socket) => {
+//   // console.log(`A user connected ${socket.id}`);
 
-  // Listen for geolocation updates from clients
-  socket.on('updateGeolocation', (data) => {
-    // Broadcast the updated geolocation to all connected clients
-    socket.broadcast.emit('userGeolocationUpdate', data);
-  });
+//   // Listen for geolocation updates from clients
+//   socket.on('updateGeolocation', (data) => {
+//     // Broadcast the updated geolocation to all connected clients
+//     socket.broadcast.emit('userGeolocationUpdate', data);
+//   });
 
-  socket.on('disconnect', () => {
-    // console.log('User disconnected');
-  });
+//   socket.on('disconnect', () => {
+//     // console.log('User disconnected');
+//   });
 
-  // likes notifications
-  socket.on('likesNotif', (data) => {
-    // console.log('received');
-    socket.broadcast.emit('likeSent', data);
-  });
+//   // likes notifications
+//   socket.on('likesNotif', (data) => {
+//     // console.log('received');
+//     socket.broadcast.emit('likeSent', data);
+//   });
 
-  // follwers notifications
-  socket.on('followersNotif', (data) => {
-    // console.log('received');
-    socket.broadcast.emit('follower', data);
-  });
+//   // follwers notifications
+//   socket.on('followersNotif', (data) => {
+//     // console.log('received');
+//     socket.broadcast.emit('follower', data);
+//   });
 
-});
+// });
 
 
 app.get('/*', (req: Request, res: Response) => {

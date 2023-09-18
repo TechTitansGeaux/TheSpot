@@ -20,12 +20,12 @@ import './navigation.css';
 import Snackbar from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import io from 'socket.io-client';
+// import io from 'socket.io-client';
 import Button from '@mui/material/Button';
 import { setAuthUser } from '../store/appSlice';
 import { RootState } from '../store/store';
 
-const socket = io();
+// const socket = io();
 
 type Anchor = 'left';
 type Props = {
@@ -144,10 +144,10 @@ const Navigation: React.FC<Props> = ({ user }) => {
   useEffect(() => {
     getLikes();
 
-    socket.on('likeSent', (data) => {
-      getLikes();
-    });
-  }, [socket, location.pathname]); // user
+    // socket.on('likeSent', (data) => {
+    //   getLikes();
+    // });
+  }, [location.pathname]); // socket
 
   // once you click on likes sidebar, set likes checked column to true
   const checkedLikes = () => {
@@ -188,10 +188,10 @@ const Navigation: React.FC<Props> = ({ user }) => {
   useEffect(() => {
     getAllFollowers();
 
-    socket.on('follower', (data) => {
-      getAllFollowers();
-    });
-  }, [socket, location.pathname]);
+    // socket.on('follower', (data) => {
+    //   getAllFollowers();
+    // });
+  }, [location.pathname]); // socket
 
   // once you click followers on sidebar, set followers checked column to true
   const checkedFollowers = () => {

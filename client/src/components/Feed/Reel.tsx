@@ -8,8 +8,8 @@ import Loading from './Loading'
 const ReelItem = lazy(() => import('./ReelItem'));
 // import ReelItem from './ReelItem';
 import { useTheme } from '@mui/material/styles';
-import io from 'socket.io-client';
-const socket = io();
+// import io from 'socket.io-client';
+// const socket = io();
 
 type Props = {
   reels: {
@@ -150,7 +150,7 @@ const Reel: React.FC<Props> = ({
       .delete(`/feed/delete/${reelId}`)
       .then((data) => {
         console.log('Reel deleted', data);
-        socket.emit('likesNotif', 'like');
+        // socket.emit('likesNotif', 'like');
         getAllReels();
       })
       .catch((err) => {
