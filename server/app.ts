@@ -31,25 +31,11 @@ const app = express();
 const uuid = require('uuid');
 const secretKey = uuid.v4();
 
-// server setup for sockets
-import { createServer } from "http";
-const httpServer = createServer(app);
-import { Server } from "socket.io";
-const io = new Server(httpServer, {
-  cors: {
-    origin: "https://www.thespot.live/",
-    allowedHeaders: ["my-custom-header"],
-    methods: ["GET", "POST"],
-    credentials: true
-  }
-});
-
 // middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: '100mb' }));
 app.use(express.static(distPath));
 // users session
-
 
 /**
 A session store implementation for Express using lru-cache.
@@ -86,33 +72,18 @@ app.use('/followers', followersRouter)
 // RSVPs route
 app.use('/RSVPs', rsvpRouter)
 
-// Emit user geolocation updates to connected clients
-// io.on('connection', (socket) => {
-//   // console.log(`A user connected ${socket.id}`);
-
-//   // Listen for geolocation updates from clients
-//   socket.on('updateGeolocation', (data) => {
-//     // Broadcast the updated geolocation to all connected clients
-//     socket.broadcast.emit('userGeolocationUpdate', data);
-//   });
-
-//   socket.on('disconnect', () => {
-//     // console.log('User disconnected');
-//   });
-
-//   // likes notifications
-//   socket.on('likesNotif', (data) => {
-//     // console.log('received');
-//     socket.broadcast.emit('likeSent', data);
-//   });
-
-//   // follwers notifications
-//   socket.on('followersNotif', (data) => {
-//     // console.log('received');
-//     socket.broadcast.emit('follower', data);
-//   });
-
-// });
+// server setup for sockets
+import { createServer } from "http";
+const httpServer = createServer(app);
+import { Server } from "socket.io";
+const io = new Server(httpServer, {
+  cors: {
+    origin: "https://www.thespot.live/",
+    allowedHeaders: ["my-custom-header"],
+    methods: ["GET", "POST"],
+    credentials: true
+  }
+});
 
 
 app.get('/*', (req: Request, res: Response) => {
