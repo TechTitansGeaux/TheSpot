@@ -20,11 +20,12 @@ import './navigation.css';
 import Snackbar from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import io from 'socket.io-client';
+// import io from 'socket.io-client';
 import Button from '@mui/material/Button';
 import { setAuthUser } from '../store/appSlice';
 import { RootState } from '../store/store';
-const socket = io();
+
+// const socket = io();
 
 type Anchor = 'left';
 type Props = {
@@ -69,7 +70,6 @@ const Navigation: React.FC<Props> = ({ user }) => {
   const [pFriends, setPFriends] = useState([]); // pending friends list
   const [open, setOpen] = useState(false); // open and close snackbar
   const [likesArr, setLikesArr] = useState([]); // user's own reels that have been liked FROM likes table
-  const [userReels, setUserReels] = useState([]); // user's own reels
   const [following, setFollowing] = useState([]); // user's followers that haven't been checked
 
   const [onPage, setOnPage] = useState(
@@ -80,7 +80,6 @@ const Navigation: React.FC<Props> = ({ user }) => {
   const location = useLocation();
   const feedPath = location.pathname;
   const [setting, setSetting] = useState('');
-  // const [userType, setUserType] = useState(null);
   const [bottomNavHidden, setBottomNavHidden] = useState(false) // boolean state var to hide bottom nav
   const dispatch = useDispatch();
   const authUser = useSelector((state: RootState) => state.app.authUser);
@@ -102,15 +101,17 @@ const Navigation: React.FC<Props> = ({ user }) => {
 
   // get all pending friends for current user
   const getAllPFriends = () => {
-    axios
-      .get('feed/friendlist/pending')
-      .then((response) => {
-        // console.log('pending friends:', response.data);
-        setPFriends(response.data);
-      })
-      .catch((err) => {
-        console.error('Could not GET pending friends:', err);
-      });
+    if (user?.type === 'personal') {
+      axios
+        .get('feed/friendlist/pending')
+        .then((response) => {
+          // console.log('pending friends:', response.data);
+          setPFriends(response.data);
+        })
+        .catch((err) => {
+          console.error('Could not GET pending friends:', err);
+        });
+    }
   };
 
   useEffect(() => {
@@ -126,41 +127,13 @@ const Navigation: React.FC<Props> = ({ user }) => {
 
   }, [location.pathname, user]);
 
-  // get your own reels
-  const getOwnReels = () => {
-    axios
-      .get('/feed/reel/user')
-      .then((response: any) => {
-        //console.log('users own reels:', response.data);
-        setUserReels(response.data);
-      })
-      .catch((err: any) => {
-        console.error('Cannot get own reels:', err);
-      })
-  };
-
-  useEffect(() => {
-    getOwnReels();
-
-    socket.on('likeSent', (data) => {
-      getOwnReels();
-    });
-  }, [socket, location.pathname]);
-
-  // get reels that have been liked AND checked
+  // get reels that have been liked
   const getLikes = () => {
-    const likes: any = []; // user's reels that have been liked
     if (user) {
       axios
-        .get('/likes/likes')
+        .get('/likes/likesusernull')
         .then((response) => {
-          // console.log('likes:', response.data);
-          for (let i = 0; i < response.data.length; i++) {
-            for (let j = 0; j < userReels.length; j++) {
-              if (response.data[i].ReelId === userReels[j].id && response.data[i].checked !== true) { likes.push(response.data[i]); }
-            }
-          }
-          setLikesArr(likes);
+          setLikesArr(response.data);
         })
         .catch((err) => {
           console.error('Could not GET all likes:', err);
@@ -171,10 +144,10 @@ const Navigation: React.FC<Props> = ({ user }) => {
   useEffect(() => {
     getLikes();
 
-    socket.on('likeSent', (data) => {
-      getLikes();
-    });
-  }, [location.pathname, user]);
+    // socket.on('likeSent', (data) => {
+    //   getLikes();
+    // });
+  }, [location.pathname]); // socket
 
   // once you click on likes sidebar, set likes checked column to true
   const checkedLikes = () => {
@@ -215,10 +188,10 @@ const Navigation: React.FC<Props> = ({ user }) => {
   useEffect(() => {
     getAllFollowers();
 
-    socket.on('follower', (data) => {
-      getAllFollowers();
-    });
-  }, [socket, location.pathname]);
+    // socket.on('follower', (data) => {
+    //   getAllFollowers();
+    // });
+  }, [location.pathname]); // socket
 
   // once you click followers on sidebar, set followers checked column to true
   const checkedFollowers = () => {
@@ -341,7 +314,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
           <ListItemButton
             className='sidebar-btn'
             component={Link}
-            to={'/Feed'}
+            to={'/MyReels'}
             sx={{ minHeight: '4em', paddingLeft: '1.5em' }}
           >
             MY REELS
@@ -504,7 +477,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
                 <AddCircleIcon
                   className='create-reel-btn'
                   color='secondary'
-                  sx={{ width: 52, height: 52 }}
+                  sx={{ width: 52, height: 52}}
                 />
               </Link>
             </div>

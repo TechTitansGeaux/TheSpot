@@ -45,7 +45,6 @@ type Props = {
   getFriendList: () => void
   latitude: number
   longitude: number
-  i: number
   zoom: number
 
 };
@@ -80,7 +79,7 @@ const rmFriendTheme = createTheme({
   },
 });
 
-const UserPin: React.FC<Props> = ({ user, loggedIn, friendList, pendingFriendList, longitude, latitude, i, getFriendList, getPendingFriendList, zoom }) => {
+const UserPin: React.FC<Props> = ({ user, loggedIn, friendList, pendingFriendList, longitude, latitude, getFriendList, getPendingFriendList, zoom }) => {
 
   const { current } = useMap();
 
@@ -136,7 +135,7 @@ const UserPin: React.FC<Props> = ({ user, loggedIn, friendList, pendingFriendLis
   const isNotLoggedInUser = (user.id !== loggedIn.id) || null;
 
   return (
-    <Marker longitude={longitude} latitude={latitude} key={'userPin' + i} anchor='top' style={{zIndex: '0'}}>
+    <Marker longitude={longitude} latitude={latitude} key={'userPin' + user.id} anchor='top' style={{zIndex: '0'}}>
         <div className='userDot' id={user.username + user.id} onClick={ () => {
           togglePopUp();
           zoomTo(longitude, latitude);
@@ -159,7 +158,7 @@ const UserPin: React.FC<Props> = ({ user, loggedIn, friendList, pendingFriendLis
             </p>
           </div>
           <div className='addOrRmFriend'>
-            {!pendingFriendList.includes(user.id) && !friendList.includes(user.id) && isNotLoggedInUser && (
+            {!pendingFriendList.includes(user.id) && !friendList.includes(user.id) && isNotLoggedInUser && loggedIn.type !== 'business' && (
               <div style={{ position: 'relative', top: '-166.5px', left: '-50%', marginBottom: '10px' }}>
                 <ThemeProvider theme={addFriendTheme}>
                   <div>

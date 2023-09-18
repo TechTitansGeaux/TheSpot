@@ -37,7 +37,6 @@ app.use(express.urlencoded({ extended: true, limit: '100mb' }));
 app.use(express.static(distPath));
 // users session
 
-
 /**
 A session store implementation for Express using lru-cache.
 Because the default MemoryStore for express-session will lead to a memory leak due to it haven't a suitable way to make them expire. */
@@ -84,34 +83,6 @@ const io = new Server(httpServer, {
     methods: ["GET", "POST"],
     credentials: true
   }
-});
-
-// Emit user geolocation updates to connected clients
-io.on('connection', (socket) => {
-  // console.log(`A user connected ${socket.id}`);
-
-  // Listen for geolocation updates from clients
-  socket.on('updateGeolocation', (data) => {
-    // Broadcast the updated geolocation to all connected clients
-    socket.broadcast.emit('userGeolocationUpdate', data);
-  });
-
-  socket.on('disconnect', () => {
-    // console.log('User disconnected');
-  });
-
-  // likes notifications
-  socket.on('likesNotif', (data) => {
-    // console.log('received');
-    socket.broadcast.emit('likeSent', data);
-  });
-
-  // follwers notifications
-  socket.on('followersNotif', (data) => {
-    // console.log('received');
-    socket.broadcast.emit('follower', data);
-  });
-
 });
 
 

@@ -9,7 +9,7 @@ import Box from '@mui/material/Box';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import InfoIcon from '@mui/icons-material/Info';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import axios from 'axios';
 import dayjs from 'dayjs';
@@ -30,10 +30,9 @@ import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import Rsvp from '../UserProfile/Rsvps/Rsvp';
 import UnRsvp from '../UserProfile/Rsvps/UnRsvp';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
-import Snackbar from '@mui/material/Snackbar';
-import CloseIcon from '@mui/icons-material/Close';
-import io from 'socket.io-client';
-const socket = io();
+import useIsInView from './useIsInView';
+// import io from 'socket.io-client';
+// const socket = io();
 
 dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat);
@@ -87,27 +86,16 @@ type Props = {
   friendList?: any;
   user: User;
   deleteReel: any;
-  likes: any;
   muted: boolean;
   handleToggleMute: () => void;
+  index: any;
+  lastReelIndex: number;
+  getAllReelsRecent: any;
+  filter: string;
+  handleAlertOpen: any;
 };
 
 const theme = createTheme({
-  components: {
-    MuiSnackbar: {
-      variants: [
-        {
-          props: { variant: 'theSpot-pink' },
-          style: {
-            '& .MuiSnackbarContent-root': {
-              background: '#f433ab',
-              zIndex: '99999'
-            },
-          },
-        },
-      ],
-    },
-  },
   palette: {
     primary: {
       main: '#f0f465',
@@ -137,10 +125,21 @@ const ReelItem: React.FC<Props> = ({
   deleteReel,
   muted,
   handleToggleMute,
+  index,
+  lastReelIndex,
+  getAllReelsRecent,
+  filter,
+  handleAlertOpen,
 }) => {
-  // const theme = useTheme();
   // REFERENCE VIDEO HTML element in JSX element // Uses a ref to hold an array of generated refs, and assign them when mapping.
-  const myRef = useRef<HTMLVideoElement>(null);
+  // ref for entire reelItem
+  const reelItemRef = useRef(null);
+  // ref for entire a video
+  const videoRef = useRef<HTMLVideoElement>(null);
+  // load new reels from last index
+  const [loadNewReelsAt, setLoadNewReelsAt] = useState(lastReelIndex);
+  const isInViewport = useIsInView(reelItemRef);
+
   const [loop, setLoop] = useState(false);
   const [stayDisabled, setStayDisabled] = useState([]);
   const [likesArr, setLikesArr] = useState([]); // user's own reels that have been liked FROM likes table
@@ -164,12 +163,6 @@ const ReelItem: React.FC<Props> = ({
   const [openInfo, setOpenInfo] = useState(false);
   const [disabled, setDisabled] = useState([]);
   // to open friends alert
-  const [openAlert, setOpenAlert] = useState(false);
-  // to open follower alert
-  const [followAlert, setFollowAlert] = useState(false);
-  // to following message alert
-  const [messageAlert, setMessageAlert] = useState('');
-  // GET current user
 
   const toggleEventTimeButton = useCallback(() => {
     checkEventTime();
@@ -293,14 +286,12 @@ const ReelItem: React.FC<Props> = ({
 
   // GET request get friendList from Friendship table in DB // set to state variable
   useEffect(() => {
-    // update abort clean-ups to end axios request for unmounting
-    // const controller = new AbortController();
     axios
       .get('/feed/friendlist/pending')
       .then(({ data }) => {
         // console.log('data from friends to DISABLE button Axios GET ==>', data);
         data.map((user: any) => {
-          if (user.status === 'pending') {
+          if (user?.status === 'pending') {
             setStayDisabled((prev) => [...prev, user.accepter_id]);
           }
         });
@@ -308,8 +299,6 @@ const ReelItem: React.FC<Props> = ({
       .catch((err) => {
         console.error('Failed to get Disabled List:', err);
       });
-    // aborts axios request when component unmounts
-    // return () => controller?.abort();
   }, []);
 
   // likes functionality
@@ -396,7 +385,7 @@ const ReelItem: React.FC<Props> = ({
         setFollowed((prev) => [...prev, followedUser]);
         setDisabled([...disabled, followedUser]);
         // sockets for following notifications
-        socket.emit('followersNotif', 'following');
+        // socket.emit('followersNotif', 'following');
         console.log('Now following followedUser_id: ', followedUser);
       })
       .catch((err) => {
@@ -424,106 +413,51 @@ const ReelItem: React.FC<Props> = ({
       });
   };
 
-  //Snackbar Functionality
-  // snackbar logic for pending friends
-  //Snackbar for friends and follows
-  const handleAlertOpen = (option: string) => {
-    console.log('snackbar open for pending friend');
-    if (option === 'Friend Request Pending') {
-      setOpenAlert(true);
-    } else {
-      setMessageAlert(option);
-      setFollowAlert(true);
+  // call getAllReels with length onload for reels
+  const getAllReels = (length: number) => {
+    if (filter === 'recent') {
+      getAllReelsRecent(length, false);
     }
   };
 
-  const handleAlertClose = (
-    event: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === 'clickaway') {
-      return;
-    }
+  // observe videos with IntersectionObserver API to playback on scroll in view
+  // if videoRef in viewport play in half a second
+  if (isInViewport) {
+    videoRef.current.play();
+    setTimeout(() => {
+      setLoop(true);
+    });
 
-    setOpenAlert(false);
-    setFollowAlert(false);
-  };
+    if (loadNewReelsAt === Number(reelItemRef.current.id)) {
+      // increase loadNewReels by 2
+      setLoadNewReelsAt((prev) => prev + 2);
+      getAllReels(3);
+    }
+  }
 
   useEffect(() => {
-    // observe videos with IntersectionObserver API to playback on scroll in view
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        // console.log('entry', entry);
-        const playVideo = myRef.current.play();
-        if (!entry.isIntersecting && playVideo !== undefined) {
-          // if video is in view PLAY video and LOOP
-          playVideo
-            .then((_) => {
-              myRef.current.pause();
-              setLoop(false);
-            })
-            .catch((err) => {
-              console.error('Auto-play was prevented', err);
-            });
-        } else {
-          // else video is out of view PAUSE video and don't Loop
-          myRef.current.play();
-          setLoop(true);
-        }
+    if (!isInViewport) {
+      setTimeout(() => {
+        videoRef.current.pause();
       });
-    });
-    observer.observe(myRef.current);
+      setLoop(false);
+    }
+  }, [isInViewport]);
 
-    return () => observer.disconnect();
-  }, [user]);
 
-  //TEST FUNCTIONALITY OF LIKES AND RSVPS
   useEffect(() => {
     toggleLikeButton();
     toggleRsvpButton();
+    toggleEventTimeButton();
   }, []);
 
-  const action = (
-    <React.Fragment>
-      <IconButton
-        size='small'
-        aria-label='close'
-        color='inherit'
-        onClick={handleAlertClose}
-      >
-        <CloseIcon fontSize='small' />
-      </IconButton>
-    </React.Fragment>
-  );
-
   return (
-    <div>
-      <ThemeProvider theme={theme}>
-        <Snackbar
-          variant='theSpot-pink'
-          sx={{ paddingBottom: '50px' }}
-          anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
-          open={openAlert}
-          autoHideDuration={4000}
-          onClick={handleAlertClose}
-          message='Friend Request Sent'
-          action={action}
-        />
-        <Snackbar
-          variant='theSpot-pink'
-          sx={{ paddingBottom: '50px' }}
-          anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
-          open={followAlert}
-          autoHideDuration={4000}
-          onClick={handleAlertClose}
-          message={messageAlert || 'Follow Request Sent'}
-          action={action}
-        />
-      </ThemeProvider>
+    <div style={{ position: 'relative', zIndex: 0 }}>
       {true && (
         <div
+          ref={reelItemRef}
+          id={index}
           className='reel-child'
-          style={{ fontSize: theme.typography.fontSize }}
         >
           <>
             <div
@@ -536,9 +470,10 @@ const ReelItem: React.FC<Props> = ({
               {reel.url.length > 15 && (
                 <video
                   className='reel'
-                  ref={myRef}
+                  ref={videoRef}
                   id={`video${reel.id}`}
                   src={reel.url}
+                  poster={reel.url}
                   loop={loop}
                   muted={muted}
                   preload='none'
@@ -589,9 +524,12 @@ const ReelItem: React.FC<Props> = ({
                   (!friendList.includes(reel.User.id) &&
                     reel.User.id !== user?.id && (
                       <div className='friend-request'>
-                        <Box className='friend-box'>
+                        <Box
+                          sx={{ position: 'relative', zIndex: '3' }}
+                          className='friend-box'
+                        >
                           <Fab
-                            style={{ transform: 'scale(0.6)' }}
+                            style={{ transform: 'scale(0.6)', zIndex: '3' }}
                             size='small'
                             color='primary'
                             aria-label='add'
@@ -684,7 +622,7 @@ const ReelItem: React.FC<Props> = ({
                         </Box>
                       </div>
                     ))}
-                {reel.UserId === user.id && (
+                {reel.UserId === user?.id && (
                   <div className='friend-request'>
                     <div>
                       <Tooltip
@@ -735,7 +673,7 @@ const ReelItem: React.FC<Props> = ({
                   </div>
                 )}
               </>
-              <div className='friend-request'>
+              <div className='friend-request' style={{ zIndex: '0' }}>
                 <Tooltip
                   title={reel.User.displayName}
                   TransitionComponent={Zoom}
@@ -753,7 +691,12 @@ const ReelItem: React.FC<Props> = ({
                   <Avatar
                     className='friend-avatar'
                     aria-label={`Profile Avatar of ${reel.User.displayName}`}
-                    sx={{ width: 48, height: 48 }}
+                    sx={{
+                      transform: 'scale(0.9)',
+                      width: 48,
+                      height: 48,
+                      zIndex: '0',
+                    }}
                     alt={reel.User.displayName}
                     src={reel.User.picture}
                   />
@@ -841,6 +784,7 @@ const ReelItem: React.FC<Props> = ({
                   />
                   <BottomNavigationAction
                     className='bottom-nav-parent'
+                    sx={{ position: 'relative', zIndex: '0' }}
                     component={'div'}
                     label='Going'
                     icon={

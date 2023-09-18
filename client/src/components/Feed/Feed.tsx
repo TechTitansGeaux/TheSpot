@@ -9,6 +9,10 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Snackbar from '@mui/material/Snackbar';
+import CloseIcon from '@mui/icons-material/Close';
+import IconButton from '@mui/material/IconButton';
 
 type Props = {
   user: {
@@ -28,6 +32,36 @@ type Props = {
   AddFriend?: React.ReactNode | React.ReactNode[];
 };
 
+const theme = createTheme({
+  components: {
+    MuiSnackbar: {
+      variants: [
+        {
+          props: { variant: 'theSpot-pink' },
+          style: {
+            '& .MuiSnackbarContent-root': {
+              background: '#f433ab',
+            },
+          },
+        },
+      ],
+    },
+  },
+  palette: {
+    primary: {
+      main: '#f0f465',
+      dark: '#f433ab',
+      contrastText: '#0b0113',
+    },
+    secondary: {
+      main: '#f433ab',
+      dark: '#f0f465',
+      contrastText: '#0b0113',
+    },
+  },
+});
+
+
 const Feed: React.FC<Props> = ({user}) => {
   const [reels, setReels] = useState([]);
   const [filter, setFilter] = useState('recent'); // filter feed state
@@ -37,10 +71,23 @@ const Feed: React.FC<Props> = ({user}) => {
   const [userLat, setUserLat] = useState(0);
   const [userLong, setUserLong] = useState(0);
   const [followers, setFollowers] = useState([]); // followers list for current user (business)
+  const [reelsLoaded, setReelsLoaded] = useState(false); // state for loading reels on infinite scroll
+  const [lastIndex, setLastIndex] = useState(reels.length - 1)
+  const [startIndex, setStartIndex] = useState(0); // set start index for reelsLoading
+  const [openAlert, setOpenAlert] = useState(false);
+  // to open follower alert
+  const [followAlert, setFollowAlert] = useState(false);
+  // to following message alert
+  const [messageAlert, setMessageAlert] = useState('');
+  // GET current user
 
-    // filter dialog
+  // filter dialog
   const [open, setOpen] = React.useState(false);
-  const marks = [{value: 1, label: '1 mile'}, {value: 15, label: '15 miles'}, {value: 30, label: '30 miles'}];
+  const marks = [
+    { value: 1, label: '1 mile' },
+    { value: 15, label: '15 miles' },
+    { value: 30, label: '30 miles' },
+  ];
 
   const friendsReels: any = [];
   const followingReels: any = [];
@@ -65,23 +112,22 @@ const Feed: React.FC<Props> = ({user}) => {
 
   // find distance (miles) with 2 points
   const distance = (lat1: number, lat2: number, lon1: number, lon2: number) => {
-
-    lon1 = lon1 * Math.PI / 180;
-    lon2 = lon2 * Math.PI / 180;
-    lat1 = lat1 * Math.PI / 180;
-    lat2 = lat2 * Math.PI / 180;
+    lon1 = (lon1 * Math.PI) / 180;
+    lon2 = (lon2 * Math.PI) / 180;
+    lat1 = (lat1 * Math.PI) / 180;
+    lat2 = (lat2 * Math.PI) / 180;
     // Haversine formula
     const dlon = lon2 - lon1;
     const dlat = lat2 - lat1;
-    const a = Math.pow(Math.sin(dlat / 2), 2)
-              + Math.cos(lat1) * Math.cos(lat2)
-              * Math.pow(Math.sin(dlon / 2),2);
+    const a =
+      Math.pow(Math.sin(dlat / 2), 2) +
+      Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(dlon / 2), 2);
 
     const c = 2 * Math.asin(Math.sqrt(a));
 
     const r = 3956;
 
-    return(c * r);
+    return c * r;
   };
 
   // location filter to be used repeatedly arr is response.data
@@ -106,18 +152,45 @@ const Feed: React.FC<Props> = ({user}) => {
     }
   };
 
-  const getAllReelsRecent = () => {
+  // Sets the reel length for infinite scroll on feed
+  const setReelLength = (length: number, clicked: boolean) => {
+    let newReels = geoReels.slice(startIndex, startIndex + length);
+    // if recent filter button clicked, load first 3 reels
+    // if reels left less than 2, load first 3 reels
+    if (clicked || geoReels.length < 2) {
+      setReels(geoReels.slice(0, 3));
+      setStartIndex(prev => prev * 0);
+      console.log('clicked recent | line 162 Feed.tsx');
+    }
+    if (newReels.length > 1) {
+      console.log('newReels.length > 1 | line 165 Feed.tsx');
+      // if newReels array has a length more than 1, add reels by length amount
+      setReels((prev) => [...prev, ...newReels]);
+      setStartIndex((prev) => prev + length);
+    } else {
+      // else include remaining reels and reset start to 0 index
+      console.log('else newsReels.length NOT | line 170 Feed.tsx');
+      newReels = geoReels.slice(startIndex, geoReels.length);
+      setReels((prev) => [...prev, ...newReels]);
+      setStartIndex((prev) => prev * 0);
+    }
+  };
+
+  const getAllReelsRecent = (length: number, clicked: boolean) => {
     axios
       .get('/feed/recent')
       .then((response) => {
         locFilter(response.data);
-        setReels(geoReels);
+        setReelLength(length, clicked); //updated from setReels(geoReels);
+        setReelsLoaded(true); // added to set Reels as loaded
         setFilter('recent');
         setOpen(false);
       })
       .catch((err) => {
         console.error('Could not GET all recent reels:', err);
-      })
+        setReelsLoaded(false); // updated B
+        setStartIndex(0); // updated B
+      });
   };
 
   const getAllReelsLikes = () => {
@@ -131,9 +204,8 @@ const Feed: React.FC<Props> = ({user}) => {
       })
       .catch((err) => {
         console.error('Could not GET all recent reels:', err);
-      })
+      });
   };
-
 
   const getAllFriendReels = () => {
     axios
@@ -154,36 +226,36 @@ const Feed: React.FC<Props> = ({user}) => {
       })
       .catch((err) => {
         console.error('Could not GET all frens reels:', err);
-      })
+      });
   };
 
   const getFriendList = () => {
-      if (user?.type === 'personal') {
-        axios
-          .get(`/feed/frens`)
-          .then((response) => {
-            //console.log('friends response.data:', response.data);
-            setFriends(response.data);
-          })
-          .catch((err) => {
-            console.error('Could not GET friends:', err);
-          })
-      }
+    if (user?.type === 'personal') {
+      axios
+        .get(`/feed/frens`)
+        .then((response) => {
+          //console.log('friends response.data:', response.data);
+          setFriends(response.data);
+        })
+        .catch((err) => {
+          console.error('Could not GET friends:', err);
+        });
+    }
   };
 
   // for personal accounts
   const getFollowingList = () => {
-      if (user?.type === 'personal') {
-        axios
-          .get('/feed/following')
-          .then((response) => {
-            // console.log('following:', response.data);
-            setFollowing(response.data);
-          })
-          .catch((err) => {
-            console.error('Could not GET followings:', err);
-          })
-      }
+    if (user?.type === 'personal') {
+      axios
+        .get('/feed/following')
+        .then((response) => {
+          // console.log('following:', response.data);
+          setFollowing(response.data);
+        })
+        .catch((err) => {
+          console.error('Could not GET followings:', err);
+        });
+    }
   };
 
   const getAllFollowingReels = () => {
@@ -204,16 +276,16 @@ const Feed: React.FC<Props> = ({user}) => {
       })
       .catch((err) => {
         console.error('Could not GET all following reels:', err);
-      })
+      });
   };
 
   // business accounts
   const getFollowersList = () => {
-      if (user?.type === 'business') {
+     if (user?.type === 'business') {
         axios
           .get('/feed/followers')
           .then((response) => {
-            console.log('followers:', response.data);
+            // console.log('followers:', response.data);
             setFollowers(response.data);
           })
           .catch((err) => {
@@ -224,28 +296,28 @@ const Feed: React.FC<Props> = ({user}) => {
 
   const getAllFollowersReels = () => {
     axios
-    .get('/feed/recent')
-    .then((response) => {
-      for (let i = 0; i < followers.length; i++) {
-        for (let j = 0; j < response.data.length; j++) {
-          if (followers[i].follower_id === response.data[j].UserId) {
-            followerReels.push(response.data[j]);
+      .get('/feed/recent')
+      .then((response) => {
+        for (let i = 0; i < followers.length; i++) {
+          for (let j = 0; j < response.data.length; j++) {
+            if (followers[i].follower_id === response.data[j].UserId) {
+              followerReels.push(response.data[j]);
+            }
           }
         }
-      }
-      locFilter(followerReels);
-      setReels(geoReels);
-      setFilter('followers');
-      setOpen(false);
-    })
-    .catch((err) => {
-      console.error('Could not GET all following reels:', err);
-    })
+        locFilter(followerReels);
+        setReels(geoReels);
+        setFilter('followers');
+        setOpen(false);
+      })
+      .catch((err) => {
+        console.error('Could not GET all following reels:', err);
+      });
   };
 
-  const getAllReels = () => {
+  const getAllReels = (length: number) => {
     if (filter === 'recent') {
-      getAllReelsRecent();
+      getAllReelsRecent(length, false);
     } else if (filter === 'friends') {
       getAllFriendReels();
     } else if (filter === 'following') {
@@ -256,6 +328,44 @@ const Feed: React.FC<Props> = ({user}) => {
       getAllFollowersReels();
     }
   };
+
+  //Snackbar Functionality
+  // snackbar logic for pending friends
+  //Snackbar for friends and follows
+  const handleAlertOpen = (option: string) => {
+    console.log('snackbar open for pending friend');
+    if (option === 'Friend Request Pending') {
+      setOpenAlert(true);
+    } else {
+      setMessageAlert(option);
+      setFollowAlert(true);
+    }
+  };
+
+  const handleAlertClose = (
+    e: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenAlert(false);
+    setFollowAlert(false);
+  };
+
+    const action = (
+      <React.Fragment>
+        <IconButton
+          size='small'
+          aria-label='close'
+          color='inherit'
+          onClick={handleAlertClose}
+        >
+          <CloseIcon fontSize='small' />
+        </IconButton>
+      </React.Fragment>
+    );
+
 
   // filter dialog box
   const handleClickOpen = () => {
@@ -268,110 +378,139 @@ const Feed: React.FC<Props> = ({user}) => {
 
   useEffect(() => {
     userCoord(user);
-  }, [user, reels]);
+  }, [user]);
 
   useEffect(() => {
-    getAllReels();
+    getAllReels(3);
   }, [filter, geoF, user, userLat]);
 
   useEffect(() => {
     if (user?.type === 'personal') {
       getFriendList();
     }
-  }, [filter]);
+  }, [user]);
 
   useEffect(() => {
     if (user?.type === 'personal') {
       getFollowingList();
     }
-  }, [filter]);
+  }, [user]);
 
   useEffect(() => {
     if (user?.type === 'business') {
       getFollowersList();
       }
-  }, [filter]);
-
+  }, [user]);
 
   return (
     <>
-    {user?.type === 'personal' && (
-      <div className='filter-container'>
-      <div className='label'>
-        Filter By{' '}
-      <button
-        className='filter-btn'
-        name='Filter Button'
-        onClick={handleClickOpen}
-      >
-        {filter}
-      </button>
-    <Dialog
-      open={open}
-      onClose={handleClose}
-    >
-      <DialogTitle id='filter-dialog-title'>
-        {'Filter By'}
-      </DialogTitle>
-      <DialogActions>
-        <Button onClick={getAllReelsRecent} autoFocus>Recent</Button>
-        <Button onClick={getAllFriendReels} autoFocus>Friends</Button>
-        <Button onClick={getAllFollowingReels} autoFocus>Following</Button>
-        <Button onClick={getAllReelsLikes} autoFocus>Likes</Button>
-      </DialogActions>
-    </Dialog>
-      </div>
-    </div>
-    )}
+      {user?.type === 'personal' && (
+        <div className='filter-container'>
+          <div className='label'>
+            Filter By{' '}
+            <button
+              className='filter-btn'
+              name='Filter Button'
+              onClick={handleClickOpen}
+            >
+              {filter}
+            </button>
+            <Dialog open={open} onClose={handleClose}>
+              <DialogTitle id='filter-dialog-title'>{'Filter By'}</DialogTitle>
+              <DialogActions>
+                <Button onClick={() => getAllReelsRecent(3, true)} autoFocus>
+                  Recent
+                </Button>
+                <Button onClick={getAllFriendReels} autoFocus>
+                  Friends
+                </Button>
+                <Button onClick={getAllFollowingReels} autoFocus>
+                  Following
+                </Button>
+                <Button onClick={getAllReelsLikes} autoFocus>
+                  Likes
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </div>
+        </div>
+      )}
 
-    {user?.type === 'business' && (
-      <div className='filter-container'>
-      <div className='label'>
-        Filter By{' '}
-      <button
-        className='filter-btn'
-        name='Filter Button'
-        onClick={handleClickOpen}
-      >
-        {filter}
-      </button>
-    <Dialog
-      open={open}
-      onClose={handleClose}
-    >
-      <DialogTitle id='filter-dialog-title'>
-        {'Filter By'}
-      </DialogTitle>
-      <DialogActions>
-        <Button onClick={getAllReelsRecent} autoFocus>Recent</Button>
-        <Button onClick={getAllFollowersReels} autoFocus>Followers</Button>
-        <Button onClick={getAllReelsLikes} autoFocus>Likes</Button>
-      </DialogActions>
-    </Dialog>
+      {user?.type === 'business' && (
+        <div className='filter-container'>
+          <div className='label'>
+            Filter By{' '}
+            <button
+              className='filter-btn'
+              name='Filter Button'
+              onClick={handleClickOpen}
+            >
+              {filter}
+            </button>
+            <Dialog open={open} onClose={handleClose}>
+              <DialogTitle id='filter-dialog-title'>{'Filter By'}</DialogTitle>
+              <DialogActions>
+                <Button onClick={() => getAllReelsRecent(3, true)} autoFocus>
+                  Recent
+                </Button>
+                <Button onClick={getAllFollowersReels} autoFocus>
+                  Followers
+                </Button>
+                <Button onClick={getAllReelsLikes} autoFocus>
+                  Likes
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </div>
+        </div>
+      )}
+      <div className='slider'>
+        <Box sx={{ width: 300 }}>
+          <Slider
+            defaultValue={geoF}
+            min={1}
+            max={30}
+            onChange={geoFilterHandler}
+            marks={marks}
+            valueLabelDisplay='auto'
+            color='secondary'
+            classes={{ markLabel: 'white' }}
+          />
+        </Box>
       </div>
-    </div>
-    )}
-    <div className='slider'>
-      <Box sx={{ width: 300 }}>
-        <Slider
-          defaultValue={geoF}
-          min={1}
-          max={30}
-          onChange={geoFilterHandler}
-          marks={marks}
-          valueLabelDisplay="auto"
-          color="secondary"
-          classes={{ markLabel: 'white' }}
-        />
-      </Box>
-    </div>
       <div className='container-full-w'>
         <Reel
+          reelsLoaded={reelsLoaded}
           reels={reels}
           friends={friends}
           getAllReels={getAllReels}
+          getAllReelsRecent={getAllReelsRecent}
+          handleAlertOpen={handleAlertOpen}
+          filter={filter}
         />
       </div>
+      <ThemeProvider theme={theme}>
+        <Snackbar
+          variant='theSpot-pink'
+          sx={{ paddingBottom: '50px' }}
+          anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
+          open={openAlert}
+          autoHideDuration={4000}
+          onClick={handleAlertClose}
+          message='Friend Request Sent'
+          action={action}
+        />
+        <Snackbar
+          variant='theSpot-pink'
+          sx={{ paddingBottom: '50px' }}
+          anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
+          open={followAlert}
+          autoHideDuration={4000}
+          onClick={handleAlertClose}
+          message={messageAlert || 'Follow Request Sent'}
+          action={action}
+        />
+      </ThemeProvider>
     </>
   );
 };

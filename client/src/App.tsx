@@ -19,12 +19,14 @@ import FriendRequestList from './components/UserProfile/FriendRequests/FriendReq
 import FollowersList from './components/UserProfile/Followers/FollowersList';
 import LikesList from './components/UserProfile/Likes/LikesList';
 import EventsList from './components/UserProfile/Events/EventsList';
+import MyReels from './components/UserProfile/MyReels/MyReels';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAuthUser, setIsAuthenticated, setFontSize } from './store/appSlice';
 import { RootState } from './store/store';
 import { useTheme } from '@mui/material/styles';
-import io from 'socket.io-client';
-const socket = io();
+// import io from 'socket.io-client';
+import { start } from 'repl';
+// const socket = io();
 
 
 type User = {
@@ -97,15 +99,12 @@ const App = () => {
   }, [fontSize]);
 
   const startGeolocationWatch = () => {
+    console.log('before if---------')
     if (user && location) {
     const [lat1, lng1] = user.geolocation.split(',');
     const [lat2, lng2] = location.split(',');
-    // if distance b/t user and center of event is less than 300ft
-    if (distance(+lat1, +lat2, +lng1, +lng2) < 150) {
-      return;
-    }
     if (navigator.geolocation) {
-      navigator.geolocation.watchPosition(
+      navigator.geolocation.getCurrentPosition(
         (position) => {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
@@ -113,13 +112,17 @@ const App = () => {
         setLocation(newGeolocation);
         console.log(location, '<-----LOCATION');
         console.log(user?.geolocation, '<----POSITION');
+        if (distance(+lat1, +lat2, +lng1, +lng2) < 10) {
+          return;
+        }
+        console.log('after if-----------')
         if (authUser?.type === 'personal') {
             axios
               .patch(`/users/updateGeolocation/${authUser.id}`, { geolocation: newGeolocation })
               .then((response) => {
                 dispatch(setAuthUser(response.data));
                 setUser(response.data);
-                socket.emit('userGeolocationUpdate', 'refresh')
+                // socket.emit('userGeolocationUpdate', 'refresh')
               })
               .catch((error) => {
                 console.error('Error updating geolocation on server:', error);
@@ -140,12 +143,18 @@ const App = () => {
     }
 };
 
-
   useEffect(() => {
-    startGeolocationWatch();
-}, [user, location]);
+    // const interval = setInterval(() => {
+    //   startGeolocationWatch();
+    //   console.log('weeeeee')
+    // }, 8000);
 
+    // return () => {
+    //   clearInterval(interval);
+    // }
 
+    startGeolocationWatch()
+}, [user]);
 
 
   // get all other users
@@ -172,6 +181,7 @@ const App = () => {
           <Route path='/Events' element={<EventsList user={user} />}></Route>
           <Route path='/UserType' element={<UserType />}></Route>
           <Route path='/Feed' element={<Feed user={user} />}></Route>
+          <Route path='/MyReels' element={<MyReels user={user} />}></Route>
           <Route path='/FriendRequests' element={<FriendRequestList allUsers={allUsers} user={user} />} ></Route>
           <Route path='/Follows' element={<FollowersList allUsers={allUsers}  user={user} />}></Route>
           <Route path='/Likes' element={<LikesList user={user} />}></Route>
