@@ -24,7 +24,7 @@ import io from 'socket.io-client';
 import Button from '@mui/material/Button';
 import { setAuthUser } from '../store/appSlice';
 import { RootState } from '../store/store';
-
+const logoGradient = require('/client/src/img/logo-gradient.jpg');
 const socket = io();
 
 type Anchor = 'left';
@@ -50,7 +50,7 @@ const listStyles = {
   '&:focus': { backgroundColor: '#f0f465', color: '#11011e' },
   '&:focus-visible': { backgroundColor: '#f0f465', color: '#11011e' },
 };
-const logoGradient = require('/client/src/img/logo-gradient.jpg');
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -74,7 +74,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
 
   const [onPage, setOnPage] = useState(
     <NavLink className='navLink' to='/Feed'>
-      <img id='nav-logo' src={logoGradient} alt='app logo' />
+      <img id='nav-logo' src={logoGradient} alt='TheSpot' />
     </NavLink>
   );
   const location = useLocation();
@@ -223,7 +223,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
           <img
             id='nav-logo'
             src={logoGradient}
-            alt='app logo'
+            alt='TheSpot'
           />
         </NavLink>
       );
@@ -234,7 +234,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
           <img
             id='nav-logo'
             src={logoGradient}
-            alt='app logo'
+            alt='TheSpot'
           />
         </NavLink>
       );
