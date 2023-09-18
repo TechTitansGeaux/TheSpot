@@ -24,9 +24,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setAuthUser, setIsAuthenticated, setFontSize } from './store/appSlice';
 import { RootState } from './store/store';
 import { useTheme } from '@mui/material/styles';
-import io from 'socket.io-client';
+// import io from 'socket.io-client';
 import { start } from 'repl';
-const socket = io();
+// const socket = io();
 
 
 type User = {
@@ -122,7 +122,7 @@ const App = () => {
               .then((response) => {
                 dispatch(setAuthUser(response.data));
                 setUser(response.data);
-                socket.emit('userGeolocationUpdate', 'refresh')
+                // socket.emit('userGeolocationUpdate', 'refresh')
               })
               .catch((error) => {
                 console.error('Error updating geolocation on server:', error);
