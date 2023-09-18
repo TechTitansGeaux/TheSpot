@@ -31,8 +31,8 @@ import Rsvp from '../UserProfile/Rsvps/Rsvp';
 import UnRsvp from '../UserProfile/Rsvps/UnRsvp';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import useIsInView from './useIsInView';
-// import io from 'socket.io-client';
-// const socket = io();
+import io from 'socket.io-client';
+const socket = io();
 
 dayjs.extend(relativeTime);
 dayjs.extend(localizedFormat);
@@ -385,7 +385,7 @@ const ReelItem: React.FC<Props> = ({
         setFollowed((prev) => [...prev, followedUser]);
         setDisabled([...disabled, followedUser]);
         // sockets for following notifications
-        // socket.emit('followersNotif', 'following');
+        socket.emit('followersNotif', 'following');
         console.log('Now following followedUser_id: ', followedUser);
       })
       .catch((err) => {
