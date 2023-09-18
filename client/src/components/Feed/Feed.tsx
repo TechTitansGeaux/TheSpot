@@ -326,6 +326,8 @@ const Feed: React.FC<Props> = ({user}) => {
       getAllReelsLikes();
     } else if (filter === 'followers') {
       getAllFollowersReels();
+    } else {
+      getAllReelsRecent(length, false);
     }
   };
 
