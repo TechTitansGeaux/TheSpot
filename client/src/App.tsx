@@ -52,7 +52,6 @@ const App = () => {
   const fontSize = useSelector((state: RootState) => state.app.fontSize); // Default font size
   const [allUsers, setAllUsers] = useState<[User]>(null);
   const [location, setLocation] = useState<string>('0, 0');
-  const [geo, setGeo] = useState(false);
 
     // find distance (miles) with 2 points
     const distance = (lat1: number, lat2: number, lon1: number, lon2: number) => {
@@ -109,8 +108,8 @@ const App = () => {
         const longitude = position.coords.longitude;
         const newGeolocation = `${latitude},${longitude}`;
         setLocation(newGeolocation);
-        console.log(location, '<-----LOCATION');
-        console.log(user?.geolocation, '<----POSITION');
+        // console.log(location, '<-----LOCATION');
+        // console.log(user?.geolocation, '<----POSITION');
         if (distance(+lat1, +lat2, +lng1, +lng2) < 10) {
           return;
         }
@@ -144,7 +143,7 @@ const App = () => {
 
   useEffect(() => {
     startGeolocationWatch()
-}, [user]);
+}, [user, location]);
 
 
   // get all other users

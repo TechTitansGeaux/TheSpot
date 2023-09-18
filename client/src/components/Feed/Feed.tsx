@@ -160,16 +160,16 @@ const Feed: React.FC<Props> = ({user}) => {
     if (clicked || geoReels.length < 2) {
       setReels(geoReels.slice(0, 3));
       setStartIndex(prev => prev * 0);
-      console.log('clicked recent | line 162 Feed.tsx');
+      // console.log('clicked recent | line 162 Feed.tsx');
     }
     if (newReels.length > 1) {
-      console.log('newReels.length > 1 | line 165 Feed.tsx');
+      // console.log('newReels.length > 1 | line 165 Feed.tsx');
       // if newReels array has a length more than 1, add reels by length amount
       setReels((prev) => [...prev, ...newReels]);
       setStartIndex((prev) => prev + length);
     } else {
       // else include remaining reels and reset start to 0 index
-      console.log('else newsReels.length NOT | line 170 Feed.tsx');
+      // console.log('else newsReels.length NOT | line 170 Feed.tsx');
       newReels = geoReels.slice(startIndex, geoReels.length);
       setReels((prev) => [...prev, ...newReels]);
       setStartIndex((prev) => prev * 0);
