@@ -37,7 +37,6 @@ app.use(express.urlencoded({ extended: true, limit: '100mb' }));
 app.use(express.static(distPath));
 // users session
 
-
 /**
 A session store implementation for Express using lru-cache.
 Because the default MemoryStore for express-session will lead to a memory leak due to it haven't a suitable way to make them expire. */
