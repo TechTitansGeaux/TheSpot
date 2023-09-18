@@ -74,7 +74,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
 
   const [onPage, setOnPage] = useState(
     <NavLink className='navLink' to='/Feed'>
-      <img id='nav-logo' src={logoGradient} alt='app logo' />
+      <img id='nav-logo' src={logoGradient} alt='TheSpot' />
     </NavLink>
   );
   const location = useLocation();
@@ -223,7 +223,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
           <img
             id='nav-logo'
             src={logoGradient}
-            alt='app logo'
+            alt='TheSpot'
           />
         </NavLink>
       );
@@ -234,7 +234,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
           <img
             id='nav-logo'
             src={logoGradient}
-            alt='app logo'
+            alt='TheSpot'
           />
         </NavLink>
       );
