@@ -83,7 +83,7 @@ eventRouter.get('/:geolocation/:date', async (req: any, res: any) => {
           const [lat1, lng1] = event.geolocation.split(',');
           const [lat2, lng2] = geolocation.split(',');
           // if distance b/t user and center of event is less than 300ft
-          return (distance(+lat1, +lat2, +lng1, +lng2) < 150)
+          return (distance(+lat1, +lat2, +lng1, +lng2) < 300)
         })
         res.status(200).send(
           filteredArr
