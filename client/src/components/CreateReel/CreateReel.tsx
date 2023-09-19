@@ -127,6 +127,7 @@ const privateEventCheck = (location: any, date: any, time: any) => {
 const getCurrentAddress = () => {
   // grab users lat and lng
   const [lat, lng] = user.geolocation.split(',');
+  // move google api to routes in backend
   axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&location_type=ROOFTOP&result_type=street_address&key=${process.env.REACT_APP_GEOCODING_API}`)
     .then((response) => {
       // console.log(response.data.results[0].formatted_address, '<-----res from reverse geocoding fetch')
