@@ -7,7 +7,6 @@ import NewEventForm from './NewEventForm';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
-// import { LazyMotion, m, domAnimation } from 'framer-motion';
 import { useNavigate  } from 'react-router-dom';
 import Tooltip from '@mui/material/Tooltip';
 import EventNoteIcon from '@mui/icons-material/EventNote';
@@ -93,7 +92,7 @@ const VideoRecorder: React.FC<Props> = ({
     type: string,
     }
   };
-  
+
   // navigator.mediaDevices.enumerateDevices().then(devices => console.log(devices))
 
   const handleDataAvailable = useCallback(
@@ -418,7 +417,7 @@ const switchCams = () => {
         { !justRecorded && (
         <div className='cam-mask'>
           {!isCameraLoading && (
-            <CameraswitchIcon 
+            <CameraswitchIcon
             color='secondary'
             className='camera-switch-icon'
             onClick={switchCams}/>

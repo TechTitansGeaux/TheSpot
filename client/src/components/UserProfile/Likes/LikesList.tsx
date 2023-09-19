@@ -21,42 +21,16 @@ type Props = {
 };
 const LikesList: React.FC<Props> = ({user}) => {
   const [likesArr, setLikesArr] = useState([]); // user's own reels that have been liked FROM likes table
-  const [userReels, setUserReels] = useState([]); // user's own reels
-
-    // get your own reels
-    const getOwnReels = () => {
-      axios
-        .get('/feed/reel/user')
-        .then((response: any) => {
-          //console.log('users own reels:', response.data);
-          setUserReels(response.data);
-        })
-        .catch((err: any) => {
-          console.error('Cannot get own reels:', err);
-        })
-    };
-
-    useEffect(() => {
-      getOwnReels();
-    }, [user]);
 
     // get reels that have been liked AND checked
     const getLikes = () => {
-      const likes: any = []; // user's reels that have been liked
       if (user) {
+        // console.log('user', user);
         axios
-          .get('/likes/likes')
+          .get('/likes/likesuser')
           .then((response) => {
             console.log('likes:', response.data);
-            for (let i = 0; i < response.data.length; i++) {
-              for (let j = 0; j < userReels.length; j++) {
-                if (response.data[i].ReelId === userReels[j].id) {
-                  likes.push(response.data[i]); }
-              }
-            }
-            setLikesArr(likes);
-            console.log('likes array:', likesArr);
-            console.log('user reels:', userReels);
+            setLikesArr(response.data);
           })
           .catch((err) => {
             console.error('Could not GET all likes:', err);
@@ -66,20 +40,20 @@ const LikesList: React.FC<Props> = ({user}) => {
 
     useEffect(() => {
       getLikes();
-    }, [user, userReels]);
+    }, [user]);
 
   return (
     <ul>
-    <div className='container-likes'>
-      <h1 className='title'>Likes</h1>
-      {likesArr.map((like, index) => {
-        return <LikesEntry key={`${index}-${like.id}`}
-        like={like}
-        user={user}
-        />
-      })}
+      <div className='container-likes'>
+        <h1 className='title'>Likes</h1>
+        {likesArr.map((like, index) => {
+          return <LikesEntry key={`${index}-${like.id}`}
+          like={like}
+          user={user}
+          />
+        })}
 
-    </div>
+      </div>
 
     </ul>
   );

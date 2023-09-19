@@ -1,0 +1,53 @@
+
+.reelItemContainer {
+  display: grid;
+  grid-template-columns: 32% 32% 32%;
+  grid-template-rows: auto;
+  gap: .5rem;
+  padding: .5rem;
+}
+
+.myReelItem {
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  align-items: stretch;
+  position: relative;
+  background-color: var(--light-violet);
+  height: 26vh;
+  max-height: 240px;
+  min-width: 90px;
+  cursor: pointer;
+  transition: margin .2s ease;
+}
+
+.myReel-text {
+  position: absolute;
+  margin-top: 10px;
+  padding: 12px auto;
+  color: var(--yellow);
+  z-index: 2;
+}
+
+video.myReel-video {
+  position: relative;
+  left: 0%;
+  top: 0%;
+  min-width: 180px;
+}
+
+.myReelItem:hover {
+  border: 1px solid var(--yellow);
+  margin: .1rem;
+}
+
+@media screen and (max-width: 300px) {
+video.myReel-video {
+    min-width: 140px;
+  }
+  .myReelItem {
+    height: 20vh;
+    min-width: 75px;
+  }
+}
+

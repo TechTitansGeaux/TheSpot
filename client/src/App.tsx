@@ -19,6 +19,7 @@ import FriendRequestList from './components/UserProfile/FriendRequests/FriendReq
 import FollowersList from './components/UserProfile/Followers/FollowersList';
 import LikesList from './components/UserProfile/Likes/LikesList';
 import EventsList from './components/UserProfile/Events/EventsList';
+import MyReels from './components/UserProfile/MyReels/MyReels';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAuthUser, setIsAuthenticated, setFontSize } from './store/appSlice';
 import { RootState } from './store/store';
@@ -51,7 +52,6 @@ const App = () => {
   const fontSize = useSelector((state: RootState) => state.app.fontSize); // Default font size
   const [allUsers, setAllUsers] = useState<[User]>(null);
   const [location, setLocation] = useState<string>('0, 0');
-  const [geo, setGeo] = useState(false);
 
     // find distance (miles) with 2 points
     const distance = (lat1: number, lat2: number, lon1: number, lon2: number) => {
@@ -97,13 +97,10 @@ const App = () => {
   }, [fontSize]);
 
   const startGeolocationWatch = () => {
+    console.log('before if---------')
     if (user && location) {
     const [lat1, lng1] = user.geolocation.split(',');
     const [lat2, lng2] = location.split(',');
-    // if distance b/t user and center of event is less than 300ft
-    if (distance(+lat1, +lat2, +lng1, +lng2) < 150) {
-      return;
-    }
     if (navigator.geolocation) {
       navigator.geolocation.watchPosition(
         (position) => {
@@ -111,8 +108,12 @@ const App = () => {
         const longitude = position.coords.longitude;
         const newGeolocation = `${latitude},${longitude}`;
         setLocation(newGeolocation);
-        console.log(location, '<-----LOCATION');
-        console.log(user?.geolocation, '<----POSITION');
+        // console.log(location, '<-----LOCATION');
+        // console.log(user?.geolocation, '<----POSITION');
+        if (distance(+lat1, +lat2, +lng1, +lng2) < 10) {
+          return;
+        }
+        console.log('after if-----------')
         if (authUser?.type === 'personal') {
             axios
               .patch(`/users/updateGeolocation/${authUser.id}`, { geolocation: newGeolocation })
@@ -140,12 +141,9 @@ const App = () => {
     }
 };
 
-
   useEffect(() => {
-    startGeolocationWatch();
+    startGeolocationWatch()
 }, [user, location]);
-
-
 
 
   // get all other users
@@ -172,6 +170,7 @@ const App = () => {
           <Route path='/Events' element={<EventsList user={user} />}></Route>
           <Route path='/UserType' element={<UserType />}></Route>
           <Route path='/Feed' element={<Feed user={user} />}></Route>
+          <Route path='/MyReels' element={<MyReels user={user} />}></Route>
           <Route path='/FriendRequests' element={<FriendRequestList allUsers={allUsers} user={user} />} ></Route>
           <Route path='/Follows' element={<FollowersList allUsers={allUsers}  user={user} />}></Route>
           <Route path='/Likes' element={<LikesList user={user} />}></Route>
