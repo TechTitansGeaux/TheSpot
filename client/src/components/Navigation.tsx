@@ -407,18 +407,16 @@ const Navigation: React.FC<Props> = ({ user }) => {
             SETTINGS
           </ListItemButton>
         </ListItem>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginTop: '20rem',
-            paddingLeft: '1em',
-          }}
-        >
-          <Button variant='outlined' color='secondary' onClick={handleLogout}>
-            Logout
-          </Button>
-        </div>
+        <ListItem className='drawer-btn' disablePadding
+        sx={{ marginTop: '7em', paddingLeft: '1.5em', marginBottom: '2em' }}>
+        <ListItemButton
+            onClick={handleLogout}
+            className='sidebar-btn'
+            sx={{ minHeight: '3em', color: '#f433ab' }}
+          >
+            LOGOUT
+          </ListItemButton>
+        </ListItem>
       </List>
     </Box>
   );
