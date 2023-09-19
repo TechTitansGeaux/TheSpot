@@ -72,7 +72,6 @@ const Feed: React.FC<Props> = ({user}) => {
   const [userLong, setUserLong] = useState(0);
   const [followers, setFollowers] = useState([]); // followers list for current user (business)
   const [reelsLoaded, setReelsLoaded] = useState(false); // state for loading reels on infinite scroll
-  const [lastIndex, setLastIndex] = useState(reels.length - 1)
   const [startIndex, setStartIndex] = useState(0); // set start index for reelsLoading
   const [openAlert, setOpenAlert] = useState(false);
   // to open follower alert
