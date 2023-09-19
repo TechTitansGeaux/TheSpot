@@ -127,12 +127,10 @@ const urltoFile = (url: any, filename: any, mimeType: any) => {
   const handleStartCaptureClick = useCallback(() => {
     setCapturing(true);
     if (MediaRecorder.isTypeSupported('video/webm')) {
-      console.log('webm supported')
     mediaRecorderRef.current = new MediaRecorder(webcamRef.current.stream, {
       mimeType: "video/webm",
     });
   } else if (MediaRecorder.isTypeSupported('video/mp4')) {
-    console.log('mp4 supported')
     mediaRecorderRef.current = new MediaRecorder(webcamRef.current.stream, {
       mimeType: "video/mp4",
     });
@@ -171,7 +169,6 @@ const urltoFile = (url: any, filename: any, mimeType: any) => {
         // append file to form data
         const formData = new FormData;
 
-        console.log(file.size, '<------ size of file')
 
         formData.append('video', file);
         // console.log(file, '<---- file that is appended to formData')
@@ -182,7 +179,6 @@ const urltoFile = (url: any, filename: any, mimeType: any) => {
           maxContentLength: 10000000,
         })
         .then((res) => {
-          console.log(res, '<---res from axios upload')
           setPublic_id(res.data.cloudID);
           setUrl(res.data.cloudURL)
           setUrlRetrieved(true)

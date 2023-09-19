@@ -24,6 +24,8 @@ eventRouter.get('/allCurrent', async (req, res) => {
         const formattedEventTime = new Date(rawEventTime);
         const timeForComparing = Date.parse(formattedEventTime.toString());
         const nowRaw = new Date();
+        const millisecondsToAdd = 5 * 60 * 60 * 1000;
+        nowRaw.setTime(nowRaw.getTime() - millisecondsToAdd);
         const now = Date.parse(nowRaw.toString());
         return timeForComparing >= now;
       })
