@@ -55,6 +55,8 @@ const Settings: React.FC<Props> = ({fontSize}) => {
   const [geolocation, setGeolocation] = React.useState(authUser.geolocation);
   const [privacy, setPrivacy] = React.useState(authUser.privacy);
   const [type, setType] = React.useState(authUser.type);
+  const [email, setEmail] = React.useState(authUser.email);
+  const [googleId, setGoogleId] = React.useState(authUser.googleId);
 
   const theme = createTheme({
     palette: {
@@ -96,6 +98,8 @@ const Settings: React.FC<Props> = ({fontSize}) => {
       setPicture('no pic');
       setSelectedMapIcon('no icon');
       setType('');
+      setEmail('');
+      setGoogleId('');
 
       const profileData = {
         username: username,
@@ -104,7 +108,9 @@ const Settings: React.FC<Props> = ({fontSize}) => {
         mapIcon: selectedMapIcon,
         geolocation: geolocation,
         privacy: privacy,
-        type: type
+        type: type,
+        email: email,
+        googleId: googleId
       };
     try {
         // logout the user by clearing the authUser state
