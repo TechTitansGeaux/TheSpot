@@ -88,28 +88,28 @@ const Settings: React.FC<Props> = ({fontSize}) => {
 
 
   const handleDeleteConfirm = async () => {
-      // setShowDeleteConfirmation(false);
-      // setUsername(`user${Math.floor(Math.random())}`);
-      // setDisplayName(`user${Math.floor(Math.random())}`);
-      // setGeolocation('-24.4879217, -46.6741555');
-      // setPrivacy('private');
-      // setPicture('no pic');
-      // setSelectedMapIcon('no icon');
-      // setType('');
+      setShowDeleteConfirmation(false);
+      setUsername(`user${Math.floor(Math.random())}`);
+      setDisplayName(`user${Math.floor(Math.random())}`);
+      setGeolocation('-24.4879217, -46.6741555');
+      setPrivacy('private');
+      setPicture('no pic');
+      setSelectedMapIcon('no icon');
+      setType('');
 
-      // const profileData = {
-      //   username: username,
-      //   displayName: displayName,
-      //   picture: picture,
-      //   mapIcon: selectedMapIcon,
-      //   geolocation: geolocation,
-      //   privacy: privacy,
-      //   type: type
-      // };
+      const profileData = {
+        username: username,
+        displayName: displayName,
+        picture: picture,
+        mapIcon: selectedMapIcon,
+        geolocation: geolocation,
+        privacy: privacy,
+        type: type
+      };
     try {
         // logout the user by clearing the authUser state
         dispatch(setAuthUser(null));
-      const response = await axios.delete(`/users/${authUser.id}`);
+      const response = await axios.patch(`/users/${authUser.id}`);
       if (response && response.data) {
         // redirect the user to the homepage
         window.location.href = process.env.HOST;
