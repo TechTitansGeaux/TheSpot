@@ -15,11 +15,6 @@ import MenuItem from '@mui/material/MenuItem';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import LocationSearchInput from './LocationSearchInput';
 import SpeechToText from './SpeechToText';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContentText from '@mui/material/DialogContentText';
 
 type Props = {
 fontSize: string;
@@ -48,6 +43,8 @@ const BusinessSettings: React.FC<Props> = ({fontSize}) => {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [selectedFont, setSelectedFont] = useState(fontSize);
   const [type, setType] = React.useState(authUser.type);
+  const [email, setEmail] = React.useState(authUser.email);
+  const [googleId, setGoogleId] = React.useState(authUser.googleId);
 
 
   const theme = createTheme({
@@ -98,6 +95,8 @@ useEffect(() => {
     setPicture('no pic');
     setSelectedMapIcon('no icon');
     setType('');
+    setEmail('');
+    setGoogleId('');
 
       const profileData = {
         username: username,
@@ -106,7 +105,9 @@ useEffect(() => {
         geolocation: geolocation,
         mapIcon: selectedMapIcon,
         privacy: privacy,
-        type: type
+        type: type,
+        email: email,
+        googleId: googleId
       };
 
       axios
@@ -209,13 +210,6 @@ useEffect(() => {
   //     console.error(error);
   //   }
   // };
-
-  const handleLogout = () => {
-    // logout the user by clearing the authUser state
-    dispatch(setAuthUser(null));
-    // redirect the user to the homepage
-    window.location.href = `${process.env.HOST}/`;
-  };
 
   return (
     <ThemeProvider theme={theme}>

@@ -97,7 +97,6 @@ const App = () => {
   }, [fontSize]);
 
   const startGeolocationWatch = () => {
-    console.log('before if---------')
     if (user && location) {
     const [lat1, lng1] = user.geolocation.split(',');
     const [lat2, lng2] = location.split(',');
@@ -113,7 +112,6 @@ const App = () => {
         if (distance(+lat1, +lat2, +lng1, +lng2) < 10) {
           return;
         }
-        console.log('after if-----------')
         if (authUser?.type === 'personal') {
             axios
               .patch(`/users/updateGeolocation/${authUser.id}`, { geolocation: newGeolocation })
