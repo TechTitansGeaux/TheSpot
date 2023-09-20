@@ -76,29 +76,43 @@
   {
     "id": 6,
     "username": "sammy",
-    "displayName": "samtaro",
+    "displayName": "Samson Thai",
     "type": "personal",
     "geolocation": "30.0085192,-90.2338564",
     "mapIcon": "https://img.icons8.com/?size=512&id=luN7421eTXGW&format=png",
     "birthday": "1994-08-16",
     "privacy": "public",
     "accessibility": "",
-    "email": "samsontest894@gmail.com",
+    "email": "drewsbrees@email.com",
     "picture": "https://lh3.googleusercontent.com/a/AAcHTtcumH5yV4FWWZoyLzOoiXmG9P2jr8fvA5K-hKrJs-D7=s96-c",
     "googleId": "105034674130068305670"
   },
   {
     "id": 7,
     "username": "DrewBrees",
-    "displayName": "Dree Brees",
+    "displayName": "Drew Brees",
     "type": "personal",
     "geolocation": "29.95169312756421, -90.08130857301946",
     "mapIcon": "https://img.icons8.com/?size=512&id=16937&format=png",
     "birthday": "1986-08-11",
     "privacy": "public",
     "accessibility": "",
-    "email": "drewsbrees@email.com",
+    "email": "samsontest894@gmail.com",
     "picture": "https://www.si.com/.image/t_share/MTY3ODg4OTk0Mzg0NzQ5OTUy/drew-brees-start-cardinals-saints.jpg",
     "googleId": ""
+  },
+  {
+    "id": 8,
+    "username": "Bernie",
+    "displayName": "Bernie January",
+    "type": "personal",
+    "geolocation": "29.96819309844399, -90.04585864202467",
+    "mapIcon": "https://img.icons8.com/?size=512&id=19983&format=png",
+    "birthday": "1984-10-08",
+    "privacy": "public",
+    "accessibility": "",
+    "email": "bernie@myheartsleeve.com",
+    "picture": "https://lh3.googleusercontent.com/a/ACg8ocLt1FVqBrky6RIcU1soORW4t-9CunBQHlxbH9pj-J95XVE=s96-c",
+    "googleId": "C01ly83o8"
   }
 ]

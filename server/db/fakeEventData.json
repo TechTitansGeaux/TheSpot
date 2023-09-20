@@ -3,7 +3,7 @@
     "id": 1,
     "name": "Street Party",
     "rsvp_count": 10,
-    "date": "2023-09-01",
+    "date": "2023-10-01",
     "time": "19:00",
     "endTime": "23:00",
     "geolocation": "30.039587748382235,-90.2405565887334",
@@ -17,7 +17,7 @@
     "id": 2,
     "name": "Fun Times",
     "rsvp_count": 25,
-    "date": "2023-08-31",
+    "date": "2023-11-31",
     "time": "15:00",
     "endTime": "18:00",
     "geolocation": "29.94274204513914,-90.06446969325872",
@@ -31,7 +31,7 @@
     "id": 3,
     "name": "Graduation",
     "rsvp_count": 30,
-    "date": "2023-08-31",
+    "date": "2023-11-31",
     "time": "12:00",
     "endTime": "16:00",
     "geolocation": "30.031003882054566,-90.050313779948",
@@ -40,5 +40,19 @@
     "private": false,
     "PlaceId": 3,
     "UserId": 5
-  }
+  },
+    {
+      "id": 4,
+      "name": "Muppet Birthday Party",
+      "rsvp_count": 17,
+      "date": "2023-10-08",
+      "time": "12:00",
+      "endTime": "14:00",
+      "geolocation": "29.96819309844399, -90.04585864202467",
+      "address": "3000 St Claude Ave",
+      "twenty_one": false,
+      "private": false,
+      "PlaceId": 4,
+      "UserId": 8
+    }
 ]
