@@ -52,6 +52,20 @@ const listStyles = {
 };
 
 const theme = createTheme({
+  components: {
+    MuiSnackbar: {
+      variants: [
+        {
+          props: { variant: 'theSpot-pink' },
+          style: {
+            '& .MuiSnackbarContent-root': {
+              background: '#f433ab',
+            },
+          },
+        },
+      ],
+    },
+  },
   palette: {
     primary: {
       main: '#0b0113',
@@ -488,7 +502,7 @@ const Navigation: React.FC<Props> = ({ user }) => {
                 <AddCircleIcon
                   className='create-reel-btn'
                   color='secondary'
-                  sx={{ width: 52, height: 52}}
+                  sx={{ width: 52, height: 52 }}
                 />
               </Link>
             </div>
@@ -498,6 +512,8 @@ const Navigation: React.FC<Props> = ({ user }) => {
               <div>
                 <Snackbar
                   variant='theSpot-pink'
+                  sx={{ paddingBottom: '50px' }}
+                  anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
                   open={open}
                   autoHideDuration={6000}
                   onClick={handleClose}

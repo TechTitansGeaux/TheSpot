@@ -40,5 +40,19 @@
     "private": false,
     "PlaceId": 3,
     "UserId": 5
-  }
+  },
+    {
+      "id": 4,
+      "name": "Muppet Birthday Party",
+      "rsvp_count": 17,
+      "date": "2023-10-08",
+      "time": "12:00",
+      "endTime": "14:00",
+      "geolocation": "29.96819309844399, -90.04585864202467",
+      "address": "3000 St Claude Ave",
+      "twenty_one": false,
+      "private": false,
+      "PlaceId": 4,
+      "UserId": 8
+    }
 ]

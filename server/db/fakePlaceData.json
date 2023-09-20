@@ -13,5 +13,10 @@
     "id": 3,
     "venue_name": "UNO Lakefront Arena",
     "coordinates": "30.031003882054566,-90.050313779948"
+  },
+  {
+    "id": 4,
+    "venue_name": "Sea Cave",
+    "coordinates": "29.96819309844399, -90.04585864202467"
   }
 ]
